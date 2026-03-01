@@ -116,16 +116,16 @@ An optional AI-powered prompt rewriting step that expands brief descriptions int
 
 |  | **modelBridge** | **Traditional AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Export → Upload → Wait → Download → Import → Position |
-| **Model selection** | 300+ from one panel | 1–5 hardcoded models | One per platform |
+| **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import → Position |
+| **Model selection** | 300+ from one panel | ~5 hardcoded models | Varies wildly |
 | **New model support** | Automatic (schema-driven) | Requires plugin update | Requires new account/tab |
 | **Input validation** | Two-layer, pre-request | Basic or none | Server-side only (you pay for failures) |
 | **Error messages** | Plain language + recovery steps | Raw API errors | Varies wildly |
 | **Cost tracking** | Per-project, per-client, CSV export | None | Per-platform, no aggregation |
 | **Client organization** | Built-in project/client tagging | None | Manual folder management |
-| **Timeline integration** | Auto-positioned and scaled | Manual import | Manual import |
+| **Timeline integration** | Auto-positioned | Manual import | Manual import |
 | **Inpainting** | Built-in mask editor | Export to external tool | Platform-specific |
-| **Data stays local** | Media processed locally, sent direct to API | Varies | Uploaded to third-party servers |
+| **Data stays local** | Media processed locally, sent direct to API | Varies | Often uploaded to third-party servers |
 
 ---
 
