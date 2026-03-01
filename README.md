@@ -12,6 +12,7 @@ This is the public showcase for the project. The source code lives in a private 
 
 ## At a Glance
 
+- **Up to 3x faster creative workflows** — no more switching between editor, browser, and AI platforms
 - **Eliminates context switching** — editors stay inside Premiere Pro for all AI generation
 - **300+ models, one panel** — every model gets an auto-generated interface from its API spec
 - **Cost tracking built in** — per-project, per-client spend tracking with CSV export for invoicing
@@ -39,7 +40,7 @@ modelBridge is a CEP panel extension that integrates generative AI directly into
 
 The AI tooling landscape for video editors is fragmented. Each model lives behind its own web interface with its own upload flow, its own parameter naming, its own error messages. Editors who want to experiment across models — comparing a style transfer result from one provider against another — spend more time managing browser tabs than making creative decisions.
 
-Most existing plugins solve this by hardcoding support for a handful of popular models. When a new model launches, you wait for a plugin update. When a model changes its API, things break silently.
+Most existing plugins solve this by hardcoding support for a handful of popular models — often locked to a single vendor's AI offering. When a new model launches, you wait for a plugin update. When a model changes its API, things break silently.
 
 modelBridge takes a different approach: **schema-driven architecture**. Instead of hardcoding model interfaces, it reads each model's OpenAPI specification and generates the UI dynamically. Every parameter, every constraint, every validation rule comes from the live schema. When a new model appears on the provider platform, modelBridge supports it automatically — no plugin update required.
 
@@ -187,6 +188,10 @@ modelBridge runs as a three-layer system inside Premiere Pro:
 For a deeper look at the architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 For the full version history, see [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+Beta release expected April 2026. Interested in early access? [Reach out](https://www.linkedin.com/in/niklazhallberg/).
 
 ---
 
