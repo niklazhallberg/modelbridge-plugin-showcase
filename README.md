@@ -184,16 +184,6 @@ For the full version history, see [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
-## Development Context
-
-This is a solo project, built from October 2025 through March 2026. It started as a single-model proof of concept ("can I trigger an AI generation from inside Premiere Pro?") and grew into a production system supporting 300+ models with schema-driven UI, comprehensive error handling, and professional-grade cost tracking.
-
-The CEP platform imposes real constraints — no ES modules, no build tooling in the panel layer, an ES3 scripting bridge, no native event system for timeline changes. Every architectural decision reflects working within (and sometimes around) those constraints while maintaining a codebase that's navigable and maintainable as a solo developer.
-
-I chose to build this as a CEP extension rather than a UXP plugin because CEP provides full Node.js access and unrestricted filesystem operations — both essential for media processing, server management, and the disk-based persistence layer that survives across reinstalls.
-
----
-
 ## About
 
 modelBridge.ai is built by [Niklaz Hallberg](https://niklaz.works). Connect on [LinkedIn](https://www.linkedin.com/in/niklazhallberg/).
