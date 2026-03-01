@@ -10,6 +10,16 @@ This is the public showcase for the project. The source code lives in a private 
 
 ---
 
+## At a Glance
+
+- **Eliminates context switching** — editors stay inside Premiere Pro for all AI generation
+- **300+ models, one panel** — every model gets an auto-generated interface from its API spec
+- **Cost tracking built in** — per-project, per-client spend tracking with CSV export for invoicing
+- **Two-layer validation** — catches errors before the request leaves your machine, preventing wasted spend
+- **Zero-maintenance model support** — schema-driven architecture means new models work automatically
+
+---
+
 ## What It Does
 
 modelBridge is a CEP panel extension that integrates generative AI directly into Premiere Pro's editing environment. It connects to a provider platform serving 300+ models and makes them accessible through a single, consistent interface.
@@ -60,13 +70,9 @@ Two layers, zero wasted spend. Every generation that reaches the API has already
 
 AI model APIs return errors designed for developers, not editors. `"422 Unprocessable Entity: resolution must be divisible by 8"` means nothing to someone mid-edit.
 
-modelBridge intercepts every error response and runs it through a pattern-matching translation pipeline. 20+ error patterns are classified and translated into plain-language messages with specific recovery steps:
+modelBridge intercepts every error response and runs it through a declarative, pattern-based translation system. A growing library of error patterns maps raw API responses to plain-language messages with specific recovery steps — resolution constraints become cropping advice, safety filter rejections become prompt suggestions, timeouts become status guidance.
 
-- **Resolution errors** → "This model needs dimensions divisible by 8. Your clip is 1920×1079 — try cropping 1 pixel from the bottom."
-- **NSFW rejections** → "The safety filter flagged this content. Try adjusting the prompt or using a different source frame."
-- **Timeout errors** → "This generation is taking longer than expected. It may still complete — check back in a few minutes."
-
-Unknown errors are logged structurally with the raw response, model ID, and input context. This creates a feedback loop: every new error pattern that appears in the logs becomes a candidate for the next translation rule. Coverage converges toward 100% over time.
+The system is designed to improve over time. Unmatched errors are logged structurally, creating a feedback loop where every new error type becomes a candidate for the next translation rule. Coverage converges toward zero unknowns.
 
 ### Timeline-Native Results
 
@@ -127,9 +133,9 @@ An optional AI-powered prompt rewriting step that expands brief descriptions int
 | Metric | Value |
 |---|---|
 | AI models supported | 300+ |
-| JavaScript modules | 40 |
-| Lines of code | 15,000+ |
-| CSS design tokens | 67 |
+| JavaScript modules | 40+ |
+| Lines of code | 10,000+ |
+| CSS design tokens | 50+ |
 | Error translation patterns | 20+ |
 | Generation progress stages | 8 |
 | Pricing model types supported | 6 |
@@ -148,7 +154,7 @@ modelBridge runs as a three-layer system inside Premiere Pro:
 │  ┌───────────────────────────────────────┐  │
 │  │     CEP Panel (Chromium Browser)      │  │
 │  │                                       │  │
-│  │  40 JS modules · Dynamic UI engine    │  │
+│  │  40+ JS modules · Dynamic UI engine   │  │
 │  │  Schema parser · Validation system    │  │
 │  │  Cost tracker · Progress manager      │  │
 │  │          │               │            │  │
