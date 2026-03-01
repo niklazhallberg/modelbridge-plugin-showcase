@@ -12,7 +12,7 @@ This is the public showcase for the project. The source code lives in a private 
 
 ## At a Glance
 
-- **Up to 3x faster creative workflows** — no more switching between editor, browser, and AI platforms
+- **Up to 2-3x faster creative workflows** — no more switching between editor, browser, and AI platforms
 - **Eliminates context switching** — editors stay inside Premiere Pro for all AI generation
 - **300+ models, one panel** — every model gets an auto-generated interface from its API spec
 - **Cost tracking built in** — per-project, per-client spend tracking with CSV export for invoicing
