@@ -44,17 +44,99 @@ modelBridge runs inside Adobe Premiere Pro as three cooperating layers, each wit
 
 The core architectural decision: no model has a hardcoded interface. Every form is generated at runtime from the model's OpenAPI specification — schema in, validated UI out. A multi-tier field classifier determines the correct component for each input (slider, dropdown, media upload, checkbox), with schema-level guards ensuring structural types like enums and booleans are never misclassified by name heuristics. Parsed classifications are versioned and cached, so changes to classification logic automatically invalidate stale data without network calls.
 
-## Error Translation
+This is infrastructure, not a wrapper. The plugin doesn't know about individual models — it knows about schemas. The same engine works across 500+ models today and will work for whatever launches tomorrow.
 
-Raw API errors pass through a declarative pattern-matching pipeline before reaching the user. Each pattern is a self-contained rule — a matcher, a human-readable message template, and recovery suggestions. Adding coverage for a new error type means adding a rule, not changing structure. Unmatched errors are logged with full context, creating a convergence loop where the percentage of unknown errors trends toward zero over time.
+---
+
+## Three-Layer Error Handling
+
+Every error passes through a three-layer defense system designed so that users never see raw JSON, never waste money on preventable failures, and never wonder what went wrong.
+
+```
+Layer 1: Prevent     Schema-driven preflight catches errors before Generate is clickable
+Layer 2: Learn       Self-improving cache saves API error constraints for future preflight
+Layer 3: Never Leak  Human-readable translation — WHAT / WHY / WHAT TO DO
+```
+
+Each layer handles what the one before it missed. Schema constraints catch known limits. The learning system catches limits the schema didn't declare. And when something truly unexpected happens, the translation layer ensures the user sees a clear, actionable message — never a stack trace or a field name like `start_image_url`.
+
+20+ pattern categories cover every error class: network failures, authentication, billing, rate limiting, content policy, validation (6 specific types), upload/download failures, server errors, and schema failures. Each pattern produces a specific message + recovery action pair.
+
+---
+
+## Self-Learning Constraint Cache
+
+Not every constraint is declared in the schema. A model might accept images without specifying minimum dimensions — until you send one that's too small and the API rejects it.
+
+When an API error contains parseable constraint values, the plugin extracts them, caches them per model, and enforces them at preflight on all future attempts. The system gets smarter the more you use it.
+
+**Learn → Read → Enforce pipeline:**
+
+1. **Learn.** Parse constraint values from the error message using type-specific regex patterns. Save to both localStorage (fast reads) and a durable disk file (survives cache clears and reinstalls).
+2. **Read.** On every preflight cycle, merge learned constraints with schema constraints. Schema always wins — learned values only fill gaps.
+3. **Enforce.** Compare actual media properties against the merged constraint set. Block invalid media before any API call.
+
+Six constraint types are covered end-to-end: minimum/maximum dimensions, file size, aspect ratio, and video duration. A generic fallback parser handles unknown constraint types by extracting numeric min/max values from any error message.
+
+The first error on an undocumented constraint is unavoidable. Every subsequent attempt on the same model catches it instantly — red border, specific error message, Generate button disabled. No API call, no charge, no waiting.
+
+---
 
 ## Media Validation
 
 Media validation runs as a continuous sub-second polling loop rather than event-driven — a deliberate choice because Premiere Pro's selection-change events are unreliable across versions. Each cycle checks selection presence, media type compatibility against the current model's requirements, and updates the UI accordingly. The validation result gates the Generate button and drives contextual labels across all media input fields.
 
+**Dual-source polling** checks both timeline and project bin every 500ms. A change-only approach detects signature changes (not count changes) to decide which source is active. A 1.5-second cooldown prevents flickering when both sources change simultaneously.
+
+**Drop zone integration** allows files dragged from Finder to override polled selections. Dropped files are pinned — polling won't clear them. Mixed mode lets one slot hold a dropped file while the other holds a timeline selection.
+
+---
+
+## Dual-Frame Rendering
+
+Models that accept both a start frame and end frame use a purpose-built dual-column card component instead of stacking slots vertically. Each column displays a media-type icon, title, Required/Optional badge, and thumbnail area.
+
+Selection order is explicit — the first clip selected becomes the Start Frame regardless of timeline position. When both clips are adjacent on the same timeline track (detected in real-time with one-frame tolerance), the generated video can replace both source stills as a single clip spanning their combined duration.
+
+Adjacency detection runs every 500ms alongside media validation, checking same-track positioning and wall-to-wall alignment. A context-aware info bar adapts: green when adjacent, neutral guidance when there's a gap or clips are on different tracks, hidden when either clip is invalid.
+
+---
+
+## Mask Editor
+
+The built-in mask editor provides inpainting capabilities without leaving the panel. A full canvas overlay renders extracted video frames with adjustable brush size and opacity, eraser mode, undo support, and zoom/pan navigation for precision work on high-res frames.
+
+The mask is rendered on a separate canvas layer above the source frame. On generation, it's composited, converted to the format the model expects, and uploaded alongside the source image — all handled transparently as part of the generation request.
+
+---
+
+## Server Resilience
+
+The Node.js backend is designed to be invisible. A multi-layered resilience system ensures the server stays healthy or recovers automatically:
+
+- **90-second heartbeat** — continuous health monitoring catches issues before they affect the user
+- **Automatic crash recovery** — if the server stops responding, the plugin restarts it within seconds
+- **Crash budget** — prevents infinite restart loops by tracking failures within a time window
+- **Pre-flight health checks** — operations like model search verify server health before starting, triggering recovery preemptively
+- **Exponential backoff** — network requests to the AI platform retry up to 3 times (1s, 2s, 4s) before surfacing errors
+- **Manual fallback** — a Reload button runs the full recovery sequence when automatic recovery isn't enough
+
+---
+
 ## Dual Persistence
 
-State is persisted through two complementary systems. `localStorage` provides fast, synchronous access for session state and caches. Disk-based JSON files (managed through the Node server with atomic writes) provide durability that survives cache clears and reinstalls. Critical data is written to both; on startup, disk is the source of truth if `localStorage` is empty.
+State is persisted through two complementary systems. `localStorage` provides fast, synchronous access for session state and caches. Disk-based JSON files provide durability that survives cache clears, plugin updates, and reinstalls.
+
+Critical data is written to both simultaneously:
+- **Custom models** — localStorage primary + disk JSON backup
+- **Cost history** — localStorage + disk file
+- **Learned constraints** — localStorage + disk file
+- **API keys** — localStorage + .env file
+- **User settings** — localStorage + disk JSON
+
+On startup, disk is the source of truth if localStorage is empty. The system self-heals transparently — a Premiere Pro update that clears the cache causes a brief first-load restore, then everything continues as normal.
+
+---
 
 ## No Build Step
 
@@ -67,5 +149,7 @@ The panel layer is dozens of IIFE modules loaded in dependency order via `<scrip
 - **No build step** — source files are the runtime, no compilation layer to debug through
 - **Schema as source of truth** — models define their own UI, the plugin just renders it
 - **Errors as data** — translation patterns are declarative, coverage grows with every deployment
+- **Self-improving validation** — the plugin learns from failures and prevents them from recurring
 - **Dual persistence** — survives cache clears and reinstalls automatically
-- **Dark-first design system** — 50+ CSS tokens, 8px grid, built to sit alongside Premiere's native UI
+- **Server invisibility** — the backend should never be something the user thinks about
+- **Dark-first design system** — 56 CSS tokens, 8px grid, built to sit alongside Premiere's native UI
