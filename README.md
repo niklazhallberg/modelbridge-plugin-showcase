@@ -69,6 +69,8 @@ Every error passes through a three-layer defense system so that raw API errors n
 
 **Layer 3 — Never Leak.** Every error message follows the WHAT / WHY / WHAT TO DO pattern. 20+ pattern categories map raw API responses to plain-language messages with specific recovery steps. No raw JSON, no HTTP status codes, no API field names reach the user.
 
+> The error system has been independently verified via CDP stress testing: sticky banners for critical errors, clickable recovery links, no raw API text exposed to users, and consistent visual hierarchy across all error types and severities.
+
 ### Self-Learning Validation
 
 The plugin gets smarter the more you use it. When a model rejects media — wrong dimensions, file too large, unsupported aspect ratio, video too long or too short — the constraint values are parsed from the error message, cached locally per model, and enforced at preflight on all future attempts.
@@ -181,7 +183,29 @@ modelBridge uses dual persistence: localStorage for fast reads, disk-backed JSON
 | Generation progress stages | 11 |
 | Pricing model types supported | 6 |
 | UX decisions documented | 280+ |
+| Stress tests completed | 52 |
+| Gaps found and fixed during testing | 18 |
 | Build steps required | 0 |
+
+---
+
+## Quality & Testing
+
+modelBridge has been systematically stress tested across five test suites covering error handling, edge cases, and failure recovery. Testing was conducted via Chrome DevTools Protocol (CDP) against a live Premiere Pro 2025 environment.
+
+| Suite | Tests | Result |
+|-------|-------|--------|
+| Error system — translation, sticky banners, XSS, visual consistency | 14 | 14/14 pass |
+| Dual Mode — incompatibility, field validation, cost preview, completion guards | 14 | 14/14 pass |
+| Preview & import actions — sequential import, retry, rapid click, sub-bugs | 10 | 10/10 pass |
+| Replace on Timeline — clip identity validation, adjacent clip detection | 6 | 6/6 pass |
+| Server & Node.js crash recovery — fetch timeouts, ENOENT, heartbeat | 10 | 10/10 pass |
+
+**52 tests. 51 pass. 1 documented as tech debt.**
+
+18 gaps were identified and fixed during testing across 9 commits — including silent failures, missing debounce guards, unhandled edge cases, and a preview flicker caused by unguarded per-model completion operations.
+
+Full report: [STRESS_TEST_REPORT.md](STRESS_TEST_REPORT.md)
 
 ---
 
