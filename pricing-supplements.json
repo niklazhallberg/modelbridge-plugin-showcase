@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "last_verified": "2026-03-06",
+    "verified_by": "manual — fal.ai model pages",
+    "next_review": "2026-04-06",
+    "notes": "Review top models monthly. Check fal.ai model pages for price changes."
+  },
+  "fal-ai/flux-2-pro": {
+    "type": "per_megapixel_tiered",
+    "firstMpRate": 0.03,
+    "additionalMpRate": 0.015
+  },
+  "fal-ai/flux-pro/v1.1-ultra": {
+    "type": "per_megapixel_tiered",
+    "firstMpRate": 0.06,
+    "additionalMpRate": 0.06
+  },
+  "fal-ai/kling-video/v2/master/image-to-video": {
+    "type": "compound",
+    "baseCost": 1.40,
+    "baseSeconds": 5,
+    "additionalCostPerSecond": 0.28
+  },
+  "fal-ai/kling-video/v2/master/text-to-video": {
+    "type": "compound",
+    "baseCost": 1.40,
+    "baseSeconds": 5,
+    "additionalCostPerSecond": 0.28
+  }
+}
