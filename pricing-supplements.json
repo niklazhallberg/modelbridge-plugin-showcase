@@ -1,9 +1,12 @@
+Den saknar v1.5-entryn nu — du tog bort för mycket. Här är hela filen korrekt:
+
+```json
 {
   "_meta": {
     "version": "1.0",
-    "last_verified": "2026-03-06",
+    "last_verified": "2026-03-07",
     "verified_by": "manual — fal.ai model pages",
-    "next_review": "2026-04-06",
+    "next_review": "2026-04-07",
     "notes": "Review top models monthly. Check fal.ai model pages for price changes."
   },
   "fal-ai/flux-2-pro": {
@@ -53,3 +56,6 @@
     "source": "https://fal.ai/models/fal-ai/bytedance/seedance/v1.5/pro/image-to-video"
   }
 }
+```
+
+Klistra in hela denna, commit på main.
