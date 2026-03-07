@@ -39,5 +39,17 @@
     "noAudioMultiplier": 0.5,
     "defaultResolution": "720p",
     "source": "https://fal.ai/models/fal-ai/bytedance/seedance/v1/pro/image-to-video"
+  },
+  "fal-ai/bytedance/seedance/v1.5/pro/image-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": {
+      "480p": 0.024,
+      "720p": 0.054,
+      "1080p": 0.122
+    },
+    "audioParam": "generate_audio",
+    "noAudioMultiplier": 0.5,
+    "defaultResolution": "720p",
+    "source": "https://fal.ai/models/fal-ai/bytedance/seedance/v1.5/pro/image-to-video"
   }
 }
