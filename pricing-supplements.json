@@ -1,61 +1,429 @@
-Den saknar v1.5-entryn nu — du tog bort för mycket. Här är hela filen korrekt:
-
-```json
 {
   "_meta": {
-    "version": "1.0",
-    "last_verified": "2026-03-07",
-    "verified_by": "manual — fal.ai model pages",
+    "version": "2.1",
+    "last_verified": "2026-03-08",
+    "verified_by": "manual — fal.ai model pages + provider docs",
     "next_review": "2026-04-07",
-    "notes": "Review top models monthly. Check fal.ai model pages for price changes."
+    "notes": "Review top models monthly. Check fal.ai model pages for price changes. v2.1: added per_video_resolution, per_image_filtered types + Magi, LatentSync, Pika, Ideogram, Wan R2V flash entries."
   },
+
   "fal-ai/flux-2-pro": {
     "type": "per_megapixel_tiered",
     "firstMpRate": 0.03,
-    "additionalMpRate": 0.015
+    "additionalMpRate": 0.015,
+    "source": "fal_official_docs",
+    "confidence": "high"
   },
   "fal-ai/flux-pro/v1.1-ultra": {
-    "type": "per_megapixel_tiered",
-    "firstMpRate": 0.06,
-    "additionalMpRate": 0.06
+    "type": "per_image",
+    "rate": 0.06,
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.06,
+    "fal_api_unit": "megapixel"
   },
+  "fal-ai/flux-kontext-pro": {
+    "type": "per_image",
+    "rate": 0.04,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
   "fal-ai/kling-video/v2/master/image-to-video": {
     "type": "compound",
     "baseCost": 1.40,
     "baseSeconds": 5,
-    "additionalCostPerSecond": 0.28
+    "additionalCostPerSecond": 0.28,
+    "source": "fal_official_docs",
+    "confidence": "high"
   },
   "fal-ai/kling-video/v2/master/text-to-video": {
     "type": "compound",
     "baseCost": 1.40,
     "baseSeconds": 5,
-    "additionalCostPerSecond": 0.28
+    "additionalCostPerSecond": 0.28,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/kling-video/v2.6/pro/text-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.070,
+    "rate_audio": 0.140,
+    "source": "provider_docs",
+    "confidence": "medium"
+  },
+  "fal-ai/kling-video/v2.6/pro/image-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.070,
+    "rate_audio": 0.140,
+    "source": "provider_docs",
+    "confidence": "medium"
+  },
+
+  "fal-ai/kling-video/v3/standard/text-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.168,
+    "rate_audio": 0.252,
+    "rate_voice_control": 0.308,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/v3/standard/image-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.168,
+    "rate_audio": 0.252,
+    "rate_voice_control": 0.308,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/v3/pro/text-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.224,
+    "rate_audio": 0.336,
+    "rate_voice_control": 0.392,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/v3/pro/image-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.224,
+    "rate_audio": 0.336,
+    "rate_voice_control": 0.392,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/kling-video/o3/standard/text-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.168,
+    "rate_audio": 0.224,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/o3/standard/image-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.168,
+    "rate_audio": 0.224,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/o3/pro/text-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.224,
+    "rate_audio": 0.280,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/kling-video/o3/pro/image-to-video": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.224,
+    "rate_audio": 0.280,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/bytedance/seedance/v1/lite/text-to-video": {
+    "type": "video_token",
+    "rate_per_million": 1.80,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/bytedance/seedance/v1/lite/image-to-video": {
+    "type": "video_token",
+    "rate_per_million": 1.80,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/bytedance/seedance/v1/pro/text-to-video": {
+    "type": "video_token",
+    "rate_per_million": 2.50,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
   },
   "fal-ai/bytedance/seedance/v1/pro/image-to-video": {
-    "type": "per_second_resolution",
-    "ratesPerSecondUSD": {
-      "480p": 0.024,
-      "720p": 0.054,
-      "1080p": 0.122
-    },
-    "audioParam": "generate_audio",
-    "noAudioMultiplier": 0.5,
-    "defaultResolution": "720p",
-    "source": "https://fal.ai/models/fal-ai/bytedance/seedance/v1/pro/image-to-video"
+    "type": "video_token",
+    "rate_per_million": 2.50,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/bytedance/seedance/v1.5/pro/text-to-video": {
+    "type": "video_token",
+    "rate_per_million_audio": 2.40,
+    "rate_per_million_no_audio": 1.20,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
   },
   "fal-ai/bytedance/seedance/v1.5/pro/image-to-video": {
+    "type": "video_token",
+    "rate_per_million_audio": 2.40,
+    "rate_per_million_no_audio": 1.20,
+    "default_fps": 24,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/veo3": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.20,
+    "rate_audio": 0.40,
+    "audio_multiplier": 0.50,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/veo3/fast": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.10,
+    "rate_audio": 0.15,
+    "audio_multiplier": 0.67,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/veo3.1": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p":  { "no_audio": 0.20, "audio": 0.40 },
+      "1080p": { "no_audio": 0.20, "audio": 0.40 },
+      "4k":    { "no_audio": 0.40, "audio": 0.60 }
+    },
+    "default_resolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/veo3.1/fast": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p":  { "no_audio": 0.10, "audio": 0.15 },
+      "1080p": { "no_audio": 0.10, "audio": 0.15 },
+      "4k":    { "no_audio": 0.30, "audio": 0.35 }
+    },
+    "default_resolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/wan-25-preview/text-to-video": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "480p": { "no_audio": 0.05 },
+      "720p": { "no_audio": 0.10 },
+      "1080p": { "no_audio": 0.15 }
+    },
+    "default_resolution": "720p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/wan-25-preview/image-to-video": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "480p": { "no_audio": 0.05 },
+      "720p": { "no_audio": 0.10 },
+      "1080p": { "no_audio": 0.15 }
+    },
+    "default_resolution": "720p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/wan/v2.6/text-to-video": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p": { "no_audio": 0.10 },
+      "1080p": { "no_audio": 0.15 }
+    },
+    "default_resolution": "720p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/wan/v2.6/image-to-video": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p": { "no_audio": 0.10 },
+      "1080p": { "no_audio": 0.15 }
+    },
+    "default_resolution": "720p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/wan/v2.6/flash/text-to-video": {
     "type": "per_second_resolution",
     "ratesPerSecondUSD": {
-      "480p": 0.024,
-      "720p": 0.054,
-      "1080p": 0.122
+      "720p": 0.05
     },
-    "audioParam": "generate_audio",
-    "noAudioMultiplier": 0.5,
     "defaultResolution": "720p",
-    "source": "https://fal.ai/models/fal-ai/bytedance/seedance/v1.5/pro/image-to-video"
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/ltx-2.3/text-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": {
+      "1080p": 0.06,
+      "1440p": 0.12,
+      "2160p": 0.24
+    },
+    "defaultResolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/ltx-2.3/image-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": {
+      "1080p": 0.06,
+      "1440p": 0.12,
+      "2160p": 0.24
+    },
+    "defaultResolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/ltx-2.3/image-to-video/fast": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": {
+      "1080p": 0.04,
+      "1440p": 0.08,
+      "2160p": 0.16
+    },
+    "defaultResolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/minimax/hailuo-02/standard/text-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": { "default": 0.045 },
+    "defaultResolution": "default",
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.045,
+    "fal_api_unit": "second"
+  },
+  "fal-ai/minimax/hailuo-02/standard/image-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": { "default": 0.045 },
+    "defaultResolution": "default",
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.045,
+    "fal_api_unit": "second"
+  },
+  "fal-ai/minimax/hailuo-02/pro/text-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": { "default": 0.08 },
+    "defaultResolution": "default",
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.08,
+    "fal_api_unit": "second"
+  },
+  "fal-ai/minimax/hailuo-02/pro/image-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": { "default": 0.08 },
+    "defaultResolution": "default",
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.08,
+    "fal_api_unit": "second"
+  },
+  "fal-ai/minimax/hailuo-02-fast/image-to-video": {
+    "type": "per_second_resolution",
+    "ratesPerSecondUSD": { "default": 0.017 },
+    "defaultResolution": "default",
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "fal_api_unit_price": 0.017,
+    "fal_api_unit": "second"
+  },
+
+  "fal-ai/magi": {
+    "type": "compound",
+    "baseCost": 0.80,
+    "baseSeconds": 4,
+    "additionalCostPerSecond": 0.20,
+    "inputs": ["duration"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/magi-distilled": {
+    "type": "compound",
+    "baseCost": 0.32,
+    "baseSeconds": 4,
+    "additionalCostPerSecond": 0.08,
+    "inputs": ["duration"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/latentsync": {
+    "type": "compound",
+    "baseCost": 0.20,
+    "baseSeconds": 40,
+    "additionalCostPerSecond": 0.005,
+    "inputs": ["duration"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/wan/v2.6/reference-to-video/flash": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p":  { "audio": 0.10, "no_audio": 0.025 },
+      "1080p": { "audio": 0.15, "no_audio": 0.0375 }
+    },
+    "default_resolution": "720p",
+    "inputs": ["duration", "resolution", "enable_audio"],
+    "source": "fal_official_docs",
+    "confidence": "high",
+    "note": "no_audio = 25% of audio rate"
+  },
+
+  "fal-ai/pika/v2.2/text-to-video": {
+    "type": "per_video_resolution",
+    "rates": { "720p": 0.20, "1080p": 0.45 },
+    "base_seconds": 5,
+    "default_resolution": "720p",
+    "inputs": ["resolution"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/pika/v2.2/image-to-video": {
+    "type": "per_video_resolution",
+    "rates": { "720p": 0.20, "1080p": 0.45 },
+    "base_seconds": 5,
+    "default_resolution": "720p",
+    "inputs": ["resolution"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+
+  "fal-ai/ideogram/v3": {
+    "type": "per_image_filtered",
+    "filter_field": "quality",
+    "rates": { "turbo": 0.03, "balanced": 0.06, "quality": 0.09 },
+    "inputs": ["quality"],
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/ideogram/v3/turbo": {
+    "type": "per_image",
+    "rate": 0.03,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/ideogram/v3/balanced": {
+    "type": "per_image",
+    "rate": 0.06,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/ideogram/v3/quality": {
+    "type": "per_image",
+    "rate": 0.09,
+    "source": "fal_official_docs",
+    "confidence": "high"
   }
 }
-```
-
-Klistra in hela denna, commit på main.
