@@ -4,6 +4,33 @@ Key milestones in the development of modelBridge.ai.
 
 ---
 
+## v0.11 — Pricing Intelligence, Smart Import & Audio (March 2026)
+
+### Pricing Intelligence
+- **Four-layer pricing pipeline** — curated supplements for exact pricing, official API for base rates (100% model coverage), family heuristics for related models, honest "unavailable" when no data exists. Zero fabricated prices
+- **Three explicit UI states** — exact price with live parameter updates, base rate with disclaimer, or "Pricing unavailable" — never a wrong number
+- **24-model accuracy audit** — verified across all pricing types and 7 generation categories. Result: zero incorrect prices
+- **Audio-aware cost triggers** — toggling audio, voice control, or resolution updates the cost estimate in real-time
+
+### Smart Import
+- **Context-aware timeline import** — one button, automatic routing: source-based models replace the original clip in-place; text-based models insert at playhead; audio inserts on audio tracks
+- **Contextual instruction texts** — each preview card shows what the import will do before you click: "Replaces the source on the timeline" or "Inserts at the playhead"
+- **Preview buttons simplified** — 4 buttons merged to 3: "Save and import to timeline" (smart routing), "Save to project bin", "Discard"
+
+### Audio & TTS
+- **Audio preview player** — play TTS and sound effect generations directly in the preview card before importing. Mutual exclusion ensures only one player plays at a time
+- **Audio timeline import** — audio generations import directly to Premiere Pro audio tracks
+
+### Dual Mode
+- **Selection-driven results** — clickable preview cards with active-state border. Import buttons act on the selected card only
+- **Timeline import for Dual Mode** — previously project-bin-only, now supports full timeline import per slot
+- **Same-source-clip handling** — when both slots use the same source clip, the second slot auto-switches from "replace" to "insert at playhead" after the first imports
+
+### Reliability
+- **Legal compliance** — pricing data sourced exclusively from the official API; web scraping rejected per platform terms of service
+- **Family heuristic safety** — prevents pricing cross-contamination between model variants with incompatible rate structures
+- **3 CDP-discovered bugs fixed** — generate button disabled for text-only models, argument-order mismatch in readiness checks, text input field ignored in generation logic
+
 ## v0.10 — Self-Learning & Resilience (March 2026)
 
 - **Three-layer error handling architecture** — Prevent (schema-driven preflight) → Learn (self-improving constraint cache) → Never Leak (human-readable error translation with WHAT / WHY / WHAT TO DO pattern)

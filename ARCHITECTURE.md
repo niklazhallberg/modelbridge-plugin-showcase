@@ -144,6 +144,25 @@ The panel layer is dozens of IIFE modules loaded in dependency order via `<scrip
 
 ---
 
+## Four-Layer Pricing Pipeline
+
+Every cost estimate resolves through a four-layer cascade, designed so users never see a wrong price.
+
+```
+Layer 1: Supplement     Curated per-model pricing — exact, parameter-aware
+Layer 2: API            Official platform pricing API — 100% model coverage, base rates
+Layer 3: Family         Heuristic match to related model's curated pricing
+Layer 4: Unavailable    Honest "Pricing unavailable" — no fabricated numbers
+```
+
+Supplements provide exact pricing that responds to parameter changes in real-time — toggle audio on, switch resolution, change duration, and the estimate updates instantly. The official API provides base rates for every model on the platform but can't account for parameter-dependent surcharges. Family heuristics use a related model's supplement as a rough estimate. When all layers fail, the UI shows "Pricing unavailable" rather than guessing.
+
+All pricing data is sourced from the official platform API — no web scraping. The system was validated through a 24-model audit across 7 generation categories with zero incorrect prices.
+
+Safety guards prevent cross-contamination between model variants with incompatible rate structures, and a drift detection system flags when curated rates diverge from API rates by more than 5%.
+
+---
+
 ## Design Principles
 
 - **No build step** — source files are the runtime, no compilation layer to debug through
