@@ -110,6 +110,27 @@ The mask is rendered on a separate canvas layer above the source frame. On gener
 
 ---
 
+## Background Generation & Follow Your Generation Panel
+
+AI video generation takes 30 seconds to 5 minutes. Blocking the panel UI during that time is unusable in a professional Premiere Pro workflow. modelBridge decouples generation from the UI — after submission, the Node.js backend handles polling, downloading, and importing while the editor continues working.
+
+The **Follow Your Generation** panel is a persistent DOM zone (`#mb-background-zone-host`) fixed at the bottom of the plugin, outside the per-model generation log. This is the PASS 3 (Option B) architecture — the zone host lives in the main panel DOM, not inside the gen-log. This eliminates the previous "no gen-log → no zone" blind spot and removes scattered reattach calls from `selectModel()`.
+
+**How it works:**
+
+- All active background generations are tracked in JS state (`_rows` map) and rendered into the persistent zone regardless of which model card is currently open
+- Each row shows: status dot (orange = running, gray = queued, green = done, red = failed), model name, elapsed timer, current step label, and expand chevron
+- Expanded view shows a 5-step progress tracker (Sent → Queued → Generating → Downloading → Importing) with visual state transitions — completed steps turn green with checkmarks, the active step pulses orange
+- Step labels in the row header update in real time: "Queued #2" (with fal.ai queue position), "Generating", "Downloading", "Importing", "Imported"
+- Expanded rows also display input details (prompt, duration, resolution, aspect ratio, endpoint) so the user always knows which generation is which
+- **Auto-dismiss:** when the user navigates to a model whose generation just completed, the row auto-removes and the generation log on that model card is brought to completed state — no manual cleanup needed
+- **Failure handling:** failed rows stay visible with red state + "See error" link — never auto-dismissed, always manually dismissable
+- **Snackbar notifications:** floating success/failure toasts appear when a background generation completes, with a "View →" or "Details →" action button
+
+**UX decision:** The "Queued" step label renders in gray (waiting state), while Generating/Downloading/Importing render in orange (active states). This distinction was fixed from the initial implementation where Queued incorrectly used the active orange color.
+
+---
+
 ## Server Resilience
 
 The Node.js backend is designed to be invisible. A multi-layered resilience system ensures the server stays healthy or recovers automatically:

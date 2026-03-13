@@ -4,6 +4,22 @@ Key milestones in the development of modelBridge.ai.
 
 ---
 
+## v0.12 — Follow Your Generation (March 2026)
+
+### Background Generation Panel
+- **Follow Your Generation panel** — persistent zone at the bottom of the plugin tracks all active background generations regardless of which model card is open. Status dot, model name, elapsed timer, step label, and expand chevron per row
+- **5-step progress tracker** — Sent → Queued → Generating → Downloading → Importing. Completed steps turn green with checkmarks, active step pulses orange. Step labels update in real time with fal.ai queue position
+- **Input details in expanded view** — prompt (italic, truncated), duration, resolution, aspect ratio, endpoint — always know which generation is which
+- **Auto-dismiss on navigation** — navigating to a completed model's card auto-removes the background row and brings the gen-log to completed state. No manual cleanup
+- **Failure handling** — failed rows stay visible with red state + "See error" link. Never auto-dismissed, always manually dismissable
+- **Snackbar notifications** — floating success/failure toasts with "View →" or "Details →" action
+
+### Architecture
+- **PASS 3 (Option B) zone host** — persistent `#mb-background-zone-host` element outside the gen-log. Eliminates "no gen-log → no zone" blind spot and removes scattered reattach calls from `selectModel()`
+
+### QA
+- **30-check behavioral audit** — visual QA, step progression, auto-dismiss, failure state, inputParams plumbing, edge cases. 29 PASS / 1 FAIL (P3 cosmetic — Queued label color fixed)
+
 ## v0.11 — Pricing Intelligence, Smart Import & Audio (March 2026)
 
 ### Pricing Intelligence

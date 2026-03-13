@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comprehensive stress testing conducted March 5–6, 2026 across five test suites covering error handling, dual mode edge cases, preview/import actions, timeline replacement, and server crash recovery. Testing performed via Chrome DevTools Protocol (CDP) at `localhost:8089`, code path analysis, DOM mutation monitoring, and state injection against a live Premiere Pro 2025 (v25.x) environment.
+Comprehensive stress testing conducted March 5–13, 2026 across six test suites covering error handling, dual mode edge cases, preview/import actions, timeline replacement, server crash recovery, and background generation tracking. Testing performed via Chrome DevTools Protocol (CDP) at `localhost:8089`, code path analysis, DOM mutation monitoring, and state injection against a live Premiere Pro 2025 (v25.x) environment.
 
 All tests targeted the panel layer (JS/HTML/CSS in Chromium) and the Node.js backend (`node/server.js` on port 3000). ExtendScript (JSX) functions were exercised through their `CSInterface.evalScript()` call sites.
 
@@ -130,6 +130,43 @@ Validated the self-healing Node.js server, fetch timeouts, and graceful degradat
 
 ---
 
+### Suite 6 — Follow Your Generation (Tests FYG-01–FYG-30)
+
+Behavioral audit of the Follow Your Generation background generation panel. Conducted March 13, 2026 via static code analysis, CSS token verification, and JS logic review.
+
+| # | Description | Result | Notes |
+|---|-------------|--------|-------|
+| FYG-01 | Zone host persists outside gen-log (PASS 3 Option B) | Pass | `#mb-background-zone-host` is a sibling of model panel container |
+| FYG-02 | Rows persist across model switches | Pass | JS state `_rows` re-rendered into zone on navigation |
+| FYG-03 | Status dot color: orange for running | Pass | CSS class `.running` |
+| FYG-04 | Status dot color: gray for queued | Pass | Queued uses step 2 with no active class — gray default |
+| FYG-05 | Status dot color: green for complete | Pass | CSS class `.complete` |
+| FYG-06 | Status dot color: red for failed | Pass | CSS class `.failed` |
+| FYG-07 | Elapsed timer updates every 1s | Pass | `_timerInterval` runs `_updateElapsedTimers()` at 1s interval |
+| FYG-08 | Step tracker: 5 steps render correctly | Pass | Sent → Queued → Generating → Downloading → Importing |
+| FYG-09 | Step tracker: completed steps turn green | Pass | `.done` class applied to steps < current |
+| FYG-10 | Step tracker: active step pulses orange | Pass | `.active` class on current step |
+| FYG-11 | Step transitions from fal.ai status | Pass | `IN_QUEUE` → step 2, `IN_PROGRESS` → step 3 |
+| FYG-12 | Queue position shown in header | Pass | "Queued #N" suffix when step 2 + queuePosition present |
+| FYG-13 | Header step label: "Queued" is gray, not orange | Pass | P3 fix applied — `active` class only for steps ≥ 3 |
+| FYG-14 | Header step label: "Generating" is orange | Pass | `active` class applied for steps 3–5 |
+| FYG-15 | Accordion expand/collapse | Pass | Single-row accordion via `_toggleExpand()` |
+| FYG-16 | Details grid: prompt (italic, truncated) | Pass | Truncated to 80 chars with ellipsis, `.gen-log-bg-detail-prompt` class |
+| FYG-17 | Details grid: duration displayed | Pass | Appended with "s" suffix |
+| FYG-18 | Details grid: resolution displayed | Pass | Raw value from inputParams |
+| FYG-19 | Details grid: aspect ratio displayed | Pass | Raw value from inputParams |
+| FYG-20 | Details grid: endpoint displayed | Pass | Always shown when modelPath exists |
+| FYG-21 | Auto-dismiss on navigation to completed model | Pass | `_maybeDismissOnNav()` removes row + calls `GenerationLog.completeBg()` |
+| FYG-22 | Failed rows NOT auto-dismissed | Pass | `_maybeDismissOnNav()` only matches `status === 'complete'` |
+| FYG-23 | Failed rows manually dismissable | Pass | Dismiss button present for failed status |
+| FYG-24 | "See error" button navigates to model | Pass | Calls `_navigateToModel()` via `selectModel()` |
+| FYG-25 | "View result" button navigates to model | Pass | Same navigation path as error button |
+| FYG-26 | Snackbar notification on completion | Pass | `_showSnackbar('success', ...)` with 7s auto-dismiss |
+| FYG-27 | Snackbar notification on failure | Pass | `_showSnackbar('failed', ...)` with action button |
+| FYG-28 | inputParams plumbing from generation to row | Pass | `addRow()` accepts `inputParams` parameter |
+| FYG-29 | Zone hides when no rows remain | Pass | `has-bg-rows` class removed, timer stopped |
+| FYG-30 | Copy download URL on failed row | Pass | Clipboard write with "Copied!" feedback |
+
 ## Known Limitations (Tech Debt)
 
 Documented but not yet addressed. See `CLAUDE.md` for full tech debt inventory.
@@ -163,9 +200,9 @@ Documented but not yet addressed. See `CLAUDE.md` for full tech debt inventory.
 
 | Metric | Count |
 |--------|-------|
-| Total tests | 52 |
-| Pass | 51 |
+| Total tests | 82 |
+| Pass | 81 |
 | Documented as tech debt | 1 (Test 28 — dual mode error vocabulary) |
-| Gaps found during testing | 18 |
-| Gaps fixed during testing | 18 |
-| Commits from stress test fixes | 9 |
+| Gaps found during testing | 19 |
+| Gaps fixed during testing | 19 |
+| Commits from stress test fixes | 10 |

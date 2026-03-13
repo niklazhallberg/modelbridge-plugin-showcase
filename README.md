@@ -56,6 +56,8 @@ Built for professional use — not a prototype.
 
 **Plain-language errors.** When something goes wrong, you get a clear explanation and specific recovery steps — what happened, why, and what to do. No HTTP status codes. No raw API text. No technical jargon. 20+ error patterns covered.
 
+**Follow Your Generation.** AI video generation can take 30 seconds to 5 minutes. Blocking the UI during that time is unusable in a professional editing workflow. modelBridge runs every generation in the background — switch models, browse, keep editing. A persistent panel at the bottom of the plugin tracks all active generations regardless of which model card is open. Each row shows a status dot (orange = running, gray = queued, green = done, red = failed), model name, elapsed timer, and current step. Expand a row to see a 5-step progress tracker — Sent → Queued → Generating → Downloading → Importing — each step turning green with a checkmark as it completes, the active step pulsing orange. Step labels update in real time: "Queued #2" with fal.ai queue position, "Generating", "Downloading", "Importing", "Imported." The expanded view also shows input details — prompt, duration, resolution, aspect ratio, endpoint — so you always know which generation is which. When you navigate to a model whose generation just completed, the row auto-removes and the generation log on that model card shows the completed state. No manual cleanup. Failed rows stay visible with a red indicator and "See error" link — never auto-dismissed, always manually dismissable.
+
 **Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that ensures long-running generations are never lost — even if you close and reopen the panel.
 
 **Durable settings.** Your configuration, saved models, and cost history survive Premiere Pro updates, cache clears, and reinstalls. Dual persistence ensures nothing is lost.
@@ -75,6 +77,8 @@ modelBridge has undergone the most comprehensive testing of any AI plugin for Pr
 **94 automated tests** via Chrome DevTools Protocol against a live Premiere Pro 2025 environment — covering error handling, crash recovery, preview flows, pricing formulas, dual mode rendering, cost display, and input overrides. Plus 52 manual stress tests covering edge cases and failure recovery.
 
 **Pricing accuracy audit** — 24 models across 7 categories, zero incorrect prices. Preview/import audit — 8 routing paths verified correct, 0 bugs.
+
+**Follow Your Generation audit** — 30 checks across visual QA, behavioral QA (step progression, auto-dismiss, failure state, inputParams plumbing), and edge cases. 29 PASS / 1 FAIL (P3 cosmetic — fixed). Tools: static code analysis, CSS token verification, JS logic review.
 
 | | |
 |---|---|
