@@ -110,6 +110,102 @@ modelBridge has undergone the most comprehensive testing of any AI plugin for Pr
 
 ---
 
+## System Architecture
+
+*Built around one principle: the system manages itself so the editor never has to.*
+
+### Three pillars
+
+| Zero manual maintenance | Non-blocking workflow | Native Premiere integration |
+|---|---|---|
+| Models, pricing, and constraints update automatically — no plugin release needed | All AI jobs run in background — the editor is always responsive | Results land on the timeline automatically — right track, right timecode |
+
+---
+
+### What the editor sees and touches
+
+<table>
+<tr>
+<td width="25%">
+
+**Discover & configure**
+
+`Model search & browser` · `Auto-generated UI` · `Preflight validation` · `Prompt optimizer`
+
+</td>
+<td width="25%">
+
+**Review & deliver**
+
+`Preview & approve` · `Mask editor` · `Dual Mode` · `Mobile preview`
+
+</td>
+<td width="25%">
+
+**Cost & reporting**
+
+`Live cost per generation` · `Costs dashboard` · `Client report export` · `Generation audit log`
+
+</td>
+<td width="25%">
+
+**Self-managing systems** 🟢
+
+🔄 `Auto-updating model list` · 🔄 `Self-healing server` · 🔄 `Constraint cache` · 🔄 `Onboarding wizard`
+
+</td>
+</tr>
+</table>
+
+> 860+ models — filter by category. Controls built from model schema, not hardcoded. Errors caught before any cost.
+
+&nbsp;&nbsp;&nbsp;&nbsp;⬇ **Background server** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇ **Premiere scripting API**
+
+---
+
+### What runs invisibly
+
+<table>
+<tr>
+<td width="50%">
+
+**Local server**
+
+`Media extraction` · `File transfer` · `Credential vault` · 🔄 `361 pricing entries — auto-loaded` · 🔄 `Async job queue`
+
+</td>
+<td width="50%">
+
+**AI providers**
+
+`Image generation` · `Video generation` · `Voice & audio` · `Multi-provider ready`
+
+> Flux, Kling, Wan, Luma, Stable Diffusion, ElevenLabs, and hundreds more
+
+</td>
+</tr>
+</table>
+
+*The plugin coordinates both directions — the server and the timeline never communicate directly.*
+
+---
+
+### What lands on the timeline — zero manual steps
+
+`Auto timeline placement` · `Project bin import` · `Fit-to-frame scaling` · `Format detection` · `Audio track placement` · `Source Monitor & AME`
+
+> Right track. Right timecode. Matches existing clip exactly. Reads sequence FPS and resolution.
+
+---
+
+### Key numbers
+
+| 860+ | 0 | 3 | 1 |
+|:---:|:---:|:---:|:---:|
+| AI models available at launch — schema-discovered, not hardcoded | Manual steps to get a result onto the timeline | Self-managing layers — models, pricing, and error handling update without releases | Interface for image, video, voice, and audio generation — inside Premiere |
+
+---
+
 Beta release expected April 2026.
 
 Interested in early access? [Reach out on LinkedIn →](https://www.linkedin.com/in/niklazhallberg/)
