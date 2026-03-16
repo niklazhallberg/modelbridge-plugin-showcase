@@ -1,10 +1,11 @@
 {
   "_meta": {
-    "version": "2.1",
-    "last_verified": "2026-03-08",
-    "verified_by": "manual — fal.ai model pages + provider docs",
-    "next_review": "2026-04-07",
-    "notes": "Review top models monthly. Check fal.ai model pages for price changes. v2.1: added per_video_resolution, per_image_filtered types + Magi, LatentSync, Pika, Ideogram, Wan R2V flash entries."
+    "version": "2.2",
+    "last_verified": "2026-03-16",
+    "last_updated": "2026-03-16",
+    "verified_by": "cross-tool research audit — fal.ai model pages + provider docs + API pricing endpoint",
+    "next_review": "2026-04-16",
+    "notes": "v2.2: corrected Kling v3 i2v/standard rates, added FLUX variant supplements (per_megapixel_ceiling), removed undocumented Seedance v1.5 audio rate split."
   },
 
   "fal-ai/flux-2-pro": {
@@ -25,6 +26,37 @@
   "fal-ai/flux-kontext-pro": {
     "type": "per_image",
     "rate": 0.04,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/flux-pro/v1.1": {
+    "type": "per_megapixel_ceiling",
+    "rate": 0.04,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/flux/dev": {
+    "type": "per_megapixel_ceiling",
+    "rate": 0.025,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/flux/schnell": {
+    "type": "per_megapixel_ceiling",
+    "rate": 0.003,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/flux-pro/v1/fill": {
+    "type": "per_megapixel_ceiling",
+    "rate": 0.05,
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/flux-2-pro/edit": {
+    "type": "per_megapixel_tiered",
+    "firstMpRate": 0.03,
+    "additionalMpRate": 0.015,
     "source": "fal_official_docs",
     "confidence": "high"
   },
@@ -63,19 +95,21 @@
 
   "fal-ai/kling-video/v3/standard/text-to-video": {
     "type": "per_second_audio",
-    "rate_no_audio": 0.168,
-    "rate_audio": 0.252,
-    "rate_voice_control": 0.308,
+    "rate_no_audio": 0.084,
+    "rate_audio": 0.126,
+    "rate_voice_control": 0.154,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "high",
+    "last_verified": "2026-03-16"
   },
   "fal-ai/kling-video/v3/standard/image-to-video": {
     "type": "per_second_audio",
-    "rate_no_audio": 0.168,
-    "rate_audio": 0.252,
-    "rate_voice_control": 0.308,
+    "rate_no_audio": 0.084,
+    "rate_audio": 0.126,
+    "rate_voice_control": 0.154,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "high",
+    "last_verified": "2026-03-16"
   },
   "fal-ai/kling-video/v3/pro/text-to-video": {
     "type": "per_second_audio",
@@ -83,15 +117,17 @@
     "rate_audio": 0.336,
     "rate_voice_control": 0.392,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "high",
+    "last_verified": "2026-03-16"
   },
   "fal-ai/kling-video/v3/pro/image-to-video": {
     "type": "per_second_audio",
-    "rate_no_audio": 0.224,
-    "rate_audio": 0.336,
-    "rate_voice_control": 0.392,
+    "rate_no_audio": 0.112,
+    "rate_audio": 0.168,
+    "rate_voice_control": 0.196,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "high",
+    "last_verified": "2026-03-16"
   },
 
   "fal-ai/kling-video/o3/standard/text-to-video": {
@@ -153,19 +189,21 @@
   },
   "fal-ai/bytedance/seedance/v1.5/pro/text-to-video": {
     "type": "video_token",
-    "rate_per_million_audio": 2.40,
-    "rate_per_million_no_audio": 1.20,
+    "rate_per_million": 2.40,
     "default_fps": 24,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "medium",
+    "last_verified": "2026-03-16",
+    "note": "Audio rate split undocumented — using higher rate as conservative default"
   },
   "fal-ai/bytedance/seedance/v1.5/pro/image-to-video": {
     "type": "video_token",
-    "rate_per_million_audio": 2.40,
-    "rate_per_million_no_audio": 1.20,
+    "rate_per_million": 2.40,
     "default_fps": 24,
     "source": "fal_official_docs",
-    "confidence": "high"
+    "confidence": "medium",
+    "last_verified": "2026-03-16",
+    "note": "Audio rate split undocumented — using higher rate as conservative default"
   },
 
   "fal-ai/veo3": {
@@ -201,6 +239,17 @@
       "720p":  { "no_audio": 0.10, "audio": 0.15 },
       "1080p": { "no_audio": 0.10, "audio": 0.15 },
       "4k":    { "no_audio": 0.30, "audio": 0.35 }
+    },
+    "default_resolution": "1080p",
+    "source": "fal_official_docs",
+    "confidence": "high"
+  },
+  "fal-ai/veo3.1/image-to-video": {
+    "type": "per_second_audio_resolution",
+    "rates": {
+      "720p":  { "no_audio": 0.20, "audio": 0.40 },
+      "1080p": { "no_audio": 0.20, "audio": 0.40 },
+      "4k":    { "no_audio": 0.40, "audio": 0.60 }
     },
     "default_resolution": "1080p",
     "source": "fal_official_docs",
