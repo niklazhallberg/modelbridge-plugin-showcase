@@ -12,13 +12,13 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 **860+ models, one panel.** Browse, search, filter, add. Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs — all generated from the model's own specification. Not hardcoded. Not simplified. The full model, as its creators intended.
 
-**Smart timeline import.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact same position, exact same scale. Generate a video from a text prompt, and the result inserts at the playhead on the first available track. Generate a voiceover, and it lands on the audio track. Each preview card tells you exactly what will happen before you click: *"Replaces the source image on the timeline with the generated video"* or *"Inserts the audio at the playhead on the first available audio track."* Your original source clip stays in the project bin — nothing is ever destroyed.
+**Smart timeline import — you always know what will happen.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact same position, exact same duration, exact same scale. Generate a video from a text prompt, and the result inserts at the playhead on the first empty track — or creates a new one if all are occupied. Generate audio, and it lands on the right audio track without touching your existing audio. The preview bar tells you exactly what will happen before you click, updated live as you move the playhead: *"Replaces the source image on V1 with the generated video. Same position and duration. Other tracks stay untouched. Undo with Cmd+Z."* or *"Adds the audio on A3 at 00:01:24. Existing audio stays untouched. Undo with Cmd+Z."* Every message answers three questions: where does it go, what happens to my existing content, and how do I undo. Your original source clip stays in the project bin — nothing is ever destroyed.
 
 **Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when they share the same source clip. The first result replaces it; the second automatically inserts at the playhead instead. No manual workaround needed.
 
-**Audio preview & TTS.** Generate professional voiceover and sound effects without leaving Premiere Pro. ElevenLabs, Kokoro, Qwen-TTS, and dozens more — all through the same interface as video and image models. Preview audio directly in the plugin with an inline player before importing. Only one player plays at a time, so you can audition results cleanly. Compare two voices on the same script with Dual Mode.
+**3-click voice changer & full audio pipeline.** Record a voiceover in Premiere, select the clip on the timeline, click Generate. The AI-converted voice imports directly to the first empty audio track at your playhead — existing audio stays untouched. No export. No browser. No re-import. No other tool offers "select clip on timeline → AI voice conversion → back on timeline" in one step. The plugin detects audio clips on audio-only tracks (A1, A2, A3) automatically, including Premiere's Voice-Over recordings. 10+ audio models supported: ElevenLabs Voice Changer (voice swap preserving timing and emotion), ElevenLabs Dubbing (multi-language with sync), Eleven v3/Turbo/Multilingual TTS, text-to-dialogue (multi-voice scenes), AI music generation, sound effects from text, and speech-to-text transcription. Preview audio with an inline player before importing. Compare two voices on the same script with Dual Mode.
 
-**Real-time cost estimates.** Before you generate, you see what it will cost. Change the duration from 5 to 10 seconds — the estimate updates. Toggle audio on — the estimate updates. Switch resolution — the estimate updates. 11 pricing model types covered. Three clear states: exact price, base rate with disclaimer, or "Pricing unavailable." Never a wrong number.
+**Real-time cost estimates.** Before you generate, you see what it will cost. Change the duration from 5 to 10 seconds — the estimate updates. Toggle audio on — the estimate updates. Switch resolution — the estimate updates. 11 pricing formula types covered. Four confidence tiers: accurate estimate, base rate with disclaimer, post-generation actual cost, or honest "Pricing unavailable." Never a fabricated number.
 
 **Mobile Preview.** Send results to your phone with one tap. Review on the screen your audience actually uses — Instagram, TikTok, YouTube Shorts. Scan a QR code once, then your latest generation is always in the app.
 
@@ -38,13 +38,39 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 **Cost tracking per client and project.** Every generation tracked with exact cost per model per call — in USD, EUR, or SEK. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
 
-**Four-layer pricing intelligence.** The cost estimate you see before generating comes from a four-layer pipeline: curated per-model pricing that responds to every parameter change (resolution, duration, audio, quality tier), the official platform pricing API for base rates (100% model coverage), family heuristics for related models, and an honest "Pricing unavailable" when no data exists. Verified across 24 models and 7 generation categories with zero incorrect prices.
+**Four-layer pricing intelligence.** The cost estimate you see before generating comes from a four-layer pipeline: curated per-model pricing that responds to every parameter change (resolution, duration, audio, quality tier), the official platform pricing API for base rates (100% model coverage), family heuristics for related models, and an honest "Pricing unavailable" when no data exists. After generation, actual costs from fal.ai's billing confirmation replace estimates when available. Verified across 24 models and 7 generation categories with zero incorrect prices.
 
 **No hidden credits.** You use your own fal.ai API key. You see exactly what each generation costs before you commit. No proprietary token systems, no bundled subscriptions, no markup.
 
 **Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
 
 **External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. Everything shows up in one dashboard alongside your fal.ai generations — total AI spend across all tools.
+
+---
+
+## Cost Transparency
+
+### What you see before generating
+
+modelBridge shows a cost estimate for every generation, based on fal.ai's official published rates. The estimate is labeled clearly so you always know how confident we are:
+
+- **Est. $X.XX** — from our curated rate database, verified against fal.ai's official documentation. Updates live as you change parameters (duration, resolution, audio toggle, quality tier).
+- **~$X.XX (base rate)** — from fal.ai's live pricing API. May not reflect all parameter surcharges (audio, resolution tier).
+- **Cost unavailable** — fal.ai doesn't publish pricing for this model. Click the link to check their site directly.
+
+### What you see after generating
+
+When fal.ai confirms the billing units for your generation, modelBridge updates the cost entry to show **Actual $X.XX** — the most accurate cost signal available from the provider. This appears as a green badge in your Costs tab alongside the original estimate, so you can see exactly what you were charged.
+
+### Why we can't always show exact costs
+
+fal.ai publishes pricing as unit rates (per second, per megapixel, per image). These are the same rates any tool uses to estimate costs — no tool receives the actual invoiced amount from fal.ai before generation completes. We calculate estimates from official rates and are transparent about the confidence level of each estimate. When a model's pricing structure is too complex or undocumented for accurate estimation, we say "Cost unavailable" rather than show a wrong number.
+
+### No markups
+
+modelBridge does not add any markup to fal.ai's rates. You use your own API key. You pay fal.ai directly at their published prices. No proprietary token systems, no bundled subscriptions.
+
+Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
 
 ---
 
@@ -101,9 +127,9 @@ modelBridge has undergone the most comprehensive testing of any AI plugin for Pr
 | **Categories** | 7 (image, video, audio, TTS) | 1–2 | 1 per platform |
 | **New models** | Automatic | Plugin update required | New account required |
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
-| **Smart import** | Context-aware replace or insert | Manual positioning | Manual positioning |
-| **Audio/TTS** | Built-in preview + audio track import | None or separate tool | Platform-specific |
-| **Pre-gen cost estimate** | Exact or base rate for 860+ models | Hidden or none | Hidden behind credits |
+| **Smart import** | Context-aware replace or insert with live track + timecode preview | Manual positioning | Manual positioning |
+| **Audio/TTS** | Select clip → Generate → on timeline (3 clicks) | None or separate tool | Export → upload → download → import |
+| **Pre-gen cost estimate** | 4-tier confidence for 860+ models | Hidden or none | Hidden behind credits |
 | **Mobile preview** | Built-in | No | No |
 | **Dual comparison** | Side-by-side with independent import | No | Manual across tabs |
 | **Multi-image inputs** | Auto-detected from schema | Hardcoded per model | Platform-specific |
