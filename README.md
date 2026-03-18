@@ -78,9 +78,27 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 Built for professional use — not a prototype.
 
-**Smart validation across all 7 categories.** Inputs are validated against each model's requirements before you generate — image dimensions, file size, aspect ratio, video duration, required fields. The plugin learns from edge cases over time, caching constraints from API errors to prevent repeat failures. Works identically across text-to-image, image-to-video, video-to-video, text-to-video, TTS, text-to-audio, and image-to-image.
+**Generate with confidence.** Before you click Generate, the plugin checks your media against every requirement the model has — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong before any API call is made: "This image is 640x480 px. This model requires at least 1024x768 px." The Generate button stays disabled until everything passes. No wasted credits. No waiting 30 seconds for a generation to fail.
 
-**Plain-language errors.** When something goes wrong, you get a clear explanation and specific recovery steps — what happened, why, and what to do. No HTTP status codes. No raw API text. No technical jargon. 20+ error patterns covered.
+**It learns what each model needs.** The first time a model rejects your media — say, a 12 MB video on a model that allows 10 MB max — the plugin remembers that limit permanently. Next time you select a file that's too large for the same model, it's caught instantly. The system gets smarter with every generation, building a knowledge base of real-world requirements that go beyond what's published in the model's documentation.
+
+**Every error is a clear sentence, not a wall of code.** When something goes wrong, modelBridge tells you exactly what happened, why, and what to do next:
+
+- Not "error occurred" — *"Your image needs to be at least 512x512 px."*
+- Not "request failed" — *"Your fal.ai balance is empty — top up at fal.ai/dashboard."*
+- Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."*
+
+No HTTP status codes. No raw API text. No technical jargon. 44 error types from fal.ai mapped to plain language with specific recovery steps.
+
+**Different problems look different.** Error messages are color-coded by what you need to do:
+
+- **Red** — something about your input needs fixing (wrong size, wrong format)
+- **Amber** — action required on your end (billing, content adjustment)
+- **Blue** — temporary issue, automatic retry in progress (network, server load)
+
+This applies everywhere — in the main panel, in the media preview card, and in the background generation tracker. You always know at a glance what kind of issue you're looking at.
+
+**Background generations are fully tracked.** Even when you're working on something else, errors from background generations are caught and waiting for you. When you return, you see exactly what failed, why, and what to do — color-coded by error type so you can prioritize. Failed generations never silently disappear.
 
 **Follow Your Generation.** AI video generation can take 30 seconds to 5 minutes. Blocking the UI during that time is unusable in a professional editing workflow. modelBridge runs every generation in the background — switch models, browse, keep editing. A persistent panel at the bottom of the plugin tracks all active generations regardless of which model card is open. Each row shows a status dot (orange = running, gray = queued, green = done, red = failed), model name, elapsed timer, and current step. Expand a row to see a 5-step progress tracker — Sent → Queued → Generating → Downloading → Importing — each step turning green with a checkmark as it completes, the active step pulsing orange. Step labels update in real time: "Queued #2" with fal.ai queue position, "Generating", "Downloading", "Importing", "Imported." The expanded view also shows input details — prompt, duration, resolution, aspect ratio, endpoint — so you always know which generation is which. When you navigate to a model whose generation just completed, the row auto-removes and the generation log on that model card shows the completed state. No manual cleanup. Failed rows stay visible with a red indicator and "See error" link — never auto-dismissed, always manually dismissable.
 
@@ -133,8 +151,8 @@ modelBridge has undergone the most comprehensive testing of any AI plugin for Pr
 | **Mobile preview** | Built-in | No | No |
 | **Dual comparison** | Side-by-side with independent import | No | Manual across tabs |
 | **Multi-image inputs** | Auto-detected from schema | Hardcoded per model | Platform-specific |
-| **Validation** | Self-improving, 3-layer | Basic or none | Server-side only |
-| **Error messages** | Plain language + recovery steps | Raw API errors | Varies |
+| **Validation** | Self-improving — learns from errors, blocks before API call | Basic or none | Server-side only |
+| **Error messages** | Plain language + exact values + color-coded by type | Raw API errors | Varies |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
 | **Pre-launch testing** | 155 models audited + 94 automated tests | Unknown | Unknown |
 
