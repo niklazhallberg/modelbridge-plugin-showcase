@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "version": "2.2",
-    "last_verified": "2026-03-16",
-    "last_updated": "2026-03-16",
+    "version": "2.3",
+    "last_verified": "2026-03-19",
+    "last_updated": "2026-03-19",
     "verified_by": "cross-tool research audit — fal.ai model pages + provider docs + API pricing endpoint",
-    "next_review": "2026-04-16",
-    "notes": "v2.2: corrected Kling v3 i2v/standard rates, added FLUX variant supplements (per_megapixel_ceiling), removed undocumented Seedance v1.5 audio rate split."
+    "next_review": "2026-04-19",
+    "notes": "v2.3: added Kling v2.6 motion-control pro/standard supplements from API pricing endpoint."
   },
 
   "fal-ai/flux-2-pro": {
@@ -91,6 +91,26 @@
     "rate_audio": 0.140,
     "source": "provider_docs",
     "confidence": "medium"
+  },
+  "fal-ai/kling-video/v2.6/pro/motion-control": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.112,
+    "rate_audio": 0.112,
+    "source": "fal_pricing_api",
+    "confidence": "medium",
+    "fal_api_unit_price": 0.112,
+    "fal_api_unit": "seconds",
+    "note": "API returns single rate — no audio tier documented for motion-control"
+  },
+  "fal-ai/kling-video/v2.6/standard/motion-control": {
+    "type": "per_second_audio",
+    "rate_no_audio": 0.070,
+    "rate_audio": 0.070,
+    "source": "fal_pricing_api",
+    "confidence": "medium",
+    "fal_api_unit_price": 0.070,
+    "fal_api_unit": "seconds",
+    "note": "API returns single rate — no audio tier documented for motion-control"
   },
 
   "fal-ai/kling-video/v3/standard/text-to-video": {
