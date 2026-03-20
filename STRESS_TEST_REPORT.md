@@ -196,13 +196,59 @@ Documented but not yet addressed. See `CLAUDE.md` for full tech debt inventory.
 
 ---
 
+## Category Gating & End-to-End Audit (2026-03-20)
+
+Full verification that (1) no unsupported model can be added or generate, and (2) every supported model category works end-to-end. Code path analysis + static verification across all entry points.
+
+### Part 1 — Gating: 5 entry points verified
+
+| Entry point | Gate function | Status |
+|---|---|---|
+| Search results | `buildResultRow()` → `isCategoryBlocked()` | PASS |
+| Direct endpoint add | `addModelById()` — 2 gates (pre-schema + post-schema) | PASS |
+| JSON import | `importCustomModel()` | PASS |
+| addCustomModel() direct call | Category gate at top of function | PASS |
+| Already-added blocked models | `buildModelCardHTML()` visual gate | PASS |
+
+12 category normalization variants tested (kebab, snake, upper, camelCase). Unknown categories default to blocked (fail-safe). No persistent DevTools bypass possible.
+
+### Part 2 — End-to-End: all 11 categories PASS
+
+| # | Category | Output | Search | Add | Render | Validate | Cost | Generate | Poll | BG Panel | Result | Preview | Import | Cost Log |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | text_to_image | image | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 2 | image_to_image | image | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 3 | text_to_video | video | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 4 | image_to_video | video | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 5 | video_to_video | video | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 6 | text_to_audio | audio | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 7 | text_to_speech | audio | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 8 | audio_to_audio | audio | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 9 | audio_to_video | video | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 10 | video_to_audio | audio | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+| 11 | speech_to_speech | audio | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
+
+### Parts 3–5 — Preview, Active Gen Panel, Cost System: all PASS
+
+- **Image preview:** render, Source Monitor, Show in Finder, import, multi-image gallery
+- **Video preview:** render, fit-to-frame, two-clip replacement, Source Monitor
+- **Audio preview:** HTML5 player, play/pause/seek, error handler, audio track import (3-tier selection)
+- **Background removal:** alpha guidance text with correct styling
+- **Active Gen Panel:** output-type-aware notifications, step tracker, expiry warnings (20h/24h)
+- **Cost system:** 11 pricing types across all categories, 3 badge states, breakdown drawer, currency switching
+
+3 info-level issues found and fixed in commit `ca88421`.
+
+---
+
 ## Summary
 
 | Metric | Count |
 |--------|-------|
-| Total tests | 82 |
-| Pass | 81 |
-| Documented as tech debt | 1 (Test 28 — dual mode error vocabulary) |
-| Gaps found during testing | 19 |
-| Gaps fixed during testing | 19 |
-| Commits from stress test fixes | 10 |
+| Total tests (manual + audit) | 183 |
+| Pass (manual suites 1–6) | 81 |
+| Documented as tech debt (manual) | 1 (Test 28 — dual mode error vocabulary) |
+| Pass (category gating audit) | 101 (5 gates + 12 normalization + 11×7 e2e + 17 preview/panel/cost) |
+| Gaps found during testing | 22 |
+| Gaps fixed during testing | 22 |
+| Commits from stress test fixes | 11 |

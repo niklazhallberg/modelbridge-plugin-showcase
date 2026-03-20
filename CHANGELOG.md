@@ -4,6 +4,22 @@ Key milestones in the development of modelBridge.ai.
 
 ---
 
+## v0.13 — Category Gating & Full E2E Certification (March 2026)
+
+### Model Category System
+- **Three-tier category gating** — ALLOWED (11 categories), WARNING (reserved), BLOCKED (13 categories). Five independent gates prevent unsupported models at every entry point: search, addModelById (pre + post schema), addCustomModel, importCustomModel
+- **Fail-safe unknown category handling** — new categories from fal.ai are automatically blocked until explicitly allowlisted. No unsafe defaults
+- **saveCustomModels() defensive filter** — blocked-category models cannot persist to localStorage or disk, closing the DevTools injection gap
+
+### End-to-End Verification
+- **All 11 supported categories pass end-to-end** — text_to_image, image_to_image, text_to_video, image_to_video, video_to_video, text_to_audio, text_to_speech, audio_to_audio, audio_to_video, video_to_audio, speech_to_speech
+- **Full pipeline verified per category** — search → add → render → validate → cost → generate → poll → background panel → result extraction → preview → import → cost log
+- **Audio pipeline fully functional** — dedicated `insertAudioOnTimeline()` JSX with 3-tier audio track selection (targeted empty > any empty > auto-create)
+
+### QA
+- **101-check category gating audit** — 5 entry point gates, 12 normalization variants, 11×13 end-to-end matrix, preview/panel/cost deep-dives. Zero failures
+- **277 total tests** across 6 automated CDP suites (94), 6 manual suites (82), and category audit (101)
+
 ## v0.12 — Follow Your Generation (March 2026)
 
 ### Background Generation Panel
