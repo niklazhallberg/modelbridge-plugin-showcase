@@ -20,7 +20,7 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 **Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when sharing the same source clip.
 
-**Real-time cost estimates.** Before you generate, you see what it will cost. Change the duration — the estimate updates. Toggle audio — the estimate updates. Switch resolution — the estimate updates. Four confidence tiers: accurate estimate, base rate with disclaimer, post-generation actual cost, or honest "Pricing unavailable." Never a fabricated number.
+**Real-time cost & time estimates.** Before you generate, you see what it will cost and how long it will take. Change the duration — the cost updates. Toggle audio — the cost updates. The time estimate learns from your previous generations — after three runs, the plugin shows "~45 sec" or "~2–3 min" based on actual history. Four cost confidence tiers. No fabricated numbers.
 
 **Follow Your Generation.** Every generation runs in the background — switch models, browse, keep editing. A persistent panel tracks all active jobs with real-time progress: Sent → Queued → Generating → Downloading → Importing. Each row shows status, model name, elapsed time, and current step. Failed rows stay visible with clear error links — never auto-dismissed.
 
@@ -37,6 +37,20 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 **Prompt optimization.** One click rewrites your description into a model-optimized prompt — without requiring prompt engineering expertise.
 
 **Drag-and-drop from Finder.** Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: one slot from your timeline, one from Finder.
+
+---
+
+## An Intelligent System That Improves the More You Use It
+
+Most plugins are static — the tool you install is the tool you get. modelBridge is different. Three systems learn and adapt automatically, making the plugin more capable over time without any updates.
+
+**Growing model catalog.** When fal.ai releases a new AI model, modelBridge discovers it automatically. No plugin update. No manual refresh. The toolkit you buy today is more powerful next month — and the month after that — without you lifting a finger. 900+ models today, more every week.
+
+**Self-improving validation.** The first time a model rejects your image for being too small, modelBridge remembers that exact requirement — permanently. Next time, it catches the problem before any API call. Every failed generation teaches the system something new. After a few weeks of use, the plugin knows more about each model's real-world limits than the models' own documentation.
+
+**Learned time estimation.** After three successful generations with any model, modelBridge starts showing estimated generation time: "~45 sec" or "~2–3 min." The estimates are built entirely from your own usage history — median-based, rounded up slightly so the actual time usually comes in under the estimate. During generation, the estimate tracks progress: "Almost done..." when you're close, "Still working..." if it takes longer than usual. No hardcoded data. No guessing. The system simply watches, learns, and gets more accurate over time.
+
+The result: a tool that feels like it knows what it's doing — because it does.
 
 ---
 
