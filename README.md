@@ -4,33 +4,65 @@
 
 Other plugins hardcode 5–20 models, break when APIs change, and charge you through proprietary credit systems. modelBridge takes a different approach — a schema-driven engine that reads any model's API specification and generates the interface automatically. When fal.ai releases a new model tomorrow, your plugin supports it today. No update required.
 
-860+ models across 7 categories — text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, text-to-speech, and text-to-audio. One panel. Your own API key. Transparent per-call pricing.
+860+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
+
+<!-- Screenshots will go here — see bottom of README for capture list -->
 
 ---
 
-## What You Get
+## Key Features
 
-**860+ models, one panel.** Browse, search, filter, add. Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs — all generated from the model's own specification. Not hardcoded. Not simplified. The full model, as its creators intended.
+**Schema-driven dynamic UI.** Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs — all generated from the model's OpenAPI specification. Not hardcoded. Not simplified. The full model, as its creators intended.
 
-**Smart timeline import — you always know what will happen.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact same position, exact same duration, exact same scale. Generate a video from a text prompt, and the result inserts at the playhead on the first empty track — or creates a new one if all are occupied. Generate audio, and it lands on the right audio track without touching your existing audio. The preview bar tells you exactly what will happen before you click, updated live as you move the playhead: *"Replaces the source image on V1 with the generated video. Same position and duration. Other tracks stay untouched. Undo with Cmd+Z."* or *"Adds the audio on A3 at 00:01:24. Existing audio stays untouched. Undo with Cmd+Z."* Every message answers three questions: where does it go, what happens to my existing content, and how do I undo. Your original source clip stays in the project bin — nothing is ever destroyed.
+**Smart timeline import.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact position, exact duration, exact scale. Generate from a text prompt, and the result inserts at the playhead on the first empty track. Generate audio, and it lands on the right audio track. A live preview bar tells you exactly what will happen before you click — updated as you move the playhead. Your original source clip stays in the project bin — nothing is ever destroyed.
 
-**Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when they share the same source clip. The first result replaces it; the second automatically inserts at the playhead instead. No manual workaround needed.
+**Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when sharing the same source clip.
 
-**3-click voice changer & full audio pipeline.** Record a voiceover in Premiere, select the clip on the timeline, click Generate. The AI-converted voice imports directly to the first empty audio track at your playhead — existing audio stays untouched. No export. No browser. No re-import. No other tool offers "select clip on timeline → AI voice conversion → back on timeline" in one step. The plugin detects audio clips on audio-only tracks (A1, A2, A3) automatically, including Premiere's Voice-Over recordings. 10+ audio models supported: ElevenLabs Voice Changer (voice swap preserving timing and emotion), ElevenLabs Dubbing (multi-language with sync), Eleven v3/Turbo/Multilingual TTS, text-to-dialogue (multi-voice scenes), AI music generation, sound effects from text, and speech-to-text transcription. Preview audio with an inline player before importing. Compare two voices on the same script with Dual Mode.
+**Real-time cost estimates.** Before you generate, you see what it will cost. Change the duration — the estimate updates. Toggle audio — the estimate updates. Switch resolution — the estimate updates. Four confidence tiers: accurate estimate, base rate with disclaimer, post-generation actual cost, or honest "Pricing unavailable." Never a fabricated number.
 
-**Real-time cost estimates.** Before you generate, you see what it will cost. Change the duration from 5 to 10 seconds — the estimate updates. Toggle audio on — the estimate updates. Switch resolution — the estimate updates. 11 pricing formula types covered. Four confidence tiers: accurate estimate, base rate with disclaimer, post-generation actual cost, or honest "Pricing unavailable." Never a fabricated number.
+**Follow Your Generation.** Every generation runs in the background — switch models, browse, keep editing. A persistent panel tracks all active jobs with real-time progress: Sent → Queued → Generating → Downloading → Importing. Each row shows status, model name, elapsed time, and current step. Failed rows stay visible with clear error links — never auto-dismissed.
 
-**Mobile Preview.** Send results to your phone with one tap. Review on the screen your audience actually uses — Instagram, TikTok, YouTube Shorts. Scan a QR code once, then your latest generation is always in the app.
-
-**Source Monitor preview.** Evaluate results at full resolution in Premiere Pro's native Source Monitor before committing. Set In and Out points to use only the best segment — import just the marked subregion to your timeline.
+**3-click voice changer & full audio pipeline.** Select a voice clip on the timeline, click Generate. The AI-converted voice imports directly to the first empty audio track. No export. No browser. No re-import. 10+ audio models: ElevenLabs Voice Changer, Dubbing, TTS, multi-voice dialogue, AI music, sound effects, and transcription. Preview audio inline before importing.
 
 **Built-in mask editor.** Paint inpainting masks directly in the panel — adjustable brush, zoom, pan, eraser, undo. No Photoshop roundtrip.
 
-**Dual-frame interpolation.** Select a start frame and an end frame on your timeline. The AI generates the motion between them. When both clips are adjacent, the result replaces them as a single clip spanning their combined duration.
+**Dual-frame interpolation.** Select a start frame and end frame on your timeline. The AI generates the motion between them. Adjacent clips get replaced as a single clip spanning their combined duration.
 
-**Drag-and-drop from Finder.** Drag a file onto the media card — skip the Premiere Pro import step entirely. Mix sources: one slot from your timeline, one from Finder.
+**Source Monitor preview.** Evaluate results at full resolution in Premiere Pro's Source Monitor. Set In/Out points to import just the best segment.
 
-**Prompt optimization.** One click rewrites your brief description into a model-optimized prompt. The optimizer understands model-specific conventions and adds the technical detail that improves output quality — without requiring prompt engineering expertise.
+**Mobile Preview.** Send results to your phone with one tap. Review on the screen your audience uses. Scan a QR code once, then your latest generation is always in the app.
+
+**Prompt optimization.** One click rewrites your description into a model-optimized prompt — without requiring prompt engineering expertise.
+
+**Drag-and-drop from Finder.** Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: one slot from your timeline, one from Finder.
+
+---
+
+## How It Works
+
+1. **Search and add** — Browse 860+ AI models from the fal.ai catalog. Filter by category, search by name or keyword. Add any model with one click.
+
+2. **Configure and estimate** — The plugin generates a custom interface from the model's schema. Set your parameters, see the cost estimate update in real time. 9 validation gates check your inputs before any API call.
+
+3. **Generate and import** — Click Generate. The result downloads and imports directly to your Premiere Pro timeline — right track, right timecode, right scale. Or preview first in Source Monitor, on your phone, or side-by-side in Dual Mode.
+
+---
+
+## Supported Categories
+
+| Category | Example Use Cases |
+|---|---|
+| **Text to Image** | Generate stills from prompts — titles, backgrounds, concept art |
+| **Image to Image** | Style transfer, upscaling, background removal, image editing |
+| **Text to Video** | Generate video clips from text descriptions |
+| **Image to Video** | Animate a still frame — product shots, hero images, b-roll |
+| **Video to Video** | Style transfer on existing footage, video enhancement |
+| **Text to Audio** | Sound effects, ambient audio, music from text descriptions |
+| **Text to Speech** | AI voiceovers — multiple voices, languages, emotions |
+| **Audio to Audio** | Voice conversion, audio enhancement, noise removal |
+| **Audio to Video** | Lip sync, music visualization, audio-driven animation |
+| **Video to Audio** | Extract or generate audio tracks from video content |
+| **Speech to Speech** | Real-time voice transformation preserving timing and emotion |
 
 ---
 
@@ -38,13 +70,9 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 **Cost tracking per client and project.** Every generation tracked with exact cost per model per call — in USD, EUR, or SEK. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
 
-**Four-layer pricing intelligence.** The cost estimate you see before generating comes from a four-layer pipeline: curated per-model pricing that responds to every parameter change (resolution, duration, audio, quality tier), the official platform pricing API for base rates (100% model coverage), family heuristics for related models, and an honest "Pricing unavailable" when no data exists. After generation, actual costs from fal.ai's billing confirmation replace estimates when available. Verified across 24 models and 7 generation categories with zero incorrect prices.
-
-**No hidden credits.** You use your own fal.ai API key. You see exactly what each generation costs before you commit. No proprietary token systems, no bundled subscriptions, no markup.
-
 **Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
 
-**External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. Everything shows up in one dashboard alongside your fal.ai generations — total AI spend across all tools.
+**External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
 
 ---
 
@@ -54,85 +82,101 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 modelBridge shows a cost estimate for every generation, based on fal.ai's official published rates. The estimate is labeled clearly so you always know how confident we are:
 
-- **Est. $X.XX** — from our curated rate database, verified against fal.ai's official documentation. Updates live as you change parameters (duration, resolution, audio toggle, quality tier).
-- **~$X.XX (base rate)** — from fal.ai's live pricing API. May not reflect all parameter surcharges (audio, resolution tier).
+- **Est. $X.XX** — from our curated rate database, verified against fal.ai's documentation. Updates live as you change parameters (duration, resolution, audio, quality tier).
+- **~$X.XX (base rate)** — from fal.ai's live pricing API. May not reflect all parameter surcharges.
 - **Cost unavailable** — fal.ai doesn't publish pricing for this model. Click the link to check their site directly.
 
 ### What you see after generating
 
-When fal.ai confirms the billing units for your generation, modelBridge updates the cost entry to show **Actual $X.XX** — the most accurate cost signal available from the provider. This appears as a green badge in your Costs tab alongside the original estimate, so you can see exactly what you were charged.
+When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a green badge in your Costs tab alongside the original estimate.
 
 ### Why we can't always show exact costs
 
-fal.ai publishes pricing as unit rates (per second, per megapixel, per image). These are the same rates any tool uses to estimate costs — no tool receives the actual invoiced amount from fal.ai before generation completes. We calculate estimates from official rates and are transparent about the confidence level of each estimate. When a model's pricing structure is too complex or undocumented for accurate estimation, we say "Cost unavailable" rather than show a wrong number.
-
-### No markups
-
-modelBridge does not add any markup to fal.ai's rates. You use your own API key. You pay fal.ai directly at their published prices. No proprietary token systems, no bundled subscriptions.
+fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. We calculate estimates from official rates and are transparent about the confidence level. When pricing is undocumented, we say "Cost unavailable" rather than show a wrong number.
 
 Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
 
 ---
 
-## Reliability
+## Security & Privacy
 
-Built for professional use — not a prototype.
+### Your data stays on your machine
 
-**Generate with confidence.** Before you click Generate, the plugin checks your media against every requirement the model has — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong before any API call is made: "This image is 640x480 px. This model requires at least 1024x768 px." The Generate button stays disabled until everything passes. No wasted credits. No waiting 30 seconds for a generation to fail.
+All user data — saved models, settings, generation history, cost logs — is stored locally on your machine using localStorage and local JSON files. modelBridge does not operate any cloud server, database, or analytics backend. There is no "modelBridge server" that your data is sent to.
 
-**It learns what each model needs.** The first time a model rejects your media — say, a 12 MB video on a model that allows 10 MB max — the plugin remembers that limit permanently. Next time you select a file that's too large for the same model, it's caught instantly. The system gets smarter with every generation, building a knowledge base of real-world requirements that go beyond what's published in the model's documentation.
+Generated media (images, videos, audio) is downloaded directly from fal.ai to your local project folder.
 
-**Every error is a clear sentence, not a wall of code.** When something goes wrong, modelBridge tells you exactly what happened, why, and what to do next:
+### API key handling
 
-- Not "error occurred" — *"Your image needs to be at least 512x512 px."*
-- Not "request failed" — *"Your fal.ai balance is empty — top up at fal.ai/dashboard."*
-- Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."*
+Your fal.ai API key is entered once and stored locally on your machine. It is never transmitted to modelBridge or any third party — used exclusively for direct communication between the plugin and fal.ai. You can view, change, or delete your key at any time from plugin settings.
 
-No HTTP status codes. No raw API text. No technical jargon. 44 error types from fal.ai mapped to plain language with specific recovery steps.
+### Network communication — only two destinations
 
-**Different problems look different.** Error messages are color-coded by what you need to do:
+- **fal.ai** — for AI model generation, schema fetching, and pricing data. All requests authenticated with your own API key.
+- **LemonSqueezy** — for license validation at startup. No user data is included — only the license key and a machine identifier.
 
-- **Red** — something about your input needs fixing (wrong size, wrong format)
-- **Amber** — action required on your end (billing, content adjustment)
-- **Blue** — temporary issue, automatic retry in progress (network, server load)
+No third-party analytics, tracking pixels, telemetry, or data collection of any kind.
 
-This applies everywhere — in the main panel, in the media preview card, and in the background generation tracker. You always know at a glance what kind of issue you're looking at.
+### License validation
 
-**Background generations are fully tracked.** Even when you're working on something else, errors from background generations are caught and waiting for you. When you return, you see exactly what failed, why, and what to do — color-coded by error type so you can prioritize. Failed generations never silently disappear.
+License validation checks a single endpoint (LemonSqueezy License API) at plugin startup. The only data sent is the license key and a local instance identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 72 hours since the last successful validation.
 
-**Follow Your Generation.** AI video generation can take 30 seconds to 5 minutes. Blocking the UI during that time is unusable in a professional editing workflow. modelBridge runs every generation in the background — switch models, browse, keep editing. A persistent panel at the bottom of the plugin tracks all active generations regardless of which model card is open. Each row shows a status dot (orange = running, gray = queued, green = done, red = failed), model name, elapsed timer, and current step. Expand a row to see a 5-step progress tracker — Sent → Queued → Generating → Downloading → Importing — each step turning green with a checkmark as it completes, the active step pulsing orange. Step labels update in real time: "Queued #2" with fal.ai queue position, "Generating", "Downloading", "Importing", "Imported." The expanded view also shows input details — prompt, duration, resolution, aspect ratio, endpoint — so you always know which generation is which. When you navigate to a model whose generation just completed, the row auto-removes and the generation log on that model card shows the completed state. No manual cleanup. Failed rows stay visible with a red indicator and "See error" link — never auto-dismissed, always manually dismissable.
+### What we do NOT collect
 
-**Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that ensures long-running generations are never lost — even if you close and reopen the panel.
+- No prompts, inputs, or generated content
+- No usage statistics or analytics
+- No personal information beyond what LemonSqueezy provides at purchase
+- No browsing behavior, no cookies beyond localStorage, no fingerprinting
 
-**Durable settings.** Your configuration, saved models, and cost history survive Premiere Pro updates, cache clears, and reinstalls. Dual persistence ensures nothing is lost.
+### Data deletion
 
-**Pricing accuracy.** 24-model audit across 7 generation categories. Zero incorrect prices. Every cost estimate is either exact (from curated data), an honest base rate (from the official API), or clearly marked as unavailable. No fabricated numbers.
+All locally stored data can be cleared from within the plugin (Settings → Reset). Uninstalling removes all extension files. Cost history includes a manual "Reset" function requiring the user to type "DELETE" as confirmation — no accidental data loss.
 
 ---
 
-## Verified at Scale
+## Reliability
 
-modelBridge has undergone the most comprehensive testing of any AI plugin for Premiere Pro.
+**9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
 
-**155 models audited** across 5 rounds of systematic UI input verification — every field checked for correct type, placement, constraints, and user accessibility. 14 root cause fixes implemented. Zero critical issues remaining.
+**Self-improving constraint cache.** The first time a model rejects your media, the plugin remembers that limit permanently. Next time, it's caught before any API call. The system gets smarter with every generation.
 
-**Full system audit** by a 4-role review team covering schema rendering, cost estimation, generation reliability, and data integrity. 27 checks across the entire pipeline — from API schema parsing to timeline import.
+**Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
 
-**94 automated tests** via Chrome DevTools Protocol against a live Premiere Pro 2025 environment — covering error handling, crash recovery, preview flows, pricing formulas, dual mode rendering, cost display, and input overrides. Plus 52 manual stress tests covering edge cases and failure recovery.
+**Background generation tracking.** Errors from background generations are caught and waiting for you — color-coded by type so you can prioritize. Failed generations never silently disappear.
 
-**Pricing accuracy audit** — 24 models across 7 categories, zero incorrect prices. Preview/import audit — 8 routing paths verified correct, 0 bugs.
+**Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that survives panel close/reopen. Dual persistence ensures settings, saved models, and cost history survive Premiere Pro updates and cache clears.
 
-**Follow Your Generation audit** — 30 checks across visual QA, behavioral QA (step progression, auto-dismiss, failure state, inputParams plumbing), and edge cases. 29 PASS / 1 FAIL (P3 cosmetic — fixed). Tools: static code analysis, CSS token verification, JS logic review.
+---
 
-| | |
+## Quality & Testing
+
+### Pre-launch audit results
+
+- 163 systematic checks across 6 specialized audit agents
+- 140 PASS, 0 Critical issues, 0 High-severity issues
+- All 11 model categories verified end-to-end
+
+### Adversarial stress test
+
+- 57 attack vectors tested (race conditions, data corruption, network failures, input abuse, unusual models)
+- All CRASH and DATA_LOSS findings resolved
+- Data integrity audit: custom models and cost history verified safe under all error conditions
+
+### Category gating audit
+
+- All 5 entry points verified — unsupported models cannot be added
+- Unknown/new categories blocked by default (fail-safe design)
+- Full pipeline verified per category: search → add → render → validate → cost → generate → poll → preview → import → cost log
+
+### Automated & manual testing
+
+| Metric | Result |
 |---|---|
-| Models verified | 155+ |
-| Audit rounds completed | 5 |
-| System audit checks | 27 |
-| Automated tests passed | 94 of 94 |
-| Manual stress tests | 52 |
-| Pricing accuracy | 0 incorrect across 24 models and 7 categories |
-| Root cause fixes | 14+ |
+| Automated tests (CDP) | 94 of 94 passed |
+| Manual stress tests | 52 passed |
+| Models audited (UI verification) | 155+ across 5 rounds |
+| Pricing accuracy | 0 incorrect across 24 models, 7 categories |
+| Root cause fixes from audits | 14+ |
 | Critical issues remaining | 0 |
 
 ---
@@ -142,115 +186,66 @@ modelBridge has undergone the most comprehensive testing of any AI plugin for Pr
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
 | **Models** | 860+ (auto-discovered) | 5–20 hardcoded | 1 per platform |
-| **Categories** | 7 (image, video, audio, TTS) | 1–2 | 1 per platform |
-| **New models** | Automatic | Plugin update required | New account required |
+| **Categories** | 11 | 1–2 | 1 per platform |
+| **New models** | Automatic — no update needed | Plugin update required | New account required |
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
-| **Smart import** | Context-aware replace or insert with live track + timecode preview | Manual positioning | Manual positioning |
-| **Audio/TTS** | Select clip → Generate → on timeline (3 clicks) | None or separate tool | Export → upload → download → import |
-| **Pre-gen cost estimate** | 4-tier confidence for 860+ models | Hidden or none | Hidden behind credits |
-| **Mobile preview** | Built-in | No | No |
-| **Dual comparison** | Side-by-side with independent import | No | Manual across tabs |
-| **Multi-image inputs** | Auto-detected from schema | Hardcoded per model | Platform-specific |
-| **Validation** | Self-improving — learns from errors, blocks before API call | Basic or none | Server-side only |
-| **Error messages** | Plain language + exact values + color-coded by type | Raw API errors | Varies |
+| **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
+| **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
+| **Cost estimate** | 4-tier confidence, live parameter updates | Hidden or none | Hidden behind credits |
+| **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
+| **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
-| **Pre-launch testing** | 155 models audited + 94 automated tests | Unknown | Unknown |
 
 ---
 
-## System Architecture
-
-*Built around one principle: the system manages itself so the editor never has to.*
-
-### Three pillars
-
-| Zero manual maintenance | Non-blocking workflow | Native Premiere integration |
-|---|---|---|
-| Models, pricing, and constraints update automatically — no plugin release needed | All AI jobs run in background — the editor is always responsive | Results land on the timeline automatically — right track, right timecode |
-
----
-
-### What the editor sees and touches
+## Technical Architecture
 
 <table>
 <tr>
-<td width="25%">
+<td width="33%">
 
-**Discover & configure**
+**Zero manual maintenance**
 
-`Model search & browser` · `Auto-generated UI` · `Preflight validation` · `Prompt optimizer`
-
-</td>
-<td width="25%">
-
-**Review & deliver**
-
-`Preview & approve` · `Mask editor` · `Dual Mode` · `Mobile preview`
+Models, pricing, and constraints update automatically — no plugin release needed.
 
 </td>
-<td width="25%">
+<td width="33%">
 
-**Cost & reporting**
+**Non-blocking workflow**
 
-`Live cost per generation` · `Costs dashboard` · `Client report export` · `Generation audit log`
+All AI jobs run in background — the editor is always responsive.
 
 </td>
-<td width="25%">
+<td width="34%">
 
-**Self-managing systems** 🟢
+**Native Premiere integration**
 
-🔄 `Auto-updating model list` · 🔄 `Self-healing server` · 🔄 `Constraint cache` · 🔄 `Onboarding wizard`
+Results land on the timeline automatically — right track, right timecode.
 
 </td>
 </tr>
 </table>
 
-> 860+ models — filter by category. Controls built from model schema, not hardcoded. Errors caught before any cost.
+**Stack:** 40 JavaScript IIFE modules (ES3-compatible, no bundler) · Node.js backend on localhost (Express) · ExtendScript for Premiere Pro timeline operations · localStorage + disk persistence with dual backup · CSS custom properties (`--mb-*`) design token system.
 
-&nbsp;&nbsp;&nbsp;&nbsp;⬇ **Background server** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬇ **Premiere scripting API**
-
----
-
-### What runs invisibly
-
-<table>
-<tr>
-<td width="50%">
-
-**Local server**
-
-`Media extraction` · `File transfer` · `Credential vault` · 🔄 `361 pricing entries — auto-loaded` · 🔄 `Async job queue`
-
-</td>
-<td width="50%">
-
-**AI providers**
-
-`Image generation` · `Video generation` · `Voice & audio` · `Multi-provider ready`
-
-> Flux, Kling, Wan, Luma, Stable Diffusion, ElevenLabs, and hundreds more
-
-</td>
-</tr>
-</table>
-
-*The plugin coordinates both directions — the server and the timeline never communicate directly.*
+**Pipeline:** Panel layer (Chromium via CEP) → Local Express server (media extraction, file transfer, async job queue) → fal.ai API (generation, schemas, pricing) → ExtendScript (timeline import, fit-to-frame scaling, format detection).
 
 ---
 
-### What lands on the timeline — zero manual steps
+## Pricing
 
-`Auto timeline placement` · `Project bin import` · `Fit-to-frame scaling` · `Format detection` · `Audio track placement` · `Source Monitor & AME`
-
-> Right track. Right timecode. Matches existing clip exactly. Reads sequence FPS and resolution.
+- **$7/month** subscription (planned)
+- No markup on AI costs — you use your own fal.ai API key and pay fal.ai directly at their published rates
+- Real-time cost visibility before every generation
 
 ---
 
-### Key numbers
+## Who It's For
 
-| 860+ | 0 | 3 | 1 |
-|:---:|:---:|:---:|:---:|
-| AI models available at launch — schema-discovered, not hardcoded | Manual steps to get a result onto the timeline | Self-managing layers — models, pricing, and error handling update without releases | Interface for image, video, voice, and audio generation — inside Premiere |
+- **Video editors** who want AI-generated assets without leaving Premiere Pro
+- **Post-production studios** integrating AI into existing workflows
+- **Content creators** who need quick AI generations with direct timeline integration
+- **Agencies** tracking AI costs per client with exportable reports
 
 ---
 
@@ -263,3 +258,20 @@ Interested in early access? [Reach out on LinkedIn →](https://www.linkedin.com
 Built by [Niklaz Hallberg](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI.
 
 2025–2026.
+
+<!--
+## Screenshots needed (capture manually)
+
+1. Main Generate tab with a model selected and parameters visible
+2. Model search/browse view with filter chips
+3. Cost estimate badge with breakdown drawer open
+4. Dual Mode with two result cards side-by-side
+5. Active Generations Panel with a running job (progress steps visible)
+6. Costs tab with generation history rows
+7. Audio preview player (inline player visible)
+8. Smart timeline import preview bar showing placement message
+9. Built-in mask editor
+10. Mobile Preview QR code
+
+Current state: No screenshots directory exists in the repo. All screenshots need to be captured fresh.
+-->
