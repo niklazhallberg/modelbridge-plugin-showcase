@@ -4,7 +4,9 @@
 
 Other plugins hardcode 5–20 models, break when APIs change, and charge you through proprietary credit systems. modelBridge takes a different approach — a schema-driven engine that reads any model's API specification and generates the interface automatically. When fal.ai releases a new model tomorrow, your plugin supports it today. No update required.
 
-860+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
+900+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
+
+**modelBridge grows with the AI industry.** New models appear automatically as fal.ai expands its catalog — no plugin update, no manual refresh. The toolkit you buy today is more powerful next month, and the month after that, without you lifting a finger.
 
 <!-- Screenshots will go here — see bottom of README for capture list -->
 
@@ -40,7 +42,7 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 ## How It Works
 
-1. **Search and add** — Browse 860+ AI models from the fal.ai catalog. Filter by category, search by name or keyword. Add any model with one click.
+1. **Search and add** — Browse 900+ AI models from the fal.ai catalog. Filter by category, search by name or keyword. Add any model with one click.
 
 2. **Configure and estimate** — The plugin generates a custom interface from the model's schema. Set your parameters, see the cost estimate update in real time. 9 validation gates check your inputs before any API call.
 
@@ -185,7 +187,7 @@ All locally stored data can be cleared from within the plugin (Settings → Rese
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Models** | 860+ (auto-discovered) | 5–20 hardcoded | 1 per platform |
+| **Models** | 900+ (auto-discovered) | 5–20 hardcoded | 1 per platform |
 | **Categories** | 11 | 1–2 | 1 per platform |
 | **New models** | Automatic — no update needed | Plugin update required | New account required |
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
