@@ -4,6 +4,13 @@ Key milestones in the development of modelBridge.ai.
 
 ---
 
+## v0.14 — Full Catalog Validation (March 2026)
+
+- **Full catalog bulk audit** — 1,229 models scanned, 1,082 audited through complete schema pipeline, 0 pipeline errors, 1,025 clean (94.7%)
+- **Schema pipeline stress tests** — 54 automated CDP tests covering all 11 categories, classifyField guards, media requirements, extractMediaUrl, and auditSingleModel
+- **Auto-audit on model add/re-parse** — `auditSingleModel()` runs 9 checks per model, results shown as badges on model cards and collapsible banners in detail view
+- **Generate confirmation for flagged models** — dialog warns about compatibility issues before spending API credits
+
 ## v0.13 — Category Gating & Full E2E Certification (March 2026)
 
 ### Model Category System
