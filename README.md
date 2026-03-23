@@ -1,4 +1,5 @@
-# modelBridge.ai
+# modelBridge.app
+
 
 **Every AI model. Inside Premiere Pro. Automatically.**
 
@@ -9,6 +10,9 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 **modelBridge grows with the AI industry.** New models appear automatically as fal.ai expands its catalog — no plugin update, no manual refresh. The toolkit you buy today is more powerful next month, and the month after that, without you lifting a finger.
 
 <!-- Screenshots will go here — see bottom of README for capture list -->
+
+Documentation available here:
+https://docs.modelbridge.app/what-is-modelbridge/
 
 ---
 
