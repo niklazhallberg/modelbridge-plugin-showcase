@@ -11,7 +11,7 @@ Other plugins hardcode 5–20 models, break when APIs change, and charge you thr
 
 <!-- Screenshots will go here — see bottom of README for capture list -->
 
-Documentation available here:
+Full documentation available here:<br>
 https://docs.modelbridge.app/what-is-modelbridge/
 
 ---
