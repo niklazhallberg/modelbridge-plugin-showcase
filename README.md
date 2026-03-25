@@ -5,9 +5,9 @@
 
 Other plugins hardcode 5–20 models, break when APIs change, and charge you through proprietary credit systems. modelBridge takes a different approach — a schema-driven engine that reads any model's API specification and generates the interface automatically. When fal.ai releases a new model tomorrow, your plugin supports it today. No update required.
 
-1,200+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
+850+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
 
-**modelBridge grows with the AI industry.** New models appear automatically as fal.ai expands its catalog — no plugin update, no manual refresh. The toolkit you buy today is more powerful next month, and the month after that, without you lifting a finger.
+**modelBridge grows with the AI industry.** New models appear automatically as fal.ai expands its catalog — no plugin update needed. The model catalog refreshes every 30 minutes, or hit Refresh for instant access to the latest releases. The toolkit you buy today is more powerful next month, and the month after that, without you lifting a finger.
 
 <!-- Screenshots will go here — see bottom of README for capture list -->
 
@@ -38,29 +38,31 @@ https://docs.modelbridge.app/what-is-modelbridge/
 
 **Mobile Preview.** Send results to your phone with one tap. Review on the screen your audience uses. Scan a QR code once, then your latest generation is always in the app.
 
+**Your models, organized.** Your 3 most recently used models always appear at the top of the dropdown — no scrolling, no searching for what you just used. Pin your favorites for one-click access. Filter by category (Img-to-Vid, Txt-to-Vid, TTS, and more) to find the right tool fast. Every dropdown in the plugin is searchable and scrollable — type to filter, scroll to browse.
+
 **Prompt optimization.** One click rewrites your description into a model-optimized prompt — without requiring prompt engineering expertise.
 
 **Drag-and-drop from Finder.** Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: one slot from your timeline, one from Finder.
 
 ---
 
-## An Intelligent System That Improves the More You Use It
+## A Living System That Grows With the AI Industry
 
-Most plugins are static — the tool you install is the tool you get. modelBridge is different. Three systems learn and adapt automatically, making the plugin more capable over time without any updates.
+Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is different. It's a living system: three adaptive mechanisms continuously expand its capabilities, sharpen its accuracy, and deepen its knowledge — without shipping a single update.
 
-**Growing model catalog.** When fal.ai releases a new AI model, modelBridge discovers it automatically. No plugin update. No manual refresh. The toolkit you buy today is more powerful next month — and the month after that — without you lifting a finger. 1,200+ models today, more every week.
+**Growing model catalog.** When fal.ai releases a new AI model, modelBridge discovers it automatically. The model catalog refreshes every 30 minutes in the background — or hit the Refresh button for instant access to brand-new models. Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in seconds. If the local catalog doesn't have what you're looking for, the plugin automatically searches fal.ai's live API as a fallback. The toolkit you buy today is more powerful next month — and the month after that. 850+ models today, more every week.
 
-**Self-improving validation.** The first time a model rejects your image for being too small, modelBridge remembers that exact requirement — permanently. Next time, it catches the problem before any API call. Every failed generation teaches the system something new. After a few weeks of use, the plugin knows more about each model's real-world limits than the models' own documentation.
+**Self-improving validation.** The first time a model rejects your image for being too small, modelBridge extracts the exact requirement from the error — minimum dimensions, maximum file size, duration limits, aspect ratio constraints — and remembers it permanently. Next time, it catches the problem *before* any API call, before any money is spent. The same protection applies across six constraint types: image dimensions, file size, aspect ratio, and video duration (both minimum and maximum). Every failed generation teaches the system something new. After a few weeks of use, the plugin knows more about each model's real-world limits than the models' own documentation. These learned requirements survive restarts, cache clears, and plugin updates — they're saved to disk, not just browser memory.
 
 **Learned time estimation.** After three successful generations with any model, modelBridge starts showing estimated generation time: "~45 sec" or "~2–3 min." The estimates are built entirely from your own usage history — median-based, rounded up slightly so the actual time usually comes in under the estimate. During generation, the estimate tracks progress: "Almost done..." when you're close, "Still working..." if it takes longer than usual. No hardcoded data. No guessing. The system simply watches, learns, and gets more accurate over time.
 
-The result: a tool that feels like it knows what it's doing — because it does.
+The result: a plugin that evolves alongside the AI industry. It absorbs new models, learns from every interaction, and gets measurably better the more you use it. Install it today and it's more capable next month — not because of an update, but because the system itself grew.
 
 ---
 
 ## How It Works
 
-1. **Search and add** — Browse 1,200+ AI models from the fal.ai catalog. Filter by category, search by name or keyword. Add any model with one click.
+1. **Search and add** — Browse 850+ AI models from the fal.ai catalog. Smart, forgiving search — type what you're looking for and find it, even with typos or abbreviations. Search "klinh" and still find Kling. Search "upscale" and find Super Resolution models. Search "tts" and find Text to Speech. Filter by category, or paste any fal.ai endpoint ID directly for instant access. Add any model with one click.
 
 2. **Configure and estimate** — The plugin generates a custom interface from the model's schema. Set your parameters, see the cost estimate update in real time. 9 validation gates check your inputs before any API call.
 
@@ -154,6 +156,17 @@ All locally stored data can be cleared from within the plugin (Settings → Rese
 
 ---
 
+## Legal & Compliance
+
+Comprehensive legal framework published at [docs.modelbridge.app/legal/](https://docs.modelbridge.app/legal/):
+
+- **Terms & Conditions** — covers AI-generated content ownership, liability boundaries, and commercial use rights. EU/GDPR compliant, AI Act positioned.
+- **Privacy Policy** — GDPR, CCPA, LGPD, and UK data protection coverage. Documents exactly what minimal data is collected (license validation only) and what isn't (everything else).
+
+Built for professional environments where legal review is a prerequisite for tool adoption.
+
+---
+
 ## Reliability
 
 **9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
@@ -226,9 +239,10 @@ Automated tooling (`__mb_bulk_audit()`) enables this validation to be re-run at 
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Models** | 1,200+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
+| **Models** | 850+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
 | **Categories** | 11 | 1–2 | 1 per platform |
-| **New models** | Automatic — no update needed | Plugin update required | New account required |
+| **New models** | Automatic — refreshes every 30 min | Plugin update required | New account required |
+| **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
@@ -266,6 +280,14 @@ Results land on the timeline automatically — right track, right timecode.
 </td>
 </tr>
 </table>
+
+**Schema-driven, not hardcoded.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's OpenAPI specification. No model-specific code. No field name lookup tables. No special cases. The same engine handles 850+ models across 11 categories with zero per-model maintenance. When a model's API changes, the UI adapts on the next load.
+
+**Three-layer error architecture.** Layer 1 prevents errors before they happen (schema-driven preflight). Layer 2 learns from errors that get through (constraint extraction and permanent caching). Layer 3 translates every remaining error into plain language with a clear next step. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface — error banners, media cards, and background generation rows all use the same visual language.
+
+**Four-layer cost resolution.** Curated pricing supplements (verified rates) → fal.ai official pricing API (100% coverage) → model family heuristics → honest "unavailable." Each layer is clearly labeled in the UI so users always know the confidence level. No fabricated numbers — ever. Post-generation actuals from fal.ai billing headers confirm or correct estimates.
+
+**Dual persistence everywhere.** Every piece of user data — saved models, learned constraints, cost history, settings — is written to both localStorage (fast reads) and disk files (survives cache clears, Premiere updates, and extension reinstalls). Automatic backup before any migration. Recovery from backup if both primary stores are empty.
 
 **Stack:** 40 JavaScript IIFE modules (ES3-compatible, no bundler) · Node.js backend on localhost (Express) · ExtendScript for Premiere Pro timeline operations · localStorage + disk persistence with dual backup · CSS custom properties (`--mb-*`) design token system.
 
