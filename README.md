@@ -90,7 +90,7 @@ The result: a plugin that evolves alongside the AI industry. It absorbs new mode
 
 ## For Agencies & Freelancers
 
-**Cost tracking per client and project.** Every generation tracked with exact cost per model per call — in USD, EUR, or SEK. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
+**Cost tracking per client and project.** Every generation tracked with exact cost per model per call — in USD, EUR, SEK, DKK, NOK, or GBP. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
 
 **Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
 
@@ -102,11 +102,11 @@ The result: a plugin that evolves alongside the AI industry. It absorbs new mode
 
 ### What you see before generating
 
-modelBridge shows a cost estimate for every generation, based on fal.ai's official published rates. The estimate is labeled clearly so you always know how confident we are:
+modelBridge shows a cost estimate for every generation, based on fal.ai's official published rates. Four confidence tiers, clearly labeled:
 
-- **Est. $X.XX** — from our curated rate database, verified against fal.ai's documentation. Updates live as you change parameters (duration, resolution, audio, quality tier).
-- **~$X.XX (base rate)** — from fal.ai's live pricing API. May not reflect all parameter surcharges.
-- **Cost unavailable** — fal.ai doesn't publish pricing for this model. Click the link to check their site directly.
+- **$X.XX Estimated** (blue) — calculated from fal.ai's official price list. Updates live as you change parameters (duration, resolution, audio, quality tier). Close to the final cost.
+- **From $X.XX** (orange) — minimum cost from fal.ai's pricing API. Actual charge may be higher depending on resolution, duration, or audio.
+- **No price** (grey) — fal.ai doesn't publish pricing for this model. Click the link to check their site directly.
 
 ### What you see after generating
 
@@ -114,7 +114,7 @@ When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a gre
 
 ### Why we can't always show exact costs
 
-fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. We calculate estimates from official rates and are transparent about the confidence level. When pricing is undocumented, we say "Cost unavailable" rather than show a wrong number.
+fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. We calculate estimates from official rates and are transparent about the confidence level. When pricing is undocumented, we show "No price" rather than fabricate a number.
 
 Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
 
