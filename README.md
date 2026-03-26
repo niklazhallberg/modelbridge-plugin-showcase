@@ -60,6 +60,26 @@ The result: a plugin that evolves alongside the AI industry. It absorbs new mode
 
 ---
 
+## 7 Intelligent Systems
+
+Under the surface, 70 behaviors work automatically — adapting, learning, and preventing mistakes. Here are the seven most significant.
+
+**1. Self-expanding library.** 1,200+ AI models today. More tomorrow. Zero plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models — three discovery layers ensure nothing is missed. The toolkit you buy today is more powerful next month without anyone touching it.
+
+**2. Schema-driven interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,200+ models, zero model-specific UI code.
+
+**3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin extracts the exact requirement and remembers it permanently. Next time, it catches the problem before any API call. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
+
+**4. Cost intelligence.** Four confidence levels — from confirmed billing amounts to honest "pricing unavailable." The plugin never fabricates a number. 11 pricing formula types, live recalculation as you change parameters, daily exchange rates in 6 currencies, and post-generation actuals from fal.ai billing headers. You always know what you're spending.
+
+**5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built from your own usage history using a rolling 30-sample median. After three generations with any model, the estimate appears. After thirty, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
+
+**6. Smart timeline import.** One button. The plugin reads your editing context and decides how to import. Source clip selected? Replace in-place. Text prompt? Insert at playhead. Audio? Land on the audio track. Two adjacent clips? Replace both with a single interpolation span. A live preview bar shows exactly what will happen — track, timecode, action — updated as you move the playhead.
+
+**7. AI prompt optimization.** One click to enhance your prompt — tailored to your specific model type. The optimizer knows whether you're generating video, images, or audio, and adjusts its enhancement strategy accordingly. Better prompts, better results, no prompt engineering expertise required.
+
+---
+
 ## How It Works
 
 1. **Search and add** — Browse 850+ AI models from the fal.ai catalog. Smart, forgiving search — type what you're looking for and find it, even with typos or abbreviations. Search "klinh" and still find Kling. Search "upscale" and find Super Resolution models. Search "tts" and find Text to Speech. Filter by category, or paste any fal.ai endpoint ID directly for instant access. Add any model with one click.
