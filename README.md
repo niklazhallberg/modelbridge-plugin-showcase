@@ -212,6 +212,18 @@ Built for professional environments where legal review is a prerequisite for too
 
 ---
 
+## Always Up to Date
+
+Every error message in modelBridge is written for humans. You'll never see raw API responses, HTTP status codes, or cryptic field names. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — in plain language, color-coded by severity.
+
+When fal.ai introduces a new error type that modelBridge hasn't seen before, the plugin shows a safe, generic message immediately — no broken UI, no confusing technical output. The error is logged internally so it can be addressed.
+
+Error documentation updates are delivered remotely — no reinstallation, no plugin update. When a new error is identified and documented, the updated copy arrives automatically the next time the plugin starts. "Read more" links in error banners only appear when a verified documentation page exists for that specific error — never broken links.
+
+The result: a plugin that handles the unexpected gracefully and gets smarter over time, without requiring any action from you.
+
+---
+
 ## How It Compares
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
