@@ -56,7 +56,9 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 
 **Learned time estimation.** After three successful generations with any model, modelBridge starts showing estimated generation time: "~45 sec" or "~2–3 min." The estimates are built entirely from your own usage history — median-based, rounded up slightly so the actual time usually comes in under the estimate. During generation, the estimate tracks progress: "Almost done..." when you're close, "Still working..." if it takes longer than usual. No hardcoded data. No guessing. The system simply watches, learns, and gets more accurate over time.
 
-The result: a plugin that evolves alongside the AI industry. It absorbs new models, learns from every interaction, and gets measurably better the more you use it. Install it today and it's more capable next month — not because of an update, but because the system itself grew.
+**Always up-to-date error handling.** When something goes wrong, modelBridge shows a clear, helpful message — not raw API errors. If a new type of error appears that the plugin hasn't seen before, it's automatically reported to the development team (anonymously, with no personal data). Specific error messages and fix steps are published remotely and arrive the next time you open the plugin. What was a generic message yesterday becomes a targeted explanation today — without any plugin update. Cost estimates stay accurate the same way: pricing data updates automatically when fal.ai changes rates.
+
+The result: a plugin that evolves alongside the AI industry. It absorbs new models, learns from every interaction, improves its error handling in the field, and gets measurably better the more you use it. Install it today and it's more capable next month — not because of an update, but because the system itself grew.
 
 ---
 
@@ -152,23 +154,32 @@ Generated media (images, videos, audio) is downloaded directly from fal.ai to yo
 
 Your fal.ai API key is entered once and stored locally on your machine. It is never transmitted to modelBridge or any third party — used exclusively for direct communication between the plugin and fal.ai. You can view, change, or delete your key at any time from plugin settings.
 
-### Network communication — only two destinations
+### Network communication
 
 - **fal.ai** — for AI model generation, schema fetching, and pricing data. All requests authenticated with your own API key.
 - **LemonSqueezy** — for license validation at startup. No user data is included — only the license key and a machine identifier.
+- **GitHub raw content** — for remote pricing updates, error documentation, and feature flags. Read-only, no user data sent.
+- **modelBridge telemetry** — anonymous error type reports when an unexpected error occurs (see below). Enabled by default, can be disabled in Settings > Privacy at any time.
 
-No third-party analytics, tracking pixels, telemetry, or data collection of any kind.
+No third-party analytics or tracking pixels.
 
 ### License validation
 
 License validation checks a single endpoint (LemonSqueezy License API) at plugin startup. The only data sent is the license key and a local instance identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 72 hours since the last successful validation.
 
+### Anonymous error telemetry
+
+When an unexpected error occurs, modelBridge sends an anonymous report containing only: error type, HTTP status code, model endpoint (a public fal.ai identifier like `fal-ai/kling-video/v3`), plugin version, and platform. This helps the development team identify and fix new errors quickly — often within hours.
+
+- Enabled by default. Disable at any time in **Settings > Privacy**.
+- No prompts, file paths, media, API keys, or personal information are ever included.
+
 ### What we do NOT collect
 
 - No prompts, inputs, or generated content
-- No usage statistics or analytics
 - No personal information beyond what LemonSqueezy provides at purchase
 - No browsing behavior, no cookies beyond localStorage, no fingerprinting
+- No usage statistics — telemetry covers only unexpected error types, not normal usage
 
 ### Data deletion
 
