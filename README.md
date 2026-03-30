@@ -189,7 +189,7 @@ All locally stored data can be cleared from within the plugin (Settings → Rese
 
 ## Legal & Compliance
 
-Comprehensive legal framework published at [docs.modelbridge.app/legal/](https://docs.modelbridge.app/legal/):
+Comprehensive legal framework published at [docs.modelbridge.app/legal/terms-and-conditions/](https://docs.modelbridge.app/legal/terms-and-conditions/):
 
 - **Terms & Conditions** — covers AI-generated content ownership, liability boundaries, and commercial use rights. EU/GDPR compliant, AI Act positioned.
 - **Privacy Policy** — GDPR, CCPA, LGPD, and UK data protection coverage. Documents exactly what minimal data is collected (license validation only) and what isn't (everything else).
