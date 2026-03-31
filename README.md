@@ -12,7 +12,7 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **900+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
 
-**Know the cost before you click Generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Four confidence tiers tell you how reliable the number is. You pay fal.ai directly at their published rates — no credit systems, no surprises.
+**See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Four confidence tiers tell you how reliable the number is. You pay fal.ai directly at their published rates — no credit systems, no surprises.
 
 **Generate in the background. Edit in the foreground.** Long generations move to the background automatically. Stack parallel jobs across different models. A sound and notification tell you when each result is ready. If Premiere restarts, your background jobs resume.
 
@@ -100,7 +100,7 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 **3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin extracts the exact requirement and remembers it permanently. Next time, it catches the problem before any API call. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
 
-**4. Cost intelligence.** Four confidence levels — from confirmed billing amounts to honest "pricing unavailable." The plugin never fabricates a number. 11 pricing formula types, live recalculation as you change parameters, daily exchange rates in 6 currencies, and post-generation actuals from fal.ai billing headers. You always know what you're spending.
+**4. Cost intelligence.** Four confidence levels — from recorded billing amounts to honest "pricing unavailable." The plugin never fabricates a number. 11 pricing formula types, live recalculation as you change parameters, daily exchange rates in 6 currencies, and post-generation actuals from fal.ai billing headers. You always know what you're spending.
 
 **5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built from your own usage history using a rolling 30-sample median. After three generations with any model, the estimate appears. After thirty, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
 
@@ -130,7 +130,7 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 ## For Agencies & Freelancers
 
-**Cost tracking per client and project.** Every generation tracked with exact cost per model per call — in USD, EUR, SEK, DKK, NOK, or GBP. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
+**Cost tracking per client and project.** Every generation tracked with estimated cost per model per call — in USD, EUR, SEK, DKK, NOK, or GBP. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
 
 **Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
 
