@@ -211,6 +211,16 @@ The result: a plugin that handles the unexpected gracefully and gets smarter ove
 
 ---
 
+## Live News Feed
+
+modelBridge includes an in-plugin news feed that keeps you current without leaving Premiere Pro. New AI models are detected automatically from fal.ai's catalog and announced in a compact banner below the tab bar. Feature updates, workflow tips, and maintenance notices are delivered the same way.
+
+When a new model appears, clicking "Try it" opens the model search with the endpoint pre-filled — add it to your library in one click. Service notices warn you about scheduled downtime before it affects your work.
+
+The feed checks for updates once per startup, respects your preferences (disable non-critical news in Settings), and sends only your plugin version and platform to our server — no personal data.
+
+---
+
 ## Security & Privacy
 
 ### Your data stays on your machine
