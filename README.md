@@ -24,15 +24,22 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **Built-in tools.** Paint inpainting masks directly in the panel. Optimize prompts with one click. Preview on your phone via QR code. Run two models side-by-side in Dual Mode.
 
-## How it works
+## Getting started
 
-1. **Install the plugin.** Drop it into Premiere Pro and enter your fal.ai API key.
-2. **Pick a model and configure.** Browse 900+ models, set parameters — the interface builds itself from each model's API schema.
-3. **Generate.** Click Generate. The result downloads and imports to your timeline automatically.
+1. **Subscribe** at [modelbridge.app](https://modelbridge.app) — 14-day free trial, then $7/month or $59/year
+2. **Install** the plugin via ZXP installer — see [docs.modelbridge.app/getting-started/installation/](https://docs.modelbridge.app/getting-started/installation/)
+3. **Open modelBridge** in Premiere Pro → Extensions → modelBridge
+4. **Paste your license key** from the LemonSqueezy receipt email
+5. **Paste your fal.ai API key** from [fal.ai/dashboard/keys](https://fal.ai/dashboard/keys)
+6. **Start generating**
 
 ## Pricing
 
-$7/month for the plugin. AI generation costs paid directly to fal.ai at their published rates. No markup. No credit bundles. Real-time cost visibility before every generation — you always know what you're spending.
+**$7/month** or **$59/year** (save ~30%). 14-day free trial with full access — no restrictions, no generation limits. A payment method (card, PayPal, Apple Pay, or Google Pay) is required to start the trial, but you won't be charged until the trial ends.
+
+AI generation costs paid directly to fal.ai at their published rates — modelBridge adds zero markup. No credit systems, no lock-in, cancel anytime.
+
+**What happens when your subscription expires:** Read-only mode. Your data stays — generation is disabled until you reactivate. No data is ever deleted because of a billing change.
 
 ## Links
 
@@ -227,7 +234,7 @@ No third-party analytics or tracking pixels.
 
 ### License validation
 
-License validation checks a single endpoint (LemonSqueezy License API) at plugin startup. The only data sent is the license key and a local instance identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 72 hours since the last successful validation.
+License validation checks a single endpoint (LemonSqueezy License API) at plugin startup. The only data sent is the license key and a device identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 7 days since the last successful validation. Your license works on up to 2 devices — release a device in Settings when you need to move to a new machine.
 
 ### Anonymous error telemetry
 
