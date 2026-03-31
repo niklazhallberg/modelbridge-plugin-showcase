@@ -1,18 +1,46 @@
 # modelBridge.app
 
+AI generation for Adobe Premiere Pro — 900+ models, one panel, zero browser tabs.
 
-**Every AI model. Inside Premiere Pro. Automatically.**
+---
 
-Other plugins hardcode 5–20 models, break when APIs change, and charge you through proprietary credit systems. modelBridge takes a different approach — a schema-driven engine that reads any model's API specification and generates the interface automatically. When fal.ai releases a new model tomorrow, your plugin supports it today. No update required.
+Professional video editors juggle 3–5 AI tools in separate browser tabs. Every generation means leaving Premiere Pro — uploading, waiting, downloading, importing, conforming. You're paying four separate subscriptions, dealing with four different credit systems, and none of these tools know anything about your timeline. modelBridge puts every major AI model directly inside your NLE. Results land on your timeline, positioned and ready to cut. When fal.ai adds a new model, modelBridge supports it automatically — no plugin update needed.
 
-850+ models · 11 categories · Real-time cost estimates · Your own API key — no markup on AI costs.
+## Why editors switch to modelBridge
 
-**modelBridge grows with the AI industry.** New models appear automatically as fal.ai expands its catalog — no plugin update needed. The model catalog refreshes every 30 minutes, or hit Refresh for instant access to the latest releases. The toolkit you buy today is more powerful next month, and the month after that, without you lifting a finger.
+**Stay in Premiere.** Generate AI video, images, and audio without opening a browser. Results import to the right track, at the right timecode, with the right scale. Your creative flow never breaks.
+
+**900+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
+
+**Know the cost before you click Generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Four confidence tiers tell you how reliable the number is. You pay fal.ai directly at their published rates — no credit systems, no surprises.
+
+**Generate in the background. Edit in the foreground.** Long generations move to the background automatically. Stack parallel jobs across different models. A sound and notification tell you when each result is ready. If Premiere restarts, your background jobs resume.
+
+**Track costs per client.** Tag generations to projects. See spending breakdowns, model usage, and commercial compliance status. Export reports with KPIs and licensing badges. Bill AI costs to clients with confidence.
+
+**Self-improving validation.** The same mistake never costs money twice. When a model rejects your media, the plugin extracts the exact requirement and enforces it on all future attempts — before any API call, before any charge.
+
+**Smart timeline import.** One button. The plugin reads your editing context and acts: replace source clip in-place, insert at playhead, route audio to the right track. A live preview bar shows exactly what will happen before you click.
+
+**Built-in tools.** Paint inpainting masks directly in the panel. Optimize prompts with one click. Preview on your phone via QR code. Run two models side-by-side in Dual Mode.
+
+## How it works
+
+1. **Install the plugin.** Drop it into Premiere Pro and enter your fal.ai API key.
+2. **Pick a model and configure.** Browse 900+ models, set parameters — the interface builds itself from each model's API schema.
+3. **Generate.** Click Generate. The result downloads and imports to your timeline automatically.
+
+## Pricing
+
+$7/month for the plugin. AI generation costs paid directly to fal.ai at their published rates. No markup. No credit bundles. Real-time cost visibility before every generation — you always know what you're spending.
+
+## Links
+
+- [Documentation](https://docs.modelbridge.app/what-is-modelbridge/) — full feature docs, guides, and reference
+- [Store](https://modelbridge.app) — download and subscribe
+- [Support](mailto:support@modelbridge.app) — reach out anytime
 
 <!-- Screenshots will go here — see bottom of README for capture list -->
-
-Full documentation available here:<br>
-https://docs.modelbridge.app/what-is-modelbridge/
 
 ---
 
@@ -82,16 +110,6 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 ---
 
-## How It Works
-
-1. **Search and add** — Browse 850+ AI models from the fal.ai catalog. Smart, forgiving search — type what you're looking for and find it, even with typos or abbreviations. Search "klinh" and still find Kling. Search "upscale" and find Super Resolution models. Search "tts" and find Text to Speech. Filter by category, or paste any fal.ai endpoint ID directly for instant access. Add any model with one click.
-
-2. **Configure and estimate** — The plugin generates a custom interface from the model's schema. Set your parameters, see the cost estimate update in real time. 9 validation gates check your inputs before any API call.
-
-3. **Generate and import** — Click Generate. The result downloads and imports directly to your Premiere Pro timeline — right track, right timecode, right scale. Or preview first in Source Monitor, on your phone, or side-by-side in Dual Mode.
-
----
-
 ## Supported Categories
 
 | Category | Example Use Cases |
@@ -120,6 +138,24 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 ---
 
+## How It Compares
+
+|  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
+|---|---|---|---|
+| **Models** | 850+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
+| **Categories** | 11 | 1–2 | 1 per platform |
+| **New models** | Automatic — refreshes every 30 min | Plugin update required | New account required |
+| **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
+| **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
+| **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
+| **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
+| **Cost estimate** | 4-tier confidence, live parameter updates | Hidden or none | Hidden behind credits |
+| **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
+| **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
+| **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
+
+---
+
 ## Cost Transparency
 
 ### What you see before generating
@@ -139,6 +175,32 @@ When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a gre
 fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. We calculate estimates from official rates and are transparent about the confidence level. When pricing is undocumented, we show "No price" rather than fabricate a number.
 
 Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
+
+---
+
+## Reliability
+
+**9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
+
+**Self-improving constraint cache.** The first time a model rejects your media, the plugin remembers that limit permanently. Next time, it's caught before any API call. The system gets smarter with every generation.
+
+**Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
+
+**Background generation tracking.** Errors from background generations are caught and waiting for you — color-coded by type so you can prioritize. Failed generations never silently disappear.
+
+**Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that survives panel close/reopen. Dual persistence ensures settings, saved models, and cost history survive Premiere Pro updates and cache clears.
+
+---
+
+## Always Up to Date
+
+Every error message in modelBridge is written for humans. You'll never see raw API responses, HTTP status codes, or cryptic field names. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — in plain language, color-coded by severity.
+
+When fal.ai introduces a new error type that modelBridge hasn't seen before, the plugin shows a safe, generic message immediately — no broken UI, no confusing technical output. The error is logged internally so it can be addressed.
+
+Error documentation updates are delivered remotely — no reinstallation, no plugin update. When a new error is identified and documented, the updated copy arrives automatically the next time the plugin starts. "Read more" links in error banners only appear when a verified documentation page exists for that specific error — never broken links.
+
+The result: a plugin that handles the unexpected gracefully and gets smarter over time, without requiring any action from you.
 
 ---
 
@@ -198,50 +260,6 @@ Built for professional environments where legal review is a prerequisite for too
 
 ---
 
-## Reliability
-
-**9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
-
-**Self-improving constraint cache.** The first time a model rejects your media, the plugin remembers that limit permanently. Next time, it's caught before any API call. The system gets smarter with every generation.
-
-**Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
-
-**Background generation tracking.** Errors from background generations are caught and waiting for you — color-coded by type so you can prioritize. Failed generations never silently disappear.
-
-**Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that survives panel close/reopen. Dual persistence ensures settings, saved models, and cost history survive Premiere Pro updates and cache clears.
-
----
-
-## Always Up to Date
-
-Every error message in modelBridge is written for humans. You'll never see raw API responses, HTTP status codes, or cryptic field names. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — in plain language, color-coded by severity.
-
-When fal.ai introduces a new error type that modelBridge hasn't seen before, the plugin shows a safe, generic message immediately — no broken UI, no confusing technical output. The error is logged internally so it can be addressed.
-
-Error documentation updates are delivered remotely — no reinstallation, no plugin update. When a new error is identified and documented, the updated copy arrives automatically the next time the plugin starts. "Read more" links in error banners only appear when a verified documentation page exists for that specific error — never broken links.
-
-The result: a plugin that handles the unexpected gracefully and gets smarter over time, without requiring any action from you.
-
----
-
-## How It Compares
-
-|  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
-|---|---|---|---|
-| **Models** | 850+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
-| **Categories** | 11 | 1–2 | 1 per platform |
-| **New models** | Automatic — refreshes every 30 min | Plugin update required | New account required |
-| **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
-| **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
-| **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
-| **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
-| **Cost estimate** | 4-tier confidence, live parameter updates | Hidden or none | Hidden behind credits |
-| **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
-| **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
-| **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
-
----
-
 ## Technical Architecture
 
 <table>
@@ -284,20 +302,9 @@ Results land on the timeline automatically — right track, right timecode.
 
 ---
 
-## Pricing
-
-- **$7/month** subscription (planned)
-- No markup on AI costs — you use your own fal.ai API key and pay fal.ai directly at their published rates
-- Real-time cost visibility before every generation
-
----
-
 ## Who It's For
 
-- **Video editors** who want AI-generated assets without leaving Premiere Pro
-- **Post-production studios** integrating AI into existing workflows
-- **Content creators** who need quick AI generations with direct timeline integration
-- **Agencies** tracking AI costs per client with exportable reports
+Freelance editors who want to stop context-switching between browser tabs and their NLE. Agency teams who need cost accountability and per-client reporting. Motion designers who want access to every model without juggling four subscriptions. Anyone editing in Premiere Pro who uses AI generation as part of their workflow.
 
 ---
 
