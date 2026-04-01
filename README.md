@@ -12,7 +12,7 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **900+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
 
-**See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Four confidence tiers tell you how reliable the number is. You pay fal.ai directly at their published rates — no credit systems, no surprises.
+**See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Five confidence tiers tell you how reliable the number is — and the plugin learns from your billing history to make estimates more accurate over time. You pay fal.ai directly at their published rates — no credit systems, no surprises.
 
 **Generate in the background. Edit in the foreground.** Long generations move to the background automatically. Stack parallel jobs across different models. A sound and notification tell you when each result is ready. If Premiere restarts, your background jobs resume.
 
@@ -59,7 +59,7 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 **Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when sharing the same source clip.
 
-**Real-time cost & time estimates.** Before you generate, you see what it will cost and how long it will take. Change the duration — the cost updates. Toggle audio — the cost updates. The time estimate learns from your previous generations — after three runs, the plugin shows "~45 sec" or "~2–3 min" based on actual history. Four cost confidence tiers. No fabricated numbers.
+**Real-time cost & time estimates.** Before you generate, you see what it will cost and how long it will take. Change the duration — the cost updates. Toggle audio — the cost updates. Both estimates learn from your history — time estimates after three runs, cost estimates from your actual billing. Five confidence tiers. No fabricated numbers.
 
 **Follow Your Generation.** Long-running AI generations automatically move to the background so you never wait. Keep editing, switch models, browse the catalog — your generations run in parallel across any number of models. A persistent panel tracks every active job with real-time progress through five stages: Sent → Queued → Generating → Downloading → Importing. modelBridge keeps you informed every step of the way — a 5-stage communication system delivers contextual guidance, estimated completion time, and clear next steps as each generation progresses. When it's done, a sound notification and visual badge bring you back. If something fails, the error stays visible with a color-coded explanation and fix steps — never silently dismissed. Even restarting the plugin doesn't lose your generation — active jobs are recovered automatically and polling resumes where it left off.
 
@@ -83,15 +83,27 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 ## A Living System That Grows With the AI Industry
 
-Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is different. It's a living system: three adaptive mechanisms continuously expand its capabilities, sharpen its accuracy, and deepen its knowledge — without shipping a single update.
+Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is different. It's a living system that grows with the ecosystem and with your usage. The model catalog expands automatically as providers release new models. Generation time estimates get tighter as you work. And cost estimates become more accurate with every generation you run. The plugin you use next month is smarter than the one you use today — without a single update.
 
-**Growing model catalog.** When fal.ai releases a new AI model, modelBridge discovers it automatically. The model catalog refreshes every 30 minutes in the background — or hit the Refresh button for instant access to brand-new models. Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in seconds. If the local catalog doesn't have what you're looking for, the plugin automatically searches fal.ai's live API as a fallback. The toolkit you buy today is more powerful next month — and the month after that. 850+ models today, more every week.
+**Growing model catalog.** When fal.ai releases a new AI model, modelBridge discovers it automatically. The model catalog refreshes every 30 minutes in the background — or hit the Refresh button for instant access to brand-new models. Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in seconds. If the local catalog doesn't have what you're looking for, the plugin automatically searches fal.ai's live API as a fallback. The toolkit you buy today is more powerful next month — and the month after that. 1,200+ models today, more every week.
 
 **Self-improving validation.** The first time a model rejects your image for being too small, modelBridge extracts the exact requirement from the error — minimum dimensions, maximum file size, duration limits, aspect ratio constraints — and remembers it permanently. Next time, it catches the problem *before* any API call, before any money is spent. The same protection applies across six constraint types: image dimensions, file size, aspect ratio, and video duration (both minimum and maximum). Every failed generation teaches the system something new. After a few weeks of use, the plugin knows more about each model's real-world limits than the models' own documentation. These learned requirements survive restarts, cache clears, and plugin updates — they're saved to disk, not just browser memory.
+
+**Learned cost estimation.** Most AI tools can only show prices for models with complete, static pricing metadata. modelBridge goes further: when providers don't expose full pricing per resolution or option, it quietly learns from your real billing instead. After a few generations with any model and configuration, the cost badge levels up from "From" to "Learned" — showing an estimate derived from the median of your actual fal.ai invoices. Learned estimates are personal to your workflow: two editors can see different estimates for the same model because they use it differently. Your data stays local — nothing is sent anywhere. Estimates expire after 60 days of inactivity to stay current with provider pricing changes.
 
 **Learned time estimation.** After three successful generations with any model, modelBridge starts showing estimated generation time: "~45 sec" or "~2–3 min." The estimates are built entirely from your own usage history — median-based, rounded up slightly so the actual time usually comes in under the estimate. During generation, the estimate tracks progress: "Almost done..." when you're close, "Still working..." if it takes longer than usual. No hardcoded data. No guessing. The system simply watches, learns, and gets more accurate over time.
 
 **Always up-to-date error handling.** When something goes wrong, modelBridge shows a clear, helpful message — not raw API errors. If a new type of error appears that the plugin hasn't seen before, it's automatically reported to the development team (anonymously, with no personal data). Specific error messages and fix steps are published remotely and arrive the next time you open the plugin. What was a generic message yesterday becomes a targeted explanation today — without any plugin update. Cost estimates stay accurate the same way: pricing data updates automatically when fal.ai changes rates.
+
+### Three dimensions of learning
+
+These adaptive mechanisms compound. A model that didn't exist last week appears automatically (catalog). You generate with it a few times and the time estimate dials in (time learning). After a few runs, the cost badge levels up from "From" to "Learned" (cost learning). The system converges toward accuracy on every axis, for every model, the more you use it.
+
+| What it learns | How | Result |
+|---|---|---|
+| Cost per model + config | Median of your actual fal.ai billing | "Learned ≈$0.042" badge after a few generations |
+| Generation time | Rolling median of past durations | Estimated completion time before you click Generate |
+| Model catalog | Schema-driven discovery of 1,200+ models | New models appear automatically, no plugin update needed |
 
 The result: a plugin that evolves alongside the AI industry. It absorbs new models, learns from every interaction, improves its error handling in the field, and gets measurably better the more you use it. Install it today and it's more capable next month — not because of an update, but because the system itself grew.
 
@@ -107,7 +119,7 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 **3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin extracts the exact requirement and remembers it permanently. Next time, it catches the problem before any API call. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
 
-**4. Cost intelligence.** Four confidence levels — from recorded billing amounts to honest "pricing unavailable." The plugin never fabricates a number. 11 pricing formula types, live recalculation as you change parameters, daily exchange rates in 6 currencies, and post-generation actuals from fal.ai billing headers. You always know what you're spending.
+**4. Cost intelligence.** Five confidence levels — from recorded billing amounts to honest "pricing unavailable." The plugin learns from your real billing to fill gaps where providers don't expose full pricing. 11 pricing formula types, live recalculation as you change parameters, daily exchange rates in 6 currencies, and post-generation actuals from fal.ai billing headers. You always know what you're spending.
 
 **5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built from your own usage history using a rolling 30-sample median. After three generations with any model, the estimate appears. After thirty, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
 
@@ -149,14 +161,14 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Models** | 850+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
+| **Models** | 1,200+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
 | **Categories** | 11 | 1–2 | 1 per platform |
 | **New models** | Automatic — refreshes every 30 min | Plugin update required | New account required |
 | **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
-| **Cost estimate** | 4-tier confidence, live parameter updates | Hidden or none | Hidden behind credits |
+| **Cost estimate** | 5-tier confidence, learns from your billing | Hidden or none | Hidden behind credits |
 | **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
 | **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
@@ -165,21 +177,34 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 ## Cost Transparency
 
+### An adaptive cost system
+
+Most AI tools can only show prices for models with complete, static pricing metadata. modelBridge goes further: when providers don't expose full pricing per resolution or option, it quietly learns from your real billing instead. That's how it can estimate costs per model and per configuration, even when the official APIs don't.
+
+5-layer pricing cascade: curated supplements → learned from your billing → fal.ai pricing API → model family heuristic → unavailable. The first source with data wins. Estimates are only shown when there is real data for your exact configuration. If there isn't, modelBridge says so.
+
 ### What you see before generating
 
-modelBridge shows a cost estimate for every generation, based on fal.ai's official published rates. Four confidence tiers, clearly labeled:
+Five confidence tiers, clearly labeled:
 
-- **$X.XX Estimated** (blue) — calculated from fal.ai's official price list. Updates live as you change parameters (duration, resolution, audio, quality tier). Close to the final cost.
-- **From $X.XX** (orange) — minimum cost from fal.ai's pricing API. Actual charge may be higher depending on resolution, duration, or audio.
-- **No price** (grey) — fal.ai doesn't publish pricing for this model. Click the link to check their site directly.
+- **$X.XX Estimated** (blue) — calculated from curated, hand-verified pricing data. Updates live as you change parameters (duration, resolution, audio, quality tier). Close to the final cost.
+- **Learned ≈$X.XX** (purple) — derived from the median of your actual fal.ai billing for this model and configuration. Improves with usage — shown after a few generations. Personal to your workflow.
+- **From $X.XX** (orange) — minimum cost from fal.ai's pricing API or a similar model's rates. Starting price — options like resolution, audio, or quality may increase the final cost.
+- **No price** (grey) — no pricing data available. Click the link to check fal.ai directly.
 
 ### What you see after generating
 
 When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a green badge in your Costs tab alongside the original estimate.
 
-### Why we can't always show exact costs
+### How the system learns your costs
 
-fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. We calculate estimates from official rates and are transparent about the confidence level. When pricing is undocumented, we show "No price" rather than fabricate a number.
+modelBridge doesn't just display prices — it learns them. Every generation makes cost estimates for your favorite models more accurate. After a few runs with any model and configuration, the cost badge levels up from "From" to "Learned."
+
+Learned pricing is based on your usage, not generic benchmarks. Two editors can see different learned estimates for the same model, because they use it differently. Estimates are only shown for exact configuration matches — switch to an untested resolution and modelBridge falls back honestly instead of interpolating. Learned estimates expire after 60 days of inactivity to stay current with provider pricing changes. Your data stays local — learned pricing is stored on your machine, not sent anywhere.
+
+### Why estimates aren't always exact
+
+fal.ai publishes pricing as unit rates (per second, per megapixel, per image). No tool receives the actual invoiced amount before generation completes. For models where the API doesn't provide full parameter-specific pricing, the most reliable way to know what a given configuration actually costs is to observe real billing — which is exactly what learned pricing does.
 
 Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
 
@@ -305,11 +330,11 @@ Results land on the timeline automatically — right track, right timecode.
 </tr>
 </table>
 
-**Schema-driven, not hardcoded.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's OpenAPI specification. No model-specific code. No field name lookup tables. No special cases. The same engine handles 850+ models across 11 categories with zero per-model maintenance. When a model's API changes, the UI adapts on the next load.
+**Schema-driven, not hardcoded.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's OpenAPI specification. No model-specific code. No field name lookup tables. No special cases. The same engine handles 1,200+ models across 11 categories with zero per-model maintenance. When a model's API changes, the UI adapts on the next load.
 
 **Three-layer error architecture.** Layer 1 prevents errors before they happen (schema-driven preflight). Layer 2 learns from errors that get through (constraint extraction and permanent caching). Layer 3 translates every remaining error into plain language with a clear next step. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface — error banners, media cards, and background generation rows all use the same visual language.
 
-**Four-layer cost resolution.** Curated pricing supplements (verified rates) → fal.ai official pricing API (100% coverage) → model family heuristics → honest "unavailable." Each layer is clearly labeled in the UI so users always know the confidence level. No fabricated numbers — ever. Post-generation actuals from fal.ai billing headers confirm or correct estimates.
+**Five-layer cost resolution.** Curated pricing supplements (verified rates) → learned pricing from your billing history → fal.ai official pricing API → model family heuristics → honest "unavailable." The first source with data wins. Each layer is clearly labeled in the UI so users always know the confidence level. Learned pricing fills the gap where providers don't expose per-configuration rates — the system gets more accurate the more you use it. No fabricated numbers — ever. Post-generation actuals from fal.ai billing headers confirm or correct estimates.
 
 **Dual persistence everywhere.** Every piece of user data — saved models, learned constraints, cost history, settings — is written to both localStorage (fast reads) and disk files (survives cache clears, Premiere updates, and extension reinstalls). Automatic backup before any migration. Recovery from backup if both primary stores are empty.
 
