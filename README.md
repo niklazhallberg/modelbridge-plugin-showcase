@@ -1,6 +1,6 @@
 # modelBridge.app
 
-AI generation for Adobe Premiere Pro — 900+ models, one panel, zero browser tabs.
+AI generation for Adobe Premiere Pro — 1,200+ models, one panel, zero browser tabs.
 
 ---
 
@@ -10,7 +10,7 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **Stay in Premiere.** Generate AI video, images, and audio without opening a browser. Results import to the right track, at the right timecode, with the right scale. Your creative flow never breaks.
 
-**900+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
+**1,200+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
 
 **See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and aspect ratio. Five confidence tiers tell you how reliable the number is — and the plugin learns from your billing history to make estimates more accurate over time. You pay fal.ai directly at their published rates — no credit systems, no surprises.
 
@@ -169,6 +169,9 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
 | **Cost estimate** | 5-tier confidence, learns from your billing | Hidden or none | Hidden behind credits |
+| **Learns from your usage** | Estimates get closer to your real bill every time you generate | No | No |
+| **Adapts to pricing changes** | Staleness rules + OTA updates | No | No |
+| **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
 | **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
 | **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
@@ -200,7 +203,11 @@ When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a gre
 
 modelBridge doesn't just display prices — it learns them. Every generation makes cost estimates for your favorite models more accurate. After a few runs with any model and configuration, the cost badge levels up from "From" to "Learned."
 
-Learned pricing is based on your usage, not generic benchmarks. Two editors can see different learned estimates for the same model, because they use it differently. Estimates are only shown for exact configuration matches — switch to an untested resolution and modelBridge falls back honestly instead of interpolating. Learned estimates expire after 60 days of inactivity to stay current with provider pricing changes. Your data stays local — learned pricing is stored on your machine, not sent anywhere.
+- Learned pricing is based on your usage, not generic benchmarks. Two editors can see different learned estimates for the same model, because they use it differently.
+- Estimates are only shown for exact configuration matches — switch to an untested resolution and modelBridge falls back honestly instead of interpolating.
+- In practice, learned estimates tend to land close to the actual invoice once a configuration has been used a few times.
+- Learned estimates expire after 60 days of inactivity to stay current with provider pricing changes.
+- Your data stays local — learned pricing is stored on your machine, not sent anywhere.
 
 ### Why estimates aren't always exact
 
