@@ -201,7 +201,9 @@ When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a gre
 
 ### How the system learns your costs
 
-modelBridge doesn't just display prices — it learns them. Every generation makes cost estimates for your favorite models more accurate. After a few runs with any model and configuration, the cost badge levels up from "From" to "Learned."
+On fal.ai's website, the only way to find out what a generation cost is to check Settings → Billing after the fact — and try to remember that number next time. modelBridge removes that step entirely. It learns from your billing automatically, and the next time you use the same model with similar settings, the cost is already there — before you click Generate. No lookups, no mental math, no guessing.
+
+After a few runs with any model and configuration, the cost badge levels up from "From" to "Learned."
 
 - Learned pricing is based on your usage, not generic benchmarks. Two editors can see different learned estimates for the same model, because they use it differently.
 - Estimates are only shown for exact configuration matches — switch to an untested resolution and modelBridge falls back honestly instead of interpolating.
