@@ -99,7 +99,7 @@ Key milestones in the development of modelBridge.ai.
 ## v0.8 — Cost & Error Intelligence (February 2026)
 
 - Real-time cost tracking per project and client, with CSV export for invoicing
-- Multi-currency support (USD, EUR, SEK) with pre-generation cost estimates
+- Multi-currency support (USD, EUR, GBP, SEK, NOK, DKK, JPY, CAD, AUD) with pre-generation cost estimates
 - Error translation system turning raw API errors into plain-language recovery guidance
 - HTML report generator — self-contained offline reports with Chart.js, 4 KPIs, cost-by-model and cost-by-deliverable charts, compliance badge
 - External AI costs via CSV import for third-party platforms (Midjourney, RunwayML, etc.)
