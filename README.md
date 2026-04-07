@@ -53,7 +53,7 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 ## Key Features
 
-**Schema-driven dynamic UI.** Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs — all generated from the model's OpenAPI specification. Not hardcoded. Not simplified. The full model, as its creators intended.
+**Schema-driven adaptive UI.** Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs, nested sections — all generated dynamically from the model's API specification. Not hardcoded. Not simplified. The full model, as its creators intended. 1,200+ models, thousands of unique input fields, zero model-specific UI code. When you select a model, the interface adapts instantly — showing exactly the controls that model needs, in the right format, with the right constraints. New models work immediately, no plugin update needed.
 
 **Smart timeline import.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact position, exact duration, exact scale. Generate from a text prompt, and the result inserts at the playhead on the first empty track. Generate audio, and it lands on the right audio track. A live preview bar tells you exactly what will happen before you click — updated as you move the playhead. Your original source clip stays in the project bin — nothing is ever destroyed.
 
@@ -127,7 +127,7 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 **1. Self-expanding library.** 1,200+ AI models today. More tomorrow. Zero plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models — three discovery layers ensure nothing is missed. The toolkit you buy today is more powerful next month without anyone touching it.
 
-**2. Schema-driven interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,200+ models, zero model-specific UI code.
+**2. Adaptive model interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, nested sections, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,200+ models, thousands of unique input fields, zero model-specific UI code.
 
 **3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin extracts the exact requirement and remembers it permanently. Next time, it catches the problem before any API call. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
 
@@ -369,7 +369,20 @@ Results land on the timeline automatically — right track, right timecode.
 </tr>
 </table>
 
-**Schema-driven, not hardcoded.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's OpenAPI specification. No model-specific code. No field name lookup tables. No special cases. The same engine handles 1,200+ models across 11 categories with zero per-model maintenance. When a model's API changes, the UI adapts on the next load.
+**Schema-driven adaptive UI.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's API specification. No model-specific code. No field name lookup tables. No special cases. The same engine handles 1,200+ models across 11 categories with zero per-model maintenance. When a model's API changes, the UI adapts on the next load.
+
+Key capabilities of the adaptive UI system:
+
+- **Automatic input classification** — Each parameter is analyzed and rendered as the appropriate control type: sliders for ranges, dropdowns for choices, toggles for booleans, media inputs for files, nested sections for complex structures
+- **Constraint enforcement** — Min/max ranges, allowed values, required fields, and format validation are all derived from the specification and enforced in the UI before generation
+- **Parameter-aware cost estimation** — The cost system reads the same input values to calculate real-time cost estimates that update as you adjust settings
+- **718 curated parameter explanations** — Every non-obvious input field has a ⓘ icon with a plain-language explanation and link to documentation
+- **Zero-configuration model support** — When fal.ai publishes a new model, modelBridge can render its complete interface immediately — no plugin update required
+- **Design system integration** — Connected to a unified design system (`--mb-*` token architecture), ensuring hundreds of different models still feel like one cohesive product
+- **Release-gated quality** — Schema-based UI audits verify that new and updated models receive correct controls before reaching end users
+- **Provider-agnostic architecture** — Works with any machine-readable API specification, not just fal.ai — designed for multi-provider expansion
+
+Technical depth: 17 distinct schema patterns mapped to native UI components. 661 fields verified across 83 models with 100% rendering accuracy. Automatic media type detection (image, video, audio, mask) with 3-tab hybrid input (Timeline → Upload → URL). Self-healing: models with updated specifications automatically get rebuilt interfaces.
 
 **Three-layer error architecture.** Layer 1 prevents errors before they happen (schema-driven preflight). Layer 2 learns from errors that get through (constraint extraction and permanent caching). Layer 3 translates every remaining error into plain language with a clear next step. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface — error banners, media cards, and background generation rows all use the same visual language.
 
