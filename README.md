@@ -101,7 +101,7 @@ Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in 
 
 **Self-improving validation.** The first time a model rejects your image for being too small, modelBridge extracts the exact requirement from the error — minimum dimensions, maximum file size, duration limits, aspect ratio constraints — and remembers it permanently. Next time, it catches the problem *before* any API call, before any money is spent. The same protection applies across six constraint types: image dimensions, file size, aspect ratio, and video duration (both minimum and maximum). Every failed generation teaches the system something new. After a few weeks of use, the plugin knows more about each model's real-world limits than the models' own documentation. These learned requirements survive restarts, cache clears, and plugin updates — they're saved to disk, not just browser memory.
 
-**Learned cost estimation.** Most AI tools can only show prices for models with complete, static pricing metadata. modelBridge goes further: when providers don't expose full pricing per resolution or option, it quietly learns from your real billing instead. After a few generations with any model and configuration, the cost badge levels up from "From" to "Learned" — showing an estimate derived from the median of your actual fal.ai invoices. Learned estimates are personal to your workflow: two editors can see different estimates for the same model because they use it differently. Your data stays local — nothing is sent anywhere. Estimates expire after 60 days of inactivity to stay current with provider pricing changes.
+**Learned cost estimation.** Most AI tools can only show prices for models with complete, static pricing metadata. modelBridge goes further: when providers don't expose full pricing per resolution or option, it quietly learns from your real billing instead. After a few generations with any model and configuration, the cost badge levels up from "From" (minimum published price) to "Learned" (automatically derived from your actual billing history) — showing an estimate based on the median of your actual fal.ai invoices. Learned estimates are personal to your workflow: two editors can see different estimates for the same model because they use it differently. Your data stays local — nothing is sent anywhere. Estimates expire after 60 days of inactivity to stay current with provider pricing changes.
 
 **Learned time estimation.** After three successful generations with any model, modelBridge starts showing estimated generation time: "~45 sec" or "~2–3 min." The estimates are built entirely from your own usage history — median-based, rounded up slightly so the actual time usually comes in under the estimate. During generation, the estimate tracks progress: "Almost done..." when you're close, "Still working..." if it takes longer than usual. No hardcoded data. No guessing. The system simply watches, learns, and gets more accurate over time.
 
@@ -109,11 +109,11 @@ Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in 
 
 ### Three dimensions of learning
 
-These adaptive mechanisms compound. A model that didn't exist last week appears automatically (catalog). You generate with it a few times and the time estimate dials in (time learning). After a few runs, the cost badge levels up from "From" to "Learned" (cost learning). The system converges toward accuracy on every axis, for every model, the more you use it.
+These adaptive mechanisms compound. A model that didn't exist last week appears automatically (catalog). You generate with it a few times and the time estimate dials in (time learning). After a few runs, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). The system converges toward accuracy on every axis, for every model, the more you use it.
 
 | What it learns | How | Result |
 |---|---|---|
-| Cost per model + config | Median of your actual fal.ai billing | "Learned ≈$0.042" badge after a few generations |
+| Cost per model + config | Median of your actual fal.ai billing | "Learned ≈$0.042" (derived from your billing history) badge after a few generations |
 | Generation time | Rolling median of past durations | Estimated completion time before you click Generate |
 | Model catalog | Schema-driven discovery of 1,200+ models | New models appear automatically, no plugin update needed |
 
@@ -209,13 +209,13 @@ Five confidence tiers, clearly labeled:
 
 ### What you see after generating
 
-When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** — a green badge in your Costs tab alongside the original estimate.
+When fal.ai confirms billing units, modelBridge shows **Actual $X.XX** (recorded directly from fal.ai billing data) — a green badge in your Costs tab alongside the original estimate.
 
 ### How the system learns your costs
 
 On fal.ai's website, the only way to find out what a generation cost is to check Settings → Billing after the fact — and try to remember that number next time. modelBridge removes that step entirely. It learns from your billing automatically, and the next time you use the same model with similar settings, the cost is already there — before you click Generate. No lookups, no mental math, no guessing.
 
-After a few runs with any model and configuration, the cost badge levels up from "From" to "Learned."
+After a few runs with any model and configuration, the cost badge levels up from "From" (minimum published price) to "Learned" (based on what you've actually been charged).
 
 - Learned pricing is based on your usage, not generic benchmarks. Two editors can see different learned estimates for the same model, because they use it differently.
 - Estimates are only shown for exact configuration matches — switch to an untested resolution and modelBridge falls back honestly instead of interpolating.
