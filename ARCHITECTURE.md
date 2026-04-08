@@ -165,18 +165,21 @@ The panel layer is dozens of IIFE modules loaded in dependency order via `<scrip
 
 ---
 
-## Four-Layer Pricing Pipeline
+## Five-Layer Pricing Pipeline
 
-Every cost estimate resolves through a four-layer cascade, designed so users never see a wrong price.
+Every cost estimate resolves through a five-layer cascade, designed so users never see a wrong price. The first source with data wins.
 
 ```
 Layer 1: Supplement     Curated per-model pricing — exact, parameter-aware
-Layer 2: API            Official platform pricing API — 100% model coverage, base rates
-Layer 3: Family         Heuristic match to related model's curated pricing
-Layer 4: Unavailable    Honest "Pricing unavailable" — no fabricated numbers
+Layer 2: Learned        Median of actual fal.ai charges — personal to each user
+Layer 3: API            Official platform pricing API — base rates, broad coverage
+Layer 4: Family         Heuristic match to related model's curated pricing
+Layer 5: Unavailable    Honest "Pricing unavailable" — no fabricated numbers
 ```
 
-Supplements provide exact pricing that responds to parameter changes in real-time — toggle audio on, switch resolution, change duration, and the estimate updates instantly. The official API provides base rates for every model on the platform but can't account for parameter-dependent surcharges. Family heuristics use a related model's supplement as a rough estimate. When all layers fail, the UI shows "Pricing unavailable" rather than guessing.
+This architecture exists because fal.ai's pricing data varies in granularity between models. Supplements provide exact pricing that responds to parameter changes in real-time — toggle audio on, switch resolution, change duration, and the estimate updates instantly. Learned pricing fills gaps where providers don't expose per-parameter rates, deriving estimates from the median of the user's actual billing for each model and configuration. The official API provides base rates but can't always account for parameter-dependent surcharges. Family heuristics use a related model's supplement as a rough estimate. When all layers fail, the UI shows "Pricing unavailable" rather than guessing.
+
+Six confidence tiers (Actual, Computed, Learned, Estimated, From, No price) are labeled in the UI so users always know the basis for each number. All pre-generation tiers resolve to Actual or Computed once fal.ai confirms billing units.
 
 All pricing data is sourced from the official platform API — no web scraping. The system was validated through a 24-model audit across 7 generation categories with zero incorrect prices.
 
