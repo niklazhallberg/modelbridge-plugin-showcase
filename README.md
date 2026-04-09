@@ -126,18 +126,25 @@ The result: a plugin that evolves alongside the AI industry. It absorbs new mode
 Under the surface, 70 behaviors work automatically — adapting, learning, and preventing mistakes. Here are the seven most significant.
 
 **1. Self-expanding library.** 1,200+ AI models today. More tomorrow. Zero plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models — multiple discovery mechanisms ensure nothing is missed. The toolkit you buy today is more powerful next month without anyone touching it.
+[Learn more →](https://docs.modelbridge.app/features/news-feed/)
 
 **2. Adaptive model interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, nested sections, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,200+ models, thousands of unique input fields, zero model-specific UI code.
+[Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
 **3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin extracts the exact requirement and remembers it permanently. Next time, it catches the problem before any API call. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
+[Learn more →](https://docs.modelbridge.app/reference/self-learning/)
 
 **4. modelBridge Cost Intelligence.** Six confidence tiers — from confirmed billing amounts to honest "pricing unavailable." A multi-layer pricing system checks multiple sources in priority order — from hand-verified rates to learned estimates from your billing — and is honest when data is unavailable. Every model can reach the Learned tier after a few generations — estimates improve automatically, personalized to your exact configurations. Multiple pricing formula types covering per-second, per-megapixel, per-image, and compound models, live recalculation as you change parameters, daily exchange rates in 9 currencies, and post-generation actuals from fal.ai billing confirmations. You always know what you're spending.
+[Learn more →](https://docs.modelbridge.app/models/costs/)
 
 **5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built entirely from your own usage history. After a few generations with any model, the estimate appears. After regular use, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
+[Learn more →](https://docs.modelbridge.app/features/background-generations/)
 
 **6. Smart timeline import.** One button. The plugin reads your editing context and decides how to import. Source clip selected? Replace in-place. Text prompt? Insert at playhead. Audio? Land on the audio track. Two adjacent clips? Replace both with a single interpolation span. A live preview bar shows exactly what will happen — track, timecode, action — updated as you move the playhead.
+[Learn more →](https://docs.modelbridge.app/features/timeline-import/)
 
 **7. AI prompt optimization.** One click to enhance your prompt — tailored to your specific model type. The optimizer knows whether you're generating video, images, or audio, and adjusts its enhancement strategy accordingly. Better prompts, better results, no prompt engineering expertise required.
+[Learn more →](https://docs.modelbridge.app/guides/prompt-tips/)
 
 ---
 
@@ -162,8 +169,10 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 ## For Agencies & Freelancers
 
 **Cost tracking per client and project.** Every generation tracked with estimated cost per model per call — in USD, EUR, GBP, SEK, NOK, DKK, JPY, CAD, or AUD. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
+[Learn more →](https://docs.modelbridge.app/guides/cost-tracking/)
 
 **Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
+[Learn more →](https://docs.modelbridge.app/models/available-models/)
 
 **External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
 
@@ -233,6 +242,8 @@ After a few runs, the cost badge levels up from "From" (minimum published price)
 fal.ai's billing is always the source of truth for the actual charge. Estimates may differ due to provider-side pricing logic (internal surcharges, volume tiers), pricing changes between cache refreshes, or currency conversion timing. modelBridge's role is to make cost information more accessible and actionable — not to replace fal.ai's billing.
 
 Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee.
+
+[Learn more →](https://docs.modelbridge.app/models/costs/)
 
 ---
 
@@ -378,7 +389,7 @@ Results land on the timeline automatically — right track, right timecode.
 
 - **Automatic input classification** — each parameter is analyzed and rendered as the appropriate control type: sliders for ranges, dropdowns for choices, toggles for booleans, media inputs for files, nested sections for complex structures
 - **Constraint enforcement** — min/max ranges, allowed values, required fields, and format validation are all derived from the specification and enforced before generation
-- **718 curated parameter explanations** — every non-obvious input field has a ⓘ icon with a plain-language explanation and link to documentation
+- **Over 700 curated parameter explanations** — every non-obvious input field has a ⓘ icon with a plain-language explanation and link to documentation
 - **Zero-configuration model support** — when fal.ai publishes a new model, modelBridge renders its complete interface immediately — no plugin update required
 - **Unified design system** — hundreds of different models feel like one cohesive product through a shared visual language
 - **Provider-agnostic architecture** — works with any machine-readable API specification, not just fal.ai — designed for multi-provider expansion
