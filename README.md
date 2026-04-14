@@ -95,8 +95,6 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 
 **Self-adapting model ecosystem.** modelBridge connects to 1,200+ AI models — and that number grows weekly without plugin updates. New models are automatically detected, validated for compatibility, and presented to users with AI-written Key Strengths, media previews, educational parameter guides, and category tags. A scrolling news banner announces arrivals in real-time, and a dedicated "Today's models" filter lets users browse new discoveries with the same rich card interface as the full catalog — thumbnails, specs, preview media, and one-click install.
 
-The system validates every model before surfacing it. Models without complete API specifications are held back and automatically retried — users never encounter broken "model not found" errors. Endpoint ID formats are normalized across the entire stack, making the plugin resilient to provider-side naming changes.
-
 Need a specific model right now? Paste its fal.ai endpoint ID and it's ready in seconds. If the local catalog doesn't have what you're looking for, the plugin automatically searches fal.ai's live API as a fallback. The toolkit you buy today is more powerful next month — and the month after that.
 
 **A living model catalog.** The model count you see above the search field reflects exactly what's available right now — not a cached number from last week. Every time you open modelBridge, the catalog syncs with the current state of the AI ecosystem. New models appear as soon as they're published, and if a provider retires a model, the total adjusts accordingly. Behind the scenes, the system cross-checks catalog changes before reflecting them — temporary API hiccups or network blips are filtered out, so the number you see is one you can trust. The catalog is designed to grow over time, but it's also designed to stay honest.
@@ -120,6 +118,8 @@ These adaptive mechanisms compound. A model that didn't exist last week appears 
 | Model catalog | Schema-driven discovery of 1,200+ models | New models appear automatically, no plugin update needed |
 
 The result: a plugin that evolves alongside the AI industry. It absorbs new models, learns from every interaction, improves its error handling in the field, and gets measurably better the more you use it. Install it today and it's more capable next month — not because of an update, but because the system itself grew.
+
+**Built to stay current.** modelBridge monitors, validates, and maintains itself continuously. New models appear automatically. Broken or reorganized endpoints are silently repaired. Cost estimates, error messages, and validation constraints all improve in the background — no plugin update required, no action from you. The plugin you open tomorrow is more accurate than the one you opened today.
 
 ---
 
@@ -147,6 +147,22 @@ Under the surface, 70 behaviors work automatically — adapting, learning, and p
 
 **7. AI prompt optimization.** One click to enhance your prompt — tailored to your specific model type. The optimizer knows whether you're generating video, images, or audio, and adjusts its enhancement strategy accordingly. Better prompts, better results, no prompt engineering expertise required.
 [Learn more →](https://docs.modelbridge.app/guides/prompt-tips/)
+
+---
+
+## Intelligent Model Catalog
+
+modelBridge does not simply mirror a provider's model list. Every model in the catalog has been individually validated — its API schema fetched, parsed, and verified against a compatibility checklist — before it becomes available to users. Models that fail verification are filtered out entirely. The catalog only shows what actually works.
+
+This verification runs continuously. A scheduled pipeline re-checks the full catalog every six hours, fetching and re-validating every model's schema against the current compatibility requirements. When a provider adds a new model, it is discovered and verified within the next cycle — no manual curation, no plugin update. When a provider changes or breaks a model's API, the catalog reflects that change automatically. The catalog you see today is accurate today, not a snapshot from last week.
+
+Not every model is ready the moment it appears. Providers sometimes publish a model before its API schema is fully available — the model exists in their catalog but cannot yet be called reliably. modelBridge tracks these as pending and re-checks them on every verification cycle. When a pending model's schema becomes available and passes validation, it is promoted automatically and surfaced with a "Now Available" indicator. Users discover newly working models without having to check back manually or guess when something became usable.
+
+The search experience accounts for this. When a user searches for a model that exists but has not yet passed verification, it appears with a "Coming soon" label and a clear explanation — never as a broken button or a cryptic error. The catalog distinguishes between models that do not exist, models that are not ready yet, and models that are ready to use. Each state has its own visual treatment so the user always knows where they stand.
+
+The verification pipeline itself is monitored. If the background job fails for any reason — expired credentials, upstream API changes, rate limiting — an alert fires immediately. The system is designed to fail loudly. A silently stale catalog is worse than a visibly broken one, because stale data erodes trust in ways users cannot see.
+
+The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. The pipeline discovers models, validates them, tracks the ones that aren't ready yet, promotes them when they become available, updates the UI, and monitors its own health — around the clock, every day of the year. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning. If the pipeline itself breaks, an alert reaches the development team within minutes. modelBridge treats catalog quality as infrastructure that runs continuously, not a task that someone remembers to do.
 
 ---
 
