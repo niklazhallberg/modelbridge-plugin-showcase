@@ -99,10 +99,10 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 **2. Adaptive model interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, nested sections, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,000+ models, thousands of unique input fields, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
-**3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media, the plugin learns the exact requirement and enforces it automatically on all future attempts — before any API call, before any charge. Six constraint types across dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
+**3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media — wrong dimensions, file too large, unsupported format — modelBridge remembers. Future attempts on that model are checked automatically before any API call, before any charge. The system gets smarter with every generation.
 [Learn more →](https://docs.modelbridge.app/reference/self-learning/)
 
-**4. modelBridge Cost Intelligence.** Six confidence tiers — from confirmed billing amounts to honest "pricing unavailable." The system checks multiple pricing sources in priority order and learns from your actual fal.ai charges over time. Every model can reach the Learned tier after a few generations — estimates improve automatically, personalized to your workflow. Multiple pricing formula types covering per-second, per-megapixel, per-image, and compound models, live recalculation as you change parameters, daily exchange rates in 9 currencies, and post-generation actuals from fal.ai billing confirmations. You always know what you're spending.
+**4. modelBridge Cost Intelligence.** Six confidence tiers — from confirmed billing amounts to honest "pricing unavailable." The system checks multiple pricing sources in priority order and learns from your actual fal.ai charges over time. Every model can reach the Learned tier after a few generations — estimates improve automatically, personalized to your workflow. Live recalculation as you change parameters, daily exchange rates in 9 currencies, and post-generation actuals from fal.ai billing confirmations. You always know what you're spending.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
 **5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built entirely from your own usage history. After a few generations with any model, the estimate appears. After regular use, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
@@ -123,17 +123,13 @@ These systems compound. A model that didn't exist last week appears automaticall
 
 ## Intelligent Model Catalog
 
-modelBridge does not simply mirror a provider's model list. Every model in the catalog has been individually validated — its API schema fetched, parsed, and verified against a compatibility checklist — before it becomes available to users. Models that fail verification are filtered out entirely. The catalog only shows what actually works.
+Every model in the catalog is individually validated before it appears. modelBridge does not simply mirror a provider's model list — it confirms that each model's interface can be built, its inputs can be read, and the full generation pipeline works end-to-end. Models that fail verification are filtered out entirely. The catalog only shows what actually works.
 
-This verification runs continuously. A scheduled pipeline re-checks the full catalog every six hours, fetching and re-validating every model's schema against the current compatibility requirements. When a provider adds a new model, it is discovered and verified within the next cycle — no manual curation, no plugin update. When a provider changes or breaks a model's API, the catalog reflects that change automatically. The catalog you see today is accurate today, not a snapshot from last week.
+The catalog updates itself continuously as fal.ai adds new models. You see only models that are confirmed to work — no stale entries, no broken models in your panel. When a provider changes or breaks a model's API, the catalog reflects that change automatically. The catalog you see today is accurate today, not a snapshot from last week.
 
-Not every model is ready the moment it appears. Providers sometimes publish a model before its API schema is fully available — the model exists in their catalog but cannot yet be called reliably. modelBridge tracks these as pending and re-checks them on every verification cycle. When a pending model's schema becomes available and passes validation, it is promoted automatically and surfaced with a "Now Available" indicator. Users discover newly working models without having to check back manually or guess when something became usable.
+Not every model is ready the moment it appears. When a model exists on fal.ai but isn't fully available yet, modelBridge shows it with a "Coming soon" label and a clear explanation — never as a broken button or a cryptic error. The catalog distinguishes between models that do not exist, models that are not ready yet, and models that are ready to use. Each state has its own visual treatment so the user always knows where they stand. When a model becomes ready, it appears automatically — no manual action needed.
 
-The search experience accounts for this. When a user searches for a model that exists but has not yet passed verification, it appears with a "Coming soon" label and a clear explanation — never as a broken button or a cryptic error. The catalog distinguishes between models that do not exist, models that are not ready yet, and models that are ready to use. Each state has its own visual treatment so the user always knows where they stand.
-
-The verification pipeline itself is monitored. If the background job fails for any reason — expired credentials, upstream API changes, rate limiting — an alert fires immediately. The system is designed to fail loudly. A silently stale catalog is worse than a visibly broken one, because stale data erodes trust in ways users cannot see.
-
-The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. The pipeline discovers models, validates them, tracks the ones that aren't ready yet, promotes them when they become available, updates the UI, and monitors its own health — around the clock, every day of the year. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning. If the pipeline itself breaks, an alert reaches the development team within minutes. modelBridge treats catalog quality as infrastructure that runs continuously, not a task that someone remembers to do.
+The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning. modelBridge treats catalog quality as infrastructure that runs continuously, not a task that someone remembers to do.
 
 ---
 
@@ -212,7 +208,7 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 **9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
 
-**Self-improving constraint cache.** The first time a model rejects your media, the plugin remembers that limit permanently. Next time, it's caught before any API call. The system gets smarter with every generation.
+**Self-improving validation.** When a generation fails due to a media constraint — wrong dimensions, file too large, unsupported format — modelBridge remembers. The same error never costs money twice. Future attempts on that model are checked automatically before any API call.
 
 **Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
 
@@ -351,9 +347,9 @@ Results land on the timeline automatically — right track, right timecode.
 - **Unified design system** — hundreds of different models feel like one cohesive product through a shared visual language
 - **Provider-agnostic architecture** — works with any machine-readable API specification, not just fal.ai — designed for multi-provider expansion
 
-**Three-layer error architecture.** Layer 1 prevents errors before they happen with schema-driven preflight. Layer 2 learns from errors that get through and enforces new constraints automatically. Layer 3 translates every remaining error into plain language with a clear next step. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface.
+**Intelligent error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and always shown in plain language with a clear next step. No raw API errors reach the editor. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface.
 
-**Five-layer cost resolution.** Multiple pricing sources checked in priority order. The first source with data wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
+**Adaptive cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
 
 **Resilient data persistence.** Every piece of user data — saved models, learned constraints, cost history, settings — is stored with redundant persistence that survives cache clears, Premiere Pro updates, and plugin reinstalls. Automatic backup before any migration. Recovery from backup if primary storage is empty.
 
