@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "schema": {
+    "primary_url": "https://fal.ai/api/openapi/queue/openapi.json",
+    "fallback_url": "https://api.fal.ai/v1/models",
+    "timeout_ms": 10000
+  },
+  "models": {},
+  "kill_switches": {
+    "strict_schema_validation": true,
+    "pricing_display": true
+  },
+  "incident": {
+    "active": false,
+    "message": "",
+    "severity": "warning"
+  }
+}

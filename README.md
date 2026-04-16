@@ -89,9 +89,9 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 ---
 
-## 8 Intelligent Systems
+## 9 Intelligent Systems
 
-Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is a living system that grows with the AI ecosystem and with your usage. At least 15 adaptive behaviors work automatically — learning, preventing mistakes, and staying current without plugin updates or action from you.
+Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is a living system that grows with the AI ecosystem and with your usage. At least 16 adaptive behaviors work automatically — learning, preventing mistakes, and staying current without plugin updates or action from you.
 
 **1. Self-expanding library.** 1,000+ AI models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models — multiple discovery mechanisms ensure nothing is missed. The toolkit you buy today is more powerful next month without anyone touching it.
 [Learn more →](https://docs.modelbridge.app/features/news-feed/)
@@ -116,6 +116,8 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 
 **8. Self-healing error intelligence.** When something goes wrong, the plugin shows a clear, actionable message — not raw API output. New error types are identified and addressed with targeted fixes delivered remotely, often within hours and without a plugin update. The error handling improves continuously in the field.
 [Learn more →](https://docs.modelbridge.app/reference/error-handling/)
+
+**9. Remote operations layer.** modelBridge monitors fal.ai service health daily. If an endpoint changes or a model becomes unavailable, an alert fires before users are affected. Endpoint priorities, validation modes, and timeout values can be updated centrally without releasing a new plugin version. When fal.ai experiences elevated errors, an amber notification appears directly in the panel — no release required. Most fal.ai API changes can be mitigated remotely, and users continue working even during partial platform issues.
 
 These systems compound. A model that didn't exist last week appears automatically. You generate with it a few times and the time estimate dials in. After regular use, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). The system converges toward accuracy on every axis, for every model, the more you use it.
 
