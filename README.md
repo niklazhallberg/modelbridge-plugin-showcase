@@ -359,6 +359,57 @@ Results land on the timeline automatically — right track, right timecode.
 
 ---
 
+## How modelBridge handles new and unknown models
+
+fal.ai adds new models continuously. modelBridge is designed to handle them without requiring a plugin update.
+
+### Automatic interface generation
+
+Every model in modelBridge gets its own interface generated automatically — not from a hardcoded template, but from the model's own specification. When a new model appears in the catalog, modelBridge reads what it needs and builds the correct controls:
+
+- Numeric parameters → sliders with correct ranges
+- Multiple-choice options → searchable dropdowns
+- Media inputs → drop zones with Premiere timeline integration
+- Toggle options → checkboxes
+- Complex inputs → structured fields with format guidance
+
+No manual UI work is required per model.
+
+### Contextual help for every field
+
+Every input field always has guidance — even for parameters that were added to fal.ai after modelBridge was installed:
+
+- Common parameters get hand-written explanations with recommended values and editor context
+- Less common parameters get descriptions sourced automatically from the model's own documentation
+- Any remaining fields get a clear generic explanation and a link to the parameter reference
+
+No field is ever left unexplained.
+
+### Always a path forward
+
+Every field links to further documentation — either a specific Academy article or the parameter reference. There is always somewhere to go when a user wants to understand more.
+
+### Graceful handling of new field types
+
+When modelBridge encounters something it has not seen before, it never crashes, never silently drops the field, and never leaves it unlabeled. The user always sees:
+
+- What the field is
+- What format is expected
+- Where to learn more
+
+### Fixed values stay fixed
+
+Parameters that a model requires to be a specific value are shown as read-only — clearly labeled, never editable, always sent correctly to the API.
+
+### What this means in practice
+
+- New fal.ai models added next month work without a plugin update
+- New parameters get contextual help automatically
+- No field is ever unexplained or silently missing
+- The plugin stays intelligent as the catalog grows
+
+---
+
 ## Who It's For
 
 Freelance editors who want to stop context-switching between browser tabs and their NLE. Agency teams who need cost accountability and per-client reporting. Motion designers who want access to every model without juggling four subscriptions. Anyone editing in Premiere Pro who uses AI generation as part of their workflow.
