@@ -18,7 +18,7 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **Track costs per client.** Tag generations to projects. See spending breakdowns, model usage, and commercial compliance status. Export reports with KPIs and licensing badges. Bill AI costs to clients with confidence.
 
-**Self-improving validation.** The same mistake never costs money twice. The plugin learns from errors and catches them before any API call on future attempts.
+**Self-improving validation.** When a model rejects your media, modelBridge remembers the requirement and catches repeat mistakes automatically on future attempts. The system gets smarter with every generation.
 
 **Smart timeline import.** One button. The plugin reads your editing context and acts: replace source clip in-place, insert at playhead, route audio to the right track. A live preview bar shows exactly what will happen before you click.
 
@@ -99,7 +99,7 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 **2. Adaptive model interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, nested sections, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,000+ models, thousands of unique input fields, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
-**3. Self-learning validation.** A constraint error costs money once — never twice. When a model rejects your media — wrong dimensions, file too large, unsupported format — modelBridge remembers. Future attempts on that model are checked automatically before any API call, before any charge. The system gets smarter with every generation.
+**3. Self-learning validation.** When a model rejects your media — wrong dimensions, file too large, unsupported format — modelBridge remembers. Future attempts on that model are checked automatically before the next API call for the most common media requirements — dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
 [Learn more →](https://docs.modelbridge.app/reference/self-learning/)
 
 **4. modelBridge Cost Intelligence.** Six confidence tiers — from confirmed billing amounts to honest "pricing unavailable." The system checks multiple pricing sources in priority order and learns from your actual fal.ai charges over time. Every model can reach the Learned tier after a few generations — estimates improve automatically, personalized to your workflow. Live recalculation as you change parameters, daily exchange rates in 9 currencies, and post-generation actuals from fal.ai billing confirmations. You always know what you're spending.
@@ -208,7 +208,7 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 **9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
 
-**Self-improving validation.** When a generation fails due to a media constraint — wrong dimensions, file too large, unsupported format — modelBridge remembers. The same error never costs money twice. Future attempts on that model are checked automatically before any API call.
+**Self-improving validation.** When a generation fails due to a media constraint — wrong dimensions, file too large, unsupported format — modelBridge remembers the exact requirement. Future attempts on that model are checked automatically before the next API call. Requirements are re-verified over time to stay current.
 
 **Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
 
@@ -222,7 +222,7 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 ## Always Up to Date
 
-Every error message in modelBridge is written for humans. You'll never see raw API responses, HTTP status codes, or cryptic field names. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — in plain language, color-coded by severity.
+Every error message in modelBridge is written for humans. Raw API responses, HTTP status codes, and cryptic field names are translated into plain language before they reach you. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — color-coded by severity.
 
 Error documentation updates are delivered remotely — no reinstallation, no plugin update. When a new error is identified and documented, the updated copy arrives automatically the next time the plugin starts. "Read more" links in error banners only appear when a verified documentation page exists for that specific error — never broken links.
 
@@ -347,7 +347,7 @@ Results land on the timeline automatically — right track, right timecode.
 - **Unified design system** — hundreds of different models feel like one cohesive product through a shared visual language
 - **Provider-agnostic architecture** — works with any machine-readable API specification, not just fal.ai — designed for multi-provider expansion
 
-**Intelligent error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and always shown in plain language with a clear next step. No raw API errors reach the editor. 44 error types mapped. Five semantic categories drive consistent color-coded treatment across every surface.
+**Intelligent error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and shown in plain language with a clear next step. 44 error types mapped to human-readable messages — raw API responses are translated before they reach the editor. Five semantic categories drive consistent color-coded treatment across every surface.
 
 **Adaptive cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
 
