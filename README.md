@@ -387,6 +387,14 @@ No field is ever left unexplained.
 
 Every field links to further documentation — either a specific Academy article or the parameter reference. There is always somewhere to go when a user wants to understand more.
 
+### Schema-driven field intelligence
+
+Every AI model defines its inputs differently. A field called `image_url` on one model might be called `start_frame` on another, or `source_media` on a third. Some fields share names but expect completely different data types. modelBridge correctly identifies what each field needs and renders the right control — across 1,000+ models and thousands of unique parameters — without any per-model configuration.
+
+The classification system is schema-first: explicit type signals always win over name heuristics. When ambiguous, the system defaults to the safest rendering. A boolean is always a toggle. An enum is always a dropdown. A media upload field is always recognized by its structural definition, not by whether someone happened to name it `video_url`. This means every field gets the correct widget type and sends data in the correct format the model expects — even for models that were published after the plugin was installed.
+
+This matters because a misclassified field is invisible to the user but fatal to the generation. A dropdown rendered as a text input, or a media upload rendered as a string field, produces a request the model cannot process. modelBridge's classification has been verified against the full fal.ai catalog. When a field genuinely cannot be classified with confidence, it falls back to a safe, clearly labeled text input with format guidance — never silently dropped, never incorrectly rendered.
+
 ### Graceful handling of new field types
 
 When modelBridge encounters something it has not seen before, it never crashes, never silently drops the field, and never leaves it unlabeled. The user always sees:
