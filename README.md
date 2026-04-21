@@ -123,15 +123,56 @@ These systems compound. A model that didn't exist last week appears automaticall
 
 ---
 
-## Intelligent Model Catalog
+## Model Intelligence
 
-Every model in the catalog is individually validated before it appears. modelBridge does not simply mirror a provider's model list — it confirms that each model's interface can be built, its inputs can be read, and the full generation pipeline works end-to-end. Models that fail verification are filtered out entirely. The catalog only shows what actually works.
+modelBridge doesn't just list AI models — it continuously validates, classifies, and curates them.
 
-The catalog updates itself continuously as fal.ai adds new models. You see only models that are confirmed to work — no stale entries, no broken models in your panel. When a provider changes or breaks a model's API, the catalog reflects that change automatically. The catalog you see today is accurate today, not a snapshot from last week.
+A dedicated cloud worker monitors the entire fal.ai catalog around the clock. Every model passes through a multi-stage verification pipeline before it can appear in the UI. The result: every model you see in modelBridge is one that actually works.
 
-Not every model is ready the moment it appears. When a model exists on fal.ai but isn't fully available yet, modelBridge shows it with a "Coming soon" label and a clear explanation — never as a broken button or a cryptic error. The catalog distinguishes between models that do not exist, models that are not ready yet, and models that are ready to use. Each state has its own visual treatment so the user always knows where they stand. When a model becomes ready, it appears automatically — no manual action needed.
+### Continuous catalog sync
+
+modelBridge stays in sync with fal.ai's catalog of 1,000+ models. New models are detected automatically, and the plugin updates without requiring a restart. The catalog refreshes in the background using a stale-while-revalidate strategy — the UI is never blocked waiting for a network response.
+
+### Schema verification
+
+For a model to be usable in modelBridge, it needs a valid API schema. Without one, inputs can't be parsed, the UI can't be rendered, and cost estimation is impossible. Every model in the catalog is verified against this requirement by a Cloudflare Worker that runs daily sweeps and continuous re-checks.
+
+Models that pass verification are added to a verified allowlist. Models that fail enter a pending state and are retried automatically — if fal.ai fixes a broken schema, modelBridge picks it up within hours, with no manual intervention required.
+
+### Category classification
+
+Not every fal.ai model belongs in a video production workflow. modelBridge uses a three-tier category system to decide what to show:
+
+- **Supported** — media production models: image generation, video generation, audio, voice, upscaling, style transfer, and more
+- **Reserved** — categories prepared for future support
+- **Blocked** — models outside the scope of video production: LLMs, transcription, 3D generation, and similar
+
+Any category not explicitly on the supported list defaults to blocked. Unknown never means visible.
+
+### State-aware UI
+
+Every model card reflects its actual current state — not a cached assumption. modelBridge distinguishes between:
+
+- Models ready to install
+- Models that are newly available after being fixed upstream
+- Models temporarily unavailable while their schema is being resolved
+- Models that are permanently retired
+
+Users always know what they're looking at and why a model may not be available yet.
+
+### Designed for a moving target
+
+fal.ai's catalog is not static. Models are added, updated, broken, and retired continuously. modelBridge handles this gracefully — treating the catalog as a live data source with explicit states, rather than a fixed list to be manually curated.
 
 The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning. modelBridge treats catalog quality as infrastructure that runs continuously, not a task that someone remembers to do.
+
+| | |
+|---|---|
+| Models monitored | 1,000+ |
+| Supported categories | 11 media production types |
+| Verification cadence | Daily sweeps + continuous re-checks |
+| Time to reflect upstream fixes | Under 30 minutes |
+| Catalog refresh | Every 30 minutes, background |
 
 ---
 
