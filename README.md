@@ -184,15 +184,15 @@ Automatic detection via scheduled monitoring. A "Today's models" filter with ric
 
 ---
 
-## 9 Intelligent Systems
+## What Runs Without You
 
-Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is a living system that grows with the AI ecosystem and with your usage. At least 16 adaptive behaviors work automatically — learning, preventing mistakes, and staying current without plugin updates or action from you.
+Most plugins are frozen in time — the tool you install is the tool you get. modelBridge updates itself. These nine systems run automatically — keeping the catalog current, learning from your usage, and delivering fixes without plugin updates.
 
 <table>
 <tr>
 <td width="33%" valign="top">
 
-**1. Self-expanding library**
+**1. Automatic catalog sync**
 
 1,000+ models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
 [Learn more →](https://docs.modelbridge.app/features/news-feed/)
@@ -200,7 +200,7 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 </td>
 <td width="33%" valign="top">
 
-**2. Adaptive model interface**
+**2. Schema-driven interface**
 
 Every model gets a custom-built interface generated from its API spec. No hardcoded models. 1,000+ models, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
@@ -218,7 +218,7 @@ When a model rejects your media, modelBridge remembers the requirement. Future a
 <tr>
 <td width="33%" valign="top">
 
-**4. Cost Intelligence**
+**4. Cost estimation**
 
 Six confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
@@ -226,7 +226,7 @@ Six confidence tiers. Multiple pricing sources checked in priority order. Learns
 </td>
 <td width="33%" valign="top">
 
-**5. Generation time learning**
+**5. Generation time estimates**
 
 Estimated time on every model card. Built from your own usage history — after a few generations, the estimate appears and improves with use.
 [Learn more →](https://docs.modelbridge.app/features/background-generations/)
@@ -252,7 +252,7 @@ One click to enhance your prompt — tailored to your model type. Better prompts
 </td>
 <td width="33%" valign="top">
 
-**8. Self-healing error intelligence**
+**8. Remote error updates**
 
 Clear, actionable messages — not raw API output. New error types addressed with targeted fixes delivered remotely, often within hours.
 [Learn more →](https://docs.modelbridge.app/reference/error-handling/)
@@ -268,11 +268,11 @@ A dedicated cloud backend monitors the fal.ai catalog continuously and delivers 
 </tr>
 </table>
 
-These systems compound. A model that didn't exist last week appears automatically. You generate with it a few times and the time estimate dials in. After regular use, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). The system converges toward accuracy on every axis, for every model, the more you use it.
+These systems compound. A model that didn't exist last week appears automatically. You generate with it a few times and the time estimate dials in. After regular use, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). Estimates get more accurate the more you use it.
 
 ---
 
-## Model Intelligence
+## Model Verification
 
 modelBridge doesn't just list AI models — it continuously validates, classifies, and curates them.
 
@@ -398,7 +398,7 @@ Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for intern
 
 ---
 
-## Cost Transparency — modelBridge Cost Intelligence
+## Cost Transparency
 
 modelBridge calculates a concrete cost for your exact settings before you generate — live estimates that update as you change duration, resolution, and audio. The system checks multiple pricing sources in priority order, and when data is unavailable, it says so honestly rather than guessing.
 
@@ -635,9 +635,9 @@ Results land on the timeline automatically — right track, right timecode.
 - **Unified design system** — hundreds of different models feel like one cohesive product through a shared visual language
 - **Provider-agnostic architecture** — works with any machine-readable API specification, not just fal.ai — designed for multi-provider expansion
 
-**Intelligent error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and shown in plain language with a clear next step. 44 error types mapped to human-readable messages — raw API responses are translated before they reach the editor. Five semantic categories drive consistent color-coded treatment across every surface.
+**Error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and shown in plain language with a clear next step. 44 error types mapped to human-readable messages — raw API responses are translated before they reach the editor. Five semantic categories drive consistent color-coded treatment across every surface.
 
-**Adaptive cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
+**Cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
 
 **Resilient data persistence.** Your models, learned constraints, cost history, and settings survive cache clears, Premiere Pro updates, and plugin reinstalls. Automatic backup before every data migration. If primary storage is empty, recovery is silent and automatic — no "reconfigure everything after an update" experience.
 
@@ -673,7 +673,7 @@ No field is ever left unexplained.
 
 Every field links to further documentation — either a specific Academy article or the parameter reference. There is always somewhere to go when a user wants to understand more.
 
-### Schema-driven field intelligence
+### Schema-driven field classification
 
 Every AI model defines its inputs differently. A field called `image_url` on one model might be called `start_frame` on another, or `source_media` on a third. Some fields share names but expect completely different data types. modelBridge correctly identifies what each field needs and renders the right control — across 1,000+ models and thousands of unique parameters — without any per-model configuration.
 
@@ -698,7 +698,7 @@ Parameters that a model requires to be a specific value are shown as read-only �
 - New fal.ai models added next month work without a plugin update
 - New parameters get contextual help automatically
 - No field is ever unexplained or silently missing
-- The plugin stays intelligent as the catalog grows
+- The plugin stays current as the catalog grows
 
 ---
 
