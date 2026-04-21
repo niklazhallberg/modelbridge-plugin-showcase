@@ -22,6 +22,8 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **Smart timeline import.** One button. The plugin reads your editing context and acts: replace source clip in-place, insert at playhead, route audio to the right track. A live preview bar shows exactly what will happen before you click.
 
+**Bring your own API key.** No credits, no markup — you pay fal.ai directly at their published rates. modelBridge's revenue is subscription-based, not usage-based. Your costs are transparent and you're never locked in.
+
 **Built-in tools.** Paint inpainting masks directly in the panel. Optimize prompts with one click. Preview on your phone via QR code. Run two models side-by-side in Dual Mode.
 
 ## Getting started
@@ -43,7 +45,7 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 ## Links
 
-- [Documentation](https://docs.modelbridge.app/what-is-modelbridge/) — full feature docs, guides, and reference
+- [Documentation](https://docs.modelbridge.app/what-is-modelbridge/) — 75+ pages: getting started, feature guides, workflow recipes, Academy, troubleshooting, and full legal framework
 - [Store](https://modelbridge.app) — download and subscribe
 - [Support](mailto:support@modelbridge.app) — reach out anytime
 
@@ -133,7 +135,7 @@ Send results to your phone with one tap. Scan a QR code once, then your latest g
 
 **Your models, organized**
 
-Recent models at the top, pinned favorites for one-click access. Filter by category, search any dropdown. Type to filter, scroll to browse.
+Recent models at the top, pinned favorites for one-click access. Filter by category or by what you want to do — "Extend shot," "Interpolate frames," "Voice-over" — instead of raw technical categories. Type to filter, scroll to browse.
 
 </td>
 <td width="25%" valign="top">
@@ -176,7 +178,9 @@ Automatic detection via scheduled monitoring. A "Today's models" filter with ric
 </tr>
 </table>
 
-**modelBridge Academy — Built-in Learning.** Contextual "Learn about X" links appear on model cards — only when relevant to the model you're looking at. Ten articles cover key parameters, LoRA, prompting, upscaling, aspect ratios, inpainting, and cost control. Toggle learning tips on or off in Settings.
+**One creative chain.** Generate an image, preview it at full resolution in Source Monitor, mark In/Out points, import just the best frame — then feed it directly into a video model. One panel, one unbroken creative pipeline from idea to timeline.
+
+**modelBridge Academy — Built-in Learning.** Contextual "Learn about X" links appear on model cards — only when relevant to the model you're looking at. 19 articles cover prompting, LoRA, cost control, upscaling, inpainting, dubbing, voice-over, negative prompts, dual mode, workflow recipes, and more. Toggle learning tips on or off in Settings.
 
 ---
 
@@ -258,7 +262,7 @@ Clear, actionable messages — not raw API output. New error types addressed wit
 
 **9. Remote operations layer**
 
-Monitors fal.ai health daily. Endpoint priorities, validation, and timeouts updated centrally — no plugin release required. Amber alerts for platform issues.
+A dedicated cloud backend monitors the fal.ai catalog continuously and delivers updates over-the-air — new error handling, pricing data, and model intelligence reach users without a plugin release. Amber alerts for platform issues.
 
 </td>
 </tr>
@@ -280,7 +284,7 @@ modelBridge stays in sync with fal.ai's catalog of 1,000+ models. New models are
 
 ### Schema verification
 
-For a model to be usable in modelBridge, it needs a valid API schema. Without one, inputs can't be parsed, the UI can't be rendered, and cost estimation is impossible. Every model in the catalog is verified against this requirement by a Cloudflare Worker that runs daily sweeps and continuous re-checks.
+For a model to be usable in modelBridge, it needs a valid API schema. Without one, inputs can't be parsed, the UI can't be rendered, and cost estimation is impossible. Every model in the catalog is verified against this requirement by a Cloudflare Worker that runs continuously — multiple times per hour.
 
 Models that pass verification are added to a verified allowlist. Models that fail enter a pending state and are retried automatically — if fal.ai fixes a broken schema, modelBridge picks it up within hours, with no manual intervention required.
 
@@ -315,9 +319,9 @@ The entire system is autonomous. No one curates the catalog. No one reviews new 
 |---|---|
 | Models monitored | 1,000+ |
 | Supported categories | 11 media production types |
-| Verification cadence | Daily sweeps + continuous re-checks |
+| Verification cadence | Continuous — multiple times per hour |
 | Time to reflect upstream fixes | Under 30 minutes |
-| Catalog refresh | Every 30 minutes, background |
+| Catalog refresh | Continuously, in the background |
 
 ---
 
@@ -368,6 +372,8 @@ Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV.
 </td>
 </tr>
 </table>
+
+Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for international agency deployment.
 
 ---
 
@@ -535,13 +541,15 @@ Comprehensive legal framework published at [docs.modelbridge.app/legal/terms-and
 - **Terms & Conditions** — covers AI-generated content ownership, liability boundaries, and commercial use rights. EU/GDPR compliant, AI Act positioned.
 - **Privacy Policy** — GDPR, CCPA, LGPD, and UK data protection coverage. Documents exactly what minimal data is collected (license validation only) and what isn't (everything else).
 
+Production-grade subscription infrastructure — seat management, offline grace period, and automated billing lifecycle.
+
 Built for professional environments where legal review is a prerequisite for tool adoption.
 
 ---
 
 ## Engineering Quality
 
-modelBridge is a solo-developer project: 70 JavaScript modules, 85 runtime script tags, and 1,000+ supported AI models — built without a bundler, transpiler, or module system. Source files are the runtime — what you read is what runs.
+Built and maintained by a single developer — with documentation, operations, and architecture designed so a team can take it over without reverse-engineering. Tens of thousands of lines of JavaScript and CSS, a token-driven design system, a dedicated cloud operations backend, a 75+ page documentation site, and 1,000+ supported AI models — built without a bundler, transpiler, or module system. Source files are the runtime — what you read is what runs.
 
 <table>
 <tr>
@@ -566,16 +574,16 @@ Chrome DevTools Protocol tests validate error handling, dual mode, cost display,
 <tr>
 <td width="33%" valign="top">
 
-**OTA error intelligence**
+**Over-the-air updates**
 
-Error messages and pricing update remotely. New error types addressed with targeted copy within hours — no plugin release required.
+A dedicated cloud backend monitors the fal.ai catalog continuously and delivers updates over-the-air — error handling, pricing data, feature flags, and model intelligence reach users without a plugin release. New error types addressed with targeted copy within hours.
 
 </td>
 <td width="33%" valign="top">
 
 **Resilient by design**
 
-Redundant persistence survives cache clears, Premiere updates, and reinstalls. Automatic server recovery, exponential backoff, and memory-optimized for long sessions.
+Your models, settings, and cost history survive everything — cache clears, Premiere updates, plugin reinstalls. Automatic backups before every data migration. If something goes wrong, recovery is silent and automatic.
 
 </td>
 <td width="33%" valign="top">
@@ -631,7 +639,7 @@ Results land on the timeline automatically — right track, right timecode.
 
 **Adaptive cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
 
-**Resilient data persistence.** Every piece of user data — saved models, learned constraints, cost history, settings — is stored with redundant persistence that survives cache clears, Premiere Pro updates, and plugin reinstalls. Automatic backup before any migration. Recovery from backup if primary storage is empty.
+**Resilient data persistence.** Your models, learned constraints, cost history, and settings survive cache clears, Premiere Pro updates, and plugin reinstalls. Automatic backup before every data migration. If primary storage is empty, recovery is silent and automatic — no "reconfigure everything after an update" experience.
 
 ---
 
