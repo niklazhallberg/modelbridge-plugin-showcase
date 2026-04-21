@@ -170,9 +170,13 @@ FFmpeg is invoked as an external process — not linked or bundled — which pre
 
 ## Platform Roadmap
 
-Adobe is transitioning Premiere Pro extensions from CEP to UXP. A detailed migration plan is in place, covering interface contracts, API mappings, and a phased timeline. The migration architecture isolates all platform-specific code behind adapter interfaces — the goal is to swap implementations without rewriting business logic.
+Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is designed with this migration in mind — not as a future project, but as an active constraint on all current development.
 
-Planned modernization steps include introducing a module bundler (prerequisite for UXP), CI automation for the existing test suites, and incremental type annotations.
+**Migration plan.** A detailed migration plan is in place, covering interface contracts, a 41-function API parity mapping between ExtendScript and UXP equivalents, and a phased timeline. The migration architecture defines four adapter bridges (storage, host communication, shell access, and credential management) that isolate all platform-specific code — the goal is to swap implementations without rewriting business logic.
+
+**Migration-first development policy.** All new code follows migration-aware rules enforced across every contribution. New file system access goes through a storage abstraction. New Premiere Pro communication goes through the host adapter. New platform-specific calls are not added directly — they route through the bridge layer. All new storage and host APIs are async-first, matching UXP's async model even though CEP supports synchronous calls. This means the codebase is migrating incrementally with every feature, not accumulating debt that needs to be resolved later.
+
+**Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), CI automation for the existing test suites, and incremental type annotations.
 
 ---
 
