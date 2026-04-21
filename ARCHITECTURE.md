@@ -8,7 +8,9 @@ How modelBridge is built — design principles, current state, and development p
 
 modelBridge is a three-layer system: a Premiere Pro panel, a local media processing backend, and a cloud operations layer. The panel handles UI and user interaction. The backend handles media extraction, uploads, and downloads. The cloud layer monitors the AI model catalog, manages licensing, and delivers remote updates.
 
-All three layers are designed to operate independently — the panel works offline with cached data, the backend recovers automatically from crashes, and the cloud layer delivers updates without requiring a plugin release.
+All three layers are designed to operate independently — the panel works offline with cached data, the backend recovers automatically from crashes, and the cloud layer delivers updates without requiring a plugin release. No single point of failure — panel, backend, and cloud layer degrade gracefully if any component is unavailable.
+
+The cloud layer runs autonomously — detecting new models, verifying schemas, and ensuring only working models reach the UI, without manual intervention.
 
 ---
 
@@ -20,7 +22,7 @@ All three layers are designed to operate independently — the panel works offli
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every data migration. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
-**Remotely updatable.** Error handling, pricing data, and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response reaches users within an hour — without a plugin release, without user action.
+**Remotely updatable.** Error handling, pricing data, model intelligence, and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response reaches users within an hour — without a plugin release, without user action.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
 
@@ -32,10 +34,10 @@ All three layers are designed to operate independently — the panel works offli
 |---|---|
 | Supported AI models | 1,000+ across 11 categories |
 | Panel codebase | Tens of thousands of lines of JavaScript and CSS |
-| Design system | Token-driven — 146 CSS custom properties |
-| Documentation site | 75+ pages (guides, reference, Academy, legal) |
+| Design system | Token-driven — visual consistency across every surface |
+| Documentation site | 75+ pages across guides, reference, Academy, and legal |
 | Automated tests | 94 CDP tests + 49 end-to-end tests + classification audit |
-| Project documentation | Comprehensive — architecture, conventions, system deep-dives, migration plan |
+| Built by | One developer — designed for team collaboration and handover |
 
 ---
 
