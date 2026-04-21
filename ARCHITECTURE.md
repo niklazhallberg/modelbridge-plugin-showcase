@@ -51,6 +51,71 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ---
 
+## Platform Integration
+
+### fal.ai
+
+modelBridge integrates with fal.ai at multiple API levels — not just the generation endpoint.
+
+**Model catalog.** The plugin consumes fal.ai's authenticated model listing and browse APIs, including popularity ranking, category classification, and schema endpoints. The catalog is treated as a live data source, not a static list — new models, schema changes, and retirements are detected and handled automatically.
+
+**Schema parsing.** Every model's OpenAPI specification is fetched, parsed, and used to generate the complete UI — input fields, validation rules, media requirements, and parameter constraints. The plugin supports both fal.ai's queue API and platform API endpoints, with automatic fallback between them.
+
+**Pricing.** Cost estimates use fal.ai's official pricing API as one of several sources. The plugin respects fal.ai's published rates and makes no attempt to scrape or infer pricing outside of official endpoints.
+
+**Error specification.** The plugin implements full coverage of fal.ai's error response formats — both structured validation errors (Format A) and infrastructure errors (Format B), including the `X-Fal-Retryable` header, `ctx` structured constraint data, and error documentation URLs. Error types are translated to user-facing language before display.
+
+### Adobe Premiere Pro
+
+modelBridge is a deep Premiere Pro integration, not a standalone panel that happens to run inside the application.
+
+**Timeline interaction.** The plugin reads and writes to the active sequence — clip selection, track identification, In/Out points, playhead position, and sequence metadata. Generated media is placed on the correct track, at the correct timecode, with frame-accurate positioning.
+
+**Source Monitor.** Results can be opened directly in Premiere Pro's Source Monitor for full-resolution evaluation. Editors can set In/Out points in the Source Monitor and import only the selected range.
+
+**Media awareness.** The plugin reads clip properties from the timeline — dimensions, duration, file path, track index — and uses them for validation, media extraction, and context-aware import decisions (replace in-place vs. insert at playhead vs. route to audio track).
+
+**ExtendScript bridge.** 41 host functions handle communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling.
+
+---
+
+## Dependencies & Licensing
+
+### Proprietary code
+
+The modelBridge codebase — panel JavaScript, CSS design system, Cloudflare Worker, schema parsing engine, cost estimation system, error handling pipeline, and all documentation — is proprietary. No open-source components are forked or vendored into the core codebase.
+
+### External service dependencies
+
+| Dependency | Role | License / Terms |
+|---|---|---|
+| fal.ai API | AI model generation, schema, pricing, catalog | Commercial API — user authenticates with their own key |
+| LemonSqueezy | Subscription billing, license validation | Commercial SaaS — webhook integration |
+| GitHub raw content | OTA delivery (error docs, pricing, feature flags) | Public CDN — read-only, no user data sent |
+
+### Local runtime dependencies
+
+| Dependency | Role | License |
+|---|---|---|
+| Node.js + Express | Local backend server | MIT |
+| FFmpeg / FFprobe | Media extraction (video frames, audio, metadata) | LGPL-2.1 / GPL-2 (used as external process, not linked) |
+| Sharp | Image processing (thumbnails, format conversion) | Apache-2.0 |
+
+FFmpeg is invoked as an external process — not linked or bundled — which preserves LGPL compliance. All other runtime dependencies are permissively licensed.
+
+### What is not dependent on third parties
+
+- UI rendering and schema-driven interface generation — fully proprietary
+- Field classification and input parsing — fully proprietary
+- Cost estimation engine (5-layer cascade, 11 formula types) — fully proprietary
+- Self-learning validation system — fully proprietary
+- Error translation and handling pipeline — fully proprietary
+- OTA update infrastructure — fully proprietary
+- Cloud operations worker (catalog monitoring, insights, licensing) — fully proprietary
+- All 75+ documentation pages — fully proprietary
+
+---
+
 ## Platform Roadmap
 
 Adobe is transitioning Premiere Pro extensions from CEP to UXP. A detailed migration plan is in place, covering interface contracts, API mappings, and a phased timeline. The migration architecture isolates all platform-specific code behind adapter interfaces — the goal is to swap implementations without rewriting business logic.
