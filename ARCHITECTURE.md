@@ -37,7 +37,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | 75+ pages across guides, reference, Academy, and legal |
 | Automated tests | 94 CDP tests + 49 end-to-end tests + classification audit |
-| Built by | One developer — designed for team collaboration and handover |
+| Built by | One developer — structured for team onboarding and handover (documented conventions, migration plan, and test suites) |
 
 ---
 
@@ -48,6 +48,8 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 **Test coverage.** Six automated test suites validate the critical paths: error normalization and translation across all fal.ai error formats, cost estimation accuracy across 11 pricing formula types, dual-mode input synchronization and field aliasing, parameter override behavior, visual rendering consistency, and pricing supplement parsing. End-to-end tests verify the full pipeline — from generation request through background polling to timeline import — across four import scenarios (insert, video replace, image replace, audio replace). A classification audit runs every model in the catalog through the schema parser and verifies correct field classification across 10,000+ input fields.
 
 **Conventions and rules.** Coding conventions, commit standards, and architectural rules are documented and enforced consistently. Every error must go through the translation layer — no raw API output reaches users. Every data migration must create a backup first. Every bug fix must check for the same class of problem elsewhere in the codebase.
+
+**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases are packaged as signed ZXP installers with version-tracked changelogs.
 
 ---
 
@@ -125,7 +127,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
 
-**Known limits.** The local backend processes one media extraction at a time per generation. Background generations queue at the fal.ai API level, not locally. The primary scaling constraint is fal.ai's own API rate limits, which apply per user API key.
+**Known limits.** The local backend processes one media extraction at a time per generation. Background generations queue at the fal.ai API level, not locally. The primary scaling constraint is fal.ai's own API rate limits, which apply per user API key. Current scale and functional constraints are documented in [Known Limitations](https://docs.modelbridge.app/reference/limitations/).
 
 ---
 
