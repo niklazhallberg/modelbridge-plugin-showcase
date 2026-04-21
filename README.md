@@ -53,39 +53,130 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 ## Key Features
 
-**Schema-driven adaptive UI.** Every model gets a purpose-built interface — sliders, dropdowns, checkboxes, media inputs, nested sections — all generated dynamically from the model's API specification. Not hardcoded. Not simplified. The full model, as its creators intended. 1,000+ models, thousands of unique input fields, no model-specific UI code. When you select a model, the interface adapts instantly — showing exactly the controls that model needs, in the right format, with the right constraints. New models work immediately, no plugin update needed.
+<table>
+<tr>
+<td width="25%" valign="top">
 
-**Smart timeline import.** One button. The plugin knows what to do. Select a clip, generate with an image-to-video model, and the result replaces your source clip in-place — exact position, exact duration, exact scale. Generate from a text prompt, and the result inserts at the playhead on the first empty track. Generate audio, and it lands on the right audio track. A live preview bar tells you exactly what will happen before you click — updated as you move the playhead. Your original source clip stays in the project bin — nothing is ever destroyed.
+**Schema-driven adaptive UI**
 
-**Dual Mode.** Run the same prompt against two models simultaneously. Results appear as selectable cards — click one, import it, then the other auto-selects for your next decision. Both results get full timeline import, even when sharing the same source clip.
+Every model gets a purpose-built interface generated from its API spec. 1,000+ models, no model-specific code. New models work immediately.
 
-**Real-time cost & time estimates.** Before you generate, you see what it will cost and how long it will take — pre-generation estimates similar to fal.ai's Sandbox, but inside Premiere Pro. Change the duration — the cost updates. Toggle audio — the cost updates. Both estimates learn from your history — time estimates after a few runs, cost estimates from your actual billing. Six confidence tiers. No fabricated numbers.
+</td>
+<td width="25%" valign="top">
 
-**Follow Your Generation.** Long-running AI generations automatically move to the background so you never wait. Keep editing, switch models, browse the catalog — your generations run in parallel across any number of models. A persistent panel tracks every active job with real-time progress through five stages: Sent → Queued → Generating → Downloading → Importing. modelBridge keeps you informed every step of the way — a 5-stage communication system delivers contextual guidance, estimated completion time, and clear next steps as each generation progresses. When it's done, a sound notification and visual badge bring you back. If something fails, the error stays visible with a color-coded explanation and fix steps — never silently dismissed. Even restarting the plugin doesn't lose your generation — active jobs are recovered automatically and polling resumes where it left off.
+**Smart timeline import**
 
-**3-click voice changer & full audio pipeline.** Select a voice clip on the timeline, click Generate. The AI-converted voice imports directly to the first empty audio track. No export. No browser. No re-import. 10+ audio models: ElevenLabs Voice Changer, Dubbing, TTS, multi-voice dialogue, AI music, sound effects, and transcription. Preview audio inline before importing.
+One button. Replace source clip in-place, insert at playhead, or route audio to the right track. A live preview bar shows what will happen before you click.
 
-**Built-in mask editor.** Paint inpainting masks directly in the panel — adjustable brush, zoom, pan, eraser, undo. No Photoshop roundtrip.
+</td>
+<td width="25%" valign="top">
 
-**Dual-frame interpolation.** Select a start frame and end frame on your timeline. The AI generates the motion between them. Adjacent clips get replaced as a single clip spanning their combined duration.
+**Dual Mode**
 
-**Source Monitor preview.** Evaluate results at full resolution in Premiere Pro's Source Monitor. Set In/Out points to import just the best segment.
+Run the same prompt against two models simultaneously. Compare results side-by-side, then import your pick with full timeline placement.
 
-**Mobile Preview.** Send results to your phone with one tap. Review on the screen your audience uses. Scan a QR code once, then your latest generation is always in the app.
+</td>
+<td width="25%" valign="top">
 
-**Your models, organized.** Your 3 most recently used models always appear at the top of the dropdown — no scrolling, no searching for what you just used. Pin your favorites for one-click access. Filter by category (Img-to-Vid, Txt-to-Vid, TTS, and more) to find the right tool fast. Every dropdown in the plugin is searchable and scrollable — type to filter, scroll to browse.
+**Cost & time estimates**
 
-**Prompt optimization.** One click rewrites your description into a model-optimized prompt — without requiring prompt engineering expertise.
+Live estimates update as you change duration, resolution, and audio. Six confidence tiers. Both learn from your billing history. No fabricated numbers.
 
-**Drag-and-drop from Finder.** Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: one slot from your timeline, one from Finder.
+</td>
+</tr>
+<tr>
+<td width="25%" valign="top">
 
-**Model Preview System.** Preview expected output for any model directly in the plugin — images, video, and audio. Example media is extracted from fal.ai OpenAPI schemas with 89% coverage across 1,000+ models. Expand any model card to see what it produces before generating.
+**Follow Your Generation**
 
-**AI-Written Key Strengths.** Every model includes 2–3 key strength bullets written specifically for video editors — not generic API descriptions. Generated via an automated Claude API enrichment pipeline and refreshed as new models appear on fal.ai.
+Generations move to the background automatically. Track every job through five stages. Sound notification when done. Survives plugin restart.
 
-**New Model Detection.** Automatic detection of new fal.ai models via scheduled monitoring. Manual refresh with instant notification of newly available models. A "Today's models" filter shows newly detected models with full rich cards. Today's discoveries are always pinned at the top of the Latest filter, marked with a "TODAY" badge — always know what's new.
+</td>
+<td width="25%" valign="top">
 
-**modelBridge Academy — Built-in Learning.** Generative AI is powerful but unfamiliar territory for most video editors. modelBridge Academy bridges that gap with contextual "Learn about X" links that appear directly on model cards — only when 100% relevant to the specific model you're looking at. Ten educational articles written specifically for video editors cover key parameters, LoRA, prompting techniques, upscaling, aspect ratios, inpainting, the Flux model family, and cost control. Users who feel confident can turn off all pedagogical UI elements with a single "Show learning tips" toggle — set during onboarding and adjustable anytime in Settings.
+**Audio pipeline**
+
+Select a voice clip, click Generate. 10+ audio models including ElevenLabs Voice Changer, TTS, dubbing, AI music, and sound effects. Preview inline before importing.
+
+</td>
+<td width="25%" valign="top">
+
+**Mask editor**
+
+Paint inpainting masks directly in the panel — adjustable brush, zoom, pan, eraser, undo. No Photoshop roundtrip.
+
+</td>
+<td width="25%" valign="top">
+
+**Dual-frame interpolation**
+
+Select a start frame and end frame. The AI generates the motion between them. Adjacent clips get replaced as a single span.
+
+</td>
+</tr>
+<tr>
+<td width="25%" valign="top">
+
+**Source Monitor preview**
+
+Evaluate results at full resolution in Premiere Pro's Source Monitor. Set In/Out points to import just the best segment.
+
+</td>
+<td width="25%" valign="top">
+
+**Mobile Preview**
+
+Send results to your phone with one tap. Scan a QR code once, then your latest generation is always available in the app.
+
+</td>
+<td width="25%" valign="top">
+
+**Your models, organized**
+
+Recent models at the top, pinned favorites for one-click access. Filter by category, search any dropdown. Type to filter, scroll to browse.
+
+</td>
+<td width="25%" valign="top">
+
+**Prompt optimization**
+
+One click rewrites your description into a model-optimized prompt — no prompt engineering expertise required.
+
+</td>
+</tr>
+<tr>
+<td width="25%" valign="top">
+
+**Drag-and-drop from Finder**
+
+Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: timeline and Finder in the same generation.
+
+</td>
+<td width="25%" valign="top">
+
+**Model Preview System**
+
+Preview expected output for any model — images, video, and audio. 89% coverage across 1,000+ models. See what it produces before generating.
+
+</td>
+<td width="25%" valign="top">
+
+**AI-written key strengths**
+
+Every model includes 2-3 strength bullets written specifically for video editors — not generic API descriptions. Refreshed as new models appear.
+
+</td>
+<td width="25%" valign="top">
+
+**New Model Detection**
+
+Automatic detection via scheduled monitoring. A "Today's models" filter with rich cards and a "TODAY" badge. Always know what's new.
+
+</td>
+</tr>
+</table>
+
+**modelBridge Academy — Built-in Learning.** Contextual "Learn about X" links appear on model cards — only when relevant to the model you're looking at. Ten articles cover key parameters, LoRA, prompting, upscaling, aspect ratios, inpainting, and cost control. Toggle learning tips on or off in Settings.
 
 ---
 
@@ -93,31 +184,85 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 
 Most plugins are frozen in time — the tool you install is the tool you get. modelBridge is a living system that grows with the AI ecosystem and with your usage. At least 16 adaptive behaviors work automatically — learning, preventing mistakes, and staying current without plugin updates or action from you.
 
-**1. Self-expanding library.** 1,000+ AI models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models — multiple discovery mechanisms ensure nothing is missed. The toolkit you buy today is more powerful next month without anyone touching it.
+<table>
+<tr>
+<td width="33%" valign="top">
+
+**1. Self-expanding library**
+
+1,000+ models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
 [Learn more →](https://docs.modelbridge.app/features/news-feed/)
 
-**2. Adaptive model interface.** Every model gets a custom-built interface — sliders, dropdowns, media inputs, nested sections, validation rules — generated automatically from the model's API specification. No hardcoded models. No simplified wrappers. The full model, as its creators intended. 1,000+ models, thousands of unique input fields, no model-specific UI code.
+</td>
+<td width="33%" valign="top">
+
+**2. Adaptive model interface**
+
+Every model gets a custom-built interface generated from its API spec. No hardcoded models. 1,000+ models, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
-**3. Self-learning validation.** When a model rejects your media — wrong dimensions, file too large, unsupported format — modelBridge remembers. Future attempts on that model are checked automatically before the next API call for the most common media requirements — dimensions, file size, duration, and aspect ratio. The system gets smarter with every generation.
+</td>
+<td width="33%" valign="top">
+
+**3. Self-learning validation**
+
+When a model rejects your media, modelBridge remembers the requirement. Future attempts are checked automatically — dimensions, file size, duration, aspect ratio.
 [Learn more →](https://docs.modelbridge.app/reference/self-learning/)
 
-**4. modelBridge Cost Intelligence.** Six confidence tiers — from confirmed billing amounts to honest "pricing unavailable." The system checks multiple pricing sources in priority order and learns from your actual fal.ai charges over time. Every model can reach the Learned tier after a few generations — estimates improve automatically, personalized to your workflow. Live recalculation as you change parameters, daily exchange rates in 9 currencies, and post-generation actuals from fal.ai billing confirmations. You always know what you're spending.
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+**4. Cost Intelligence**
+
+Six confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
-**5. Generation time learning.** Estimated time on every model card — "~45 sec" or "~2–3 min." Built entirely from your own usage history. After a few generations with any model, the estimate appears. After regular use, it's remarkably accurate. No hardcoded data. The system watches, learns, and improves.
+</td>
+<td width="33%" valign="top">
+
+**5. Generation time learning**
+
+Estimated time on every model card. Built from your own usage history — after a few generations, the estimate appears and improves with use.
 [Learn more →](https://docs.modelbridge.app/features/background-generations/)
 
-**6. Smart timeline import.** One button. The plugin reads your editing context and decides how to import. Source clip selected? Replace in-place. Text prompt? Insert at playhead. Audio? Land on the audio track. Two adjacent clips? Replace both with a single interpolation span. A live preview bar shows exactly what will happen — track, timecode, action — updated as you move the playhead.
+</td>
+<td width="33%" valign="top">
+
+**6. Smart timeline import**
+
+One button. Replace in-place, insert at playhead, or route to audio track. A live preview bar shows exactly what will happen before you click.
 [Learn more →](https://docs.modelbridge.app/features/timeline-import/)
 
-**7. AI prompt optimization.** One click to enhance your prompt — tailored to your specific model type. The optimizer adjusts its strategy for video, images, and audio. Better prompts, better results, no prompt engineering expertise required.
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+**7. AI prompt optimization**
+
+One click to enhance your prompt — tailored to your model type. Better prompts, better results, no expertise required.
 [Learn more →](https://docs.modelbridge.app/guides/prompt-tips/)
 
-**8. Self-healing error intelligence.** When something goes wrong, the plugin shows a clear, actionable message — not raw API output. New error types are identified and addressed with targeted fixes delivered remotely, often within hours and without a plugin update. The error handling improves continuously in the field.
+</td>
+<td width="33%" valign="top">
+
+**8. Self-healing error intelligence**
+
+Clear, actionable messages — not raw API output. New error types addressed with targeted fixes delivered remotely, often within hours.
 [Learn more →](https://docs.modelbridge.app/reference/error-handling/)
 
-**9. Remote operations layer.** modelBridge monitors fal.ai service health daily. If an endpoint changes or a model becomes unavailable, an alert fires before users are affected. Endpoint priorities, validation modes, and timeout values can be updated centrally without releasing a new plugin version. When fal.ai experiences elevated errors, an amber notification appears directly in the panel — no release required. Most fal.ai API changes can be mitigated remotely, and users continue working even during partial platform issues.
+</td>
+<td width="33%" valign="top">
+
+**9. Remote operations layer**
+
+Monitors fal.ai health daily. Endpoint priorities, validation, and timeouts updated centrally — no plugin release required. Amber alerts for platform issues.
+
+</td>
+</tr>
+</table>
 
 These systems compound. A model that didn't exist last week appears automatically. You generate with it a few times and the time estimate dials in. After regular use, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). The system converges toward accuracy on every axis, for every model, the more you use it.
 
@@ -196,13 +341,33 @@ The entire system is autonomous. No one curates the catalog. No one reviews new 
 
 ## For Agencies & Freelancers
 
-**Cost tracking per client and project.** Every generation tracked with estimated cost per model per call — in USD, EUR, GBP, SEK, NOK, DKK, JPY, CAD, or AUD. Tag costs to clients and deliverables. Export CSV for invoicing. Generate self-contained HTML reports with KPIs, cost-by-model charts, cost-by-deliverable breakdowns, and commercial compliance badges.
+<table>
+<tr>
+<td width="33%" valign="top">
+
+**Cost tracking per client**
+
+Every generation tracked in 9 currencies. Tag costs to clients and deliverables. Export CSV or generate HTML reports with KPIs and compliance badges.
 [Learn more →](https://docs.modelbridge.app/guides/cost-tracking/)
 
-**Commercial licensing visibility.** Filter models by commercial license before you generate. License status is tracked per model and per generation — feeds directly into compliance badges in client reports.
+</td>
+<td width="33%" valign="top">
+
+**Commercial licensing**
+
+Filter models by commercial license before you generate. License status tracked per model and per generation — feeds into compliance badges in client reports.
 [Learn more →](https://docs.modelbridge.app/models/available-models/)
 
-**External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
+</td>
+<td width="33%" valign="top">
+
+**External AI costs**
+
+Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -249,17 +414,54 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 ## Reliability
 
-**9-gate input validation.** Before you click Generate, the plugin checks your media against every requirement — image dimensions, file size, aspect ratio, video duration, required fields. If something doesn't fit, you see exactly what's wrong: "This image is 640×480 px. This model requires at least 1024×768 px." No wasted credits. No waiting for a generation to fail.
+<table>
+<tr>
+<td width="33%" valign="top">
 
-**Self-improving validation.** When a generation fails due to a media constraint — wrong dimensions, file too large, unsupported format — modelBridge remembers the exact requirement. Future attempts on that model are checked automatically before the next API call. Requirements are re-verified over time to stay current.
+**9-gate input validation**
 
-**Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds. Trim your video and try again."* 44 error types from fal.ai mapped to clear messages with recovery steps. Color-coded: red (fix your input), amber (action required), blue (temporary, auto-retrying).
+Checks your media against every requirement before you generate — dimensions, file size, aspect ratio, duration. No wasted credits, no waiting for a fail.
 
-**Platform health monitoring.** Detects fal.ai outages and degraded performance before you generate, so you're not troubleshooting what is actually a platform issue.
+</td>
+<td width="33%" valign="top">
 
-**Background generation tracking.** Errors from background generations are caught and waiting for you — color-coded by type so you can prioritize. Failed generations never silently disappear.
+**Self-improving validation**
 
-**Resilient infrastructure.** Automatic server recovery, network retry with exponential backoff, and background polling that survives panel close/reopen. Redundant persistence ensures settings, saved models, and cost history survive Premiere Pro updates and cache clears.
+When a generation fails due to a media constraint, modelBridge remembers. Future attempts are checked automatically. Requirements re-verified over time.
+
+</td>
+<td width="33%" valign="top">
+
+**Plain-language errors**
+
+Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds."* 44 error types mapped to clear messages. Color-coded by severity.
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+**Platform health monitoring**
+
+Detects fal.ai outages and degraded performance before you generate, so you're not troubleshooting a platform issue.
+
+</td>
+<td width="33%" valign="top">
+
+**Background generation tracking**
+
+Errors from background generations are caught and waiting for you — color-coded by type. Failed generations never silently disappear.
+
+</td>
+<td width="33%" valign="top">
+
+**Resilient infrastructure**
+
+Automatic server recovery, exponential backoff, and background polling that survives panel close/reopen. Data persists through updates and cache clears.
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -341,15 +543,50 @@ Built for professional environments where legal review is a prerequisite for too
 
 modelBridge is a solo-developer project: 70 JavaScript modules, 85 runtime script tags, and 1,000+ supported AI models — built without a bundler, transpiler, or module system. Source files are the runtime — what you read is what runs.
 
-**Schema-driven at every level.** No model has a hardcoded interface. Every form, validation rule, and media input is generated at runtime from the model's API specification. Over 700 curated parameter explanations ensure every non-obvious input has a plain-language tooltip. When fal.ai publishes a new model, its complete interface works immediately — no code change, no plugin update.
+<table>
+<tr>
+<td width="50%" valign="top">
 
-**277 tests across 6 automated suites.** Automated Chrome DevTools Protocol tests validate error handling, dual mode, cost display, preview actions, timeline replacement, and background generation tracking. Full end-to-end certification across all 11 supported categories — 101 checks covering search → add → render → validate → cost → generate → poll → result → preview → import.
+**Schema-driven at every level**
 
-**OTA error intelligence.** Error messages and pricing data update remotely — a new error type can be identified and addressed with targeted copy within hours, without a plugin release. The plugin handles the unexpected gracefully on day one and gets smarter over time.
+No model has a hardcoded interface. Every form, validation rule, and media input is generated at runtime from the model's API spec. 700+ curated parameter explanations. New models work immediately.
 
-**Resilient by design.** Redundant persistence ensures all user data survives cache clears, Premiere Pro updates, and plugin reinstalls. Automatic server recovery with crash budgets. Exponential backoff on network requests. Background polling that resumes after restart. Memory-optimized for long editing sessions with LRU caching and lifecycle cleanup.
+</td>
+<td width="50%" valign="top">
 
-**Provider-agnostic architecture.** The schema-driven engine works with any machine-readable API specification — designed for multi-provider expansion beyond fal.ai.
+**277 tests across 6 automated suites**
+
+Chrome DevTools Protocol tests validate error handling, dual mode, cost display, preview, timeline replacement, and background tracking. 101 end-to-end checks across all 11 categories.
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+**OTA error intelligence**
+
+Error messages and pricing update remotely. New error types addressed with targeted copy within hours — no plugin release required.
+
+</td>
+<td width="33%" valign="top">
+
+**Resilient by design**
+
+Redundant persistence survives cache clears, Premiere updates, and reinstalls. Automatic server recovery, exponential backoff, and memory-optimized for long sessions.
+
+</td>
+<td width="33%" valign="top">
+
+**Provider-agnostic architecture**
+
+The schema-driven engine works with any machine-readable API specification — designed for multi-provider expansion beyond fal.ai.
+
+</td>
+</tr>
+</table>
 
 ---
 
