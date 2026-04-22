@@ -643,6 +643,132 @@ Results land on the timeline automatically — right track, right timecode.
 
 ---
 
+## For the developer: self-running by design
+
+modelBridge is engineered to run without daily maintenance. The systems below keep the catalog current, learn from usage, surface problems before users notice them, and deliver fixes without plugin releases. Your morning routine is reading a notification — not triaging a queue.
+
+### The catalog stays current automatically
+
+A background pipeline monitors the entire fal.ai catalog continuously. New models are detected, verified, and made available to users without any intervention. Here's what happens when fal.ai publishes a new model at 3am:
+
+**Discovery.** The pipeline detects the new endpoint within its next scheduled check. A multi-stage verification process confirms the model has a valid, parseable API schema. Models that pass are added to the verified catalog. Models that fail enter a pending state and are retried automatically — if fal.ai fixes a broken schema, the pipeline picks it up within hours.
+
+**Classification.** Every new model is classified into one of 11 supported media production categories — or blocked. Unknown categories default to blocked. A model never reaches the UI without passing both schema verification and category classification.
+
+**Quarantine and blocklist.** Models with persistently invalid schemas are quarantined after a grace period. Quarantined models are re-checked daily — if the upstream issue is resolved, the model is silently promoted back to available. No manual review needed.
+
+**Plugin-side health checks.** Inside the plugin, a lazy health monitoring system verifies installed models in the background. If a model's endpoint moves, a migration table silently updates the reference. If a model is retired, it's confirmed across multiple checks before being marked unavailable — transient outages never trigger false positives. Schema changes are detected via structural comparison and trigger a silent UI rebuild on next open.
+
+The result: the model catalog you ship is not the catalog users have a week later. It's better — because every model has been continuously verified since install.
+
+### Your customers always see fresh models
+
+When the pipeline detects a model in a news-worthy category, a compact announcement appears in the plugin's news feed. Users see a "Today" badge on the model card, hear a subtle chime, and can add the model to their library in one click. This happens without you writing a changelog, pushing an update, or sending an email.
+
+The news feed also supports manual entries — feature announcements, maintenance notices, workflow tips — delivered through an admin API.
+
+### You get a daily briefing on your phone
+
+Every morning, a push notification arrives on your device with the overnight summary:
+
+- **Catalog movement** — how many models were added, removed, or promoted from pending. Net change vs yesterday.
+- **Customer activity** — new trials, conversions from trial to paid, cancellations.
+- **Pipeline health** — schema validation completions, enrichment batch status.
+
+Quiet days show only the catalog total. Sections with no activity are omitted — no noise.
+
+**Instant alerts** fire separately for urgent events: payment failures, refunds requiring manual action, catalog anomalies (sudden large drops), and model resurrections (a previously-retired model reappearing). These arrive immediately, not batched into the daily digest.
+
+### Health monitoring catches problems before users notice
+
+The background pipeline doesn't just track models — it monitors the health of the entire catalog infrastructure.
+
+- **Schema validation failures** are tracked per model with timestamps and reasons. You know exactly which models are broken and how long they've been broken.
+- **Catalog anomalies** — if more than half the catalog vanishes in a single check (likely an upstream API issue, not real removals), processing is paused and you're alerted.
+- **Model removal debouncing** — a model must be missing from multiple consecutive checks before being confirmed removed. Single-check disappearances are treated as transient.
+- **Resurrection detection** — if a confirmed-removed model reappears in the catalog, an instant alert fires.
+
+You don't monitor dashboards. The system monitors itself and tells you when something is wrong.
+
+### Support infrastructure: 729 help entries, 40 error codes, 20 Academy articles
+
+The goal is that users never need to contact you. Every surface where confusion could occur has contextual guidance built in.
+
+**729 curated parameter explanations.** Every non-obvious input field across 1,000+ models has an ⓘ icon with a plain-language explanation — what it does, which direction to push the value, and a recommended starting point. These are hand-written, not auto-generated from API descriptions.
+
+**300 intentionally hidden parameters.** Self-explanatory fields (like "prompt") are excluded from help icons to reduce visual noise. This is a curated exclusion list, not a gap.
+
+**40 documented error codes** with structured troubleshooting — cause, steps, and external links. Each error code has a matching page on the documentation site with a permanent anchor. "Read more" links in error banners only appear when the target page exists — never broken links.
+
+**28 validation error templates** with context-aware copy. When a model rejects media, the error message includes the exact constraint values from the API response — "Minimum 300×300 px" not "Image too small."
+
+**20 Academy articles** covering prompting, LoRA, cost control, upscaling, inpainting, dubbing, voice-over, negative prompts, dual mode, workflow recipes, and more. These appear as contextual "Learn about X" links on model cards — only when relevant to the model you're looking at.
+
+**78 documentation pages total** across getting started, features, guides, reference, troubleshooting, and legal sections.
+
+### What you can change without a release
+
+A remote configuration layer lets you update the plugin's behavior without shipping a new version. Changes propagate to all users within an hour.
+
+**Error documentation.** When a new error type appears, you can add targeted copy — cause, steps, links — and users see the updated message on their next plugin start. No reinstall.
+
+**Error message translations.** Context-aware error templates (with parameter substitution) are delivered remotely. You can refine or add new validation messages without touching plugin code.
+
+**Feature flags.** Any feature can be gated behind a remote flag — defaulting to off. Enable gradually, kill instantly. Currently two flags are defined; the system supports arbitrary additions.
+
+**Featured models.** The search suggestions shown to new users are updated remotely. When a noteworthy model launches, you can surface it immediately.
+
+**Incident banners.** If fal.ai has a platform issue, you can push a warning banner to all users — with severity level and custom copy — in under an hour. Remove it the same way.
+
+**Kill switches.** Critical features (schema validation, pricing display) can be toggled remotely for emergency rollback.
+
+**Integrity verification.** Every remote file is verified against a cryptographic hash before being applied. Tampered or corrupted files are rejected silently; the plugin falls back to built-in defaults.
+
+### Self-learning systems that improve with usage
+
+Three systems learn from real-world usage and get more accurate over time, with no manual tuning.
+
+**Validation constraints.** When a model rejects media for a reason not declared in its schema — minimum dimensions, maximum duration, file size limits — the exact constraint values are extracted from the API response and cached permanently per model. On all future attempts, preflight validation catches the issue before the API call. Eight constraint types are learned automatically. The same mistake never costs money twice.
+
+**Cost estimates.** After enough generations with a model, the system computes a median cost from your actual billing history — per model, per parameter configuration. This "learned" estimate sits between curated pricing data and generic API rates in the confidence hierarchy. It improves with every generation and ages out after 60 days of inactivity.
+
+**Generation time estimates.** Every successful generation records its duration. After a few samples per model, a time estimate appears on the model card — derived from your actual usage, not published benchmarks. The estimate uses a rolling window and rounds intelligently based on magnitude.
+
+### Additional automation
+
+**Automatic server lifecycle.** The plugin's local backend server is spawned automatically on panel open, monitored with keep-alive pings, and restarted automatically on crash — up to three attempts with progressive delays. Port conflicts are detected and resolved. The user sees a recovery banner only if all automatic attempts fail.
+
+**Background generation recovery.** If Premiere Pro restarts during a generation, recovery data persists locally. On next panel open, a recovery bar appears with a "Check status" link — the user can resume polling with the original request ID. No generation is silently lost.
+
+**Live exchange rates.** Cost displays update in 9 currencies with rates fetched from a public exchange rate API. If the API is unreachable, hardcoded fallback rates are used. Historical rates are stored per generation for accurate cost reporting.
+
+**Model preview backfill.** Installed models without thumbnails are backfilled lazily in the background — concurrency-capped, non-blocking, with smooth crossfade transitions. 89% of the catalog has preview coverage.
+
+**AI-written model descriptions.** Every model in the catalog receives 2–3 strength bullets written specifically for video editors — sourced from an enrichment pipeline that runs alongside catalog monitoring. These are not generic API descriptions; they're contextual recommendations like "Great for quickly testing multiple ideas" or "Prioritizes quality — may take a bit longer."
+
+**License revalidation.** Subscription status is reverified automatically every 12 hours. A 7-day offline grace period means the plugin works on planes and in studios with spotty connectivity. Trial countdowns, payment grace periods, and status transitions are all handled without user action.
+
+**Data resilience.** Every persistent data source uses dual storage — fast in-memory cache plus durable disk backup. If the primary store is empty (cache cleared, Premiere update), the system restores from disk silently. Corrupt files are detected, renamed as backups, and the system continues with clean state. Migration backups are created automatically before any schema change touches stored data.
+
+**Visibility-aware resource management.** When the plugin panel is hidden (user switches to another panel or minimizes), non-critical background work pauses automatically. Generation polling and server health checks continue; everything else waits. CPU usage drops to near zero when the panel isn't visible.
+
+**Anonymous error telemetry.** When an unrecognized error occurs, an anonymous report is sent to the monitoring backend — error type, HTTP status, model endpoint, plugin version. No prompts, no file paths, no API keys, no personal data. This is how new error types surface for documentation. Users can disable it in Settings.
+
+### What still requires a release
+
+Not everything is remote-updatable. These changes require shipping a new plugin version:
+
+- New UI components or layout changes
+- New generation pipeline logic (upload, poll, download, import)
+- New validation rules in the preflight engine
+- Changes to the local backend server
+- New Academy articles or documentation pages (hosted separately, but contextual links are in plugin code)
+- Bug fixes in client-side JavaScript
+- New error translator patterns (the built-in pattern matcher, not the remote copy)
+- ExtendScript changes (Premiere Pro host layer)
+
+---
+
 ## How modelBridge handles new and unknown models
 
 fal.ai adds new models continuously. modelBridge is designed to handle them without requiring a plugin update.
