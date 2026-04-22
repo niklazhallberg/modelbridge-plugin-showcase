@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "version": "2.3",
-    "last_verified": "2026-03-19",
-    "last_updated": "2026-03-19",
+    "version": "2.4",
+    "last_verified": "2026-04-22",
+    "last_updated": "2026-04-22",
     "verified_by": "cross-tool research audit — fal.ai model pages + provider docs + API pricing endpoint",
-    "next_review": "2026-04-19",
-    "notes": "v2.3: added Kling v2.6 motion-control pro/standard supplements from API pricing endpoint."
+    "next_review": "2026-05-22",
+    "notes": "v2.4: added per_character supplements for ElevenLabs TTS models (eleven-v3, turbo-v2.5, multilingual-v2, text-to-dialogue)."
   },
 
   "fal-ai/flux-2-pro": {
@@ -494,5 +494,37 @@
     "rate": 0.09,
     "source": "fal_official_docs",
     "confidence": "high"
+  },
+  "fal-ai/elevenlabs/tts/eleven-v3": {
+    "type": "per_character",
+    "rate": 0.10,
+    "charBlockSize": 1000,
+    "text_field": "text",
+    "source": "fal_api_pricing",
+    "confidence": "medium"
+  },
+  "fal-ai/elevenlabs/tts/turbo-v2.5": {
+    "type": "per_character",
+    "rate": 0.10,
+    "charBlockSize": 1000,
+    "text_field": "text",
+    "source": "fal_api_pricing",
+    "confidence": "medium"
+  },
+  "fal-ai/elevenlabs/tts/multilingual-v2": {
+    "type": "per_character",
+    "rate": 0.10,
+    "charBlockSize": 1000,
+    "text_field": "text",
+    "source": "fal_api_pricing",
+    "confidence": "medium"
+  },
+  "fal-ai/elevenlabs/text-to-dialogue/eleven-v3": {
+    "type": "per_character",
+    "rate": 0.10,
+    "charBlockSize": 1000,
+    "text_field": "text",
+    "source": "fal_api_pricing",
+    "confidence": "medium"
   }
 }
