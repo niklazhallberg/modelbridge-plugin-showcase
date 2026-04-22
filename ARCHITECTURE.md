@@ -91,7 +91,43 @@ The cloud operations layer is deployed on an edge runtime and runs continuously 
 
 **Monitoring.** The cloud layer produces structured event logs and sends operator alerts for anomalies — catalog disruptions, licensing events, and schema verification failures. Daily digests summarize catalog health and subscription activity. Instant alerts fire for urgent events that require manual attention.
 
-**Local backend recovery.** The Node.js backend on localhost includes health monitoring, automatic restart on crash, and port conflict detection. If the backend is unreachable, the panel surfaces a clear status message and retries automatically.
+**Local backend recovery.** The Node.js backend on localhost includes health monitoring, automatic restart on crash (up to three attempts with progressive delays), keep-alive pings, and port conflict detection. If the backend is unreachable after all recovery attempts, the panel surfaces a clear status message with a manual restart option.
+
+### Self-running systems inventory
+
+The following systems operate autonomously — reducing manual maintenance and keeping the plugin current between releases.
+
+**Catalog pipeline.** The cloud layer monitors the full fal.ai catalog on a scheduled basis. New models are detected via diff against a cumulative seen-set. Each new model passes through schema verification (structural checks against the OpenAPI spec) and category classification (11 supported media production categories; unknown defaults to blocked). Models with broken schemas enter a pending state and are retried on subsequent runs. Models that remain broken after a grace period are quarantined on a blocklist. Quarantined models are re-checked daily — if the upstream schema is fixed, the model is promoted back to available automatically. A sanity floor prevents false mass-removals: if more than half the catalog vanishes in a single check, removal processing is paused. Models must be missing from multiple consecutive checks before being confirmed removed.
+
+**Plugin-side health checks.** Installed models are verified lazily in the background — each model is rechecked after its cache expires. Health checks are concurrency-capped and non-blocking. Six endpoint states are tracked: active, migrated, gone, schema-changed, schema-unavailable, and unknown-error. Renamed endpoints are resolved via a migration table. Schema drift is detected via structural hash comparison and triggers a silent cache invalidation and UI rebuild. Models confirmed gone are auto-cleaned after a retention period.
+
+**News feed.** New models in news-worthy categories are automatically published as news items. The plugin displays these as compact banners with a "Today" badge and one-click install. The feed also supports manual entries (feature updates, maintenance notices, tips) via an admin API.
+
+**Operator notifications.** Three tiers: (1) A daily digest summarizing catalog movement, customer activity, and pipeline health. (2) Instant alerts for urgent events — payment failures, refunds, catalog anomalies, model resurrections. (3) Accumulated events folded into the next daily digest. Quiet days show only the catalog total.
+
+**OTA updates.** Error documentation, error message templates, feature flags, and featured model lists are delivered over-the-air from a remote manifest. Files are integrity-verified (cryptographic hash) before being applied; failures fall back to built-in defaults. The manifest also supports incident banners and kill switches for emergency rollback.
+
+**Self-learning validation.** When a model rejects media for a constraint not declared in its schema, the constraint values are extracted from the API error response (structured data when available, regex fallback otherwise) and cached permanently per model. Multiple constraint types are learned: dimensions, file size, duration, aspect ratio, and others. Learned constraints are enforced at preflight on all future attempts. Dual persistence (fast cache + durable disk) ensures constraints survive cache clears.
+
+**Cost learning.** After several generations with a model, the system derives a median cost from actual billing data — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after a period of inactivity.
+
+**Generation time learning.** Successful generations record their duration. After a few samples per model, a time estimate is computed from a rolling window and displayed on the model card. Rounding scales with magnitude.
+
+**Background generation recovery.** If Premiere Pro restarts during an active generation, recovery data persists locally. On next panel open, a recovery bar lets the user resume polling with the original request ID.
+
+**Model insights enrichment.** An enrichment pipeline generates editor-focused strength bullets for each model (e.g., "Great for quickly testing multiple ideas"). These are served from the cloud layer and cached locally with a stale-while-revalidate strategy. A rule-based fallback layer covers models not yet enriched.
+
+**License revalidation.** Subscription status is reverified periodically. An offline grace period allows the plugin to function without connectivity. Trial countdowns, payment grace periods, and status transitions are handled without user action.
+
+**Exchange rates.** Cost displays support multiple currencies with live rates from a public API. Fallback defaults are used when the API is unreachable. Historical rates are stored per generation for accurate retrospective reporting.
+
+**Thumbnail backfill.** Models without preview images are backfilled lazily in the background — concurrency-capped, non-blocking, with smooth transitions in the UI.
+
+**Visibility-aware polling.** When the panel is hidden, non-critical background work pauses automatically. Generation polling and server health checks continue; everything else waits.
+
+**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type, HTTP status, model endpoint, plugin version — no prompts, paths, keys, or personal data). This is how new error types are discovered for documentation. Disableable in Settings.
+
+**Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons across all models. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
 
 ---
 
