@@ -12,7 +12,7 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **1,000+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
 
-**See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and audio — concrete totals for your exact settings, not abstract per-unit rates. Six confidence tiers tell you how reliable each number is, and the plugin learns from your billing history to improve estimates over time. You pay fal.ai directly at their published rates — no credit systems, no surprises.
+**See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and audio — concrete totals for your exact settings, not abstract per-unit rates. Five confidence tiers tell you how reliable each number is, and the plugin learns from your billing history to improve estimates over time. You pay fal.ai directly at their published rates — no credit systems, no surprises.
 
 **Generate in the background. Edit in the foreground.** Long generations move to the background automatically. Stack parallel jobs across different models. A sound and notification tell you when each result is ready. If Premiere restarts, your background jobs resume.
 
@@ -82,7 +82,7 @@ Run the same prompt against two models simultaneously. Compare results side-by-s
 
 **Cost & time estimates**
 
-Live estimates update as you change duration, resolution, and audio. Six confidence tiers. Both learn from your billing history. No fabricated numbers.
+Live estimates update as you change duration, resolution, and audio. Five confidence tiers. Both learn from your billing history. No fabricated numbers.
 
 </td>
 </tr>
@@ -220,7 +220,7 @@ When a model rejects your media, modelBridge remembers the requirement. Future a
 
 **4. Cost estimation**
 
-Six confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
+Five confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
 </td>
@@ -388,7 +388,7 @@ Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for intern
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
-| **Cost estimate** | 6-tier confidence, learns from your billing | Hidden or none | Hidden behind credits |
+| **Cost estimate** | 5-tier confidence, learns from your billing | Hidden or none | Hidden behind credits |
 | **Learns from your usage** | Estimates get closer to your real bill every time you generate | No | No |
 | **Adapts to pricing changes** | Yes — pricing updates automatically | No | No |
 | **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
@@ -402,7 +402,7 @@ Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for intern
 
 modelBridge calculates a concrete cost for your exact settings before you generate — live estimates that update as you change duration, resolution, and audio. The system checks multiple pricing sources in priority order, and when data is unavailable, it says so honestly rather than guessing.
 
-Six confidence tiers tell you how reliable each number is:
+Five confidence tiers tell you how reliable each number is:
 
 - **Billed** / **Computed** — confirmed charges from fal.ai after generation
 - **Learned** — derived from your actual fal.ai billing, improving with usage
@@ -637,7 +637,7 @@ Results land on the timeline automatically — right track, right timecode.
 
 **Error handling.** Errors are caught before they cost money where possible, learned from when they slip through, and shown in plain language with a clear next step. 44 error types mapped to human-readable messages — raw API responses are translated before they reach the editor. Five semantic categories drive consistent color-coded treatment across every surface.
 
-**Cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Six confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
+**Cost resolution.** Multiple pricing sources checked in priority order — the most accurate source available always wins. Five confidence tiers are clearly labeled so users always know the basis for each number. The system learns from your actual billing to fill gaps where providers don't expose detailed rates — estimates improve with usage and stay current over time. No fabricated numbers — ever. Post-generation actuals from fal.ai confirm or correct estimates.
 
 **Resilient data persistence.** Your models, learned constraints, cost history, and settings survive cache clears, Premiere Pro updates, and plugin reinstalls. Automatic backup before every data migration. If primary storage is empty, recovery is silent and automatic — no "reconfigure everything after an update" experience.
 
