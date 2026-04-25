@@ -598,6 +598,116 @@ The schema-driven engine works with any machine-readable API specification — d
 
 ---
 
+## Platform Infrastructure
+
+A solo-developer product with production-grade infrastructure. 9+ external services orchestrated into a self-running system — every integration designed so users experience the value without seeing the complexity.
+
+### What users get
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+**Always current, never waiting**
+
+The plugin updates its own catalog, pricing data, error handling, and model intelligence continuously — without plugin releases, without restarts. Users open the panel and everything is already up to date.
+
+</td>
+<td width="33%" valign="top">
+
+**Costs in your currency**
+
+Live exchange rates for 9 currencies, updated automatically. Cost estimates, billing history, and client reports all display in the user's preferred currency — no manual conversion.
+
+</td>
+<td width="33%" valign="top">
+
+**Nothing breaks silently**
+
+Every external dependency degrades gracefully. If a service is temporarily unavailable, the plugin continues with cached data and recovers silently when connectivity returns. No error dialogs, no "service unavailable" screens.
+
+</td>
+</tr>
+</table>
+
+### What the developer/operator gets
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+**Autonomous catalog operations**
+
+A dedicated cloud worker monitors the entire AI model ecosystem on a scheduled cadence. New models are detected, verified, classified, and made available — or blocked — without manual intervention. Schema breakage is detected and auto-healed when upstream fixes land. Retired models are confirmed across multiple checks before removal. The catalog is infrastructure, not a task.
+
+</td>
+<td width="33%" valign="top">
+
+**Multi-tier alerting**
+
+Three notification tiers: a daily digest summarizing catalog health, customer lifecycle events, and pipeline status; instant alerts for payment failures, refunds, and anomalies; and accumulated low-priority events folded into the next digest. Quiet days produce a single line. Urgent events wake you up immediately.
+
+</td>
+<td width="33%" valign="top">
+
+**Remote operations without releases**
+
+Error documentation, pricing data, feature flags, incident banners, and kill switches are deployed over-the-air with cryptographic integrity verification. A new error type can be identified, documented, and delivered to all users within an hour — without touching the plugin codebase.
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+**Subscription lifecycle on autopilot**
+
+License activation, validation, trial management, renewal, cancellation, and refund handling are fully automated via webhooks. Payment failures trigger instant alerts. Refunds are processed and licenses revoked automatically. The operator is notified — not required to act.
+
+</td>
+<td width="33%" valign="top">
+
+**AI-powered content pipeline**
+
+Model descriptions, strength bullets, and search metadata are generated automatically using a large language model — tailored for video editors, not generic API documentation. Queued and processed in batches with retry logic and token accounting. 800+ models enriched without manual writing.
+
+</td>
+<td width="33%" valign="top">
+
+**CI/CD with automated quality gates**
+
+Every commit is checked for host-layer compatibility. Catalog health is verified on a scheduled basis with automated alerts on regression. Integrity-verified deployments ensure remote configuration cannot be tampered with.
+
+</td>
+</tr>
+</table>
+
+### Infrastructure at a glance
+
+| Capability | Scope |
+|---|---|
+| External service integrations | 9 services across compute, storage, payments, notifications, AI enrichment, currency, CI/CD, and content delivery |
+| Scheduled automation | Multiple cron cadences — from every few minutes to daily digests |
+| Graceful degradation | Every external dependency has a fallback — cached data, bundled defaults, or honest "unavailable" |
+| Remote-updatable surfaces | Error copy, pricing data, feature flags, incident banners, kill switches, featured models |
+| Self-learning systems | 3 (validation constraints, cost estimates, generation time) |
+| Notification tiers | 3 (instant alerts, daily digest, accumulated events) |
+| Data persistence layers | 3 (in-memory cache, client-side cache, durable disk backup) |
+| Criticality tiers | P0 (generation + licensing), P1 (payments), P2 (graceful degradation), P3 (developer-only) |
+| Monitoring coverage | Catalog health, schema verification, payment lifecycle, error telemetry, pricing drift |
+
+### Design philosophy
+
+Every service integration follows the same principles:
+
+- **User-invisible complexity.** The user experiences the result — not the mechanism. "Costs in SEK" is the feature. The exchange rate API, caching strategy, and fallback logic are invisible.
+- **Operator-minimal maintenance.** Systems that run themselves. The daily digest tells you what happened — not what you need to do. Manual intervention is the exception, not the workflow.
+- **Honest degradation over silent failure.** When data is unavailable, the UI says so — "Price not available" is always better than a fabricated number. Cached data is served transparently. Nothing pretends to be fresh when it isn't.
+- **No single point of failure.** The plugin works offline. The cloud layer recovers automatically. Remote updates fall back to bundled defaults. Every layer assumes the layer above it might be unavailable.
+
+> For full technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
+---
+
 ## Technical Architecture
 
 <table>
