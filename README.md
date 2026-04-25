@@ -59,9 +59,9 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 <tr>
 <td width="25%" valign="top">
 
-**Schema-driven adaptive UI**
+**Adaptive model intelligence**
 
-Every model gets a purpose-built interface generated from its API spec. 1,000+ models, no model-specific code. New models work immediately.
+Every model gets a purpose-built interface — whether or not the provider has published a full specification. New models are detected and made available automatically, often within hours of launch. No plugin update needed.
 
 </td>
 <td width="25%" valign="top">

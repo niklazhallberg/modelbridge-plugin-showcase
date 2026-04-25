@@ -16,7 +16,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ## Core Design Principles
 
-**Schema-driven.** No model has hardcoded UI, validation, or pricing logic. Every interface, constraint, and cost estimate is generated at runtime from the model's API specification. This is how 1,000+ models are supported without per-model code — and how new models work immediately without plugin updates. The alternative — maintaining per-model UI code — would require a plugin release for every new model and break whenever a provider updates their API. The schema-driven approach eliminates both failure modes by design.
+**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how 1,000+ models are supported without plugin updates — and how new models become available within hours of launch, not weeks.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as billing history accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
@@ -25,6 +25,24 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 **Remotely updatable.** Error handling, pricing data, model intelligence, and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response reaches users within an hour — without a plugin release, without user action.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
+
+---
+
+## Model Discovery & Availability
+
+modelBridge continuously monitors the AI model ecosystem. When a provider launches a new model, the system detects it automatically — typically within 30 minutes of the model going live.
+
+**What happens next depends on what the provider has published:**
+
+- If the model has a full API specification, modelBridge builds a complete interface with parameter controls, validation, and cost estimates — all automatically, no human in the loop.
+
+- If the model is live but its specification isn't published yet, modelBridge still makes it available with a streamlined interface. Users can start generating immediately while the system watches for the full specification to appear.
+
+- For high-demand models from major providers, modelBridge can deliver a hand-tuned interface with richer controls and more precise cost estimates — layered on top without disrupting the automatic path.
+
+**The result:** new models rarely stay unavailable for more than a few hours after launch. The system handles the common case automatically and escalates the rest. Users never have to wait for a plugin update to access a new model.
+
+This also means modelBridge doesn't just track models that work today — it tracks models that exist but aren't fully ready yet, and promotes them automatically the moment they become usable. Nothing falls through the cracks.
 
 ---
 
