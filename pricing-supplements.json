@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "version": "2.4",
-    "last_verified": "2026-04-22",
-    "last_updated": "2026-04-22",
+    "version": "2.5",
+    "last_verified": "2026-04-25",
+    "last_updated": "2026-04-25",
     "verified_by": "cross-tool research audit — fal.ai model pages + provider docs + API pricing endpoint",
     "next_review": "2026-05-22",
     "notes": "v2.4: added per_character supplements for ElevenLabs TTS models (eleven-v3, turbo-v2.5, multilingual-v2, text-to-dialogue)."
@@ -224,6 +224,63 @@
     "confidence": "medium",
     "last_verified": "2026-03-16",
     "note": "Audio rate split undocumented — using higher rate as conservative default"
+  },
+
+  "fal-ai/bytedance/seedance-2.0/text-to-video": {
+    "type": "video_token",
+    "rate_per_million": 14.00,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24",
+    "_note": "Seedance 2.0 standard. $0.014/1K tokens = $14/M. Audio included at no extra cost."
+  },
+  "fal-ai/bytedance/seedance-2.0/image-to-video": {
+    "type": "video_token",
+    "rate_per_million": 14.00,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24"
+  },
+  "fal-ai/bytedance/seedance-2.0/reference-to-video": {
+    "type": "video_token",
+    "rate_per_million": 14.00,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24"
+  },
+  "fal-ai/bytedance/seedance-2.0/fast/text-to-video": {
+    "type": "video_token",
+    "rate_per_million": 11.11,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24",
+    "_note": "Seedance 2.0 fast. ~$0.24/s at 720p -> ~$11.11/M tokens. Audio included."
+  },
+  "fal-ai/bytedance/seedance-2.0/fast/image-to-video": {
+    "type": "video_token",
+    "rate_per_million": 11.11,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24"
+  },
+  "fal-ai/bytedance/seedance-2.0/fast/reference-to-video": {
+    "type": "video_token",
+    "rate_per_million": 11.11,
+    "default_fps": 24,
+    "tier": "from",
+    "source": "fal_model_page",
+    "confidence": "medium",
+    "last_verified": "2026-04-24"
   },
 
   "fal-ai/veo3": {
