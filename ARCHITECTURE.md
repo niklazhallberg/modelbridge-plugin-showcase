@@ -44,6 +44,20 @@ modelBridge continuously monitors the AI model ecosystem. When a provider launch
 
 This also means modelBridge doesn't just track models that work today — it tracks models that exist but aren't fully ready yet, and promotes them automatically the moment they become usable. Nothing falls through the cracks.
 
+```mermaid
+flowchart TD
+    A["New AI model launches"] --> B["modelBridge detects it automatically"]
+    B --> C{"Full specification\navailable?"}
+    C -->|Yes| D["Complete interface\nwith all parameters"]
+    C -->|No| E{"Needs tailored\nexperience?"}
+    E -->|Yes| F["Hand-tuned interface\nwith rich controls"]
+    E -->|No| G["Streamlined interface\nready to generate"]
+    D --> H["Available in modelBridge\nno plugin update needed"]
+    F --> H
+    G --> H
+    H --> I["Estimates improve\nwith every generation"]
+```
+
 ---
 
 ## Scale
