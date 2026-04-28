@@ -489,6 +489,49 @@ The feed checks for updates once per startup, respects your preferences (disable
 
 ---
 
+## Blog — fal.ai News, Right Next to Your Timeline
+
+The AI model landscape moves fast. New models launch weekly — sometimes daily. Keeping up usually means checking blogs, social media, and Discord across multiple sites. By the time you find something interesting, you still need to figure out how to use it and whether it works.
+
+The Blog tab brings fal.ai's official blog directly into the panel. New model announcements, deep-dives, and platform updates appear right where you work — next to your timeline, ready to act on.
+
+### From reading to generating in seconds
+
+modelBridge scans each article for model references and surfaces them as actionable buttons. When you read about a new video model, you don't copy an endpoint ID or switch to a browser — you click **Install**, then **Try model**, and you're generating on your current project. The gap between "that looks interesting" and "let me try it on my actual footage" goes from hours to seconds.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+**Single-model articles**
+
+Launch announcements, model spotlights. One clear call-to-action: **Install model** if it's new to you, **Try model** if it's already in your library. One click selects it and switches to the Generate tab.
+
+</td>
+<td width="50%" valign="top">
+
+**Multi-model articles**
+
+Comparisons, roundups, platform updates. Each referenced model gets its own **Install** or **Try** button. Pick the ones that interest you — skip the rest.
+
+</td>
+</tr>
+</table>
+
+### What you see
+
+Article cards with featured image, publication date, reading time, title, and excerpt. **NEW** badges mark posts published since your last visit. Click any card to read the full article inside the panel — text, images, everything — without leaving Premiere Pro.
+
+### You never miss anything
+
+A badge on the Blog tab shows how many unread posts are waiting. The most recent post can also appear in the scrolling news banner on the main screen. When you visit the tab, the badges reset.
+
+The feed refreshes automatically in the background. If your connection drops, cached articles are still available — read what you've already loaded and catch up when you're back online.
+
+[Learn more →](https://docs.modelbridge.app/features/blog/)
+
+---
+
 ## Security & Privacy
 
 ### Your data stays on your machine
