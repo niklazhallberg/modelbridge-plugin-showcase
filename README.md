@@ -75,7 +75,7 @@ One button. Replace source clip in-place, insert at playhead, or route audio to 
 
 **Dual Mode**
 
-Run the same prompt against two models simultaneously. Compare results side-by-side, then import your pick with full timeline placement.
+Run the same prompt against two models simultaneously. Compare results side-by-side with an honest input overview — see exactly when a setting is adjusted for the secondary model and why. Both models always start reliably.
 
 </td>
 <td width="25%" valign="top">
@@ -149,9 +149,9 @@ One click rewrites your description into a model-optimized prompt — no prompt 
 <tr>
 <td width="25%" valign="top">
 
-**Drag-and-drop from Finder**
+**Drag-and-drop or paste a URL**
 
-Drag a file onto the media card — skip the Premiere Pro import step. Mix sources: timeline and Finder in the same generation.
+Drag a file onto the media card, or paste a public image URL from Midjourney, fal.ai, or any CDN. Thumbnail preview appears instantly. No download, no import step — the URL goes straight to the model.
 
 </td>
 <td width="25%" valign="top">
@@ -165,9 +165,18 @@ Preview expected output for any model — images, video, and audio. 89% coverage
 
 **AI-written key strengths**
 
-Every model includes 2-3 strength bullets written specifically for video editors — not generic API descriptions. Refreshed as new models appear.
+Every model includes 2–3 concise USPs written specifically for video editors — what makes this model worth choosing. Refreshed as new models appear.
 
 </td>
+<td width="25%" valign="top">
+
+**Smart model badges**
+
+HD, 4K, AUDIO, LoRA, and extend-duration badges appear automatically — derived from each model's specification, not a manually maintained list. When a new model launches with 1080p support, the HD badge is already there.
+
+</td>
+</tr>
+<tr>
 <td width="25%" valign="top">
 
 **New Model Detection**
@@ -280,7 +289,7 @@ A dedicated cloud worker monitors the entire fal.ai catalog around the clock. Ev
 
 ### Continuous catalog sync
 
-modelBridge stays in sync with fal.ai's catalog of 1,000+ models. New models are detected automatically, and the plugin updates without requiring a restart. The catalog refreshes in the background using a stale-while-revalidate strategy — the UI is never blocked waiting for a network response.
+modelBridge stays in sync with fal.ai's catalog of 1,000+ models. New models are detected automatically, and the plugin updates without requiring a restart. The catalog loads fast — cached data is displayed immediately on startup while a background refresh runs. If the network is slow, a retry button appears after 12 seconds instead of hanging indefinitely. The browse experience is never blocked waiting for a network response.
 
 ### Schema verification
 
@@ -393,7 +402,7 @@ Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for intern
 | **Adapts to pricing changes** | Yes — pricing updates automatically | No | No |
 | **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
 | **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
-| **Error messages** | Plain language + color-coded by type | Raw API errors | Varies |
+| **Error messages** | Plain language + color-coded by category, multi-error stacking | Raw API errors | Varies |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
 
 ---
@@ -424,46 +433,46 @@ Note: fal.ai may charge for requests where processing began before an error was 
 <tr>
 <td width="33%" valign="top">
 
-**9-gate input validation**
+**Central validation engine**
 
-Checks your media against every requirement before you generate — dimensions, file size, aspect ratio, duration. No wasted credits, no waiting for a fail.
+One validation system checks everything — required fields, value ranges, media constraints, and parameter dependencies — before you can click Generate. No wasted credits, no waiting for a fail. Works identically in single and dual mode.
 
 </td>
 <td width="33%" valign="top">
 
 **Self-improving validation**
 
-When a generation fails due to a media constraint, modelBridge remembers. Future attempts are checked automatically. Requirements re-verified over time.
+When a generation fails due to a media or parameter constraint, modelBridge remembers and enforces it automatically on future attempts — not just for media, but for form fields too. "Minimum 3 seconds — learned from a previous generation."
 
 </td>
 <td width="33%" valign="top">
 
 **Plain-language errors**
 
-Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds."* 44 error types mapped to clear messages. Color-coded by severity.
+Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds."* 50+ error types mapped to clear messages. Color-coded by category: red for input issues, amber for billing, blue for temporary problems. Up to two errors shown simultaneously — billing and input issues never hide each other.
 
 </td>
 </tr>
 <tr>
 <td width="33%" valign="top">
 
-**Platform health monitoring**
+**Errors always visible, always in context**
 
-Detects fal.ai outages and degraded performance before you generate, so you're not troubleshooting a platform issue.
+Input errors appear near your prompt. Generation errors appear above the Generate button. Background errors are caught and waiting for you. Errors never disappear silently — a guaranteed fallback ensures every message reaches you, regardless of scroll position or panel state.
 
 </td>
 <td width="33%" valign="top">
 
-**Background generation tracking**
+**Access-restricted model detection**
 
-Errors from background generations are caught and waiting for you — color-coded by type. Failed generations never silently disappear.
+Some models require creator approval before use. modelBridge detects this at install time — not after you've waited for a generation to fail. Clear banner with next steps, separate from billing errors.
 
 </td>
 <td width="33%" valign="top">
 
 **Resilient infrastructure**
 
-Automatic server recovery, exponential backoff, and background polling that survives panel close/reopen. Data persists through updates and cache clears.
+Automatic server recovery, exponential backoff, and background polling that survives panel close/reopen. Data persists through updates and cache clears. Storage quota protection prevents data loss when local storage fills up.
 
 </td>
 </tr>
@@ -473,7 +482,9 @@ Automatic server recovery, exponential backoff, and background polling that surv
 
 ## Always Up to Date
 
-Every error message in modelBridge is written for humans. Raw API responses, HTTP status codes, and cryptic field names are translated into plain language before they reach you. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — color-coded by severity.
+Every error message in modelBridge is written for humans. Raw API responses, HTTP status codes, and cryptic field names are translated into plain language before they reach you. When something goes wrong, the plugin tells you what happened, why, and exactly what to do — color-coded by category so you immediately know if it's something you can fix, a billing issue, or a temporary platform problem.
+
+Multiple errors are shown simultaneously — a billing warning never hides an input error. Errors appear where they matter: input issues near your prompt, generation failures above the Generate button. Upload errors from fal.ai are classified correctly — "exhausted balance" shows as a billing issue with a direct link to top up, not a generic server error.
 
 Error documentation updates are delivered remotely — no reinstallation, no plugin update. When a new error is identified and documented, the updated copy arrives automatically the next time the plugin starts. "Read more" links in error banners only appear when a verified documentation page exists for that specific error — never broken links.
 
@@ -605,9 +616,9 @@ No model has a hardcoded interface. Every form, validation rule, and media input
 </td>
 <td width="50%" valign="top">
 
-**277 tests across 6 automated suites**
+**326+ tests across automated suites**
 
-Chrome DevTools Protocol tests validate error handling, dual mode, cost display, preview, timeline replacement, and background tracking. 101 end-to-end checks across all 11 categories.
+Chrome DevTools Protocol tests validate error handling, dual mode, cost display, preview, timeline replacement, and background tracking. 101 end-to-end checks across all 11 categories. A dedicated validation engine stress-harness exercises required fields, types, ranges, enums, conditionals, and file requirements.
 
 </td>
 </tr>

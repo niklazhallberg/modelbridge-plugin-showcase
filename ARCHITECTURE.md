@@ -97,7 +97,7 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Pricing.** Cost estimates use fal.ai's official pricing API as one of several sources. The plugin respects fal.ai's published rates and makes no attempt to scrape or infer pricing outside of official endpoints.
 
-**Error specification.** The plugin implements full coverage of fal.ai's error response formats — both structured validation errors (Format A) and infrastructure errors (Format B), including the `X-Fal-Retryable` header, `ctx` structured constraint data, and error documentation URLs. Error types are translated to user-facing language before display.
+**Error specification.** The plugin implements full coverage of fal.ai's error response formats — both structured validation errors (Format A) and infrastructure errors (Format B), including the `X-Fal-Retryable` header, `ctx` structured constraint data, and error documentation URLs. Error types are translated to user-facing language before display. Six semantic categories (INPUT_QUALITY, CREDITS_BILLING, NETWORK_RETRY, CONTENT_POLICY, ACCESS_RESTRICTED, DEVELOPER_BUG) drive consistent visual treatment across all error surfaces. Up to two error banners are shown simultaneously per request — billing and input errors never mask each other. Errors are placed contextually: input issues near the prompt, generation errors above the Generate button. A guaranteed fallback container in the DOM prevents errors from being silently swallowed.
 
 **Resilience to API changes.** The schema-driven architecture is inherently resilient to changes in fal.ai's model catalog — new models, updated parameters, and revised constraints are absorbed automatically without code changes. Schema fetching uses a fallback chain with stale-cache recovery, so a temporary API issue never blocks the user. If a model endpoint is renamed or retired, the plugin detects the change and handles it gracefully.
 
@@ -139,7 +139,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **OTA updates.** Error documentation, error message templates, feature flags, and featured model lists are delivered over-the-air from a remote manifest. Files are integrity-verified (cryptographic hash) before being applied; failures fall back to built-in defaults. The manifest also supports incident banners and kill switches for emergency rollback.
 
-**Self-learning validation.** When a model rejects media for a constraint not declared in its schema, the constraint values are extracted from the API error response (structured data when available, regex fallback otherwise) and cached permanently per model. Multiple constraint types are learned: dimensions, file size, duration, aspect ratio, and others. Learned constraints are enforced at preflight on all future attempts. Dual persistence (fast cache + durable disk) ensures constraints survive cache clears.
+**Self-learning validation.** When a model rejects media or a parameter value for a constraint not declared in its schema, the constraint values are extracted from the API error response (structured data when available, regex fallback otherwise) and cached permanently per model. Multiple constraint types are learned: dimensions, file size, duration, aspect ratio, numeric parameter limits, and others. Learned constraints are enforced at preflight on all future attempts — both on media cards and in form fields. The acknowledgment "learned from a previous generation" only appears once per constraint type. Dual persistence (fast cache + durable disk) ensures constraints survive cache clears.
 
 **Cost learning.** After several generations with a model, the system derives a median cost from actual billing data — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after a period of inactivity.
 
@@ -147,7 +147,9 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Background generation recovery.** If Premiere Pro restarts during an active generation, recovery data persists locally. On next panel open, a recovery bar lets the user resume polling with the original request ID.
 
-**Model insights enrichment.** An enrichment pipeline generates editor-focused strength bullets for each model (e.g., "Great for quickly testing multiple ideas"). These are served from the cloud layer and cached locally with a stale-while-revalidate strategy. A rule-based fallback layer covers models not yet enriched.
+**Model insights enrichment.** An enrichment pipeline generates editor-focused USP bullets for each model — concise, model-specific, 5–7 words each. These are served from the cloud layer and cached locally with a stale-while-revalidate strategy. A rule-based fallback layer covers models not yet enriched. A bulk regeneration endpoint allows all insights to be refreshed when the prompt template changes.
+
+**Schema-derived model badges.** Model cards display capability badges (HD, 4K, AUDIO, LoRA, extend duration) derived automatically from each model's schema — not from a manually maintained lookup table. Resolution badges check the highest value in a resolution enum. Extend duration badges parse const values, min/max ranges, and frame counts with fps conversion. New models receive correct badges automatically on install.
 
 **License revalidation.** Subscription status is reverified periodically. An offline grace period allows the plugin to function without connectivity. Trial countdowns, payment grace periods, and status transitions are handled without user action.
 
