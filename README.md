@@ -1,16 +1,24 @@
 # modelBridge.app
 
-AI generation for Adobe Premiere Pro — 1,000+ models, one panel, zero browser tabs.
+AI generation for Adobe Premiere Pro — 1,100+ models, one panel, zero browser tabs.
 
 ---
 
 Professional video editors juggle 3–5 AI tools in separate browser tabs. Every generation means leaving Premiere Pro — uploading, waiting, downloading, importing, conforming. You're paying four separate subscriptions, dealing with four different credit systems, and none of these tools know anything about your timeline. modelBridge puts every major AI model directly inside your NLE. Results land on your timeline, positioned and ready to cut. When fal.ai adds a new model, modelBridge supports it automatically — no plugin update needed.
 
+## 1,100+ models — verified, searchable, and ready to use
+
+modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 categories. Every model in the catalog is continuously verified, classified, and made available automatically — often within hours of launch on fal.ai.
+
+The full catalog is browsable, searchable, and filterable at [docs.modelbridge.app/models/available-models/](https://docs.modelbridge.app/models/available-models/) — a live reference page updated every 30 minutes by a background monitoring system. Each model shows its current status, creator, category, and availability. You can search by name, filter by category, and see exactly what's available before you even open Premiere Pro.
+
+Inside the plugin, the same catalog powers a typo-tolerant search with synonym matching, paste-by-endpoint-ID, and category filters. New models get a "TODAY" badge and appear in the news feed. The browse experience loads cached data instantly on startup while a background refresh runs — you're never blocked waiting for a network response.
+
 ## Why editors switch to modelBridge
 
 **Stay in Premiere.** Generate AI video, images, and audio without opening a browser. Results import to the right track, at the right timecode, with the right scale. Your creative flow never breaks.
 
-**1,000+ models, one panel.** Kling, FLUX, Veo, Seedance, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
+**1,100+ models, one panel.** Kling, FLUX, Veo, Seedance, Happy Horse, ElevenLabs, and hundreds more through a single interface across 11 categories. Stop paying four separate subscriptions for four separate tools.
 
 **See estimated costs before you generate.** Real-time estimates update as you change duration, resolution, and audio — concrete totals for your exact settings, not abstract per-unit rates. Five confidence tiers tell you how reliable each number is, and the plugin learns from your billing history to improve estimates over time. You pay fal.ai directly at their published rates — no credit systems, no surprises.
 
@@ -46,146 +54,81 @@ AI generation costs paid directly to fal.ai at their published rates — modelBr
 ## Links
 
 - [Documentation](https://docs.modelbridge.app/what-is-modelbridge/) — 75+ pages: getting started, feature guides, workflow recipes, Academy, troubleshooting, and full legal framework
+- [Available Models](https://docs.modelbridge.app/models/available-models/) — live catalog of 1,100+ models, updated every 30 minutes
 - [Store](https://modelbridge.app) — download and subscribe
 - [Support](mailto:support@modelbridge.app) — reach out anytime
-
-<!-- Screenshots will go here — see bottom of README for capture list -->
 
 ---
 
 ## Key Features
 
-<table>
-<tr>
-<td width="25%" valign="top">
+### Adaptive model intelligence
 
-**Adaptive model intelligence**
+Every model gets a purpose-built interface — whether or not the provider has published a full specification. Models with complete specifications get a rich interface with every parameter exposed. Models without one still work — modelBridge has multiple strategies to make them available, and upgrades the interface automatically as more information becomes available. New models are detected and made available automatically, often within hours of launch. No plugin update needed.
 
-Every model gets a purpose-built interface — whether or not the provider has published a full specification. New models are detected and made available automatically, often within hours of launch. No plugin update needed.
-
-</td>
-<td width="25%" valign="top">
-
-**Smart timeline import**
+### Smart timeline import
 
 One button. Replace source clip in-place, insert at playhead, or route audio to the right track. A live preview bar shows what will happen before you click.
 
-</td>
-<td width="25%" valign="top">
-
-**Dual Mode**
+### Dual Mode
 
 Run the same prompt against two models simultaneously. Compare results side-by-side with an honest input overview — see exactly when a setting is adjusted for the secondary model and why. Both models always start reliably.
 
-</td>
-<td width="25%" valign="top">
+### Cost and time estimates
 
-**Cost & time estimates**
+Live estimates update as you change duration, resolution, and audio. Five confidence tiers tell you how reliable each number is. Both cost and time estimates learn from your billing history and improve with usage. No fabricated numbers.
 
-Live estimates update as you change duration, resolution, and audio. Five confidence tiers. Both learn from your billing history. No fabricated numbers.
-
-</td>
-</tr>
-<tr>
-<td width="25%" valign="top">
-
-**Follow Your Generation**
+### Follow Your Generation
 
 Generations move to the background automatically. Track every job through five stages. Sound notification when done. Survives plugin restart.
 
-</td>
-<td width="25%" valign="top">
-
-**Audio pipeline**
+### Audio pipeline
 
 Select a voice clip, click Generate. 10+ audio models including ElevenLabs Voice Changer, TTS, dubbing, AI music, and sound effects. Preview inline before importing.
 
-</td>
-<td width="25%" valign="top">
-
-**Mask editor**
+### Mask editor
 
 Paint inpainting masks directly in the panel — adjustable brush, zoom, pan, eraser, undo. No Photoshop roundtrip.
 
-</td>
-<td width="25%" valign="top">
-
-**Dual-frame interpolation**
+### Dual-frame interpolation
 
 Select a start frame and end frame. The AI generates the motion between them. Adjacent clips get replaced as a single span.
 
-</td>
-</tr>
-<tr>
-<td width="25%" valign="top">
-
-**Source Monitor preview**
+### Source Monitor preview
 
 Evaluate results at full resolution in Premiere Pro's Source Monitor. Set In/Out points to import just the best segment.
 
-</td>
-<td width="25%" valign="top">
-
-**Mobile Preview**
+### Mobile Preview
 
 Send results to your phone with one tap. Scan a QR code once, then your latest generation is always available in the app.
 
-</td>
-<td width="25%" valign="top">
-
-**Your models, organized**
+### Your models, organized
 
 Recent models at the top, pinned favorites for one-click access. Filter by category or by what you want to do — "Extend shot," "Interpolate frames," "Voice-over" — instead of raw technical categories. Type to filter, scroll to browse.
 
-</td>
-<td width="25%" valign="top">
-
-**Prompt optimization**
+### Prompt optimization
 
 One click rewrites your description into a model-optimized prompt — no prompt engineering expertise required.
 
-</td>
-</tr>
-<tr>
-<td width="25%" valign="top">
-
-**Drag-and-drop or paste a URL**
+### Drag-and-drop or paste a URL
 
 Drag a file onto the media card, or paste a public image URL from Midjourney, fal.ai, or any CDN. Thumbnail preview appears instantly. No download, no import step — the URL goes straight to the model.
 
-</td>
-<td width="25%" valign="top">
+### Model Preview System
 
-**Model Preview System**
+Preview expected output for any model — images, video, and audio. 89% coverage across 1,100+ models. See what it produces before generating.
 
-Preview expected output for any model — images, video, and audio. 89% coverage across 1,000+ models. See what it produces before generating.
-
-</td>
-<td width="25%" valign="top">
-
-**AI-written key strengths**
+### AI-written key strengths
 
 Every model includes 2–3 concise USPs written specifically for video editors — what makes this model worth choosing. Refreshed as new models appear.
 
-</td>
-<td width="25%" valign="top">
+### Smart model badges
 
-**Smart model badges**
+HD, 4K, AUDIO, LoRA, and duration badges appear automatically — derived from each model's specification, not a manually maintained list. When a new model launches with 1080p support, the HD badge is already there.
 
-HD, 4K, AUDIO, LoRA, and extend-duration badges appear automatically — derived from each model's specification, not a manually maintained list. When a new model launches with 1080p support, the HD badge is already there.
-
-</td>
-</tr>
-<tr>
-<td width="25%" valign="top">
-
-**New Model Detection**
+### New model detection
 
 Automatic detection via scheduled monitoring. A "Today's models" filter with rich cards and a "TODAY" badge. Always know what's new.
-
-</td>
-</tr>
-</table>
 
 **One creative chain.** Generate an image, preview it at full resolution in Source Monitor, mark In/Out points, import just the best frame — then feed it directly into a video model. One panel, one unbroken creative pipeline from idea to timeline.
 
@@ -197,85 +140,49 @@ Automatic detection via scheduled monitoring. A "Today's models" filter with ric
 
 Most plugins are frozen in time — the tool you install is the tool you get. modelBridge updates itself. These nine systems run automatically — keeping the catalog current, learning from your usage, and delivering fixes without plugin updates.
 
-<table>
-<tr>
-<td width="33%" valign="top">
+### 1. Automatic catalog sync
 
-**1. Automatic catalog sync**
-
-1,000+ models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
+1,100+ models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
 [Learn more →](https://docs.modelbridge.app/features/news-feed/)
 
-</td>
-<td width="33%" valign="top">
+### 2. Adaptive interface generation
 
-**2. Schema-driven interface**
-
-Every model gets a custom-built interface generated from its API spec. No hardcoded models. 1,000+ models, no model-specific UI code.
+Every model gets a custom-built interface generated from its API specification when available. Models without a published specification still work — the plugin uses multiple strategies to make them available, and upgrades the interface automatically as more data becomes available. No hardcoded models. 1,100+ models, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
-</td>
-<td width="33%" valign="top">
-
-**3. Self-learning validation**
+### 3. Self-learning validation
 
 When a model rejects your media, modelBridge remembers the requirement. Future attempts are checked automatically — dimensions, file size, duration, aspect ratio.
 [Learn more →](https://docs.modelbridge.app/reference/self-learning/)
 
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top">
-
-**4. Cost estimation**
+### 4. Cost estimation
 
 Five confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
-</td>
-<td width="33%" valign="top">
-
-**5. Generation time estimates**
+### 5. Generation time estimates
 
 Estimated time on every model card. Built from your own usage history — after a few generations, the estimate appears and improves with use.
 [Learn more →](https://docs.modelbridge.app/features/background-generations/)
 
-</td>
-<td width="33%" valign="top">
-
-**6. Smart timeline import**
+### 6. Smart timeline import
 
 One button. Replace in-place, insert at playhead, or route to audio track. A live preview bar shows exactly what will happen before you click.
 [Learn more →](https://docs.modelbridge.app/features/timeline-import/)
 
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top">
-
-**7. AI prompt optimization**
+### 7. AI prompt optimization
 
 One click to enhance your prompt — tailored to your model type. Better prompts, better results, no expertise required.
 [Learn more →](https://docs.modelbridge.app/guides/prompt-tips/)
 
-</td>
-<td width="33%" valign="top">
-
-**8. Remote error updates**
+### 8. Remote error updates
 
 Clear, actionable messages — not raw API output. New error types addressed with targeted fixes delivered remotely, often within hours.
 [Learn more →](https://docs.modelbridge.app/reference/error-handling/)
 
-</td>
-<td width="33%" valign="top">
+### 9. Remote operations layer
 
-**9. Remote operations layer**
-
-A dedicated cloud backend monitors the fal.ai catalog continuously and delivers updates over-the-air — new error handling, pricing data, and model intelligence reach users without a plugin release. Amber alerts for platform issues.
-
-</td>
-</tr>
-</table>
+A dedicated backend monitors the fal.ai catalog continuously and delivers updates over-the-air — new error handling, pricing data, and model intelligence reach users without a plugin release. Amber alerts for platform issues.
 
 These systems compound. A model that didn't exist last week appears automatically. You generate with it a few times and the time estimate dials in. After regular use, the cost badge levels up from "From" (minimum published price) to "Learned" (derived from your actual billing history). Estimates get more accurate the more you use it.
 
@@ -285,17 +192,17 @@ These systems compound. A model that didn't exist last week appears automaticall
 
 modelBridge doesn't just list AI models — it continuously validates, classifies, and curates them.
 
-A dedicated cloud worker monitors the entire fal.ai catalog around the clock. Every model passes through a multi-stage verification pipeline before it can appear in the UI. The result: every model you see in modelBridge is one that actually works.
+A dedicated background system monitors the entire fal.ai catalog around the clock. Every model passes through a multi-stage verification pipeline before it can appear in the UI. The result: every model you see in modelBridge is one that actually works.
 
 ### Continuous catalog sync
 
-modelBridge stays in sync with fal.ai's catalog of 1,000+ models. New models are detected automatically, and the plugin updates without requiring a restart. The catalog loads fast — cached data is displayed immediately on startup while a background refresh runs. If the network is slow, a retry button appears after 12 seconds instead of hanging indefinitely. The browse experience is never blocked waiting for a network response.
+modelBridge stays in sync with fal.ai's catalog of 1,100+ models. New models are detected automatically, and the plugin updates without requiring a restart. The catalog loads fast — cached data is displayed immediately on startup while a background refresh runs. If the network is slow, a retry button appears after 12 seconds instead of hanging indefinitely. The browse experience is never blocked waiting for a network response.
 
-### Schema verification
+### Multi-path model support
 
-For a model to be usable in modelBridge, it needs a valid API schema. Without one, inputs can't be parsed, the UI can't be rendered, and cost estimation is impossible. Every model in the catalog is verified against this requirement by a Cloudflare Worker that runs continuously — multiple times per hour.
+modelBridge uses multiple strategies to make models usable. When a model publishes its full specification, the plugin reads it and generates a complete interface with all parameters — resolution, duration, aspect ratio, and more. When a specification isn't fully available yet, modelBridge still makes the model accessible and continuously checks for additional data in the background, upgrading the interface automatically as more information becomes available.
 
-Models that pass verification are added to a verified allowlist. Models that fail enter a pending state and are retried automatically — if fal.ai fixes a broken schema, modelBridge picks it up within hours, with no manual intervention required.
+Models that pass verification are added to a verified allowlist. Models that fail enter a pending state and are retried automatically — if a specification becomes available, modelBridge picks it up within hours, with no manual intervention required.
 
 ### Category classification
 
@@ -309,28 +216,13 @@ Any category not explicitly on the supported list defaults to blocked. Unknown n
 
 ### State-aware UI
 
-Every model card reflects its actual current state — not a cached assumption. modelBridge distinguishes between:
-
-- Models ready to install
-- Models that are newly available after being fixed upstream
-- Models temporarily unavailable while their schema is being resolved
-- Models that are permanently retired
-
-Users always know what they're looking at and why a model may not be available yet.
+Every model card reflects its actual current state — not a cached assumption. modelBridge distinguishes between models ready to install, models newly available after being fixed upstream, models temporarily unavailable while their specification is being resolved, and models that are permanently retired. Users always know what they're looking at and why a model may not be available yet.
 
 ### Designed for a moving target
 
 fal.ai's catalog is not static. Models are added, updated, broken, and retired continuously. modelBridge handles this gracefully — treating the catalog as a live data source with explicit states, rather than a fixed list to be manually curated.
 
-The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning. modelBridge treats catalog quality as infrastructure that runs continuously, not a task that someone remembers to do.
-
-| | |
-|---|---|
-| Models monitored | 1,000+ |
-| Supported categories | 11 media production types |
-| Verification cadence | Continuous — multiple times per hour |
-| Time to reflect upstream fixes | Under 30 minutes |
-| Catalog refresh | Continuously, in the background |
+The entire system is autonomous. No one curates the catalog. No one reviews new models. No one pushes an update when a provider launches something new. A model published by fal.ai at 3am on a Sunday is verified and available to users by morning.
 
 ---
 
@@ -352,35 +244,15 @@ The entire system is autonomous. No one curates the catalog. No one reviews new 
 
 ---
 
-## For Agencies & Freelancers
+## For Agencies and Freelancers
 
-<table>
-<tr>
-<td width="33%" valign="top">
-
-**Cost tracking per client**
-
-Every generation tracked in 9 currencies. Tag costs to clients and deliverables. Export CSV or generate HTML reports with KPIs and compliance badges.
+**Cost tracking per client.** Every generation tracked in 9 currencies. Tag costs to clients and deliverables. Export CSV or generate HTML reports with KPIs and compliance badges.
 [Learn more →](https://docs.modelbridge.app/guides/cost-tracking/)
 
-</td>
-<td width="33%" valign="top">
-
-**Commercial licensing**
-
-Filter models by commercial license before you generate. License status tracked per model and per generation — feeds into compliance badges in client reports.
+**Commercial licensing.** Filter models by commercial license before you generate. License status tracked per model and per generation — feeds into compliance badges in client reports.
 [Learn more →](https://docs.modelbridge.app/models/available-models/)
 
-</td>
-<td width="33%" valign="top">
-
-**External AI costs**
-
-Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
-
-</td>
-</tr>
-</table>
+**External AI costs.** Import costs from Midjourney, RunwayML, ElevenLabs, and other platforms via CSV. One dashboard for total AI spend across all tools.
 
 Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for international agency deployment.
 
@@ -390,7 +262,7 @@ Cost estimates in 9 currencies. GDPR, CCPA, and LGPD compliant. Ready for intern
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Models** | 1,000+ (validated against full catalog) | 5–20 hardcoded | 1 per platform |
+| **Models** | 1,100+ (continuously verified) | 5–20 hardcoded | 1 per platform |
 | **Categories** | 11 | 1–2 | 1 per platform |
 | **New models** | Automatic — detected in the background | Plugin update required | New account required |
 | **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
@@ -429,54 +301,17 @@ Note: fal.ai may charge for requests where processing began before an error was 
 
 ## Reliability
 
-<table>
-<tr>
-<td width="33%" valign="top">
+**Central validation engine.** One validation system checks everything — required fields, value ranges, media constraints, and parameter dependencies — before you can click Generate. No wasted credits, no waiting for a fail. Works identically in single and dual mode.
 
-**Central validation engine**
+**Self-improving validation.** When a generation fails due to a media or parameter constraint, modelBridge remembers and enforces it automatically on future attempts — not just for media, but for form fields too. "Minimum 3 seconds — learned from a previous generation."
 
-One validation system checks everything — required fields, value ranges, media constraints, and parameter dependencies — before you can click Generate. No wasted credits, no waiting for a fail. Works identically in single and dual mode.
+**Plain-language errors.** Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds."* 50+ error types mapped to clear messages. Color-coded by category: red for input issues, amber for billing, blue for temporary problems. Up to two errors shown simultaneously — billing and input issues never hide each other.
 
-</td>
-<td width="33%" valign="top">
+**Errors always visible, always in context.** Input errors appear near your prompt. Generation errors appear above the Generate button. Background errors are caught and waiting for you. Errors never disappear silently — a guaranteed fallback ensures every message reaches you, regardless of scroll position or panel state.
 
-**Self-improving validation**
+**Access-restricted model detection.** Some models require creator approval before use. modelBridge detects this at install time — not after you've waited for a generation to fail. Clear banner with next steps, separate from billing errors.
 
-When a generation fails due to a media or parameter constraint, modelBridge remembers and enforces it automatically on future attempts — not just for media, but for form fields too. "Minimum 3 seconds — learned from a previous generation."
-
-</td>
-<td width="33%" valign="top">
-
-**Plain-language errors**
-
-Not "422 Unprocessable Entity" — *"Maximum duration is 10 seconds."* 50+ error types mapped to clear messages. Color-coded by category: red for input issues, amber for billing, blue for temporary problems. Up to two errors shown simultaneously — billing and input issues never hide each other.
-
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top">
-
-**Errors always visible, always in context**
-
-Input errors appear near your prompt. Generation errors appear above the Generate button. Background errors are caught and waiting for you. Errors never disappear silently — a guaranteed fallback ensures every message reaches you, regardless of scroll position or panel state.
-
-</td>
-<td width="33%" valign="top">
-
-**Access-restricted model detection**
-
-Some models require creator approval before use. modelBridge detects this at install time — not after you've waited for a generation to fail. Clear banner with next steps, separate from billing errors.
-
-</td>
-<td width="33%" valign="top">
-
-**Resilient infrastructure**
-
-Automatic server recovery, exponential backoff, and background polling that survives panel close/reopen. Data persists through updates and cache clears. Storage quota protection prevents data loss when local storage fills up.
-
-</td>
-</tr>
-</table>
+**Resilient infrastructure.** Automatic server recovery, exponential backoff, and background polling that survives panel close/reopen. Data persists through updates and cache clears. Storage quota protection prevents data loss when local storage fills up.
 
 ---
 
@@ -510,24 +345,7 @@ The Blog tab brings fal.ai's official blog directly into the panel. New model an
 
 modelBridge scans each article for model references and surfaces them as actionable buttons. When you read about a new video model, you don't copy an endpoint ID or switch to a browser — you click **Install**, then **Try model**, and you're generating on your current project. The gap between "that looks interesting" and "let me try it on my actual footage" goes from hours to seconds.
 
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**Single-model articles**
-
-Launch announcements, model spotlights. One clear call-to-action: **Install model** if it's new to you, **Try model** if it's already in your library. One click selects it and switches to the Generate tab.
-
-</td>
-<td width="50%" valign="top">
-
-**Multi-model articles**
-
-Comparisons, roundups, platform updates. Each referenced model gets its own **Install** or **Try** button. Pick the ones that interest you — skip the rest.
-
-</td>
-</tr>
-</table>
+Single-model articles get one clear call-to-action: **Install model** if it's new to you, **Try model** if it's already in your library. Multi-model articles give each referenced model its own button — pick the ones that interest you, skip the rest.
 
 ### What you see
 
@@ -543,11 +361,11 @@ The feed refreshes automatically in the background. If your connection drops, ca
 
 ---
 
-## Security & Privacy
+## Security and Privacy
 
 ### Your data stays on your machine
 
-All user data — saved models, settings, generation history, cost logs — is stored locally on your machine. modelBridge does not operate any cloud server, database, or analytics backend. There is no "modelBridge server" that your data is sent to.
+All user data — saved models, settings, generation history, cost logs — is stored locally on your machine. modelBridge does not operate any user-facing cloud database. There is no "modelBridge server" that your data is sent to.
 
 Generated media (images, videos, audio) is downloaded directly from fal.ai to your local project folder.
 
@@ -566,7 +384,7 @@ No third-party analytics or tracking pixels.
 
 ### License validation
 
-License validation checks a single endpoint (LemonSqueezy License API) at plugin startup. The only data sent is the license key and a device identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 7 days since the last successful validation. Your license works on up to 2 devices — release a device in Settings when you need to move to a new machine.
+License validation checks a single endpoint at plugin startup. The only data sent is the license key and a device identifier — no usage data, no generation history, no personal information. Offline grace period: the plugin continues to work for up to 7 days since the last successful validation. Your license works on up to 2 devices — release a device in Settings when you need to move to a new machine.
 
 ### Anonymous error telemetry
 
@@ -588,7 +406,7 @@ All locally stored data can be cleared from within the plugin (Settings → Rese
 
 ---
 
-## Legal & Compliance
+## Legal and Compliance
 
 Comprehensive legal framework published at [docs.modelbridge.app/legal/terms-and-conditions/](https://docs.modelbridge.app/legal/terms-and-conditions/):
 
@@ -601,196 +419,9 @@ Built for professional environments where legal review is a prerequisite for too
 
 ---
 
-## Engineering Quality
-
-Built and maintained by a single developer — with documentation, operations, and architecture designed so a team can take it over without reverse-engineering. Tens of thousands of lines of JavaScript and CSS, a token-driven design system, a dedicated cloud operations backend, a 75+ page documentation site, and 1,000+ supported AI models — built without a bundler, transpiler, or module system. Source files are the runtime — what you read is what runs.
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**Schema-driven at every level**
-
-No model has a hardcoded interface. Every form, validation rule, and media input is generated at runtime from the model's API spec. 700+ curated parameter explanations. New models work immediately.
-
-</td>
-<td width="50%" valign="top">
-
-**326+ tests across automated suites**
-
-Chrome DevTools Protocol tests validate error handling, dual mode, cost display, preview, timeline replacement, and background tracking. 101 end-to-end checks across all 11 categories. A dedicated validation engine stress-harness exercises required fields, types, ranges, enums, conditionals, and file requirements.
-
-</td>
-</tr>
-</table>
-
-<table>
-<tr>
-<td width="33%" valign="top">
-
-**Over-the-air updates**
-
-A dedicated cloud backend monitors the fal.ai catalog continuously and delivers updates over-the-air — error handling, pricing data, feature flags, and model intelligence reach users without a plugin release. New error types addressed with targeted copy within hours.
-
-</td>
-<td width="33%" valign="top">
-
-**Resilient by design**
-
-Your models, settings, and cost history survive everything — cache clears, Premiere updates, plugin reinstalls. Automatic backups before every data migration. If something goes wrong, recovery is silent and automatic.
-
-</td>
-<td width="33%" valign="top">
-
-**Provider-agnostic architecture**
-
-The schema-driven engine works with any machine-readable API specification — designed for multi-provider expansion beyond fal.ai.
-
-</td>
-</tr>
-</table>
-
----
-
-## Platform Infrastructure
-
-A solo-developer product with production-grade infrastructure. 9+ external services orchestrated into a self-running system — every integration designed so users experience the value without seeing the complexity.
-
-### What users get
-
-<table>
-<tr>
-<td width="33%" valign="top">
-
-**Always current, never waiting**
-
-The plugin updates its own catalog, pricing data, error handling, and model intelligence continuously — without plugin releases, without restarts. Users open the panel and everything is already up to date.
-
-</td>
-<td width="33%" valign="top">
-
-**Costs in your currency**
-
-Live exchange rates for 9 currencies, updated automatically. Cost estimates, billing history, and client reports all display in the user's preferred currency — no manual conversion.
-
-</td>
-<td width="33%" valign="top">
-
-**Nothing breaks silently**
-
-Every external dependency degrades gracefully. If a service is temporarily unavailable, the plugin continues with cached data and recovers silently when connectivity returns. No error dialogs, no "service unavailable" screens.
-
-</td>
-</tr>
-</table>
-
-### What the developer/operator gets
-
-<table>
-<tr>
-<td width="33%" valign="top">
-
-**Autonomous catalog operations**
-
-A dedicated cloud worker monitors the entire AI model ecosystem on a scheduled cadence. New models are detected, verified, classified, and made available — or blocked — without manual intervention. Schema breakage is detected and auto-healed when upstream fixes land. Retired models are confirmed across multiple checks before removal. The catalog is infrastructure, not a task.
-
-</td>
-<td width="33%" valign="top">
-
-**Multi-tier alerting**
-
-Three notification tiers: a daily digest summarizing catalog health, customer lifecycle events, and pipeline status; instant alerts for payment failures, refunds, and anomalies; and accumulated low-priority events folded into the next digest. Quiet days produce a single line. Urgent events wake you up immediately.
-
-</td>
-<td width="33%" valign="top">
-
-**Remote operations without releases**
-
-Error documentation, pricing data, feature flags, incident banners, and kill switches are deployed over-the-air with cryptographic integrity verification. A new error type can be identified, documented, and delivered to all users within an hour — without touching the plugin codebase.
-
-</td>
-</tr>
-<tr>
-<td width="33%" valign="top">
-
-**Subscription lifecycle on autopilot**
-
-License activation, validation, trial management, renewal, cancellation, and refund handling are fully automated via webhooks. Payment failures trigger instant alerts. Refunds are processed and licenses revoked automatically. The operator is notified — not required to act.
-
-</td>
-<td width="33%" valign="top">
-
-**AI-powered content pipeline**
-
-Model descriptions, strength bullets, and search metadata are generated automatically using a large language model — tailored for video editors, not generic API documentation. Queued and processed in batches with retry logic and token accounting. 800+ models enriched without manual writing.
-
-</td>
-<td width="33%" valign="top">
-
-**CI/CD with automated quality gates**
-
-Every commit is checked for host-layer compatibility. Catalog health is verified on a scheduled basis with automated alerts on regression. Integrity-verified deployments ensure remote configuration cannot be tampered with.
-
-</td>
-</tr>
-</table>
-
-### Infrastructure at a glance
-
-| Capability | Scope |
-|---|---|
-| External service integrations | 9 services across compute, storage, payments, notifications, AI enrichment, currency, CI/CD, and content delivery |
-| Scheduled automation | Multiple cron cadences — from every few minutes to daily digests |
-| Graceful degradation | Every external dependency has a fallback — cached data, bundled defaults, or honest "unavailable" |
-| Remote-updatable surfaces | Error copy, pricing data, feature flags, incident banners, kill switches, featured models |
-| Self-learning systems | 3 (validation constraints, cost estimates, generation time) |
-| Notification tiers | 3 (instant alerts, daily digest, accumulated events) |
-| Data persistence layers | 3 (in-memory cache, client-side cache, durable disk backup) |
-| Criticality tiers | P0 (generation + licensing), P1 (payments), P2 (graceful degradation), P3 (developer-only) |
-| Monitoring coverage | Catalog health, schema verification, payment lifecycle, error telemetry, pricing drift |
-
-### Design philosophy
-
-Every service integration follows the same principles:
-
-- **User-invisible complexity.** The user experiences the result — not the mechanism. "Costs in SEK" is the feature. The exchange rate API, caching strategy, and fallback logic are invisible.
-- **Operator-minimal maintenance.** Systems that run themselves. The daily digest tells you what happened — not what you need to do. Manual intervention is the exception, not the workflow.
-- **Honest degradation over silent failure.** When data is unavailable, the UI says so — "Price not available" is always better than a fabricated number. Cached data is served transparently. Nothing pretends to be fresh when it isn't.
-- **No single point of failure.** The plugin works offline. The cloud layer recovers automatically. Remote updates fall back to bundled defaults. Every layer assumes the layer above it might be unavailable.
-
-> For full technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
-
----
-
 ## Technical Architecture
 
-<table>
-<tr>
-<td width="33%">
-
-**No manual maintenance**
-
-Models, pricing, and constraints update automatically — no plugin release needed.
-
-</td>
-<td width="33%">
-
-**Non-blocking workflow**
-
-All AI jobs run in background — the editor is always responsive.
-
-</td>
-<td width="34%">
-
-**Native Premiere integration**
-
-Results land on the timeline automatically — right track, right timecode.
-
-</td>
-</tr>
-</table>
-
-**Schema-driven adaptive UI.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's API specification. No model-specific code. No special cases. The same engine handles 1,000+ models across 11 categories with no per-model maintenance. When a model's API changes, the UI adapts on the next load.
+**Adaptive interface generation.** The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's specification when available. Models without a full specification are still accessible — the plugin uses multiple strategies to make them work, and automatically upgrades the interface as more data becomes available. No model-specific code. No special cases. The same engine handles 1,100+ models across 11 categories with no per-model maintenance.
 
 - **Automatic input classification** — each parameter is analyzed and rendered as the appropriate control type: sliders for ranges, dropdowns for choices, toggles for booleans, media inputs for files, nested sections for complex structures
 - **Constraint enforcement** — min/max ranges, allowed values, required fields, and format validation are all derived from the specification and enforced before generation
@@ -809,13 +440,13 @@ Results land on the timeline automatically — right track, right timecode.
 
 ## For the developer: self-running by design
 
-modelBridge is designed to reduce daily manual maintenance. The systems below keep the catalog current, learn from usage, surface issues proactively, and deliver fixes without plugin releases. For full technical detail, see [ARCHITECTURE.md](ARCHITECTURE.md).
+modelBridge is designed to reduce daily manual maintenance. The systems below keep the catalog current, learn from usage, surface issues proactively, and deliver fixes without plugin releases.
 
 ### The catalog updates itself
 
-A background pipeline monitors the fal.ai catalog continuously. New models are detected, schema-verified, and classified into supported categories — or blocked — before reaching the UI. Models with broken schemas enter a pending state and are retried automatically; if fal.ai fixes the issue upstream, the model is promoted without intervention. Models that remain broken are quarantined. Unknown categories default to blocked — a model is never surfaced without passing verification.
+A background pipeline monitors the fal.ai catalog continuously. New models are detected, verified, and classified into supported categories — or blocked — before reaching the UI. Models without available specifications enter a pending state and are retried automatically; when specifications become available upstream, the model is promoted without intervention. Models that remain incompatible are quarantined. Unknown categories default to blocked — a model is never surfaced without passing verification.
 
-Inside the plugin, installed models are health-checked in the background. Renamed endpoints are silently migrated. Retired models are confirmed across multiple checks before being marked unavailable — transient outages don't trigger false positives. Schema changes are detected via structural comparison and trigger a silent UI rebuild on next open.
+Inside the plugin, installed models are health-checked in the background. Renamed endpoints are silently migrated. Retired models are confirmed across multiple checks before being marked unavailable — transient outages don't trigger false positives. Specification changes are detected via structural comparison and trigger a silent UI rebuild on next open.
 
 New models in news-worthy categories are announced automatically in the plugin's news feed with a "Today" badge. The feed also supports manual entries for feature announcements and maintenance notices.
 
@@ -841,7 +472,7 @@ All remote files are integrity-verified before being applied. Tampered or corrup
 
 Three systems learn from real-world usage and become more accurate over time.
 
-**Validation constraints.** When a model rejects media for a reason not declared in its schema, the constraint values are extracted from the API response and cached per model. Future attempts are caught at preflight — before the API call, before any cost is incurred. Multiple constraint types are learned automatically.
+**Validation constraints.** When a model rejects media for a reason not declared in its specification, the constraint values are extracted from the API response and cached per model. Future attempts are caught at preflight — before the API call, before any cost is incurred. Multiple constraint types are learned automatically.
 
 **Cost estimates.** After several generations with a model, the system computes a median cost from actual billing history — per model, per parameter configuration. This "learned" estimate fills gaps where curated pricing data isn't available, and improves with continued usage.
 
@@ -865,45 +496,25 @@ fal.ai adds new models continuously. modelBridge is designed to handle them with
 
 ### Automatic interface generation
 
-Every model in modelBridge gets its own interface generated automatically — not from a hardcoded template, but from the model's own specification. When a new model appears in the catalog, modelBridge reads what it needs and builds the correct controls:
+Every model in modelBridge gets its own interface generated automatically — not from a hardcoded template, but from the model's own specification. When a new model appears in the catalog, modelBridge reads what it needs and builds the correct controls: sliders for ranges, searchable dropdowns for choices, media drop zones with Premiere timeline integration, checkboxes for toggles, and structured fields for complex inputs.
 
-- Numeric parameters → sliders with correct ranges
-- Multiple-choice options → searchable dropdowns
-- Media inputs → drop zones with Premiere timeline integration
-- Toggle options → checkboxes
-- Complex inputs → structured fields with format guidance
+When a model's specification isn't yet fully published, modelBridge still makes it available — and continuously checks for additional data in the background, upgrading the interface automatically as more information becomes available.
 
 No manual UI work is required per model.
 
 ### Contextual help for every field
 
-Every input field always has guidance — even for parameters that were added to fal.ai after modelBridge was installed:
-
-- Common parameters get hand-written explanations with recommended values and editor context
-- Less common parameters get descriptions sourced automatically from the model's own documentation
-- Any remaining fields get a clear generic explanation and a link to the parameter reference
+Every input field always has guidance — even for parameters that were added to fal.ai after modelBridge was installed. Common parameters get hand-written explanations with recommended values and editor context. Less common parameters get descriptions sourced automatically from the model's own documentation. Any remaining fields get a clear generic explanation and a link to the parameter reference.
 
 No field is ever left unexplained.
 
-### Always a path forward
-
-Every field links to further documentation — either a specific Academy article or the parameter reference. There is always somewhere to go when a user wants to understand more.
-
 ### Schema-driven field classification
 
-Every AI model defines its inputs differently. A field called `image_url` on one model might be called `start_frame` on another, or `source_media` on a third. Some fields share names but expect completely different data types. modelBridge correctly identifies what each field needs and renders the right control — across 1,000+ models and thousands of unique parameters — without any per-model configuration.
+Every AI model defines its inputs differently. A field called `image_url` on one model might be called `start_frame` on another, or `source_media` on a third. Some fields share names but expect completely different data types. modelBridge correctly identifies what each field needs and renders the right control — across 1,100+ models and thousands of unique parameters — without any per-model configuration.
 
-The classification system is schema-first: explicit type signals always win over name heuristics. When ambiguous, the system defaults to the safest rendering. A boolean is always a toggle. An enum is always a dropdown. A media upload field is always recognized by its structural definition, not by whether someone happened to name it `video_url`. This means every field gets the correct widget type and sends data in the correct format the model expects — even for models that were published after the plugin was installed.
+The classification system is specification-first: explicit type signals always win over name heuristics. When ambiguous, the system defaults to the safest rendering. A boolean is always a toggle. An enum is always a dropdown. A media upload field is always recognized by its structural definition, not by whether someone happened to name it `video_url`. This means every field gets the correct widget type and sends data in the correct format the model expects — even for models that were published after the plugin was installed.
 
 This matters because a misclassified field is invisible to the user but fatal to the generation. A dropdown rendered as a text input, or a media upload rendered as a string field, produces a request the model cannot process. modelBridge's classification has been verified against the full fal.ai catalog. When a field genuinely cannot be classified with confidence, it falls back to a safe, clearly labeled text input with format guidance — never silently dropped, never incorrectly rendered.
-
-### Graceful handling of new field types
-
-When modelBridge encounters something it has not seen before, it never crashes, never silently drops the field, and never leaves it unlabeled. The user always sees:
-
-- What the field is
-- What format is expected
-- Where to learn more
 
 ### Fixed values stay fixed
 
@@ -924,29 +535,8 @@ Freelance editors who want to stop context-switching between browser tabs and th
 
 ---
 
-Beta release expected April 2026.
-
-Interested in early access? [Reach out on LinkedIn →](https://www.linkedin.com/in/niklazhallberg/)
-
----
-
 Built by [Niklaz Hallberg](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI.
 
 2025–2026.
 
-<!--
-## Screenshots needed (capture manually)
-
-1. Main Generate tab with a model selected and parameters visible
-2. Model search/browse view with filter chips
-3. Cost estimate badge with breakdown drawer open
-4. Dual Mode with two result cards side-by-side
-5. Active Generations Panel with a running job (progress steps visible)
-6. Billing tab with generation history rows
-7. Audio preview player (inline player visible)
-8. Smart timeline import preview bar showing placement message
-9. Built-in mask editor
-10. Mobile Preview QR code
-
-Current state: No screenshots directory exists in the repo. All screenshots need to be captured fresh.
--->
+> For full technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
