@@ -97,7 +97,7 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Pricing.** Cost estimates use fal.ai's official pricing API as one of several sources. The plugin respects fal.ai's published rates and makes no attempt to scrape or infer pricing outside of official endpoints.
 
-**Error specification.** The plugin implements full coverage of fal.ai's error response formats — both structured validation errors (Format A) and infrastructure errors (Format B), including the `X-Fal-Retryable` header, `ctx` structured constraint data, and error documentation URLs. Error types are translated to user-facing language before display. Six semantic categories (INPUT_QUALITY, CREDITS_BILLING, NETWORK_RETRY, CONTENT_POLICY, ACCESS_RESTRICTED, DEVELOPER_BUG) drive consistent visual treatment across all error surfaces. Up to two error banners are shown simultaneously per request — billing and input errors never mask each other. Errors are placed contextually: input issues near the prompt, generation errors above the Generate button. A guaranteed fallback container in the DOM prevents errors from being silently swallowed.
+**Error specification.** The plugin implements full coverage of fal.ai's error response formats — both structured validation errors (Format A) and infrastructure errors (Format B), including the `X-Fal-Retryable` header, `ctx` structured constraint data, and error documentation URLs. Error types are translated to user-facing language before display. Five semantic categories (INPUT_QUALITY, CREDITS_BILLING, NETWORK_RETRY, CONTENT_POLICY, DEVELOPER_BUG) drive consistent visual treatment across all error surfaces. Up to two error banners are shown simultaneously per request — billing and input errors never mask each other. Errors are placed contextually: input issues near the prompt, generation errors above the Generate button. A guaranteed fallback container in the DOM prevents errors from being silently swallowed.
 
 **Resilience to API changes.** The schema-driven architecture is inherently resilient to changes in fal.ai's model catalog — new models, updated parameters, and revised constraints are absorbed automatically without code changes. Schema fetching uses a fallback chain with stale-cache recovery, so a temporary API issue never blocks the user. If a model endpoint is renamed or retired, the plugin detects the change and handles it gracefully.
 
@@ -181,7 +181,9 @@ Full data architecture, retention policies, and third-party data flows are docum
 
 User API keys are stored locally and used exclusively for direct communication with fal.ai — they never transit modelBridge infrastructure. The OTA update channel (GitHub raw content) is read-only and carries no user data. License validation transmits only the license key and a device identifier over HTTPS.
 
-The local backend runs on localhost only and is not exposed to the network. Anonymous error telemetry is opt-in (enabled by default, disableable in Settings) and contains no prompts, file paths, media, or personal information.
+The local backend runs on localhost only and is not exposed to the network. Anonymous error telemetry is opt-out (enabled by default, disableable in Settings) and contains no prompts, file paths, media, or personal information. Behavioral analytics is opt-in only.
+
+For full data inventory, GDPR compliance measures, subprocessor list, and retention policies, see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md).
 
 Comprehensive privacy coverage — including GDPR, CCPA, LGPD, UK GDPR, and AI Act positioning — is published at [docs.modelbridge.app/legal/privacy-policy/](https://docs.modelbridge.app/legal/privacy-policy/).
 
@@ -248,6 +250,8 @@ Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is d
 
 **Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), CI automation for the existing test suites, and incremental type annotations.
 
+For the product roadmap (Team Cost Intelligence, Agent Mode expansion, Enterprise features), see [ROADMAP.md](ROADMAP.md).
+
 ---
 
 ## Working With the Codebase
@@ -267,3 +271,5 @@ The internal documentation follows a structured format that is consumable by bot
 - [Terms & Conditions](https://docs.modelbridge.app/legal/terms-and-conditions/) — IP, liability, AI Act positioning
 - [Compatibility](https://docs.modelbridge.app/reference/compatibility/) — supported platforms and requirements
 - [Known Limitations](https://docs.modelbridge.app/reference/limitations/) — honest list of current constraints
+- [Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md) — data inventory, GDPR measures, subprocessor list
+- [Roadmap](ROADMAP.md) — Team Cost Intelligence, Agent Mode expansion, Enterprise features

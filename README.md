@@ -23,7 +23,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 2. **1,100+ models, one panel.** Kling, FLUX, Veo, Seedance, Happy Horse, ElevenLabs, and hundreds more through a single interface across 11 categories.
 
-3. **See costs before you generate.** Real-time estimates update as you change duration, resolution, and audio. Five confidence tiers tell you how reliable each number is. The plugin learns from your billing history to improve estimates over time.
+3. **See costs before you generate.** Real-time estimates update as you change duration, resolution, and audio. Six confidence levels tell you how reliable each number is. The plugin learns from your billing history to improve estimates over time.
 
 4. **Background generation.** Long generations move to the background automatically. Stack parallel jobs. Sound notification when ready. Survives Premiere restart.
 
@@ -36,6 +36,10 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 8. **Bring your own API key.** No credits, no markup — you pay fal.ai directly at their published rates.
 
 9. **Built-in tools.** Paint inpainting masks, optimize prompts, preview on your phone via QR code, run two models side-by-side in Dual Mode.
+
+10. **Agent Mode.** Edit your timeline through natural language chat. The Agent sees your project, sequence, and selected clips — and makes real-time editorial decisions. Bring your own Anthropic API key.
+
+11. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
 
 ---
 
@@ -92,7 +96,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 ### 4. Cost and time estimates
 
 - Live estimates update as you change duration, resolution, and audio
-- Five confidence tiers tell you how reliable each number is
+- Six confidence levels tell you how reliable each number is
 - Both cost and time estimates learn from your billing history and improve with usage
 - No fabricated numbers
 
@@ -164,6 +168,22 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 - Automatic detection via scheduled monitoring
 - "Today's models" filter with rich cards and a "TODAY" badge
 
+### 18. Agent Mode
+
+- Edit your Premiere Pro timeline through natural language chat
+- The Agent is aware of your current project, active sequence, and selected clips
+- Real-time editorial decisions — cuts, inserts, effects, and more — executed directly
+- Customizable system instructions per user
+- Bring your own Anthropic API key — approximately 50–60 SEK/month for typical 2h/day usage
+- No conversation data transmitted to modelBridge infrastructure
+
+### 19. LM Arena Rankings & Trending
+
+- Models ranked by LM Arena leaderboard data, updated nightly via automated cron
+- Sort by community-validated quality ranking in the Browse panel
+- Trending filter surfaces popular models based on real usage patterns
+- Helps editors discover the best model for their task, not just the newest
+
 **One creative chain.** Generate an image, preview it at full resolution in Source Monitor, mark In/Out points, import just the best frame — then feed it directly into a video model. One panel, one unbroken creative pipeline from idea to timeline.
 
 **modelBridge Academy.** Contextual "Learn about X" links appear on model cards — only when relevant. 19 articles cover prompting, LoRA, cost control, upscaling, inpainting, dubbing, voice-over, negative prompts, dual mode, workflow recipes, and more. Toggle learning tips on or off in Settings.
@@ -191,7 +211,7 @@ When a model rejects your media, modelBridge remembers the requirement. Future a
 
 ### 4. Cost estimation
 
-Five confidence tiers. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
+Six confidence levels. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
 ### 5. Generation time estimates
@@ -311,7 +331,7 @@ Users always know what they're looking at and why a model may not be available y
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
-| **Cost estimate** | 5-tier confidence, learns from your billing | Hidden or none | Hidden behind credits |
+| **Cost estimate** | 6-level confidence, learns from your billing | Hidden or none | Hidden behind credits |
 | **Learns from your usage** | Estimates get closer to your real bill every time you generate | No | No |
 | **Adapts to pricing changes** | Yes — pricing updates automatically | No | No |
 | **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
@@ -325,7 +345,7 @@ Users always know what they're looking at and why a model may not be available y
 
 modelBridge calculates a concrete cost for your exact settings before you generate — live estimates that update as you change duration, resolution, and audio.
 
-### Five confidence tiers
+### Six confidence levels
 
 | Tier | Source | What it means |
 |---|---|---|
@@ -435,6 +455,8 @@ When an unexpected error occurs, modelBridge sends an anonymous report containin
 
 Enabled by default. Disable at any time in **Settings > Privacy**. No prompts, file paths, media, API keys, or personal information are ever included.
 
+A separate opt-in behavioral analytics stream (disabled by default) collects anonymous usage patterns — see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) for the complete data inventory.
+
 ### What we do NOT collect
 
 - No prompts, inputs, or generated content
@@ -477,13 +499,13 @@ The entire UI — every slider, dropdown, media input, and validation rule — i
 ### Error handling
 
 - Errors caught before they cost money, learned from when they slip through, shown in plain language with a clear next step
-- 44 error types mapped to human-readable messages
+- 53+ error types mapped across two format schemas to human-readable messages
 - Five semantic categories drive consistent color-coded treatment across every surface
 
 ### Cost resolution
 
 - Multiple pricing sources checked in priority order — the most accurate source always wins
-- Five confidence tiers clearly labeled so users always know the basis for each number
+- Six confidence levels clearly labeled so users always know the basis for each number
 - Learns from actual billing to fill gaps — estimates improve with usage
 - No fabricated numbers — post-generation actuals from fal.ai confirm or correct estimates
 
@@ -588,3 +610,5 @@ Built by [Niklaz Hallberg](https://niklaz.works) — digital designer and creati
 2025–2026.
 
 > For full technical architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
+> For privacy, compliance, and data architecture, see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md).
+> For what's coming next, see [ROADMAP.md](ROADMAP.md).
