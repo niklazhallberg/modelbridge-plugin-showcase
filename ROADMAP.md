@@ -23,9 +23,10 @@ Detailed technical architecture and implementation plan exists and is available 
 Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
 
 **Current capabilities (shipped):**
-- 27 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, and export
+- 29 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
 - 22-point quality control scan covering technical compliance (fps, resolution, codec, sample rate, channels, bitrate), color consistency, and editorial polish
 - One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
+- Environment-aware silence removal — the agent measures actual noise levels at a point the editor identifies as "quiet", calibrates the detection threshold to that specific recording environment, finds all silent segments, and removes them with ripple delete. Works equally well on clean studio recordings (-50dB noise floor) and noisy street interviews (-20dB). Preview mode places markers for review before cutting.
 - Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
 - Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
 - Persistent editor preferences that shape the agent's behavior across sessions
@@ -52,11 +53,9 @@ When an editor imports a 44.1 kHz audio file into a 48 kHz sequence, the agent w
 
 This turns the agent from a reactive tool into a continuous quality layer that runs alongside the editor's creative process.
 
-### Silence Detection & AI-Driven Interview Editing
+### AI-Driven Interview Editing (Beyond Silence)
 
-Combining ffmpeg audio analysis with the agent's timeline editing tools enables a workflow that agencies currently spend hours on manually: removing silence, filler words, and dead air from interview footage.
-
-The pipeline: ffmpeg's silence detection identifies quiet segments → the agent reviews the timecodes and applies editorial judgment (preserve dramatic pauses, remove dead air) → batch split and delete operations clean the timeline — all through a single conversational request.
+Silence removal is shipped. The next step is content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
 
 ### Essential Graphics Text Editing
 
