@@ -6,6 +6,8 @@ AI generation for Adobe Premiere Pro — 1,100+ models, one panel, zero browser 
 
 Professional video editors juggle 3–5 AI tools in separate browser tabs. Every generation means leaving Premiere Pro — uploading, waiting, downloading, importing, conforming. You're paying four separate subscriptions, dealing with four different credit systems, and none of these tools know anything about your timeline. modelBridge puts every major AI model directly inside your NLE. Results land on your timeline, positioned and ready to cut. When fal.ai adds a new model, modelBridge supports it automatically — no plugin update needed.
 
+And this is where it gets interesting: **Agent Mode** connects an AI assistant to both your Premiere Pro timeline and the entire modelBridge model catalog at the same time. It reads your clips, checks your project for issues, recommends the right AI model for what you're trying to do, and executes edits — all through a single conversation. It's not just an AI generation tool or just an editing assistant. It's both, working together: 1,100+ AI models aware of your timeline, and a post-production QC engine that catches problems before they reach your client.
+
 ## 1,100+ models — verified, searchable, and ready to use
 
 modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 categories. Every model in the catalog is continuously verified, classified, and made available automatically — often within hours of launch on fal.ai.
@@ -37,7 +39,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 9. **Built-in tools.** Paint inpainting masks, optimize prompts, preview on your phone via QR code, run two models side-by-side in Dual Mode.
 
-10. **Agent Mode.** Edit your timeline through natural language chat. The Agent sees your project, sequence, and selected clips — and makes real-time editorial decisions. Bring your own Anthropic API key.
+10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — "close the gaps on V1", "check if all clips use the same LUT", "reframe for 9:16" — and it reads your project, executes the edits, and verifies the result. 17-point QC scan, LUT consistency across sequences, batch clip operations, track management, and AI model recommendations. Bring your own Anthropic API key.
 
 11. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
 
@@ -170,12 +172,39 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 ### 18. Agent Mode
 
-- Edit your Premiere Pro timeline through natural language chat
-- The Agent is aware of your current project, active sequence, and selected clips
-- Real-time editorial decisions — cuts, inserts, effects, and more — executed directly
-- Customizable system instructions per user
-- Bring your own Anthropic API key — approximately 50–60 SEK/month for typical 2h/day usage
-- No conversation data transmitted to modelBridge infrastructure
+A senior post-production assistant that reads your timeline, executes edits, and checks your work — all through natural language conversation.
+
+**Timeline editing:**
+- Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
+- Add effects and transitions, adjust Lumetri Color parameters
+- Insert clips from the project bin, add/delete tracks, manage markers
+- Batch operations — "split every 5 seconds", "label all clips under 2 seconds as yellow"
+
+**17-point QC scan:**
+- FPS and resolution mismatches, V1 gaps, audio coverage, codec consistency
+- LUT inconsistency — detects when clips use different Input LUTs and offers to align them
+- Ungraded clips, flash frames, disabled clips, pacing analysis, orphaned audio
+- Grouped by severity with specific clip names, timecodes, and suggested fixes
+
+**Color and LUT management:**
+- Scan a sequence or the entire project for LUT consistency
+- Copy one clip's LUT to any number of other clips in a single operation
+- Cross-sequence brand consistency — "do all my cutdowns match the master's grade?"
+
+**Multi-step workflows:**
+- Reframe for social (9:16, 1:1, 4:5), normalize audio, close all gaps, add transitions to every cut
+- Build rough cuts from markers or bin items, J-cuts, copy effects between clips
+- Pre-client LUT QC, cross-sequence brand alignment, cleanup empty tracks
+
+**AI model operations:**
+- Search and install from 1,100+ models, get detailed parameter info, recommend models for specific tasks
+- Error troubleshooting with plain-language explanations
+
+**Personalization:**
+- Custom instructions per user — define your role, standards, workflow shortcuts, and communication preferences
+- Two Claude models: Haiku 4.5 (default, ~$10/month) for everyday tasks, Sonnet 4.6 (~$25-30/month) for complex reasoning
+- Session cost tracking in real time
+- Bring your own Anthropic API key — no conversation data transmitted to modelBridge
 
 ### 19. LM Arena Rankings & Trending
 

@@ -101,6 +101,28 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Resilience to API changes.** The schema-driven architecture is inherently resilient to changes in fal.ai's model catalog — new models, updated parameters, and revised constraints are absorbed automatically without code changes. Schema fetching uses a fallback chain with stale-cache recovery, so a temporary API issue never blocks the user. If a model endpoint is renamed or retired, the plugin detects the change and handles it gracefully.
 
+### Agent Mode (Copilot)
+
+Agent Mode adds a conversational AI layer on top of modelBridge's existing Premiere Pro integration. It uses the same ExtendScript bridge, timeline APIs, and model catalog — but makes them accessible through natural language instead of UI controls.
+
+**Architecture.** A local Express endpoint proxies between the panel and Anthropic's Claude API via server-sent events (SSE). The system prompt is composed from six markdown files (capabilities, QC rules, examples, product knowledge, error reference, documentation map) and cached as an ephemeral block for token cost reduction on subsequent turns. Two models are available: Haiku 4.5 (default) and Sonnet 4.6.
+
+**Tool system.** The agent has access to 21 tools spanning five categories:
+
+- **Read tools** (10) — sequence info, clip enumeration, gap detection, audio tracks, effect stacks, markers, playhead, project bin, track state, LUT assignments
+- **Write tools** (5) — clip editing (move/trim/split/delete), property adjustment (scale/position/opacity/speed/Lumetri), effect management, sequence metadata, track operations (mute/insert/add/delete)
+- **Color tools** (1) — LUT read, set, sequence scan, project-wide scan, batch copy. Operates on footage interpretation UUIDs via `getFootageInterpretation()` / `setFootageInterpretation()`
+- **Model tools** (4) — installed model index, model details, catalog search, model installation
+- **Error tools** (1) — error lookup with remediation guidance
+
+**QC engine.** A 17-point inspection covers technical compliance (FPS, resolution, gaps, audio, codec), color consistency (ungraded clips, LUT mismatches), and editorial observations (flash frames, pacing, disabled clips, orphaned audio). The scan calls six tools in sequence and groups findings by severity.
+
+**Session management.** Sessions have a 30-minute TTL with automatic cleanup. Custom user instructions are persisted in localStorage and injected into every API call. Token usage and session cost are tracked in real time. Tool results are capped at 50K characters with truncation indication.
+
+**Cross-sequence access.** The agent can read clips, effects, and LUT assignments from any sequence in the project — not just the active one — via `app.project.sequences` index access. This powers project-wide LUT consistency scans and is designed for reuse in future phases (Smart Relink, Delivery Ops).
+
+**Privacy.** Conversations are sent directly to Anthropic's API using the user's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure.
+
 ### Adobe Premiere Pro
 
 modelBridge is a deep Premiere Pro integration, not a standalone panel that happens to run inside the application.
@@ -250,7 +272,7 @@ Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is d
 
 **Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), CI automation for the existing test suites, and incremental type annotations.
 
-For the product roadmap (Team Cost Intelligence, Agent Mode expansion, Enterprise features), see [ROADMAP.md](ROADMAP.md).
+For the product roadmap (Agent Mode expansion, Team Cost Intelligence, Enterprise features), see [ROADMAP.md](ROADMAP.md).
 
 ---
 
