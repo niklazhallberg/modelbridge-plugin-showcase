@@ -172,7 +172,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 ### 18. Agent Mode
 
-A senior post-production assistant that reads your timeline, executes edits, and checks your work — all through natural language conversation.
+Every editor works differently. Agent Mode adapts to you — your standards, your shortcuts, your way of checking work. A post-production assistant that reads your timeline, executes edits, and catches issues before they reach your client.
 
 **Timeline editing:**
 - Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
