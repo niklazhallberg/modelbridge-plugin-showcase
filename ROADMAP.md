@@ -20,11 +20,49 @@ Detailed technical architecture and implementation plan exists and is available 
 
 ## Agent Mode — Expanding Capabilities
 
-Agent Mode already allows editors to control the Premiere Pro timeline through natural language chat. The Agent is aware of the current project, active sequence, and selected clips — it can make real-time editorial decisions and execute them directly.
+Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
 
-Planned enhancements include multi-step editorial plans (propose a sequence of edits, review, then execute), deeper sequence-aware context (understanding the narrative structure of what's on the timeline), anomaly detection (flagging potential issues in the edit), and automated QC passes.
+**Current capabilities (shipped):**
+- 27 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, and export
+- 22-point quality control scan covering technical compliance (fps, resolution, codec, sample rate, channels, bitrate), color consistency, and editorial polish
+- One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
+- Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
+- Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
+- Persistent editor preferences that shape the agent's behavior across sessions
 
-Users bring their own Anthropic API key. Typical usage for a 2-hour editing session costs approximately 50–60 SEK/month. modelBridge does not markup or proxy the API calls — the editor's key is used directly.
+**Planned enhancements:**
+
+### Conversation Intelligence
+
+As adoption scales, modelBridge will develop an understanding of how professional editors actually work — not through surveillance, but through structured, privacy-safe pattern recognition.
+
+The system will identify recurring workflow patterns across the user base: which editorial tasks consume the most time, which quality issues appear most frequently across different project types, which AI model categories are growing fastest in real production use, and where editors consistently hit friction points that could be automated.
+
+This is fundamentally different from usage analytics. Usage analytics tells you that a button was clicked 1,000 times. Conversation intelligence tells you that 40% of editors working on commercial content ask for the same three-step workflow every Monday morning — and that workflow could be a single command.
+
+At scale, this creates a feedback loop: editors shape the product through their natural workflows, the product adapts to serve those workflows better, and the result is an editing assistant that understands post-production culture — not just API endpoints.
+
+Privacy architecture is central to the design. The system classifies intent locally on the editor's machine and transmits only structured labels — never prompt text, creative direction, client names, or project content. Editors working under NDA or on confidential brand campaigns can contribute to product improvement without exposing anything about their work. Detailed privacy architecture is documented separately and available under NDA.
+
+### Predictive QC
+
+The agent currently runs quality checks on demand. The next step is proactive detection — monitoring the timeline in real-time and surfacing issues as they appear, before the editor asks.
+
+When an editor imports a 44.1 kHz audio file into a 48 kHz sequence, the agent will flag it immediately. When a clip is added that doesn't match the sequence codec profile, the agent will note the inconsistency. When the edit rhythm on V1 changes dramatically (a section of rapid cuts followed by a 45-second static shot), the agent will observe it without interrupting — and mention it during the next QC scan.
+
+This turns the agent from a reactive tool into a continuous quality layer that runs alongside the editor's creative process.
+
+### Silence Detection & AI-Driven Interview Editing
+
+Combining ffmpeg audio analysis with the agent's timeline editing tools enables a workflow that agencies currently spend hours on manually: removing silence, filler words, and dead air from interview footage.
+
+The pipeline: ffmpeg's silence detection identifies quiet segments → the agent reviews the timecodes and applies editorial judgment (preserve dramatic pauses, remove dead air) → batch split and delete operations clean the timeline — all through a single conversational request.
+
+### Essential Graphics Text Editing
+
+Premiere Pro's Motion Graphics Templates (MOGRTs) store text parameters that are readable and writable via the scripting API. The agent will be able to batch-update text content across all title clips in a sequence — font, size, color, and content — enabling one-command brand guide updates and multi-language versioning.
+
+Users bring their own Anthropic API key. Typical monthly cost for daily use is $10-18/month (Haiku default, Sonnet for complex tasks). modelBridge does not markup or proxy the API calls.
 
 ---
 
