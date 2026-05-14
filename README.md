@@ -45,6 +45,8 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 12. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
 
+13. **Any image into any model — your timeline or someone else's.** Scrub to any frame in any timeline video and click **Extract frame** — the button shows the exact timecode of your playhead and updates as you move it, so you pick the frame you want, not "roughly". Or paste a public image URL straight from Midjourney, DALL-E, or any web gallery into the same card. Both routes feed the AI model instantly — no export, no download, no Premiere import.
+
 ---
 
 ## Getting started
