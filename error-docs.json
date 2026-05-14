@@ -1,0 +1,342 @@
+{
+  "_meta": {
+    "version": 1,
+    "updatedAt": "2026-03-29T00:00:00Z"
+  },
+  "entries": {
+    "LOCAL_SERVER_DOWN": {
+      "slug": "local-server-down",
+      "cause": "The local helper server that modelBridge uses to communicate with Premiere Pro is not running or cannot be reached.",
+      "steps": [
+        "Close and reopen Premiere Pro",
+        "If the issue persists, restart your computer",
+        "Check that no firewall or antivirus is blocking port 3000"
+      ],
+      "externalLinks": []
+    },
+    "NET_ERROR": {
+      "slug": "network-error",
+      "cause": "modelBridge could not reach fal.ai. This is usually a temporary network issue.",
+      "steps": [
+        "Check your internet connection",
+        "Try again in a moment",
+        "If you are on a VPN or corporate network, check that fal.ai is not blocked"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "IMPORT_TIMEOUT": {
+      "slug": "import-timeout",
+      "cause": "The generated file was downloaded but Premiere Pro took too long to import it into the project.",
+      "steps": [
+        "Try importing the file manually from the downloads folder",
+        "Check that Premiere Pro is not busy with another operation",
+        "Restart Premiere Pro if the issue persists"
+      ],
+      "externalLinks": []
+    },
+    "IMPORT_FAIL": {
+      "slug": "import-failed",
+      "cause": "The generated file was downloaded but Premiere Pro could not import it. The file may be in a format Premiere does not support.",
+      "steps": [
+        "Try importing the file manually from the downloads folder",
+        "Check that the file is not corrupted by opening it in another application",
+        "If the model outputs an unsupported format, try a different model"
+      ],
+      "externalLinks": []
+    },
+    "DOWNLOAD_FAIL": {
+      "slug": "download-failed",
+      "cause": "The generated result could not be downloaded from fal.ai. The file may have expired or the connection was interrupted.",
+      "steps": [
+        "Try generating again — you won't be charged if the result is still cached",
+        "Check your internet connection",
+        "If the issue persists, try a different model or shorter generation"
+      ],
+      "externalLinks": []
+    },
+    "EXTRACT_FAIL": {
+      "slug": "extract-failed",
+      "cause": "modelBridge could not extract the selected media from your Premiere Pro timeline for upload.",
+      "steps": [
+        "Make sure a clip is selected in the timeline or project panel",
+        "Try selecting a different clip",
+        "If using a sequence, try selecting the individual clip instead"
+      ],
+      "externalLinks": []
+    },
+    "NO_SELECTION": {
+      "slug": "no-media-selected",
+      "cause": "No clip or media item is currently selected in Premiere Pro.",
+      "steps": [
+        "Click on a clip in the timeline or project panel",
+        "Make sure the clip is highlighted before clicking Generate"
+      ],
+      "externalLinks": []
+    },
+    "UPLOAD_FAIL": {
+      "slug": "upload-failed",
+      "cause": "The selected media could not be uploaded to fal.ai for processing. The file may be too large or the connection was interrupted.",
+      "steps": [
+        "Try a smaller or shorter clip",
+        "Check your internet connection",
+        "Try again — upload failures are often temporary"
+      ],
+      "externalLinks": []
+    },
+    "ACCESS_GATED": {
+      "slug": "model-access-gated",
+      "cause": "Some model creators restrict access to approved users. Your fal.ai account has not been granted access to this model yet.",
+      "steps": [
+        "Visit the model page on fal.ai and request access",
+        "Check your fal.ai dashboard for pending access requests",
+        "Try a different model that does not require approval"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Dashboard", "url": "https://fal.ai/dashboard" }
+      ]
+    },
+    "ACCESS_SCOPE": {
+      "slug": "insufficient-scope",
+      "cause": "API keys can be scoped to specific permissions. The key saved in modelBridge is missing the scope required by this model.",
+      "steps": [
+        "Generate a new API key with full permissions on fal.ai",
+        "Replace the key in modelBridge's Settings tab",
+        "If using a team key, ask your admin to grant the required scope"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai API Keys", "url": "https://fal.ai/dashboard/keys" }
+      ]
+    },
+    "AUTH_INVALID": {
+      "slug": "invalid-api-key",
+      "cause": "Your fal.ai API key is missing, expired, or was entered incorrectly.",
+      "steps": [
+        "Open the Settings tab in modelBridge",
+        "Delete the current key and paste a fresh one from fal.ai",
+        "Click Save and try generating again"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai API Keys", "url": "https://fal.ai/dashboard/keys" }
+      ]
+    },
+    "BALANCE_EMPTY": {
+      "slug": "balance-empty",
+      "cause": "Generations are billed per use. If your balance reaches zero, all new generations are blocked until you add funds.",
+      "steps": [
+        "Go to fal.ai billing and add funds",
+        "Return to modelBridge and try again",
+        "Check that your payment method is valid"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Billing", "url": "https://fal.ai/dashboard/usage-billing/credits" }
+      ]
+    },
+    "RATE_LIMIT": {
+      "slug": "rate-limited",
+      "cause": "fal.ai enforces per-account request limits to protect model availability. The limit resets automatically after a short cooldown.",
+      "steps": [
+        "Wait 30–60 seconds and try again",
+        "Avoid clicking Generate multiple times in quick succession"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "CONTENT_POLICY": {
+      "slug": "content-flagged",
+      "cause": "fal.ai runs automated content moderation on prompts and images. Filters vary by model — some are stricter than others.",
+      "steps": [
+        "Review your prompt for terms that may trigger content filters",
+        "Try rephrasing your prompt",
+        "If using an image, try a different source image"
+      ],
+      "externalLinks": []
+    },
+    "TIMEOUT": {
+      "slug": "api-timeout",
+      "cause": "The generation took too long and fal.ai stopped waiting. This can happen with complex prompts or busy servers.",
+      "steps": [
+        "Try again — timeouts are often temporary",
+        "Try a shorter duration or simpler prompt",
+        "If the model is new, it may need time to warm up — try again in a minute"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "SERVER_ERROR": {
+      "slug": "server-error",
+      "cause": "The model's GPU worker crashed or returned an unexpected response. This is on fal.ai's side, not your input.",
+      "steps": [
+        "Try again in a moment — server errors are usually temporary",
+        "If the error persists, the model may be experiencing issues",
+        "Try a different model as a workaround"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "PORT_CONFLICT": {
+      "slug": "port-conflict",
+      "cause": "Another application is already using port 3000, which modelBridge needs for its local helper server.",
+      "steps": [
+        "Close other applications that may use port 3000 (e.g., other dev servers)",
+        "Restart Premiere Pro",
+        "If the issue persists, restart your computer to free the port"
+      ],
+      "externalLinks": []
+    },
+    "MODEL_NOT_FOUND": {
+      "slug": "model-not-found",
+      "cause": "Models on fal.ai can be removed, renamed, or replaced without notice. The endpoint this model was installed from no longer exists.",
+      "steps": [
+        "Search for the model by name — it may have a new endpoint",
+        "Remove the model from your list and add the updated version",
+        "Check the fal.ai model page for migration guidance"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Models", "url": "https://fal.ai/models" }
+      ]
+    },
+    "SCHEMA_FAIL": {
+      "slug": "schema-failed",
+      "cause": "modelBridge could not load the model's configuration from fal.ai. The model's API schema may be temporarily unavailable.",
+      "steps": [
+        "Try again in a moment",
+        "Remove and re-add the model",
+        "If the issue persists, the model may not be compatible with modelBridge"
+      ],
+      "externalLinks": []
+    },
+    "LICENSE_INVALID": {
+      "slug": "license-invalid",
+      "cause": "Your modelBridge subscription could not be verified. The license may have expired, or the license server is temporarily unreachable.",
+      "steps": [
+        "Check your subscription status at modelbridge.app",
+        "Restart Premiere Pro after renewing",
+        "If the issue persists, check your internet connection — license verification requires a brief server check"
+      ],
+      "externalLinks": [
+        { "label": "modelBridge Account", "url": "https://modelbridge.app" }
+      ]
+    },
+    "EXT_NOT_LOADED": {
+      "slug": "extension-not-loaded",
+      "cause": "The modelBridge extension did not initialize completely. This usually happens after a Premiere Pro update or if the extension files were modified.",
+      "steps": [
+        "Close and reopen Premiere Pro",
+        "If the issue persists, reinstall modelBridge from the installer",
+        "Check that unsigned extensions are enabled (PlayerDebugMode)"
+      ],
+      "externalLinks": []
+    },
+    "QUEUE_FAIL": {
+      "slug": "queue-failed",
+      "cause": "modelBridge could not submit the generation request to fal.ai. The request may have been rejected before entering the queue.",
+      "steps": [
+        "Check your internet connection",
+        "Try again in a moment",
+        "If the issue persists, check fal.ai status for service disruptions"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "RESULT_NO_MEDIA_URL": {
+      "slug": "no-media-in-result",
+      "cause": "fal.ai completed the generation but the response did not contain a downloadable media file. The model may have returned metadata or an unsupported output format.",
+      "steps": [
+        "Try generating again — this is sometimes a transient issue",
+        "Try a different model",
+        "Check fal.ai/dashboard for the raw result"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Dashboard", "url": "https://fal.ai/dashboard" }
+      ]
+    },
+    "VALIDATION_DURATION": {
+      "slug": "mask-duration",
+      "cause": "Video inpainting models require a mask video clip, not a still image. The mask was either a single frame or shorter than the model's minimum duration.",
+      "steps": [
+        "Use the Draw Mask tool — it automatically creates a video mask at the correct duration",
+        "If using a URL, make sure it points to a video file, not an image",
+        "Check the model's minimum duration requirement in the settings panel"
+      ],
+      "externalLinks": []
+    },
+    "VALIDATION_TYPE": {
+      "slug": "validation-error",
+      "cause": "One or more settings required by this model are missing or have an invalid value. Each model defines its own parameter requirements.",
+      "steps": [
+        "Review the settings above the Generate button",
+        "Look for fields highlighted in red",
+        "If a required field is empty, enter a value and try again"
+      ],
+      "externalLinks": []
+    },
+    "FACE_NOT_DETECTED": {
+      "slug": "no-face-detected",
+      "cause": "This model requires a clear, visible face in the input image. The AI could not detect a face in the image you provided.",
+      "steps": [
+        "Use a photo where the face is well-lit and clearly visible",
+        "Ensure the face is not obscured by hair, accessories, or motion blur",
+        "Try a different photo with the subject facing the camera"
+      ],
+      "externalLinks": []
+    },
+    "IMAGE_LOAD_ERROR": {
+      "slug": "image-could-not-be-loaded",
+      "cause": "fal.ai could not process your image. The file may be corrupted, partially downloaded, or in an unsupported format.",
+      "steps": [
+        "Re-export the image from Premiere Pro (File > Export Frame)",
+        "Try converting to JPG or PNG format",
+        "If using a URL, ensure the link is publicly accessible and points directly to an image file"
+      ],
+      "externalLinks": []
+    },
+    "AUDIO_DURATION_LONG": {
+      "slug": "audio-too-long",
+      "cause": "The audio clip exceeds the maximum duration this model can process.",
+      "steps": [
+        "Trim the audio to a shorter duration",
+        "Check the model's maximum duration in the settings panel",
+        "Try splitting long audio into shorter segments"
+      ],
+      "externalLinks": []
+    },
+    "AUDIO_DURATION_SHORT": {
+      "slug": "audio-too-short",
+      "cause": "The audio clip is shorter than the minimum duration this model requires.",
+      "steps": [
+        "Use a longer audio clip",
+        "For voice cloning models, use at least 3–5 seconds of clear speech",
+        "Check the model's minimum duration in the settings panel"
+      ],
+      "externalLinks": []
+    },
+    "DOWNSTREAM_ERROR": {
+      "slug": "external-service-error",
+      "cause": "A third-party service that this model depends on returned an error. This is not caused by your input.",
+      "steps": [
+        "Try again in a few minutes",
+        "If the issue persists, the model's external dependency may be experiencing an outage",
+        "Try a different model as a workaround"
+      ],
+      "externalLinks": [
+        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+      ]
+    },
+    "EXTENDSCRIPT": {
+      "slug": "premiere-scripting-error",
+      "cause": "A Premiere Pro scripting operation failed. This can happen when Premiere Pro is busy, no sequence is open, or the timeline state is unexpected.",
+      "steps": [
+        "Make sure a sequence is open and active in the timeline",
+        "Restart the modelBridge extension panel (Window > Extensions > modelBridge)",
+        "If the issue persists, restart Premiere Pro"
+      ],
+      "externalLinks": []
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-03-29T00:00:00Z",
+  "minPluginVersion": "1.0.1",
+  "enabled": true,
+  "features": {
+    "new_reports_ui": false,
+    "bulk_export": false
+  },
+  "files": {
+    "error-docs": {
+      "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-docs.json",
+      "sha256": "4885d4925184482c2aeb5e45ea7794228b1e3d87f756c7324d3398e9a8c6d746",
+      "version": "1.0.0"
+    },
+    "error-copy": {
+      "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-copy.json",
+      "sha256": "a0fca8a3aec77fb01f2829c40de45a6184ce61c576873393c224a570805a7712",
+      "version": "1.0.0"
+    }
+  }
+}

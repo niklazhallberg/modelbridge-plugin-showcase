@@ -1,0 +1,166 @@
+{
+  "_meta": {
+    "version": 1,
+    "updatedAt": "2026-03-29T00:00:00Z"
+  },
+  "entries": {
+    "image_too_small": {
+      "action": "Use a higher resolution image.",
+      "shortMessage": "Image too small",
+      "ctxTemplate": {
+        "message": "This model requires at least {ctx.min_width}\u00d7{ctx.min_height} px. Your image was smaller.",
+        "action": "Use a larger image and try again."
+      }
+    },
+    "image_too_large": {
+      "action": "Reduce the image resolution or dimensions.",
+      "shortMessage": "Image too large",
+      "ctxTemplate": {
+        "message": "Maximum size is {ctx.max_width}\u00d7{ctx.max_height} px.",
+        "action": "Resize your image and try again."
+      }
+    },
+    "invalid_image": {
+      "action": "Try a different image format (JPG, PNG).",
+      "shortMessage": "Invalid image format"
+    },
+    "video_duration_too_long": {
+      "action": "Trim the clip to a shorter duration.",
+      "shortMessage": "Video too long",
+      "ctxTemplate": {
+        "message": "Maximum duration is {ctx.max_duration} seconds.",
+        "action": "Trim your video and try again."
+      }
+    },
+    "video_duration_too_short": {
+      "action": "Use a longer clip.",
+      "shortMessage": "Video too short",
+      "ctxTemplate": {
+        "message": "Minimum duration is {ctx.min_duration} seconds.",
+        "action": "Use a longer video clip."
+      }
+    },
+    "file_too_large": {
+      "action": "Reduce the file size before uploading.",
+      "shortMessage": "File too large",
+      "ctxTemplate": {
+        "message": "Maximum file size is {ctx.max_file_size_mb} MB.",
+        "action": "Compress or trim your file and try again."
+      }
+    },
+    "invalid_aspect_ratio": {
+      "action": "Crop or resize to a supported aspect ratio.",
+      "shortMessage": "Unsupported aspect ratio"
+    },
+    "unsupported_image_format": {
+      "action": "Convert your file and try again.",
+      "shortMessage": "Unsupported image format"
+    },
+    "unsupported_video_format": {
+      "action": "Convert your file and try again.",
+      "shortMessage": "Unsupported video format"
+    },
+    "unsupported_audio_format": {
+      "action": "Convert your file and try again.",
+      "shortMessage": "Unsupported audio format"
+    },
+    "feature_not_supported": {
+      "action": "This option is listed in the model's schema but isn't supported by fal.ai's backend. Try a different value.",
+      "shortMessage": "Option not available"
+    },
+    "file_download_error": {
+      "action": "Check that the URL is publicly accessible and try again.",
+      "shortMessage": "File could not be loaded"
+    },
+    "audio_duration_too_long": {
+      "action": "Trim the audio to a shorter duration.",
+      "shortMessage": "Audio too long",
+      "ctxTemplate": {
+        "message": "Maximum audio duration is {ctx.max_duration} seconds.",
+        "action": "Trim the audio and try again."
+      }
+    },
+    "audio_duration_too_short": {
+      "action": "Use a longer audio clip.",
+      "shortMessage": "Audio too short",
+      "ctxTemplate": {
+        "message": "Minimum audio duration is {ctx.min_duration} seconds.",
+        "action": "Use a longer audio clip."
+      }
+    },
+    "face_detection_error": {
+      "action": "Use a photo with a clear, visible face.",
+      "shortMessage": "No face detected",
+      "ctxTemplate": {
+        "message": "This model requires a clear, visible face in the image.",
+        "action": "Try a different photo where the face is well-lit and unobstructed."
+      }
+    },
+    "image_load_error": {
+      "action": "Try re-exporting from Premiere Pro or use a different image.",
+      "shortMessage": "Image could not be loaded",
+      "ctxTemplate": {
+        "message": "fal.ai could not process your image. The file may be corrupted or in an unsupported format.",
+        "action": "Try re-exporting from Premiere Pro or use a different image."
+      }
+    },
+    "downstream_service_error": {
+      "action": "Try again in a few minutes.",
+      "shortMessage": "External service error"
+    },
+    "downstream_service_unavailable": {
+      "action": "Try again later or use a different model.",
+      "shortMessage": "External service unavailable"
+    },
+    "multiple_of": {
+      "action": "Adjust the value and try again.",
+      "shortMessage": "Invalid value",
+      "ctxTemplate": {
+        "message": "Value must be a multiple of {ctx.multiple_of}.",
+        "action": "Adjust the value to a multiple of {ctx.multiple_of} and try again."
+      }
+    },
+    "greater_than": {
+      "action": "Increase the value and try again.",
+      "shortMessage": "Value too low",
+      "ctxTemplate": {
+        "message": "Value must be greater than {ctx.gt}."
+      }
+    },
+    "greater_than_equal": {
+      "action": "Increase the value and try again.",
+      "shortMessage": "Value too low",
+      "ctxTemplate": {
+        "message": "Value must be at least {ctx.ge}."
+      }
+    },
+    "less_than": {
+      "action": "Decrease the value and try again.",
+      "shortMessage": "Value too high",
+      "ctxTemplate": {
+        "message": "Value must be less than {ctx.lt}."
+      }
+    },
+    "less_than_equal": {
+      "action": "Decrease the value and try again.",
+      "shortMessage": "Value too high",
+      "ctxTemplate": {
+        "message": "Value must be at most {ctx.le}."
+      }
+    },
+    "sequence_too_short": {
+      "action": "Add more items.",
+      "shortMessage": "Too few items",
+      "ctxTemplate": {
+        "message": "This field requires at least {ctx.min_length} items."
+      }
+    },
+    "sequence_too_long": {
+      "action": "Remove some items.",
+      "shortMessage": "Too many items",
+      "ctxTemplate": {
+        "message": "Maximum {ctx.max_length} items allowed."
+      }
+    }
+  }
+}
