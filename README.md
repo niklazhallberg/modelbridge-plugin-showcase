@@ -20,6 +20,8 @@ Professional video editors juggle 3–5 AI tools in separate browser tabs. Every
 
 **Self-improving validation.** The same mistake never costs money twice. When a model rejects your media, the plugin extracts the exact requirement and enforces it on all future attempts — before any API call, before any charge.
 
+**Ask your agent about any model.** Open a model card, click "Explain this model," and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say "yes" when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
+
 **Smart timeline import.** One button. The plugin reads your editing context and acts: replace source clip in-place, insert at playhead, route audio to the right track. A live preview bar shows exactly what will happen before you click.
 
 **Built-in tools.** Paint inpainting masks directly in the panel. Optimize prompts with one click. Preview on your phone via QR code. Run two models side-by-side in Dual Mode.
