@@ -41,7 +41,9 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — "close the gaps on V1", "check if all clips use the same LUT", "reframe for 9:16" — and it reads your project, executes the edits, and verifies the result. 17-point QC scan, LUT consistency across sequences, batch clip operations, track management, and AI model recommendations. Bring your own Anthropic API key.
 
-11. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
+11. **Ask your agent about any model.** Open a model card, click "Explain this model," and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say "yes" when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
+
+12. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
 
 ---
 
