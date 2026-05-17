@@ -39,7 +39,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 9. **Built-in tools.** Paint inpainting masks, optimize prompts, preview on your phone via QR code, run two models side-by-side in Dual Mode.
 
-10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — *"close the gaps on V1"*, *"check if all clips use the same LUT"*, *"reframe for 9:16"* — and it reads your project, executes the edits, and verifies the result. 22-point QC scan, LUT consistency across sequences, batch clip operations, track management, environment-aware silence removal, multi-format export, and AI model recommendations. Bring your own Anthropic API key.
+10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — *"close the gaps on V1"*, *"check if all clips use the same LUT"*, *"reframe for 9:16"* — and it reads your project, executes the edits, and verifies the result. 21-point QC scan, LUT consistency across sequences, batch clip operations, track management, environment-aware silence removal, multi-format export, and AI model recommendations. Bring your own Anthropic API key.
 
 11. **Ask your agent about any model.** Open a model card, click *"Explain this model"*, and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say *"yes"* when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
 
@@ -196,7 +196,7 @@ You're done with a cut and delivering tomorrow. Are there offline clips? Frame r
 
 **User:** *"Scan my timeline"*
 
-**Agent:** Runs a 22-point inspection in 30 seconds. Findings grouped by severity: critical issues first, then warnings, then observations. Every finding includes the clip name and exact timecode.
+**Agent:** Runs a 21-point inspection covering technical compliance, media analysis, and editorial polish. Findings grouped by severity: critical issues first, then warnings, then observations. Every finding includes the clip name and exact timecode.
 
 #### Silence removal
 
@@ -300,7 +300,7 @@ You see a model in Browse but don't understand what the parameters do.
 - Insert clips from the project bin, add/delete tracks, manage markers
 - Batch operations — *"split every 5 seconds"*, *"label all clips under 2 seconds as yellow"*
 
-**22-point QC scan:**
+**21-point QC scan:**
 - FPS and resolution mismatches, audio coverage, codec consistency
 - LUT inconsistency — detects when clips use different Input LUTs and offers to align them
 - Ungraded clips, flash frames, disabled clips, pacing analysis, orphaned audio
