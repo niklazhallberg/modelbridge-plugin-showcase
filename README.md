@@ -178,6 +178,94 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 Every editor works differently. Agent Mode adapts to you — your standards, your shortcuts, your way of checking work. A post-production assistant that reads your timeline, executes edits, and catches issues before they reach your client.
 
+**Real workflows:**
+
+#### Dailies prep
+
+You come home after a shoot with 80 raw clips. Normally 45 minutes of sorting footage into folders, renaming clips, setting color labels and status tags — mechanical work that has to happen before the creative can start.
+
+With the agent: "Prep today's footage" — the agent reads every clip, identifies cameras from file metadata, groups clips by source, flags short takes and generated files for review, and proposes a complete organization plan in one message. You confirm or correct in one reply. Five minutes. Nothing to do tomorrow morning.
+
+The metadata travels with the footage. Your colorist in Resolve sees the same camera labels — you didn't have to tell them anything.
+
+#### Timeline scan before delivery
+
+You're done with a cut and delivering tomorrow. Are there offline clips? Frame rate mismatches? Gaps that will export as black? Normally you scrub through manually and hope you catch everything.
+
+"Scan my timeline" — 22-point inspection in 30 seconds. Findings grouped by severity: critical issues first, then warnings, then observations. Every finding includes the clip name and exact timecode.
+
+#### Silence removal
+
+You have a 20-minute interview with long pauses and filler words. Normally you listen through and cut by hand.
+
+"Remove silence from the interview track" — the agent measures the actual noise floor of your recording, shows you exactly how many segments it found and how much time will be removed, and waits for your confirmation before cutting anything.
+
+#### Rough cut from markers
+
+You watch the rushes once, marking every take that catches your eye. Now you have 30 markers across an hour of footage and the slow job of slicing out the keepers and stacking them in order.
+
+"Build a rough cut from my markers" — the agent splits the timeline at each marker boundary, keeps the marked sections, and removes the rest in one pass. The cut you described while watching is the cut you get back.
+
+#### J-cut every edit on V1
+
+You're cutting a dialogue scene. Every cut feels mechanical because video and audio change at the same frame — the polish move is to let the next clip's audio creep in half a second before the picture cuts, but applying that to 40 edits by hand takes most of an afternoon.
+
+"J-cut all the edits on V1" — the agent finds every cut point on the track, trims each audio in-point back by half a second, and reports what changed. The whole scene gets the same polish in one operation.
+
+#### Close all the gaps
+
+You spent the morning trimming and deleting and now V1 looks like Swiss cheese. Ripple-deleting one gap at a time means watching the timeline shift after every move and double-checking nothing landed wrong.
+
+"Close all the gaps on V1" — the agent finds every gap and ripples them closed, working from the end of the timeline backwards so earlier clip positions don't shift while it works.
+
+#### Color consistency across deliverables
+
+You have a master cut and three social versions. You're not sure the color grade matches across all of them.
+
+"Do all my cutdowns match the master's color grade?" — the agent scans every sequence and reports which clips have a different LUT or no LUT at all, with clip names and sequence locations.
+
+#### LUT propagation
+
+You applied a new LUT to one clip and want the same look across everything on V1. Normally copy-paste in Lumetri, clip by clip.
+
+"Copy the LUT from the hero shot to everything on V1" — the agent reads the reference clip's settings, applies to all, and reports exactly what changed.
+
+#### Export to social platforms
+
+You need to deliver to Instagram, TikTok, and YouTube. Three different specs, three export dialogs, manual settings for each.
+
+"Export for Instagram, TikTok, and YouTube" — the agent shows the optimal settings for each platform and why, waits for your OK, and exports all three.
+
+#### Reframe for vertical
+
+You have a 16:9 master that needs to become a 9:16 reel. Clip by clip manually.
+
+"Reframe this sequence for Instagram" — the agent calculates and applies the correct scale and position to every clip in the sequence.
+
+#### Codec audit
+
+You suspect you're mixing H.264, ProRes, and DNxHR in the same timeline. Premiere doesn't surface this without manual investigation.
+
+"What codecs are in my timeline?" — the agent reads directly from the media files via ffprobe and gives you a complete breakdown.
+
+#### Proxy status
+
+You don't know which clips are missing proxies before an editing session on a slow laptop.
+
+"Which clips don't have proxies?" — the agent scans the entire project bin and lists what's missing, prioritized by what's on your active timeline.
+
+#### Normalize audio
+
+Interview material from three microphones at different levels. Normally adjust each clip by ear.
+
+"Normalize all audio to -12 dB" — the agent reads current levels, calculates the adjustment per clip, and applies.
+
+#### Understand a model
+
+You see a model in Browse but don't understand what the parameters do.
+
+Click "Explain this model" — the agent gives you a short, honest walkthrough of what it's best for in a Premiere workflow and which parameters actually matter. Say yes and it installs the model directly.
+
 **Timeline editing:**
 - Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
 - Add effects and transitions, adjust Lumetri Color parameters
