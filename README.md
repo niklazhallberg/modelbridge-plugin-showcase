@@ -39,9 +39,9 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 9. **Built-in tools.** Paint inpainting masks, optimize prompts, preview on your phone via QR code, run two models side-by-side in Dual Mode.
 
-10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — "close the gaps on V1", "check if all clips use the same LUT", "reframe for 9:16" — and it reads your project, executes the edits, and verifies the result. 22-point QC scan, LUT consistency across sequences, batch clip operations, track management, environment-aware silence removal, multi-format export, and AI model recommendations. Bring your own Anthropic API key.
+10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — *"close the gaps on V1"*, *"check if all clips use the same LUT"*, *"reframe for 9:16"* — and it reads your project, executes the edits, and verifies the result. 22-point QC scan, LUT consistency across sequences, batch clip operations, track management, environment-aware silence removal, multi-format export, and AI model recommendations. Bring your own Anthropic API key.
 
-11. **Ask your agent about any model.** Open a model card, click "Explain this model," and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say "yes" when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
+11. **Ask your agent about any model.** Open a model card, click *"Explain this model"*, and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say *"yes"* when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
 
 12. **Find the best model.** LM Arena leaderboard rankings updated nightly — sort by community-validated quality, not just alphabetical. Trending filter surfaces what's popular right now.
 
@@ -184,7 +184,9 @@ Every editor works differently. Agent Mode adapts to you — your standards, you
 
 You come home after a shoot with 80 raw clips. Normally 45 minutes of sorting footage into folders, renaming clips, setting color labels and status tags — mechanical work that has to happen before the creative can start.
 
-With the agent: "Prep today's footage" — the agent reads every clip, identifies cameras from file metadata, groups clips by source, flags short takes and generated files for review, and proposes a complete organization plan in one message. You confirm or correct in one reply. Five minutes. Nothing to do tomorrow morning.
+**User:** *"Prep today's footage"*
+
+**Agent:** Reads every clip, identifies cameras from file metadata, groups clips by source, flags short takes and generated files for review, and proposes a complete organization plan in one message. You confirm or correct in one reply. Five minutes. Nothing to do tomorrow morning.
 
 The metadata travels with the footage. Your colorist in Resolve sees the same camera labels — you didn't have to tell them anything.
 
@@ -192,85 +194,111 @@ The metadata travels with the footage. Your colorist in Resolve sees the same ca
 
 You're done with a cut and delivering tomorrow. Are there offline clips? Frame rate mismatches? Gaps that will export as black? Normally you scrub through manually and hope you catch everything.
 
-"Scan my timeline" — 22-point inspection in 30 seconds. Findings grouped by severity: critical issues first, then warnings, then observations. Every finding includes the clip name and exact timecode.
+**User:** *"Scan my timeline"*
+
+**Agent:** Runs a 22-point inspection in 30 seconds. Findings grouped by severity: critical issues first, then warnings, then observations. Every finding includes the clip name and exact timecode.
 
 #### Silence removal
 
 You have a 20-minute interview with long pauses and filler words. Normally you listen through and cut by hand.
 
-"Remove silence from the interview track" — the agent measures the actual noise floor of your recording, shows you exactly how many segments it found and how much time will be removed, and waits for your confirmation before cutting anything.
+**User:** *"Remove silence from the interview track"*
+
+**Agent:** Measures the actual noise floor of your recording, shows you exactly how many segments it found and how much time will be removed, and waits for your confirmation before cutting anything.
 
 #### Rough cut from markers
 
 You watch the rushes once, marking every take that catches your eye. Now you have 30 markers across an hour of footage and the slow job of slicing out the keepers and stacking them in order.
 
-"Build a rough cut from my markers" — the agent splits the timeline at each marker boundary, keeps the marked sections, and removes the rest in one pass. The cut you described while watching is the cut you get back.
+**User:** *"Build a rough cut from my markers"*
+
+**Agent:** Splits the timeline at each marker boundary, keeps the marked sections, and removes the rest in one pass. The cut you described while watching is the cut you get back.
 
 #### J-cut every edit on V1
 
 You're cutting a dialogue scene. Every cut feels mechanical because video and audio change at the same frame — the polish move is to let the next clip's audio creep in half a second before the picture cuts, but applying that to 40 edits by hand takes most of an afternoon.
 
-"J-cut all the edits on V1" — the agent finds every cut point on the track, trims each audio in-point back by half a second, and reports what changed. The whole scene gets the same polish in one operation.
+**User:** *"J-cut all the edits on V1"*
+
+**Agent:** Finds every cut point on the track, trims each audio in-point back by half a second, and reports what changed. The whole scene gets the same polish in one operation.
 
 #### Close all the gaps
 
 You spent the morning trimming and deleting and now V1 looks like Swiss cheese. Ripple-deleting one gap at a time means watching the timeline shift after every move and double-checking nothing landed wrong.
 
-"Close all the gaps on V1" — the agent finds every gap and ripples them closed, working from the end of the timeline backwards so earlier clip positions don't shift while it works.
+**User:** *"Close all the gaps on V1"*
+
+**Agent:** Finds every gap and ripples them closed, working from the end of the timeline backwards so earlier clip positions don't shift while it works.
 
 #### Color consistency across deliverables
 
 You have a master cut and three social versions. You're not sure the color grade matches across all of them.
 
-"Do all my cutdowns match the master's color grade?" — the agent scans every sequence and reports which clips have a different LUT or no LUT at all, with clip names and sequence locations.
+**User:** *"Do all my cutdowns match the master's color grade?"*
+
+**Agent:** Scans every sequence and reports which clips have a different LUT or no LUT at all, with clip names and sequence locations.
 
 #### LUT propagation
 
 You applied a new LUT to one clip and want the same look across everything on V1. Normally copy-paste in Lumetri, clip by clip.
 
-"Copy the LUT from the hero shot to everything on V1" — the agent reads the reference clip's settings, applies to all, and reports exactly what changed.
+**User:** *"Copy the LUT from the hero shot to everything on V1"*
+
+**Agent:** Reads the reference clip's settings, applies them to every clip on V1, and reports exactly what changed.
 
 #### Export to social platforms
 
 You need to deliver to Instagram, TikTok, and YouTube. Three different specs, three export dialogs, manual settings for each.
 
-"Export for Instagram, TikTok, and YouTube" — the agent shows the optimal settings for each platform and why, waits for your OK, and exports all three.
+**User:** *"Export for Instagram, TikTok, and YouTube"*
+
+**Agent:** Shows the optimal settings for each platform and why, waits for your OK, and exports all three.
 
 #### Reframe for vertical
 
 You have a 16:9 master that needs to become a 9:16 reel. Clip by clip manually.
 
-"Reframe this sequence for Instagram" — the agent calculates and applies the correct scale and position to every clip in the sequence.
+**User:** *"Reframe this sequence for Instagram"*
+
+**Agent:** Calculates and applies the correct scale and position to every clip in the sequence.
 
 #### Codec audit
 
 You suspect you're mixing H.264, ProRes, and DNxHR in the same timeline. Premiere doesn't surface this without manual investigation.
 
-"What codecs are in my timeline?" — the agent reads directly from the media files via ffprobe and gives you a complete breakdown.
+**User:** *"What codecs are in my timeline?"*
+
+**Agent:** Reads directly from the media files via ffprobe and gives you a complete breakdown.
 
 #### Proxy status
 
 You don't know which clips are missing proxies before an editing session on a slow laptop.
 
-"Which clips don't have proxies?" — the agent scans the entire project bin and lists what's missing, prioritized by what's on your active timeline.
+**User:** *"Which clips don't have proxies?"*
+
+**Agent:** Scans the entire project bin and lists what's missing, prioritized by what's on your active timeline.
 
 #### Normalize audio
 
 Interview material from three microphones at different levels. Normally adjust each clip by ear.
 
-"Normalize all audio to -12 dB" — the agent reads current levels, calculates the adjustment per clip, and applies.
+**User:** *"Normalize all audio to -12 dB"*
+
+**Agent:** Reads current levels, calculates the adjustment per clip, and applies.
 
 #### Understand a model
 
 You see a model in Browse but don't understand what the parameters do.
 
-Click "Explain this model" — the agent gives you a short, honest walkthrough of what it's best for in a Premiere workflow and which parameters actually matter. Say yes and it installs the model directly.
+**User:** Clicks *"Explain this model"* on a model card.
+
+**Agent:** Gives you a short, honest walkthrough of what the model is best for in a Premiere workflow and which parameters actually matter. Say *yes* and it installs the model directly.
 
 **Timeline editing:**
 - Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
 - Add effects and transitions, adjust Lumetri Color parameters
 - Insert clips from the project bin, add/delete tracks, manage markers
-- Batch operations — "split every 5 seconds", "label all clips under 2 seconds as yellow"
+- Batch operations — *"split every 5 seconds"*, *"label all clips under 2 seconds as yellow"*
 
 **22-point QC scan:**
 - FPS and resolution mismatches, audio coverage, codec consistency
@@ -283,7 +311,7 @@ Click "Explain this model" — the agent gives you a short, honest walkthrough o
 **Color and LUT management:**
 - Scan a sequence or the entire project for LUT consistency
 - Copy one clip's LUT to any number of other clips in a single operation
-- Cross-sequence brand consistency — "do all my cutdowns match the master's grade?"
+- Cross-sequence brand consistency — *"do all my cutdowns match the master's grade?"*
 
 **Multi-step workflows:**
 - Reframe for social (9:16, 1:1, 4:5), normalize audio, close all gaps, add transitions to every cut
