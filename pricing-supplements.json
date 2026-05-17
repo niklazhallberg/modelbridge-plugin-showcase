@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "version": "2.5",
-    "last_verified": "2026-04-25",
-    "last_updated": "2026-04-25",
+    "version": "2.5.1",
+    "last_verified": "2026-05-17",
+    "last_updated": "2026-05-17",
     "verified_by": "cross-tool research audit — fal.ai model pages + provider docs + API pricing endpoint",
-    "next_review": "2026-05-22",
-    "notes": "v2.4: added per_character supplements for ElevenLabs TTS models (eleven-v3, turbo-v2.5, multilingual-v2, text-to-dialogue)."
+    "next_review": "2026-06-17",
+    "notes": "v2.5.1: review-cycle bump only (no entry changes). Aligned with plugin cost-tier consolidation (Computed→Billed) shipped 2026-05-16. Sync drift vs canonical node/public/pricing-supplements.json (v2.4, 60 entries) flagged for follow-up — showcase has 6 newer entries that should be reconciled into canonical. v2.5: cross-tool research audit. v2.4: added per_character supplements for ElevenLabs TTS models (eleven-v3, turbo-v2.5, multilingual-v2, text-to-dialogue)."
   },
 
   "fal-ai/flux-2-pro": {

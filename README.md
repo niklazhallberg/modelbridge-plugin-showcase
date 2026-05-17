@@ -25,7 +25,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 2. **1,100+ models, one panel.** Kling, FLUX, Veo, Seedance, Happy Horse, ElevenLabs, and hundreds more through a single interface across 11 categories.
 
-3. **See costs before you generate.** Real-time estimates update as you change duration, resolution, and audio. Six confidence levels tell you how reliable each number is. The plugin learns from your billing history to improve estimates over time.
+3. **See costs before you generate.** Real-time estimates update as you change duration, resolution, and audio. Five confidence levels tell you how reliable each number is. The plugin learns from your billing history to improve estimates over time.
 
 4. **Background generation.** Long generations move to the background automatically. Stack parallel jobs. Sound notification when ready. Survives Premiere restart.
 
@@ -39,7 +39,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 9. **Built-in tools.** Paint inpainting masks, optimize prompts, preview on your phone via QR code, run two models side-by-side in Dual Mode.
 
-10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — "close the gaps on V1", "check if all clips use the same LUT", "reframe for 9:16" — and it reads your project, executes the edits, and verifies the result. 17-point QC scan, LUT consistency across sequences, batch clip operations, track management, and AI model recommendations. Bring your own Anthropic API key.
+10. **Agent Mode.** A post-production assistant that lives inside your timeline. Describe what you want — "close the gaps on V1", "check if all clips use the same LUT", "reframe for 9:16" — and it reads your project, executes the edits, and verifies the result. 22-point QC scan, LUT consistency across sequences, batch clip operations, track management, environment-aware silence removal, multi-format export, and AI model recommendations. Bring your own Anthropic API key.
 
 11. **Ask your agent about any model.** Open a model card, click "Explain this model," and the agent picks it up — already knowing what the model is best for, its real input parameters, and what to watch out for. Say "yes" when it offers to install, and the model is ready to use. No tab-hopping, no copy-pasting endpoints, no reading the fal.ai page first.
 
@@ -102,7 +102,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 ### 4. Cost and time estimates
 
 - Live estimates update as you change duration, resolution, and audio
-- Six confidence levels tell you how reliable each number is
+- Five confidence levels tell you how reliable each number is
 - Both cost and time estimates learn from your billing history and improve with usage
 - No fabricated numbers
 
@@ -184,10 +184,12 @@ Every editor works differently. Agent Mode adapts to you — your standards, you
 - Insert clips from the project bin, add/delete tracks, manage markers
 - Batch operations — "split every 5 seconds", "label all clips under 2 seconds as yellow"
 
-**17-point QC scan:**
-- FPS and resolution mismatches, V1 gaps, audio coverage, codec consistency
+**22-point QC scan:**
+- FPS and resolution mismatches, audio coverage, codec consistency
 - LUT inconsistency — detects when clips use different Input LUTs and offers to align them
 - Ungraded clips, flash frames, disabled clips, pacing analysis, orphaned audio
+- Audio sample rate mismatch (44.1 kHz vs 48 kHz), audio bitrate outliers, channel mismatch (mono/stereo)
+- Video codec inconsistency (H.264 / ProRes / DNxHR), audio codec inconsistency (AAC / PCM / MP3) — via ffprobe integration
 - Grouped by severity with specific clip names, timecodes, and suggested fixes
 
 **Color and LUT management:**
@@ -199,6 +201,18 @@ Every editor works differently. Agent Mode adapts to you — your standards, you
 - Reframe for social (9:16, 1:1, 4:5), normalize audio, close all gaps, add transitions to every cut
 - Build rough cuts from markers or bin items, J-cuts, copy effects between clips
 - Pre-client LUT QC, cross-sequence brand alignment, cleanup empty tracks
+
+**Media probing & proxy intelligence:**
+- ffprobe integration — reads codec, bitrate, sample rate, and channel info that Premiere Pro's own scripting API doesn't expose
+- Proxy workflow audit — instant view of which clips have proxies, which need them, and which are offline
+
+**Environment-aware silence removal:**
+- Calibrates detection threshold to your actual recording environment — measures noise at a clip you identify as "quiet" so it works equally well on clean studio audio (-50dB noise floor) and noisy street interviews (-20dB)
+- Preview mode places markers for review before cutting; ripple delete removes silent segments cleanly
+
+**Multi-format export:**
+- One-command batch export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook)
+- The agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
 
 **AI model operations:**
 - Search and install from 1,100+ models, get detailed parameter info, recommend models for specific tasks
@@ -244,7 +258,7 @@ When a model rejects your media, modelBridge remembers the requirement. Future a
 
 ### 4. Cost estimation
 
-Six confidence levels. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
+Five confidence levels. Multiple pricing sources checked in priority order. Learns from your actual fal.ai charges. Live recalculation in 9 currencies.
 [Learn more →](https://docs.modelbridge.app/models/costs/)
 
 ### 5. Generation time estimates
@@ -364,7 +378,7 @@ Users always know what they're looking at and why a model may not be available y
 | **Workflow** | Select → Generate → Timeline | Select → Generate → Import → Position | Upload → Wait → Download → Import |
 | **Smart import** | Context-aware replace/insert with live preview | Manual positioning | Manual positioning |
 | **Audio/TTS** | Select clip → Generate → on timeline | None or separate tool | Export → upload → download → import |
-| **Cost estimate** | 6-level confidence, learns from your billing | Hidden or none | Hidden behind credits |
+| **Cost estimate** | 5-level confidence, learns from your billing | Hidden or none | Hidden behind credits |
 | **Learns from your usage** | Estimates get closer to your real bill every time you generate | No | No |
 | **Adapts to pricing changes** | Yes — pricing updates automatically | No | No |
 | **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
@@ -378,17 +392,17 @@ Users always know what they're looking at and why a model may not be available y
 
 modelBridge calculates a concrete cost for your exact settings before you generate — live estimates that update as you change duration, resolution, and audio.
 
-### Six confidence levels
+### Five confidence levels
 
 | Tier | Source | What it means |
 |---|---|---|
-| **Billed / Computed** | Confirmed charges from fal.ai | Post-generation — exact cost |
-| **Learned** | Your actual fal.ai billing history | Improves with usage — personalized to your workflow |
-| **Estimated** | Verified pricing data | Updates live with parameter changes |
+| **Billed** | Confirmed cost from real fal.ai billing units — covers both simple per-unit and formula-based pricing | Post-generation — the confirmed charge |
+| **Estimated** | Verified pricing data | Updates live with parameter changes (duration, resolution, audio) |
+| **Learned** | Your actual fal.ai billing history | Improves with usage — personalized to your configurations |
 | **From** | Minimum starting price | Actual cost may be higher (surcharges not reflected) |
 | **No price** | No data available | Honest fallback — generates anyway, badge levels up to Learned over time |
 
-- All pre-generation tiers resolve to Billed or Computed once fal.ai confirms the charge
+- All pre-generation tiers resolve to Billed once fal.ai confirms the charge
 - You pay fal.ai directly at their published rates — modelBridge adds no markup
 - Note: fal.ai may charge for requests where processing began before an error was detected — this is fal.ai's billing policy, not a modelBridge fee
 
@@ -402,7 +416,7 @@ modelBridge calculates a concrete cost for your exact settings before you genera
 
 - **Self-improving validation** — when a generation fails due to a constraint, modelBridge remembers and enforces it automatically on future attempts. "Minimum 3 seconds — learned from a previous generation."
 
-- **Plain-language errors** — not "422 Unprocessable Entity" but *"Maximum duration is 10 seconds."* 50+ error types mapped to clear messages. Color-coded: red for input issues, amber for billing, blue for temporary problems. Up to two errors shown simultaneously.
+- **Plain-language errors** — not "422 Unprocessable Entity" but *"Maximum duration is 10 seconds."* 53+ error types mapped to clear messages. Color-coded: red for input issues, amber for billing, blue for temporary problems. Up to two errors shown simultaneously.
 
 - **Errors always visible** — input errors near your prompt, generation errors above the Generate button, background errors caught and waiting. A guaranteed fallback ensures every message reaches you.
 
@@ -538,7 +552,7 @@ The entire UI — every slider, dropdown, media input, and validation rule — i
 ### Cost resolution
 
 - Multiple pricing sources checked in priority order — the most accurate source always wins
-- Six confidence levels clearly labeled so users always know the basis for each number
+- Five confidence levels clearly labeled so users always know the basis for each number
 - Learns from actual billing to fill gaps — estimates improve with usage
 - No fabricated numbers — post-generation actuals from fal.ai confirm or correct estimates
 

@@ -107,15 +107,13 @@ Agent Mode adds a conversational AI layer on top of modelBridge's existing Premi
 
 **Architecture.** A local Express endpoint proxies between the panel and Anthropic's Claude API via server-sent events (SSE). The system prompt is composed from six markdown files (capabilities, QC rules, examples, product knowledge, error reference, documentation map) and cached as an ephemeral block for token cost reduction on subsequent turns. Two models are available: Haiku 4.5 (default) and Sonnet 4.6.
 
-**Tool system.** The agent has access to 21 tools spanning five categories:
+**Tool system.** The agent has access to 30 tools spanning timeline introspection, edit operations, color/LUT management, AI model operations, media probing, environment-aware silence removal, multi-format export, and error lookup. The two main categories:
 
-- **Read tools** (10) — sequence info, clip enumeration, gap detection, audio tracks, effect stacks, markers, playhead, project bin, track state, LUT assignments
-- **Write tools** (5) — clip editing (move/trim/split/delete), property adjustment (scale/position/opacity/speed/Lumetri), effect management, sequence metadata, track operations (mute/insert/add/delete)
-- **Color tools** (1) — LUT read, set, sequence scan, project-wide scan, batch copy. Operates on footage interpretation UUIDs via `getFootageInterpretation()` / `setFootageInterpretation()`
-- **Model tools** (4) — installed model index, model details, catalog search, model installation
-- **Error tools** (1) — error lookup with remediation guidance
+- **Read tools** (18) — sequence info, clip enumeration, selected clips, gap detection, audio tracks, effect stacks, markers, playhead, project bin, track state, installed models, agent session costs, model details, model schemas, catalog search, error lookup with remediation guidance, proxy status audit, and media probing (codec/bitrate/sample rate/channels via ffprobe)
+- **Edit tools** (11) — clip editing (move/trim/split/delete), property adjustment (scale/position/opacity/speed/Lumetri), effect & transition management, sequence metadata, track operations (mute/insert/add/delete), model installation, persistent preference saving, generation setup handoff (used by the "Explain this model" card flow), multi-platform batch export (Instagram/TikTok/YouTube/Twitter/X/LinkedIn/Facebook), and the silence-removal pair (`calibrate_silence` measures your recording's actual noise floor, `detect_silence` then finds segments to ripple-delete)
+- **Color tool** (1) — LUT read/set/sequence-scan/project-wide-scan/batch-copy. Operates on footage interpretation UUIDs via `getFootageInterpretation()` / `setFootageInterpretation()`
 
-**QC engine.** A 17-point inspection covers technical compliance (FPS, resolution, gaps, audio, codec), color consistency (ungraded clips, LUT mismatches), and editorial observations (flash frames, pacing, disabled clips, orphaned audio). The scan calls six tools in sequence and groups findings by severity.
+**QC engine.** A 22-point inspection covers technical compliance (FPS, resolution, audio coverage, codec consistency, sample rate, channels, bitrate outliers), color consistency (ungraded clips, LUT mismatches), and editorial observations (flash frames, pacing, repeated beats, disabled clips, orphaned audio). The scan calls roughly six tools in sequence (including `probe_media` for ffprobe-derived checks) and groups findings by severity. Timeline gaps are intentionally not part of the auto-scan — editors leave them on V1+ deliberately when working with multi-track A/B/C-roll — but `detect_timeline_gaps` is available on request.
 
 **Session management.** Sessions have a 30-minute TTL with automatic cleanup. Custom user instructions are persisted in localStorage and injected into every API call. Token usage and session cost are tracked in real time. Tool results are capped at 50K characters with truncation indication.
 

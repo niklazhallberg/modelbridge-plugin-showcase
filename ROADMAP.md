@@ -23,7 +23,7 @@ Detailed technical architecture and implementation plan exists and is available 
 Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
 
 **Current capabilities (shipped):**
-- 29 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
+- 30 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
 - 22-point quality control scan covering technical compliance (fps, resolution, codec, sample rate, channels, bitrate), color consistency, and editorial polish
 - One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
 - Environment-aware silence removal — the agent measures actual noise levels at a point the editor identifies as "quiet", calibrates the detection threshold to that specific recording environment, finds all silent segments, and removes them with ripple delete. Works equally well on clean studio recordings (-50dB noise floor) and noisy street interviews (-20dB). Preview mode places markers for review before cutting.
