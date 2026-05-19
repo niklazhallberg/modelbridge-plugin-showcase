@@ -294,6 +294,14 @@ You see a model in Browse but don't understand what the parameters do.
 
 **Agent:** Gives you a short, honest walkthrough of what the model is best for in a Premiere workflow and which parameters actually matter. Say *yes* and it installs the model directly.
 
+#### Cover the missing angle
+
+You're cutting a two-person dialogue scene and you only have one camera. The cut works for a while — then you need to break up a long beat and realise there's no reverse shot to cut to.
+
+**User:** *"Build me a reverse shot of the second speaker that matches this frame"* — with a frame from the timeline attached.
+
+**Agent:** Reads the reference frame, identifies what needs to stay locked (face, wardrobe, set, lighting), and writes a prompt structured for coverage — correct lens feel, eye-level framing, identity preservation, scene-matched lighting and grade. Asks if you want it bound to a fal.ai model in the Generate tab. Say yes — the prompt lands ready to run with the reference frame pre-attached, one click to generate.
+
 **Timeline editing:**
 - Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
 - Add effects and transitions, adjust Lumetri Color parameters
@@ -329,6 +337,15 @@ You see a model in Browse but don't understand what the parameters do.
 **Multi-format export:**
 - One-command batch export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook)
 - The agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
+
+**Prompt authoring for generations:**
+- New angles from one frame — reverse shots, OTS, wides, inserts, B-roll. Attach a timeline frame, describe the angle, and the agent writes a prompt that locks face, wardrobe, set, and lighting to the reference so the new shot can cut into the scene
+- Scene matching across multiple generations — establishes a visual lock from your reference (palette, lighting direction, grain, film texture) and reuses it across every prompt in the same chat so two new shots in the same scene feel like the same production
+- Coverage you didn't shoot — story beats, dialogue coverage A/B, mood cutaways, transition frames, establishing shots, all written in editing terms (what cut needs filling, what shot type covers it)
+- Motion-ready first frames — when the generated image is going to become a clip via an image-to-video model, the prompt is shaped for that downstream use: correct aspect ratio, subtle motion cues, identity lock strong enough to survive the animation pass
+- Quality, not polish — explicitly avoids artifacts that make AI footage uncuttable: plastic skin, HDR contrast, oversaturated colors, over-sharpened edges, stock-photography composition
+- Handoff to Generate — when the prompt is ready, the agent binds it directly to a fal.ai model in the Generate tab; chat-attached frames become start frame (or start + end for first/last-frame morph models), one click to run
+- Scoped to editing work — if you ask for a thumbnail, logo, poster, or non-narrative graphic, the agent switches off film-still vocabulary and asks about the job first, because that language produces worse results on non-film imagery
 
 **AI model operations:**
 - Search and install from 1,100+ models, get detailed parameter info, recommend models for specific tasks
