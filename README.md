@@ -349,6 +349,19 @@ You're cutting a two-person dialogue scene and you only have one camera. The cut
 | Model expertise | *"Explain this model"* / *"Find me a model that does X"* | Honest model walk-through + optional install, 1,100+ model search |
 | Prompt authoring | *"Build me a reverse shot from this frame"* | Coverage prompt with identity lock and scene-matched lighting — written for editing, not stock |
 | Custom chains | *"Run QC, then export for YouTube"* | Multi-step workflows in one conversation |
+| Deep dump | *"Tell me everything about this clip"* / *"…this sequence"* | Exhaustive single-shot read — every effect with every value, source media frame rate, alpha, proxy, XMP, every track/clip/marker/transition |
+| Effect properties | *"What properties does this effect have?"* / *"Set exposure to -0.3"* (static) | Discover or set non-keyframed property values on any effect |
+| Sequence CRUD | *"Duplicate this sequence"* / *"Delete Old_Cut"* / *"Resize to 1080x1920"* / *"Switch to Color cut"* | Duplicate, delete, resize, set-active beyond Phase 1's create |
+| Clip moves | *"Rename to 'Hero Shot'"* / *"Move this to V3"* / *"Replace media with this other take"* / *"Overwrite anything at 00:00:30"* | Rename, vertical move, source swap (keeps position+duration), bin-item overwrite |
+| Batch effects | *"Apply Gaussian Blur to every selected clip"* / *"to every clip on V2"* / *"to all clips"* | One effect to many — selection, one track, or all |
+| Blend modes | *"Set blend mode to Multiply"* | Any standard blend mode by name |
+| MOGRT | *"Drop the Lower Third from my Library on V3"* / *"Import this .mogrt"* | Motion Graphics Template by name or file path |
+| Source Monitor | *"Open this in the Source Monitor"* / *"Set in at 12, out at 18"* | Preview and subclip in/out workflow |
+| Selection | *"Select all clips containing 'interview'"* / *"Clear the selection"* | Substring-matched selection across timeline or one track |
+| Workspace | *"Switch to the Color workspace"* / *"What workspaces do I have?"* | Workspace switching — Editing, Color, Audio, Effects, Graphics, custom |
+| Discovery | *"What effects are available?"* / *"What's loaded in the Source Monitor?"* | Verify names and current state before acting |
+| Project | *"Close this project"* / *"Undo the last 3 things"* | Project lifecycle and multi-step undo from the chat |
+| Diagnostics | *"Are any files offline?"* / *"Read the metadata on this clip"* | Project-wide offline scan; XMP and project metadata read |
 
 **Timeline editing:**
 - Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed (with reverse)
