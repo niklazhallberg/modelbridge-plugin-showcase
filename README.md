@@ -302,11 +302,73 @@ You're cutting a two-person dialogue scene and you only have one camera. The cut
 
 **Agent:** Reads the reference frame, identifies what needs to stay locked (face, wardrobe, set, lighting), and writes a prompt structured for coverage — correct lens feel, eye-level framing, identity preservation, scene-matched lighting and grade. Asks if you want it bound to a fal.ai model in the Generate tab. Say yes — the prompt lands ready to run with the reference frame pre-attached, one click to generate.
 
+**Capabilities at a glance:**
+
+| Domain | What you can ask | What it saves you |
+|---|---|---|
+| Read project | *"What's in this project?"* | One snapshot of every bin, sequence, media type, offline item — instead of clicking through tabs |
+| Read project | *"What's in the Footage bin?"* | Detailed item-by-item drill-down with media paths, frame rates, offline status |
+| Read timeline | *"What clips are on the timeline?"* / *"What's selected?"* | Every clip with name, dimensions, source frame rate, position, duration |
+| Read effects | *"What effects are on this clip?"* | Full effect stack, Motion, opacity, blend mode, speed, reverse, disabled state |
+| Edit clips | *"Move/trim/split/delete this clip"* | Single or batch edits — "split every 5 seconds" runs across the whole track |
+| Edit properties | *"Half-speed and reverse"* / *"Set opacity to 50%"* | Scale, position, rotation, opacity, audio level, speed (with reverse) |
+| Effects | *"Add Lumetri Color"* / *"Cross dissolve between these"* | Effects and transitions by name |
+| Lumetri color | *"Set exposure to -0.3"* | Exposure, contrast, highlights, shadows, whites, blacks, temperature, tint, saturation, vibrance, sharpening |
+| Precision trim | *"Ripple delete this clip"* | Clip removed and gap closed — every later clip slides into place |
+| Precision trim | *"Roll the cut between these two clips by 1 second"* | Edit point moves, neighbors compensate, sequence duration unchanged |
+| Precision trim | *"Slide this clip half a second later"* | Clip moves on the timeline without changing its duration |
+| Precision trim | *"Slip this clip back by a second"* | Source in/out shift — clip stays put but shows a different part of the take |
+| Precision trim | *"Reverse this clip"* / *"Enable frame blending"* | Playback direction flipped; slow-motion smoothed |
+| Precision trim | *"Detect scene cuts in this clip"* | Auto cuts at detected scene boundaries — chops raw long takes into shots |
+| Precision trim | *"Strip every effect off this clip"* | All effects removed in one call |
+| Animation | *"Fade out the last 2 seconds"* | Opacity keyframes placed at the right times with natural easing |
+| Animation | *"Animate scale from 100 to 110 over the clip"* | Keyframes on any effect property with linear, hold, or bezier curves |
+| Animation | *"What keyframes are on opacity?"* / *"Remove keyframes between 5s and 8s"* | Read, modify, or clean up animation ranges |
+| Captions | *"Turn this .srt into a caption track"* | Caption track created from an imported caption item — subtitle or 608/708 broadcast format |
+| Sequence creation | *"Create a new sequence called Cut 02"* | Empty sequence — optionally from a preset |
+| Sequence creation | *"Make a sequence from these 4 takes"* | Rough cut assembled with the listed bin items in order |
+| Bin organization | *"Create a bin called B-roll"* / *"Move all .mov files into B-roll"* | Bins created and items organized in one operation |
+| Bin organization | *"Import these files into B-roll"* / *"Relink this offline clip"* | Media imported or reconnected |
+| Bin organization | *"Merge duplicate bin entries"* | Premiere's consolidate-duplicates run from the chat |
+| Markers (write) | *"Add a red marker here saying 'check audio'"* | Marker with name, comments, color, optional duration — on sequence or specific clip |
+| Markers (write) | *"Update the marker at 00:00:45"* / *"Delete the marker at 00:01:23"* | Edit or remove by time position |
+| Tracks | *"Mute V2"* / *"Lock A1"* | Track state toggled |
+| Tracks | *"Add a new video track above V3"* / *"Delete the empty track A4"* | Track structure modified — empty-track cleanup preserves V1 and A1 |
+| Project lifecycle | *"Save"* / *"Save a copy at this path"* / *"Open this project"* | Save, save-as, or switch projects — destructive ops always confirm first |
+| Project lifecycle | *"Import the comps from this After Effects project"* | Selected or all .aep comps imported into a chosen bin |
+| Style copy | *"Copy the Lumetri grade from this clip to those four"* | All non-intrinsic effects propagated from source to multiple targets |
+| Style copy | *"Both clips have Lumetri — sync the exposure"* | Property values copied between two clips that share an effect |
+| Color & LUT | *"What LUT is on the hero shot?"* / *"Do all my cutdowns match?"* | Per-clip LUT readout, sequence-wide consistency check |
+| Color & LUT | *"Copy the LUT from this to everything on V1"* | Batch LUT propagation with per-clip success report |
+| QC | *"Scan my timeline"* | 21-point inspection: FPS, resolution, audio coverage, codec, sample rate, channels, LUT, flash frames, pacing, missing fills, orphaned audio |
+| QC | *"What codecs are on the timeline?"* / *"Which clips are offline?"* | Real codec/bitrate/sample-rate readout via ffprobe; offline-media audit |
+| Silence removal | *"Remove silence from this track"* | Noise-floor calibrated detection, preview, ripple delete |
+| Export presets | *"Export for Instagram, TikTok, and YouTube"* | Three files, platform-correct specs, one pass |
+| Export queue | *"Queue this sequence to Media Encoder"* | AME launched, job queued with preset matching |
+| Format handoff | *"Save the current frame as PNG"* / *"Export an AAF for Pro Tools"* / *"Export FCP XML for Resolve"* | Single frame, audio-post handoff, NLE handoff |
+| Model expertise | *"Explain this model"* / *"Find me a model that does X"* | Honest model walk-through + optional install, 1,100+ model search |
+| Prompt authoring | *"Build me a reverse shot from this frame"* | Coverage prompt with identity lock and scene-matched lighting — written for editing, not stock |
+| Custom chains | *"Run QC, then export for YouTube"* | Multi-step workflows in one conversation |
+
 **Timeline editing:**
-- Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed
+- Move, trim, split, delete clips. Adjust scale, position, rotation, opacity, audio levels, speed (with reverse)
 - Add effects and transitions, adjust Lumetri Color parameters
-- Insert clips from the project bin, add/delete tracks, manage markers
+- Insert clips from the project bin, add/delete/lock tracks, manage markers (read/write/update)
+- Precision trim moves — ripple delete, roll edit, slide edit, slip edit. Frame blending, scene-cut detection, strip-all-effects
+- Animate over time — place, modify, and clean up keyframes on any effect property; linear / hold / bezier curves
+- Captions — turn an imported .srt or .vtt into a real caption track in one ask
 - Batch operations — *"split every 5 seconds"*, *"label all clips under 2 seconds as yellow"*
+
+**Sequence, bin, and project structure:**
+- Create new sequences or assemble rough cuts from listed bin items
+- Create bins, move items, import media, relink offline clips, consolidate duplicates
+- Save / save-as / open project (destructive ops confirm first), import After Effects compositions
+
+**Export and handoff:**
+- Platform export presets (Instagram, TikTok, YouTube, Reels, Shorts, X/Twitter, LinkedIn, Facebook)
+- Single-frame PNG export from current playhead or a specified time
+- Queue a sequence to Adobe Media Encoder with preset matching
+- Industry handoff — AAF for Pro Tools, FCP XML for DaVinci / Final Cut
 
 **21-point QC scan:**
 - FPS and resolution mismatches, audio coverage, codec consistency
