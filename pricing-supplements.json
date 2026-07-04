@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "version": "2.6",
-    "last_verified": "2026-05-17",
-    "last_updated": "2026-05-17",
+    "version": "2.7",
+    "last_verified": "2026-07-04",
+    "last_updated": "2026-07-04",
     "verified_by": "pricing-maintenance.js + fal.ai model page verification (last full re-verify 2026-04-07); reconciliation 2026-05-17",
-    "next_review": "2026-06-17",
-    "notes": "v2.6: reconciled showcase vs canonical sync drift. Canonical adopted 6 new entries from showcase (4 ElevenLabs TTS per_character, 2 Kling v2.6 motion-control). Showcase adopted 1 entry from canonical (fal-ai/pixverse/v6/transition) and dropped fal-ai/flux-kontext-pro (404, gone). Showcase rate fixes applied for 6 Kling entries (v3/pro/t2v + O3 standard/pro t2v/i2v) that were 2x too high - matches canonical v2.4 rate correction. Entries sorted alphabetically for easier drift detection going forward. Future updates: edit canonical first, run scripts/check-supplement-sync.js, copy to showcase, bump version, push. v2.5.1: review-cycle bump in showcase only. v2.5: cross-tool research audit. v2.4: fixed 5 Kling entries with 2x rates; added per_character supplements for ElevenLabs TTS models."
+    "next_review": "2026-08-04",
+    "notes": "v2.7: added fal-ai/minimax/hailuo-2.3/pro/image-to-video (per_video_resolution, flat $0.49/video, manually verified on fal.ai model page) — closes the last family_heuristic gap from __mb_pricing_gaps(). v2.6: reconciled showcase vs canonical sync drift. Canonical adopted 6 new entries from showcase (4 ElevenLabs TTS per_character, 2 Kling v2.6 motion-control). Showcase adopted 1 entry from canonical (fal-ai/pixverse/v6/transition) and dropped fal-ai/flux-kontext-pro (404, gone). Showcase rate fixes applied for 6 Kling entries (v3/pro/t2v + O3 standard/pro t2v/i2v) that were 2x too high - matches canonical v2.4 rate correction. Entries sorted alphabetically for easier drift detection going forward. Future updates: edit canonical first, run scripts/check-supplement-sync.js, copy to showcase, bump version, push. v2.5.1: review-cycle bump in showcase only. v2.5: cross-tool research audit. v2.4: fixed 5 Kling entries with 2x rates; added per_character supplements for ElevenLabs TTS models."
   },
   "fal-ai/bytedance/seedance-2.0/fast/image-to-video": {
     "type": "video_token",
@@ -464,6 +464,17 @@
     "confidence": "high",
     "fal_api_unit_price": 0.045,
     "fal_api_unit": "second"
+  },
+  "fal-ai/minimax/hailuo-2.3/pro/image-to-video": {
+    "type": "per_video_resolution",
+    "rates": {
+      "default": 0.49
+    },
+    "default_resolution": "default",
+    "source": "fal_model_page",
+    "confidence": "high",
+    "last_verified": "2026-07-04",
+    "note": "Flat $0.49 per video — independent of duration and resolution. Manually verified on fal.ai model page 2026-07-04."
   },
   "fal-ai/pika/v2.2/image-to-video": {
     "type": "per_video_resolution",
