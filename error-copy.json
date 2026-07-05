@@ -104,6 +104,18 @@
         "action": "Try re-exporting from Premiere Pro or use a different image."
       }
     },
+    "gpu_memory_exceeded": {
+      "action": "Try again — GPU allocation varies between attempts. A lower resolution or shorter duration may help.",
+      "shortMessage": "GPU memory exceeded"
+    },
+    "invalid_lora_url": {
+      "action": "Check the LoRA URL or try generating without it.",
+      "shortMessage": "Invalid LoRA URL"
+    },
+    "speaker_not_found": {
+      "action": "Select a different voice or leave the speaker field empty for the default.",
+      "shortMessage": "Speaker not found"
+    },
     "downstream_service_error": {
       "action": "Try again in a few minutes.",
       "shortMessage": "External service error"

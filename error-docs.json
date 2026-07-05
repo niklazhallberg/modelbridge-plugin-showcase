@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": 1,
-    "updatedAt": "2026-04-06T00:00:00Z"
+    "version": 2,
+    "updatedAt": "2026-07-05T00:00:00Z"
   },
   "entries": {
     "LOCAL_SERVER_DOWN": {
@@ -200,6 +200,18 @@
       ],
       "externalLinks": [
         { "label": "fal.ai Models", "url": "https://fal.ai/models" }
+      ]
+    },
+    "MIGRATION_FAILED": {
+      "slug": "migration-failed",
+      "cause": "An automatic internal update to your installed models could not be completed. Your models are safe — no data was lost.",
+      "steps": [
+        "Close and reopen the modelBridge panel to retry",
+        "If this keeps happening, check that your disk has free space",
+        "Contact support at modelbridge.app if the issue persists"
+      ],
+      "externalLinks": [
+        { "label": "modelBridge Support", "url": "https://modelbridge.app/support" }
       ]
     },
     "SCHEMA_FAIL": {
