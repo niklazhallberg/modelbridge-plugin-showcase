@@ -61,7 +61,7 @@ Two features do reach the cloud when you use them: **visual scan** sends sampled
 
 ## Getting started
 
-1. **Subscribe** at [modelbridge.app](https://modelbridge.app) — 14-day free trial, then $7/month or $59/year
+1. **Subscribe** at [modelbridge.app](https://modelbridge.app) — 14-day free trial, then $9/month or $90/year
 2. **Install** the plugin via ZXP installer — see [docs.modelbridge.app/getting-started/installation/](https://docs.modelbridge.app/getting-started/installation/)
 3. **Open modelBridge** in Premiere Pro → Extensions → modelBridge
 4. **Paste your license key** from the LemonSqueezy receipt email
@@ -72,7 +72,7 @@ Two features do reach the cloud when you use them: **visual scan** sends sampled
 
 ## Pricing
 
-**$7/month** or **$59/year** (save ~30%). 14-day free trial with full access — no restrictions, no generation limits. A payment method (card, PayPal, Apple Pay, or Google Pay) is required to start the trial, but you won't be charged until the trial ends.
+**$9/month** or **$90/year** (save vs monthly). 14-day free trial with full access — no restrictions, no generation limits. A payment method (card, PayPal, Apple Pay, or Google Pay) is required to start the trial, but you won't be charged until the trial ends.
 
 - AI generation costs paid directly to fal.ai at their published rates — no markup
 - No credit systems, no lock-in, cancel anytime
