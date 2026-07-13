@@ -49,6 +49,16 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 ---
 
+## The cleanup features never see your footage
+
+**Silence removal, timeline analysis, and cuts run on your computer — through ffmpeg and Premiere itself. Claude only gets timestamps and clip names to reason about your edit. Your footage never leaves your machine for this work.**
+
+For editors working under NDA, the practical implication: every cleanup feature — silence detection, cut execution, ripple-delete, timeline scans — is safe on client material. Nothing uploads for these tools. See [Security and Privacy](#security-and-privacy) below for the full data-flow breakdown, or the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for a paragraph you can hand to legal.
+
+Two features do reach the cloud when you use them: **visual scan** sends sampled keyframes to Anthropic when you explicitly ask Claude to look at footage, and **generative AI** sends media to fal.ai when you use the Generate tab. Both are opt-in per action — you choose when and if.
+
+---
+
 ## Getting started
 
 1. **Subscribe** at [modelbridge.app](https://modelbridge.app) — 14-day free trial, then $7/month or $59/year
@@ -592,6 +602,7 @@ Users always know what they're looking at and why a model may not be available y
 | **Personal to your workflow** | Your billing history, your configs, your estimates | No | No |
 | **Validation** | Self-improving — learns from errors | Basic or none | Server-side only |
 | **Error messages** | Plain language + color-coded by category, multi-error stacking | Raw API errors | Varies |
+| **Cleanup runs on your machine** | Yes — silence detection and cuts stay local | Varies — often cloud-required | Cloud only — upload required |
 | **Vendor lock-in** | Your own API key | Locked to vendor | Locked to platform |
 
 ---
@@ -676,6 +687,37 @@ fal.ai's official blog directly inside the panel — new model announcements, de
 - All user data — saved models, settings, generation history, cost logs — stored locally
 - modelBridge does not operate any user-facing cloud database
 - Generated media downloaded directly from fal.ai to your local project folder
+
+### Where your video goes (and where it doesn't)
+
+Every editing tool — silence removal, cuts, timeline work — runs on your machine. The AI features that need to actually see or generate footage are separate, opt-in per action. You decide what leaves your computer, and when.
+
+**What runs on your machine**
+
+| Feature | Where it runs |
+|---|---|
+| Silence detection & timeline cleanup | Your computer, via ffmpeg |
+| Timeline edits (cuts, ripple, trim) | Premiere, on your machine |
+| Timeline scans (offline media, gap detection, LUT consistency, dailies prep) | Reads project metadata locally — no media content leaves |
+| Agent chat about editing | Timestamps and clip names go to Anthropic through your own key. Your video file never does. |
+| License checks & error reports | No media. No prompts. No timeline content. |
+
+An editor who uses only these features never sends footage to any external server.
+
+**What uses the cloud, and when**
+
+| Feature | What it sends | When |
+|---|---|---|
+| Visual scan (looking at footage with Claude) | A handful of small sampled keyframes — never the full clip | Only when you explicitly ask Claude to look at footage |
+| Generative AI (Generate tab) | Your media, to fal.ai | Only when you use the Generate tab |
+
+Both are opt-in per action. Skipping them entirely does not disable anything else.
+
+### When you want AI to see your footage
+
+Sometimes you want Claude to actually look at your footage — *"find shots where the subject is smiling,"* *"pick the takes with the best lighting."* modelBridge's visual scan handles that. When you run it, a small set of sampled keyframes goes to Anthropic for the scan — never the full video file. Anthropic doesn't store them. The scan stays under your control: you decide when it runs, on which clips, and with which prompt.
+
+For NDA work, you can skip visual scan entirely and still use every cleanup feature. They don't need to see your footage. See the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for a full feature-by-feature safety card and a paragraph you can hand to legal.
 
 ### API key handling
 
