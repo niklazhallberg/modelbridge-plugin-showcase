@@ -1,16 +1,19 @@
-# Third-Party Notices
+# NOTICE
 
-modelBridge incorporates open-source components governed by the licenses below.
+Third-party open-source components incorporated into modelBridge, with the license terms that govern their use. Where a license requires that its text and copyright notice be reproduced, that text appears here in full.
+
+If you find an open-source component in modelBridge that is not listed here, please contact <support@modelbridge.app> so we can correct the record.
+
+---
 
 ## MCP-imported Premiere Pro tools
 
-The Agent Mode tool inventory includes 38 Premiere Pro control tools imported
-from the open-source Premiere Pro MCP project by leancoderkavy, distributed
-under the MIT License.
+The Agent Mode tool inventory includes 38 Premiere Pro control tools imported from the open-source Premiere Pro MCP project by leancoderkavy, distributed under the MIT License.
 
-- Upstream: https://github.com/leancoderkavy/premiere-pro-mcp
+- Upstream: <https://github.com/leancoderkavy/premiere-pro-mcp>
 - License: MIT
 
+```
 MIT License
 
 Copyright (c) leancoderkavy and contributors
@@ -32,3 +35,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+---
+
+## Local runtime dependencies
+
+modelBridge's local backend spawns a Node.js Express server and, when available on the user's system, invokes FFmpeg and FFprobe as external processes to extract media from Premiere Pro.
+
+- Node.js and Express — MIT License
+- Sharp (image processing) — Apache-2.0 License
+- FFmpeg / FFprobe — LGPL-2.1 / GPL-2, invoked as external processes (not linked or bundled)
+
+An online copy of these attributions is also published at <https://docs.modelbridge.app/legal/attributions/>.
