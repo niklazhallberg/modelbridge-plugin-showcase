@@ -101,25 +101,24 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Resilience to API changes.** The schema-driven architecture is inherently resilient to changes in fal.ai's model catalog — new models, updated parameters, and revised constraints are absorbed automatically without code changes. Schema fetching uses a fallback chain with stale-cache recovery, so a temporary API issue never blocks the user. If a model endpoint is renamed or retired, the plugin detects the change and handles it gracefully.
 
-### Agent Mode (Copilot)
+### Agent Mode (Adept)
 
-Agent Mode adds a conversational AI layer on top of modelBridge's existing Premiere Pro integration. It uses the same ExtendScript bridge, timeline APIs, and model catalog — but makes them accessible through natural language instead of UI controls.
+Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro integration. Editors describe what they want in plain language; the agent reads the timeline, plans the operation, executes edits, and reports back.
 
-**Architecture.** A local Express endpoint proxies between the panel and Anthropic's Claude API via server-sent events (SSE). The system prompt is composed from six markdown files (capabilities, QC rules, examples, product knowledge, error reference, documentation map) and cached as an ephemeral block for token cost reduction on subsequent turns. Two models are available: Haiku 4.5 (default) and Sonnet 4.6.
+**Adept — the intelligence layer.** Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge applies an intelligence layer called Adept that tailors the agent for Adobe's environment:
 
-**Tool system.** The agent has access to 30 tools spanning timeline introspection, edit operations, color/LUT management, AI model operations, media probing, environment-aware silence removal, multi-format export, and error lookup. The two main categories:
+- **Wired into the Premiere toolkit.** Adept reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
+- **Finds a way around technical limits.** When Premiere's scripting can't cross a boundary directly, Adept looks for a workaround that still reaches the goal, instead of giving up or handing the problem back.
+- **Verifies its own work.** Every edit is checked against the real timeline before the agent reports done.
+- **Honest by design.** Adept says plainly when something genuinely can't be done, and never guesses at a cause it can't see.
 
-- **Read tools** (18) — sequence info, clip enumeration, selected clips, gap detection, audio tracks, effect stacks, markers, playhead, project bin, track state, installed models, agent session costs, model details, model schemas, catalog search, error lookup with remediation guidance, proxy status audit, and media probing (codec/bitrate/sample rate/channels via ffprobe)
-- **Edit tools** (11) — clip editing (move/trim/split/delete), property adjustment (scale/position/opacity/speed/Lumetri), effect & transition management, sequence metadata, track operations (mute/insert/add/delete), model installation, persistent preference saving, generation setup handoff (used by the "Explain this model" card flow), multi-platform batch export (Instagram/TikTok/YouTube/Twitter/X/LinkedIn/Facebook), and the silence-removal pair (`calibrate_silence` measures your recording's actual noise floor, `detect_silence` then finds segments to ripple-delete)
-- **Color tool** (1) — LUT read/set/sequence-scan/project-wide-scan/batch-copy. Operates on footage interpretation UUIDs via `getFootageInterpretation()` / `setFootageInterpretation()`
+The result: Adept solves problems a raw model would hand back to the user.
 
-**QC engine.** A 22-point inspection covers technical compliance (FPS, resolution, audio coverage, codec consistency, sample rate, channels, bitrate outliers), color consistency (ungraded clips, LUT mismatches), and editorial observations (flash frames, pacing, repeated beats, disabled clips, orphaned audio). The scan calls roughly six tools in sequence (including `probe_media` for ffprobe-derived checks) and groups findings by severity. Timeline gaps are intentionally not part of the auto-scan — editors leave them on V1+ deliberately when working with multi-track A/B/C-roll — but `detect_timeline_gaps` is available on request.
+**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence removal, quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
 
-**Session management.** Sessions have a 30-minute TTL with automatic cleanup. Custom user instructions are persisted in localStorage and injected into every API call. Token usage and session cost are tracked in real time. Tool results are capped at 50K characters with truncation indication.
+**Available models.** Claude Haiku 4.5 (default, fast + cheap) and Claude Sonnet 4.6 (deeper reasoning). Editors switch per conversation.
 
-**Cross-sequence access.** The agent can read clips, effects, and LUT assignments from any sequence in the project — not just the active one — via `app.project.sequences` index access. This powers project-wide LUT consistency scans and is designed for reuse in future phases (Smart Relink, Delivery Ops).
-
-**Privacy.** Conversations are sent directly to Anthropic's API using the user's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure.
+**Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure.
 
 ### Adobe Premiere Pro
 
