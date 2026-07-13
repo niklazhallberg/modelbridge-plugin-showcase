@@ -1,16 +1,16 @@
 # modelBridge.app
 
-AI generation for Adobe Premiere Pro — 1,100+ models, one panel, zero browser tabs.
+AI generation for Adobe Premiere Pro — over 1,200 models, one panel, zero browser tabs.
 
 ---
 
 Professional video editors juggle 3–5 AI tools in separate browser tabs. Every generation means leaving Premiere Pro — uploading, waiting, downloading, importing, conforming. You're paying four separate subscriptions, dealing with four different credit systems, and none of these tools know anything about your timeline. modelBridge puts every major AI model directly inside your NLE. Results land on your timeline, positioned and ready to cut. When fal.ai adds a new model, modelBridge supports it automatically — no plugin update needed.
 
-And this is where it gets interesting: **Agent Mode** connects an AI assistant to both your Premiere Pro timeline and the entire modelBridge model catalog at the same time. It reads your clips, checks your project for issues, recommends the right AI model for what you're trying to do, and executes edits — all through a single conversation. It's not just an AI generation tool or just an editing assistant. It's both, working together: 1,100+ AI models aware of your timeline, and a post-production QC engine that catches problems before they reach your client.
+And this is where it gets interesting: **Agent Mode** connects an AI assistant to both your Premiere Pro timeline and the entire modelBridge model catalog at the same time. It reads your clips, checks your project for issues, recommends the right AI model for what you're trying to do, and executes edits — all through a single conversation. It's not just an AI generation tool or just an editing assistant. It's both, working together: over 1,200 AI models aware of your timeline, and a post-production QC engine that catches problems before they reach your client.
 
-## 1,100+ models — verified, searchable, and ready to use
+## Over 1,200 models — verified, searchable, and ready to use
 
-modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 categories. Every model in the catalog is continuously verified, classified, and made available automatically — often within hours of launch on fal.ai.
+modelBridge connects to over **1,200 generative AI models** on fal.ai across 11 categories. Every model in the catalog is continuously verified, classified, and made available automatically — often within hours of launch on fal.ai.
 
 - **Live catalog** — browsable, searchable, and filterable at [docs.modelbridge.app/models/available-models/](https://docs.modelbridge.app/models/available-models/), updated every 30 minutes
 - **In-plugin search** — typo-tolerant with synonym matching, paste-by-endpoint-ID, and category filters
@@ -23,7 +23,7 @@ modelBridge connects to over **1,100 generative AI models** on fal.ai across 11 
 
 1. **Stay in Premiere.** Generate AI video, images, and audio without opening a browser. Results import to the right track, at the right timecode, with the right scale.
 
-2. **1,100+ models, one panel.** Kling, FLUX, Veo, Seedance, Happy Horse, ElevenLabs, and hundreds more through a single interface across 11 categories.
+2. **Over 1,200 models, one panel.** Kling, FLUX, Veo, Seedance, Happy Horse, ElevenLabs, and hundreds more through a single interface across 11 categories.
 
 3. **See costs before you generate.** Real-time estimates update as you change duration, resolution, and audio. Five confidence levels tell you how reliable each number is. The plugin learns from your billing history to improve estimates over time.
 
@@ -83,7 +83,7 @@ Two features do reach the cloud when you use them: **visual scan** sends sampled
 ## Links
 
 - [Documentation](https://docs.modelbridge.app/what-is-modelbridge/) — 75+ pages: getting started, feature guides, workflow recipes, Academy, troubleshooting, and full legal framework
-- [Available Models](https://docs.modelbridge.app/models/available-models/) — live catalog of 1,100+ models, updated every 30 minutes
+- [Available Models](https://docs.modelbridge.app/models/available-models/) — live catalog of over 1,200 models, updated every 30 minutes
 - [Store](https://modelbridge.app) — download and subscribe
 - [Support](mailto:support@modelbridge.app) — reach out anytime
 
@@ -167,7 +167,7 @@ Two features do reach the cloud when you use them: **visual scan** sends sampled
 ### 14. Model Preview System
 
 - Preview expected output for any model — images, video, and audio
-- 89% coverage across 1,100+ models — see what it produces before generating
+- 89% coverage across over 1,200 models — see what it produces before generating
 
 ### 15. AI-written key strengths
 
@@ -356,7 +356,7 @@ You're cutting a two-person dialogue scene and you only have one camera. The cut
 | Export presets | *"Export for Instagram, TikTok, and YouTube"* | Three files, platform-correct specs, one pass |
 | Export queue | *"Queue this sequence to Media Encoder"* | AME launched, job queued with preset matching |
 | Format handoff | *"Save the current frame as PNG"* / *"Export an AAF for Pro Tools"* / *"Export FCP XML for Resolve"* | Single frame, audio-post handoff, NLE handoff |
-| Model expertise | *"Explain this model"* / *"Find me a model that does X"* | Honest model walk-through + optional install, 1,100+ model search |
+| Model expertise | *"Explain this model"* / *"Find me a model that does X"* | Honest model walk-through + optional install, over 1,200 model search |
 | Prompt authoring | *"Build me a reverse shot from this frame"* | Coverage prompt with identity lock and scene-matched lighting — written for editing, not stock |
 | Custom chains | *"Run QC, then export for YouTube"* | Multi-step workflows in one conversation |
 | Deep dump | *"Tell me everything about this clip"* / *"…this sequence"* | Exhaustive single-shot read — every effect with every value, source media frame rate, alpha, proxy, XMP, every track/clip/marker/transition |
@@ -433,7 +433,7 @@ You're cutting a two-person dialogue scene and you only have one camera. The cut
 - Scoped to editing work — if you ask for a thumbnail, logo, poster, or non-narrative graphic, the agent switches off film-still vocabulary and asks about the job first, because that language produces worse results on non-film imagery
 
 **AI model operations:**
-- Search and install from 1,100+ models, get detailed parameter info, recommend models for specific tasks
+- Search and install from over 1,200 models, get detailed parameter info, recommend models for specific tasks
 - Error troubleshooting with plain-language explanations
 
 **Personalization:**
@@ -461,12 +461,12 @@ Most plugins are frozen in time — the tool you install is the tool you get. mo
 
 ### 1. Automatic catalog sync
 
-1,100+ models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
+Over 1,200 models today. More tomorrow. No plugin updates needed. The catalog refreshes automatically as fal.ai publishes new models.
 [Learn more →](https://docs.modelbridge.app/features/news-feed/)
 
 ### 2. Adaptive interface generation
 
-Every model gets a custom-built interface generated from its API specification when available. Models without a published specification still work — the plugin uses multiple strategies to make them available, and upgrades the interface automatically as more data becomes available. No hardcoded models. 1,100+ models, no model-specific UI code.
+Every model gets a custom-built interface generated from its API specification when available. Models without a published specification still work — the plugin uses multiple strategies to make them available, and upgrades the interface automatically as more data becomes available. No hardcoded models. over 1,200 models, no model-specific UI code.
 [Learn more →](https://docs.modelbridge.app/features/schema-driven-ui/)
 
 ### 3. Self-learning validation
@@ -589,7 +589,7 @@ Users always know what they're looking at and why a model may not be available y
 
 |  | **modelBridge** | **Hardcoded AI Plugins** | **Browser-Based AI** |
 |---|---|---|---|
-| **Models** | 1,100+ (continuously verified) | 5–20 hardcoded | 1 per platform |
+| **Models** | over 1,200 (continuously verified) | 5–20 hardcoded | 1 per platform |
 | **Categories** | 11 | 1–2 | 1 per platform |
 | **New models** | Automatic — detected in the background | Plugin update required | New account required |
 | **Search** | Typo-tolerant, synonyms, abbreviations, paste-by-ID | Scroll a fixed list | N/A |
@@ -784,7 +784,7 @@ Comprehensive legal framework published at [docs.modelbridge.app/legal/terms-and
 
 ### Adaptive interface generation
 
-The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's specification. No model-specific code. The same engine handles 1,100+ models across 11 categories.
+The entire UI — every slider, dropdown, media input, and validation rule — is generated at runtime from the model's specification. No model-specific code. The same engine handles over 1,200 models across 11 categories.
 
 - **Automatic input classification** — each parameter rendered as the appropriate control type: sliders for ranges, dropdowns for choices, toggles for booleans, media inputs for files
 - **Constraint enforcement** — min/max ranges, allowed values, required fields, and format validation derived from the specification and enforced before generation
@@ -881,7 +881,7 @@ fal.ai adds new models continuously. modelBridge handles them without requiring 
 | **Interface generation** | Every model gets its own UI from its specification — sliders, dropdowns, media drop zones, toggles. Not hardcoded. |
 | **Missing specifications** | Model still accessible — plugin continuously checks and upgrades the interface automatically |
 | **Contextual help** | Common parameters: hand-written explanations. Less common: from the model's docs. Remaining: generic + link. No field unexplained. |
-| **Field classification** | `image_url` on one model might be `start_frame` on another — modelBridge identifies the correct type across 1,100+ models without per-model configuration |
+| **Field classification** | `image_url` on one model might be `start_frame` on another — modelBridge identifies the correct type across over 1,200 models without per-model configuration |
 | **Fixed values** | Parameters that must be a specific value are shown as read-only — clearly labeled, never editable |
 
 ### What this means in practice

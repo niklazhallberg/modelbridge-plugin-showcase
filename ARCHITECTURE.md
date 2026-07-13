@@ -16,7 +16,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ## Core Design Principles
 
-**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how 1,100+ models are supported without plugin updates — and how new models become available within hours of launch, not weeks.
+**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how over 1,200 models are supported without plugin updates — and how new models become available within hours of launch, not weeks.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as billing history accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
@@ -64,7 +64,7 @@ flowchart TD
 
 | | |
 |---|---|
-| Supported AI models | 1,100+ across 11 categories |
+| Supported AI models | over 1,200 across 11 categories |
 | Panel codebase | Tens of thousands of lines of JavaScript and CSS |
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | 75+ pages across guides, reference, Academy, and legal |
@@ -214,7 +214,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **Panel and backend.** Run locally per user. Scaling is linear — each new user is an independent instance with no shared state.
 
-**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (currently ~1,100 models), not by the number of modelBridge users.
+**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (currently over 1,200 models), not by the number of modelBridge users.
 
 **OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
 
