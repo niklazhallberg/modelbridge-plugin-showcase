@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": 2,
-    "updatedAt": "2026-07-05T00:00:00Z"
+    "version": 3,
+    "updatedAt": "2026-07-21T00:00:00Z"
   },
   "entries": {
     "LOCAL_SERVER_DOWN": {
@@ -23,7 +23,10 @@
         "If you are on a VPN or corporate network, check that fal.ai is not blocked"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "IMPORT_TIMEOUT": {
@@ -43,6 +46,17 @@
         "Try importing the file manually from the downloads folder",
         "Check that the file is not corrupted by opening it in another application",
         "If the model outputs an unsupported format, try a different model"
+      ],
+      "externalLinks": []
+    },
+    "MEDIA_PERSIST_FAILED": {
+      "slug": "media-persist-failed",
+      "cause": "The file could not be saved to the modelBridge_Media folder next to your project file, so the import was cancelled. Importing it from the temporary location instead would make the clip go offline after a restart.",
+      "steps": [
+        "Check that the folder containing your project file is writable — not read-only and not a restricted cloud-synced location like OneDrive",
+        "If your disk is full, free up space",
+        "If the project lives on a network share or read-only volume, save it to a local, writable location",
+        "Then run the import again — the result is still available in the preview"
       ],
       "externalLinks": []
     },
@@ -94,7 +108,10 @@
         "Try a different model that does not require approval"
       ],
       "externalLinks": [
-        { "label": "fal.ai Dashboard", "url": "https://fal.ai/dashboard" }
+        {
+          "label": "fal.ai Dashboard",
+          "url": "https://fal.ai/dashboard"
+        }
       ]
     },
     "ACCESS_SCOPE": {
@@ -106,7 +123,10 @@
         "If using a team key, ask your admin to grant the required scope"
       ],
       "externalLinks": [
-        { "label": "fal.ai API Keys", "url": "https://fal.ai/dashboard/keys" }
+        {
+          "label": "fal.ai API Keys",
+          "url": "https://fal.ai/dashboard/keys"
+        }
       ]
     },
     "AUTH_INVALID": {
@@ -118,7 +138,10 @@
         "Click Save and try generating again"
       ],
       "externalLinks": [
-        { "label": "fal.ai API Keys", "url": "https://fal.ai/dashboard/keys" }
+        {
+          "label": "fal.ai API Keys",
+          "url": "https://fal.ai/dashboard/keys"
+        }
       ]
     },
     "BALANCE_EMPTY": {
@@ -131,8 +154,14 @@
         "If you've already added credits and still see this error, your account may need to be manually unlocked — contact fal.ai support"
       ],
       "externalLinks": [
-        { "label": "fal.ai Billing", "url": "https://fal.ai/dashboard/usage-billing/credits" },
-        { "label": "fal.ai Support", "url": "https://fal.ai/dashboard/support" }
+        {
+          "label": "fal.ai Billing",
+          "url": "https://fal.ai/dashboard/usage-billing/credits"
+        },
+        {
+          "label": "fal.ai Support",
+          "url": "https://fal.ai/dashboard/support"
+        }
       ]
     },
     "RATE_LIMIT": {
@@ -143,7 +172,10 @@
         "Avoid clicking Generate multiple times in quick succession"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "CONTENT_POLICY": {
@@ -165,7 +197,10 @@
         "If the model is new, it may need time to warm up — try again in a minute"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "SERVER_ERROR": {
@@ -177,7 +212,10 @@
         "Try a different model as a workaround"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "PORT_CONFLICT": {
@@ -199,7 +237,10 @@
         "Check the fal.ai model page for migration guidance"
       ],
       "externalLinks": [
-        { "label": "fal.ai Models", "url": "https://fal.ai/models" }
+        {
+          "label": "fal.ai Models",
+          "url": "https://fal.ai/models"
+        }
       ]
     },
     "MIGRATION_FAILED": {
@@ -211,7 +252,10 @@
         "Contact support at modelbridge.app if the issue persists"
       ],
       "externalLinks": [
-        { "label": "modelBridge Support", "url": "https://modelbridge.app/support" }
+        {
+          "label": "modelBridge Support",
+          "url": "https://modelbridge.app/support"
+        }
       ]
     },
     "SCHEMA_FAIL": {
@@ -233,7 +277,10 @@
         "If the issue persists, check your internet connection — license verification requires a brief server check"
       ],
       "externalLinks": [
-        { "label": "modelBridge Account", "url": "https://modelbridge.app" }
+        {
+          "label": "modelBridge Account",
+          "url": "https://modelbridge.app"
+        }
       ]
     },
     "LICENSE_DEVICE_LIMIT": {
@@ -245,7 +292,10 @@
         "After releasing a device, try activating again"
       ],
       "externalLinks": [
-        { "label": "Manage Devices", "url": "https://app.lemonsqueezy.com/my-orders" }
+        {
+          "label": "Manage Devices",
+          "url": "https://app.lemonsqueezy.com/my-orders"
+        }
       ]
     },
     "EXT_NOT_LOADED": {
@@ -267,7 +317,10 @@
         "If the issue persists, check fal.ai status for service disruptions"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "RESULT_NO_MEDIA_URL": {
@@ -279,7 +332,10 @@
         "Check fal.ai/dashboard for the raw result"
       ],
       "externalLinks": [
-        { "label": "fal.ai Dashboard", "url": "https://fal.ai/dashboard" }
+        {
+          "label": "fal.ai Dashboard",
+          "url": "https://fal.ai/dashboard"
+        }
       ]
     },
     "VALIDATION_DURATION": {
@@ -351,7 +407,10 @@
         "Try a different model as a workaround"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "GPU_MEMORY_EXCEEDED": {
@@ -363,7 +422,10 @@
         "If the issue persists, try a different model"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "INVALID_LORA_URL": {
@@ -405,7 +467,10 @@
         "Try a more popular variant of the same model family"
       ],
       "externalLinks": [
-        { "label": "fal.ai Status", "url": "https://status.fal.ai" }
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
       ]
     },
     "CONTENT_POLICY_NO_MEDIA": {
