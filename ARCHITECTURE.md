@@ -81,7 +81,7 @@ flowchart TD
 
 **Conventions and rules.** Coding conventions, commit standards, and architectural rules are documented and enforced consistently. Every error must go through the translation layer — no raw API output reaches users. Every data migration must create a backup first. Every bug fix must check for the same class of problem elsewhere in the codebase.
 
-**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases are packaged as signed ZXP installers with version-tracked changelogs.
+**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases are packaged as ZXP installers with version-tracked changelogs.
 
 ---
 

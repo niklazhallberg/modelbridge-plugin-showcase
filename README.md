@@ -145,7 +145,7 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 
 | Tier | Source | When you see it |
 |---|---|---|
-| **Billed** | Confirmed cost from fal.ai billing | After the generation completes |
+| **Billed** | fal.ai's reported usage × modelBridge's rate for the model — not read from your fal.ai invoice | After the generation completes |
 | **Estimated** | Curated pricing data | Live — updates as you tweak parameters |
 | **Learned** | Median of your last 3+ actual charges (60-day window) | After several generations with the same config |
 | **From** | fal.ai's official pricing API — minimum published rate | Newer models where surcharges aren't yet mapped |
@@ -159,7 +159,7 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 
 ## Getting started
 
-1. **Subscribe** at [modelbridge.app](https://modelbridge.app) — 14-day free trial
+1. **Subscribe** via the [subscription page](https://docs.modelbridge.app/billing/subscription/) — 14-day free trial
 2. **Install** the ZXP and paste your license key from the receipt email
 3. **Paste your fal.ai key** from [fal.ai/dashboard/keys](https://fal.ai/dashboard/keys), open modelBridge in Premiere Pro, and generate
 
@@ -169,7 +169,7 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 
 ## Pricing
 
-**$9/month** or **$90/year** — save vs monthly. 14-day free trial with full access, no restrictions. A payment method is required to start the trial; you're not charged until it ends.
+**$19/month** or **$190/year** — save vs monthly. 14-day free trial with full access, no restrictions. A payment method is required to start the trial; you're not charged until it ends.
 
 - AI generation costs paid directly to fal.ai at their published rates
 - No credit systems, no lock-in, cancel anytime
@@ -217,7 +217,7 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
 - **[Roadmap](ROADMAP.md)** — Team Cost Intelligence, Agent Mode expansion
-- **[Store](https://modelbridge.app)** — download and subscribe
+- **[Subscribe](https://docs.modelbridge.app/billing/subscription/)** — pricing, trial, and sign-up
 - **[Support](mailto:support@modelbridge.app)**
 
 ---
