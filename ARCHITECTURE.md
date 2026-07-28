@@ -160,7 +160,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Self-learning validation.** When a model rejects media or a parameter value for a constraint not declared in its schema, the constraint values are extracted from the API error response (structured data when available, regex fallback otherwise) and cached permanently per model. Multiple constraint types are learned: dimensions, file size, duration, aspect ratio, numeric parameter limits, and others. Learned constraints are enforced at preflight on all future attempts — both on media cards and in form fields. The acknowledgment "learned from a previous generation" only appears once per constraint type. Dual persistence (fast cache + durable disk) ensures constraints survive cache clears.
 
-**Cost learning.** After several generations with a model, the system derives a median cost from your Metered cost history — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after a period of inactivity.
+**Cost learning.** After several generations with a model, the system derives a median cost from your Metered cost history — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after 60 days of inactivity.
 
 **Generation time learning.** Successful generations record their duration. After a few samples per model, a time estimate is computed from a rolling window and displayed on the model card. Rounding scales with magnitude.
 
