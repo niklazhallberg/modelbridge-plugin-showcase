@@ -18,7 +18,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 **Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how over 1,200 models are supported without plugin updates — and how new models become available within hours of launch, not weeks.
 
-**Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as billing history accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
+**Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every data migration. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
@@ -160,7 +160,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Self-learning validation.** When a model rejects media or a parameter value for a constraint not declared in its schema, the constraint values are extracted from the API error response (structured data when available, regex fallback otherwise) and cached permanently per model. Multiple constraint types are learned: dimensions, file size, duration, aspect ratio, numeric parameter limits, and others. Learned constraints are enforced at preflight on all future attempts — both on media cards and in form fields. The acknowledgment "learned from a previous generation" only appears once per constraint type. Dual persistence (fast cache + durable disk) ensures constraints survive cache clears.
 
-**Cost learning.** After several generations with a model, the system derives a median cost from actual billing data — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after a period of inactivity.
+**Cost learning.** After several generations with a model, the system derives a median cost from your own metered usage — per model, per parameter configuration. Learned costs fill gaps where curated pricing supplements aren't available. Estimates age out after a period of inactivity.
 
 **Generation time learning.** Successful generations record their duration. After a few samples per model, a time estimate is computed from a rolling window and displayed on the model card. Rounding scales with magnitude.
 
