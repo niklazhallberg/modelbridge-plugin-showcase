@@ -147,7 +147,7 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 |---|---|---|
 | **Billed** | fal.ai's reported usage × modelBridge's rate for the model — not read from your fal.ai invoice | After the generation completes |
 | **Estimated** | Curated pricing data | Live — updates as you tweak parameters |
-| **Learned** | Median of your last 3+ actual charges (60-day window) | After several generations with the same config |
+| **Learned** | Median of your last 3+ Metered costs (60-day window) | After several generations with the same config |
 | **From** | fal.ai's official pricing API — minimum published rate | Newer models where surcharges aren't yet mapped |
 | **No price** | All sources unavailable | Honest fallback — no fabricated numbers |
 
