@@ -43,12 +43,20 @@ var CHECKS = [
   { re: /\bbilling history\b/i, label: 'billing history' }
 ];
 
+// Markdown is the buyer-facing prose. JSON is the OTA payload set
+// (error-copy, error-docs, config) — fetched by installed plugins and rendered
+// verbatim in the product, so it carries the same obligation as the README and
+// must be scanned too. Scanning only *.md left those three files unguarded.
+var SCAN_EXT_RE = /\.(md|json)$/i;
+
 var violations = [];
+var scanned = 0;
 
 function scanFile(rel) {
   var abs = path.join(ROOT, rel);
   var text;
   try { text = fs.readFileSync(abs, 'utf8'); } catch (e) { return; }
+  scanned++;
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var raw = lines[i];
@@ -70,11 +78,19 @@ function walk(relDir) {
     var rel = relDir ? path.join(relDir, name) : name;
     if (EXCLUDE_RE.test(rel.replace(/\\/g, '/'))) continue;
     if (entries[i].isDirectory()) walk(rel);
-    else if (/\.md$/i.test(name)) scanFile(rel);
+    else if (SCAN_EXT_RE.test(name)) scanFile(rel);
   }
 }
 
 walk('');
+
+// A guard that scanned nothing must not report success. Without this, a bad
+// EXCLUDE_RE or a moved ROOT turns the guard into a green light that has looked
+// at no files at all — which reads as evidence while proving nothing.
+if (scanned === 0) {
+  console.error('Cost-terminology guard FAILED — scanned 0 files. Check SCAN_EXT_RE / EXCLUDE_RE / ROOT.');
+  process.exit(1);
+}
 
 var SUGGEST = 'Metered (fal units x our rate) / Calculated (our formula) / Estimated (pre-run) / Learned / From / No price';
 if (violations.length) {
@@ -87,5 +103,5 @@ if (violations.length) {
   console.error('add a `cost-term-allow` marker comment on that line.\n');
   process.exit(1);
 }
-console.log('Cost-terminology guard passed — no forbidden user-facing cost terms.');
+console.log('Cost-terminology guard passed — ' + scanned + ' files scanned, no forbidden user-facing cost terms.');
 process.exit(0);

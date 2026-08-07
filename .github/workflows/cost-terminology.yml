@@ -1,19 +1,26 @@
 name: Cost terminology guard
 
-# Keeps this repo's marketing copy on the same cost vocabulary as the plugin and
+# Keeps this repo's public copy on the same cost vocabulary as the plugin and
 # docs — blocks "Billed / actual cost / actual charges / billing history" etc.
-# from creeping back into the README. See scripts/check-cost-terminology.js.
+# from creeping back in. See scripts/check-cost-terminology.js.
+#
+# The path filter must list every extension the script scans. A filter narrower
+# than the script is the same failure as a script narrower than the surface: the
+# guard exists, stays green, and never runs on the file that changed.
 
 on:
   push:
     paths:
       - '**/*.md'
+      - '**/*.json'
       - 'scripts/check-cost-terminology.js'
       - '.github/workflows/cost-terminology.yml'
   pull_request:
     paths:
       - '**/*.md'
+      - '**/*.json'
       - 'scripts/check-cost-terminology.js'
+      - '.github/workflows/cost-terminology.yml'
 
 jobs:
   cost-terminology:

@@ -133,7 +133,7 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 | **Mask editor** | Paint inpainting masks in-panel — brush, zoom, eraser, undo. No Photoshop roundtrip. [Docs →](https://docs.modelbridge.app/guides/inpainting/) |
 | **Trial + license lifecycle** | 14-day trial with full access. 7-day offline grace period. 2-device seat management. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
 | **Self-learning validation** | When a model rejects your media, modelBridge remembers the constraint and catches it automatically next time. [Docs →](https://docs.modelbridge.app/reference/self-learning/) |
-| **Over-the-air updates** | New error messages, pricing corrections, feature flags — delivered within an hour, no reinstall. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
+| **Over-the-air updates** | New error messages, endpoint changes, feature flags — delivered within an hour, no reinstall. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
 | **Background generations** | Long generations move to background automatically. Sound notification when ready. Survives Premiere restart. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
 | **700+ parameter explanations** | Every non-obvious input has a plain-language tooltip and an Academy link when the topic deserves one. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
 
