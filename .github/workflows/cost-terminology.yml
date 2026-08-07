@@ -1,0 +1,27 @@
+name: Cost terminology guard
+
+# Keeps this repo's marketing copy on the same cost vocabulary as the plugin and
+# docs — blocks "Billed / actual cost / actual charges / billing history" etc.
+# from creeping back into the README. See scripts/check-cost-terminology.js.
+
+on:
+  push:
+    paths:
+      - '**/*.md'
+      - 'scripts/check-cost-terminology.js'
+      - '.github/workflows/cost-terminology.yml'
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'scripts/check-cost-terminology.js'
+
+jobs:
+  cost-terminology:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check cost terminology
+        run: node scripts/check-cost-terminology.js

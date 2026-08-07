@@ -141,17 +141,18 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 
 ## Cost transparency
 
-modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every estimate carries a confidence tier so you always know the basis for the number.
+modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, a measured figure after.
 
-| Tier | Source | When you see it |
+| Tier | What it means | When you see it |
 |---|---|---|
-| **Billed** | fal.ai's reported usage × modelBridge's rate for the model — not read from your fal.ai invoice | After the generation completes |
-| **Estimated** | Curated pricing data | Live — updates as you tweak parameters |
-| **Learned** | Median of your last 3+ actual charges (60-day window) | After several generations with the same config |
-| **From** | fal.ai's official pricing API — minimum published rate | Newer models where surcharges aren't yet mapped |
-| **No price** | All sources unavailable | Honest fallback — no fabricated numbers |
+| **Estimated** | A forecast from curated pricing data for your exact settings | Before you run — updates live as you tweak parameters |
+| **From** | A minimum starting price; the final cost can be higher | Before you run, for newer models where surcharges aren't mapped yet |
+| **No price** | No pricing source has a rate — modelBridge never invents a number | Before you run, when pricing isn't published |
+| **Metered** | Priced from the usage fal.ai reported for the run — modelBridge's own calculation, not a copy of your fal.ai invoice | After the run |
+| **Calculated** | The run finished but fal.ai reported no usage, so this is modelBridge's formula for your settings | After the run |
+| **Learned** | Sharpened from the median of your own metered runs for this model and settings | After a few runs with the same config |
 
-You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee.
+You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
 
 [Cost system →](https://docs.modelbridge.app/models/costs/)
 
