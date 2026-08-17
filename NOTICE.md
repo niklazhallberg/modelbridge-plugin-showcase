@@ -8,7 +8,7 @@ If you find an open-source component in modelBridge that is not listed here, ple
 
 ## MCP-imported Premiere Pro tools
 
-The Agent Mode tool inventory includes 38 Premiere Pro control tools imported from the open-source Premiere Pro MCP project by leancoderkavy, distributed under the MIT License.
+The Agent Mode tool inventory includes a substantial set of Premiere Pro control tools imported from the open-source Premiere Pro MCP project by leancoderkavy, distributed under the MIT License.
 
 - Upstream: <https://github.com/leancoderkavy/premiere-pro-mcp>
 - License: MIT

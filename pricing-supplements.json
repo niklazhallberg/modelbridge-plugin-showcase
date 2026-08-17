@@ -2,7 +2,7 @@
   "_meta": {
     "version": "0",
     "example_only": true,
-    "notes": "This file is a schema-only example. Real pricing data ships bundled with the extension; a private pricing endpoint is planned."
+    "notes": "This file is a schema-only example. Real pricing data ships bundled with the extension."
   },
   "example/text-to-video-flat-per-video": {
     "type": "per_video_resolution",

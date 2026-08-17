@@ -23,8 +23,8 @@ Detailed technical architecture and implementation plan exists and is available 
 Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
 
 **Current capabilities (shipped):**
-- 30 tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
-- 22-point quality control scan covering technical compliance (fps, resolution, codec, sample rate, channels, bitrate), color consistency, and editorial polish
+- 100+ tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
+- A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels), color consistency, and editorial polish — ranked Critical / Warning / Info
 - One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
 - Environment-aware silence removal — the agent measures actual noise levels at a point the editor identifies as "quiet", calibrates the detection threshold to that specific recording environment, finds all silent segments, and removes them with ripple delete. Works equally well on clean studio recordings (-50dB noise floor) and noisy street interviews (-20dB). Preview mode places markers for review before cutting.
 - Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
@@ -61,7 +61,7 @@ Silence removal is shipped. The next step is content-aware editing — understan
 
 Premiere Pro's Motion Graphics Templates (MOGRTs) store text parameters that are readable and writable via the scripting API. The agent will be able to batch-update text content across all title clips in a sequence — font, size, color, and content — enabling one-command brand guide updates and multi-language versioning.
 
-Users bring their own Anthropic API key. Typical monthly cost for daily use is $10-18/month (Haiku default, Sonnet for complex tasks). modelBridge does not markup or proxy the API calls.
+Users bring their own Anthropic API key. Measured across real usage profiles (2026-06): about $8/month for light use, ~$26 for steady daily editing, ~$84 for heavy scan-driven work — on the default Haiku model. modelBridge does not markup or proxy the API calls.
 
 ---
 
@@ -69,7 +69,7 @@ Users bring their own Anthropic API key. Typical monthly cost for daily use is $
 
 modelBridge currently runs on CEP (Chromium Extensibility Platform), Adobe's established extension framework for Premiere Pro. Adobe is transitioning to UXP (Unified Extensibility Platform) as the modern replacement.
 
-The modelBridge architecture is already designed for this migration. All platform-specific code is isolated behind adapter layers — storage, host communication, shell access, and credential management each have defined interfaces that can be swapped without rewriting business logic. The `getDataDir()` storage abstraction and async-first API design mean the transition is incremental, not a rewrite.
+The modelBridge architecture is already designed for this migration. Platform-specific code is being isolated behind adapter layers — storage, host communication, shell access, and credential management each have defined interfaces that can be swapped without rewriting business logic, and all new code routes through them. The `getDataDir()` storage abstraction and async-first API design mean the transition is incremental, not a rewrite.
 
 This migration does not affect current functionality or users. The CEP version will continue to work on all supported Premiere Pro versions.
 
