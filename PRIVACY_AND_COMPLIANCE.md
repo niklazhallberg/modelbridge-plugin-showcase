@@ -10,7 +10,7 @@ modelBridge is a local-first application. The plugin runs entirely inside Adobe 
 
 All user preferences, generation history, API keys, installed models, cost logs, and learned constraints are stored locally on the user's machine. No modelBridge-operated database holds user-generated content or creative assets.
 
-The only modelBridge-operated backend is a Cloudflare Worker that handles three functions: anonymous error telemetry aggregation, license validation (via LemonSqueezy webhooks), and catalog monitoring. This Worker has no access to user prompts, media, generated content, or fal.ai API keys.
+The only modelBridge-operated backend is a Cloudflare Worker that handles three functions: anonymous error telemetry aggregation, license validation (via LemonSqueezy webhooks), and catalog monitoring. This Worker has no access to user prompts, media, generated content, or fal.ai API keys. The one exception is user-initiated: a bug report you choose to send carries your message, optionally your name and email, your prompt only if you tick that box (off by default on every report), and any screenshots you attach — all reviewed by you before sending, retained 180 days.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -56,16 +56,16 @@ The only modelBridge-operated backend is a Cloudflare Worker that handles three 
 | Data Category | What It Contains | Storage Location | Retention | Legal Basis (GDPR Art. 6) | User Control |
 |---|---|---|---|---|---|
 | **fal.ai API key** | User-entered API key | Local `localStorage` + disk file | Until user deletes | Contract (Art. 6(1)(b)) | View, change, or delete in Settings |
-| **Generation history** | Prompts, file paths, model used, cost, timestamp | Local disk (`generation-logs/`) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset in Costs tab (requires typing "DELETE") |
+| **Generation history** | Prompts, file paths, model used, cost, timestamp | Local disk (per-project log files) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset in Costs tab (requires typing "DELETE") |
 | **Installed models** | Model IDs, schemas, learned constraints, pricing | Local `localStorage` + disk file | Until user removes | Contract (Art. 6(1)(b)) | Remove individual models or reset all |
 | **User settings** | Preferences, UI state, feature toggles | Local `localStorage` + disk file | Until user resets | Contract (Art. 6(1)(b)) | Settings → Reset |
-| **Cost history** | Per-generation costs, currency rates, project tags | Local disk (`cost-history.json`) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset with confirmation |
+| **Cost history** | Per-generation costs, currency rates, project tags | Local disk (cost log files) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset with confirmation |
 | **Learned constraints** | Per-model dimension/duration/size limits from errors | Local `localStorage` + disk file | 30-day soft TTL, refreshed on re-learn | Contract (Art. 6(1)(b)) | Cleared on model removal |
-| **Error telemetry** | Error type, HTTP status, model endpoint, plugin version | Cloudflare KV (aggregated) | Indefinite (aggregated counts only) | Legitimate Interest (Art. 6(1)(f)) | Opt-out in Settings → Privacy |
+| **Error telemetry** | Error type, HTTP status, model endpoint, plugin version | Cloudflare KV (aggregated) | Indefinite (aggregated counts only) | Legitimate Interest (Art. 6(1)(f)) | Opt-in — off by default; enable in Settings → Privacy |
 | **Behavioral analytics** | Anonymous event counts (gen_start, gen_done, model_sel, etc.) | Cloudflare KV (per-installation daily aggregate) | 90-day TTL per installation; 365-day global aggregate | Consent (Art. 6(1)(a)) | Opt-in only; disable in Settings → Privacy |
 | **Installation ID** | SHA-256 hash (16-char hex) of machine signals | Local `localStorage` | Until cache clear | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in |
 | **License key** | LemonSqueezy license key + machine instance ID | Local `localStorage` + disk; Cloudflare KV | Active: 3 years; ended: 90 days | Contract (Art. 6(1)(b)) | Deactivate in Settings; DELETE /api/user-data |
-| **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (`sub:{subscriptionId}`) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
+| **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (subscription record) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
 | **IP address** | Request IP for rate limiting | In-memory only (Worker) | ~60 seconds (request lifecycle) | Legitimate Interest (Art. 6(1)(f)) | Not stored; transient only |
 | **Anthropic API key** (Agent Mode) | User-entered Anthropic API key for Claude | Local `localStorage` only | Until user deletes | Contract (Art. 6(1)(b)) | Delete in Settings |
 
@@ -80,6 +80,8 @@ The only modelBridge-operated backend is a Cloudflare Worker that handles three 
 - Third-party analytics SDK data (no Google Analytics, Segment, Mixpanel, etc.)
 - Tracking pixels
 
+The one exception across this list is a bug report you explicitly send (see §1): it carries your message, any contact details you type, and — only if you opt in on that report — your prompt.
+
 ---
 
 ## 3. GDPR Compliance Measures
@@ -90,18 +92,18 @@ Error telemetry (Stream A) operates under Legitimate Interest (Art. 6(1)(f)). Th
 
 - **Purpose:** Detect unknown error types to improve error handling and user experience. Without telemetry, errors appear as generic "Something went wrong" messages.
 - **Necessity:** Only error type, HTTP status, model endpoint, and plugin version are transmitted. No alternative exists that preserves anonymity while enabling error documentation.
-- **Balancing:** Data is anonymous (no user identifier), aggregated at the Worker (raw events not stored), and contains no creative content. The `rawMessage` field undergoes PII scrubbing before transmission. Users can opt out in Settings → Privacy.
+- **Balancing:** Data is anonymous (no user identifier), aggregated at the Worker (raw events not stored), and contains no creative content. The `rawMessage` field undergoes PII scrubbing before transmission. Telemetry is off by default; users opt in — and can turn it off again — in Settings → Privacy.
 
 ### Retention Policy
 
 | Data | Active Subscription | After Cancellation/Expiry |
 |---|---|---|
-| Subscription record (`sub:{id}`) | 3 years (94,608,000s) | 90 days (7,776,000s) |
-| Trial record (`trial:{id}`) | 3 years | 90 days |
-| License mapping (`license_sub:{id}`) | 3 years | 90 days |
-| Revocation flag (`revoke:{id}`) | Retained (fraud prevention) | Retained (fraud prevention) |
-| Behavioral analytics (`usage:{iid}:{date}`) | 90 days | 90 days |
-| Global daily aggregate (`agg:daily:{date}`) | 365 days | 365 days |
+| Subscription record | 3 years (94,608,000s) | 90 days (7,776,000s) |
+| Trial record | 3 years | 90 days |
+| License mapping | 3 years | 90 days |
+| Revocation flag | Retained (fraud prevention) | Retained (fraud prevention) |
+| Behavioral analytics (per-installation daily aggregate) | 90 days | 90 days |
+| Global daily aggregate | 365 days | 365 days |
 | Pushover event buffer | 48 hours | 48 hours |
 
 Enforcement: A daily cleanup function (`cleanupExpiredSubscriptions`) runs as part of the Worker cron schedule, deleting expired subscription records automatically.
@@ -117,13 +119,13 @@ Returns all data held for the subscription associated with the license key: subs
 `DELETE /api/user-data` with `{ license_key, reason? }`
 
 Deletes:
-- Subscription record (`sub:{subscriptionId}`)
-- License mapping (`license_sub:{licenseKeyId}`)
-- Trial data (`trial:{licenseKeyId}`)
-- Scrubs email from accumulated Pushover events
+- Subscription record
+- License mapping
+- Trial data
+- Scrubs email from accumulated operational events
 
 Retains (with legal basis):
-- Revocation timestamp and reason (`revoke:{licenseKeyId}`) — fraud prevention, Legitimate Interest (Art. 6(1)(f))
+- Revocation timestamp and reason — fraud prevention, Legitimate Interest (Art. 6(1)(f))
 
 Response confirms deletion with count of keys removed and list of retained keys with justification.
 
@@ -142,7 +144,7 @@ Messages are truncated to 300 characters after scrubbing.
 
 ### Two-Stream Telemetry Architecture
 
-**Stream A — Reliability telemetry (opt-out, Legitimate Interest)**
+**Stream A — Reliability telemetry (opt-in, off by default — Legitimate Interest)**
 - Route: `POST /api/error`
 - Trigger: Unknown or unhandled error types only
 - Data: Error type, HTTP status, model endpoint, plugin version, scrubbed message
@@ -155,7 +157,7 @@ Messages are truncated to 300 characters after scrubbing.
 - Data: Anonymous event type + metadata (model ID, cost, category)
 - Identifier: Installation ID (SHA-256 hash, non-reversible, 16-char hex)
 - Storage: Per-installation daily aggregate (90-day TTL); raw events discarded after aggregation
-- NEVER_TRANSMIT enforcement at both plugin and Worker level: `prompt`, `negative_prompt`, `filePath`, `fileName`, `apiKey`, `license_key`, `query`, `message`, `content` are architecturally blocked
+- NEVER_TRANSMIT enforcement at both plugin and Worker level: `prompt`, `negative_prompt`, `filePath`, `fileName`, `apiKey`, `license_key`, `query`, `message`, `content` and credential-named fields are blocked at the plugin, and the Worker independently hard-rejects the core set
 
 ### No Third-Party Behavioral Data
 
@@ -174,7 +176,8 @@ Messages are truncated to 300 characters after scrubbing.
 | **Cloudflare** (Workers + KV) | Worker hosting, key-value storage | Aggregated error telemetry, license/subscription state, behavioral analytics aggregates | Cloudflare DPA (standard) |
 | **LemonSqueezy** (Lemon Squeezy Inc.) | Payment processing, subscription management, license validation | License key, customer email, instance ID, payment details | LemonSqueezy DPA (standard) |
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs | User prompts, media files, generated content (direct from user device, authenticated with user's own API key) | Direct controller-to-controller relationship — user contracts directly with fal.ai |
-| **Anthropic** (Agent Mode insights only) | Model insights enrichment (Worker background task) | Public model metadata only — no user content | No user PII processed |
+| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages, project metadata (clip/sequence names, timecodes, file locations, effect settings), preview frames of the selected clip — direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
+| **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata only — no user content | No user PII processed |
 | **Pushover** (Superblock LLC) | Developer operational alerts | Anonymized operational events (catalog counts, error counts) — no user PII | No user PII processed |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
 
@@ -186,31 +189,31 @@ modelBridge does not act as a data processor for fal.ai generation traffic. The 
 
 ## 5. Analytics Architecture
 
-### Event Taxonomy (12 editorial events)
+### Event Taxonomy (editorial events)
 
 | Event | Trigger | Metadata |
 |---|---|---|
 | `gen_start` | User clicks Generate | Model ID, category |
-| `gen_done` | Generation completes | Model ID, accepted (bool), cost (USD) |
-| `gen_abandon` | User cancels or navigates away | Model ID |
+| `gen_done` | Generation completes | Model ID, cost (USD) |
+| `gen_accept` | Result imported from preview | Model ID, count |
+| `gen_fail` | Generation fails | Model ID, failure source |
+| `gen_abandon` | User dismisses a result | Model ID |
 | `model_sel` | User selects a model | Model ID, source (recent/search/browse) |
 | `dual_use` | User activates Dual Mode | Primary + secondary model IDs |
 | `dual_gen` | Dual Mode generation starts | Primary + secondary model IDs |
 | `search` | Category search performed | Category filter (no search text) |
-| `preview` | Preview opened | Model ID |
-| `import` | Result imported to timeline | Model ID, import type |
-| `mask_use` | Mask editor used | Model ID |
+| `cat_browse` | Catalog browsed | — |
 | `cost_view` | Costs tab opened | — |
-| `settings` | Settings changed | Setting key (no value) |
+| `settings_change` | Settings changed | Setting key (no value) |
 
 ### Aggregation Pipeline
 
 1. Plugin queues events in memory (max 20 per batch, flush every 60 seconds)
 2. Batch sent to Worker with installation ID (fire-and-forget, 5-second timeout)
 3. Worker validates NEVER_TRANSMIT fields, rate-limits per installation (10 requests/hour)
-4. Worker aggregates into per-installation daily summary (`usage:{iid}:{date}`, 90-day TTL)
+4. Worker aggregates into a per-installation daily summary (90-day TTL)
 5. Raw events discarded immediately after aggregation
-6. Daily cron compiles global aggregate (`agg:daily:{date}`, 365-day TTL)
+6. Daily cron compiles a global aggregate (365-day TTL)
 7. Global aggregate available via `GET /api/analytics/daily` (Bearer token, admin only)
 
 ### Acquisition-Demo Endpoint
@@ -225,7 +228,7 @@ Agent Mode allows users to edit the Premiere Pro timeline via natural language c
 
 **User's own API key.** The user enters their own Anthropic API key in Settings. This key is stored locally in `localStorage` and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
 
-**No conversation data collected.** modelBridge does not intercept, store, proxy, or log any Agent Mode conversation content — no prompts, no Claude responses, no tool calls, no timeline edit commands. The only telemetry event is `dual_gen` when Agent Mode triggers a generation (same anonymous event as any other generation, subject to the same opt-in/NEVER_TRANSMIT rules).
+**No conversation data collected.** modelBridge does not intercept, store, proxy, or log any Agent Mode conversation content — no prompts, no Claude responses, no tool calls, no timeline edit commands. A generation triggered from Agent Mode emits the same anonymous generation events (`gen_start`, `gen_done`, `gen_fail`) as one started from the Generate button — subject to the same opt-in and NEVER_TRANSMIT rules. Agent Mode itself emits no events of its own.
 
 **Customizable system instructions.** Users can configure custom system instructions for the Agent. These are stored locally only and included in requests sent directly to Anthropic's API. modelBridge infrastructure never sees them.
 
