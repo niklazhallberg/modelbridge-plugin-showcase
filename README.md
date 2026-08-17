@@ -39,16 +39,16 @@ That's how one plugin keeps up with 1,200 models and counting.
 
 Ask in plain language. The agent reads your timeline, executes edits, verifies its own work, and reports back.
 
-- *"Scan my timeline"* — 22-point QC across FPS, codecs, sample rate, LUT consistency, gaps, orphaned audio
+- *"Scan my timeline"* — a prioritized QC scan: offline media, flash frames, sync drift, fps and sample-rate mismatches, orphaned audio, LUT consistency and more — ranked Critical / Warning / Info
 - *"Prep today's footage"* — identifies cameras, groups clips, sets color labels
 - *"Close all the gaps on V1"* — every gap detected and rippled closed
 - *"Reframe for Reels"* — new vertical sequence via Adobe's Auto Reframe (Sensei)
 - *"Explain this model"* — honest walkthrough of a fal.ai model with one-click install
 - *"Build me a reverse shot from this frame"* — coverage prompt handed straight to the Generate tab
 
-The **Adept** layer tailors Claude specifically for Premiere Pro — wired into 100+ tools, verifies every edit before reporting done, honest by design about what it can't do. The result: it solves problems a raw model would hand back to you.
+The **Adept** layer tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. The result: it solves problems a raw model would hand back to you.
 
-Bring your own Anthropic API key. Two Claude models (Haiku 4.5 default, Sonnet 4.6 for complex reasoning). No markup. Session cost tracked in real time.
+Bring your own Anthropic API key. Two Claude models — Haiku 4.5 by default, one click to switch to Sonnet 4.6 for deeper reasoning. No markup. Session cost tracked in real time.
 
 ### Prompt authoring for editors
 
@@ -62,9 +62,8 @@ The agent is trained specifically for editorial work — not generic "AI cinemat
 
 Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview lets you review every generation on your actual delivery screen without leaving Premiere.
 
-- Scan the QR once — every future generation appears on your phone within seconds
+- Scan the QR once — every future generation appears on your phone in seconds while the app is open
 - Installs as a PWA — fullscreen, no browser chrome, autoplays muted, loops
-- **Safe-zone overlays** for TikTok, Instagram Reels, YouTube Shorts — check subject placement against platform UI before importing
 - Dual Mode results appear as labeled slides — swipe to compare on the screen your client will actually use
 
 Requires an active license. Runs on the fal.ai CDN, so it works over cellular. Latest generation only (each new one replaces the previous).
@@ -75,7 +74,7 @@ Requires an active license. Runs on the fal.ai CDN, so it works over cellular. L
 
 ## 4. Dual Mode
 
-Run the same prompt against two models in one click. Compare results side by side with an honest input overview showing which settings were adjusted for the secondary model and why. Both preview panes stream live. Import from either — or both.
+Run the same prompt against two models in one click. Compare results side by side with an honest input overview showing which settings were adjusted for the secondary model and why. Play either result, import either — or both.
 
 [Dual Mode →](https://docs.modelbridge.app/features/dual-mode/)
 
@@ -83,9 +82,9 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 ## 5. ElevenLabs and Midjourney workflows
 
-**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on the correct audio track at the playhead. Voice-over, dubbing, sound effects, voice conversion — 10+ audio models work the same way as video.
+**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on the correct audio track at the playhead. Voice-over, dubbing, sound effects, voice conversion — 9 ElevenLabs models, and 100+ audio models overall, work the same way as video.
 
-**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it onto any media card, generate on it. Or scrub any frame of any timeline video and click **Extract frame** — the button shows your live playhead timecode so you pick the frame you want, not "roughly." Every frame you extract feeds any fal.ai model instantly.
+**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or scrub any frame of any timeline video and click **Extract frame** — the button shows your live playhead timecode so you pick the frame you want, not "roughly." Every frame you extract feeds any fal.ai model instantly.
 
 [Voice-over with ElevenLabs →](https://docs.modelbridge.app/academy/voice-over-elevenlabs/) · [Midjourney → Premiere →](https://docs.modelbridge.app/academy/midjourney-to-premiere/)
 
@@ -97,7 +96,7 @@ Every generation is tagged, priced, and logged. When the delivery goes out, so d
 
 - **Per-project attribution.** Tag each generation to a client or deliverable at the point of creation. Export HTML reports or CSV for external audit
 - **Commercial-license documentation.** modelBridge tracks fal.ai's `license_type` metadata per generation. Reports carry compliance badges showing the percentage of generations using commercially licensed models — so you can *document and demonstrate* your due diligence to clients. This is a convenience feature, not a legal guarantee — the source of truth remains each model's own license
-- **External AI costs.** Import Midjourney, RunwayML, ElevenLabs receipts via CSV. One dashboard for total AI spend across every tool
+- **External AI costs.** Import costs from Midjourney, KREA, Weavy — or any vendor — via a simple CSV template. One dashboard for total AI spend across every tool
 - **No markup, ever.** You pay fal.ai directly at their published rates using your own API key. modelBridge adds no per-generation fees
 
 [Commercial use →](https://docs.modelbridge.app/legal/commercial-use/) · [Cost tracking →](https://docs.modelbridge.app/guides/cost-tracking/)
@@ -106,7 +105,7 @@ Every generation is tagged, priced, and logged. When the delivery goes out, so d
 
 When fal.ai returns an error, you don't see raw JSON or HTTP status codes. Every error type is translated into what happened, why, and what to do — with a link to the specific fal.ai docs page when one exists. The exact constraint from fal.ai's structured response drives live copy: *"Image too small (128×128, minimum 300×300)"* rather than *"422 Unprocessable Entity."*
 
-Every learned constraint gets cached per model — the same rejection never costs you a second time.
+Every learned constraint gets cached per model and enforced before the next attempt — the same rejection is caught before it can cost you again.
 
 [Error handling →](https://docs.modelbridge.app/troubleshooting/how-errors-work/)
 
@@ -128,13 +127,13 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 
 | Feature | What it does |
 |---|---|
-| **Discovery & filters** | Typo-tolerant search, paste-by-endpoint-ID, category filters, LM Arena leaderboard rankings updated nightly, "Today" filter for new models. [Docs →](https://docs.modelbridge.app/features/trending/) |
+| **Discovery & filters** | Paste-tolerant search (smart quotes, dashes and separator variants all match), paste-by-endpoint-ID, category filters, LM Arena leaderboard rankings refreshed several times a day, "Today" filter for new models. [Docs →](https://docs.modelbridge.app/features/trending/) |
 | **Source Monitor preview** | Evaluate results at full res in Premiere's own Source Monitor. Set In/Out to import a subclip. [Docs →](https://docs.modelbridge.app/features/preview-before-import/) |
 | **Mask editor** | Paint inpainting masks in-panel — brush, zoom, eraser, undo. No Photoshop roundtrip. [Docs →](https://docs.modelbridge.app/guides/inpainting/) |
 | **Trial + license lifecycle** | 14-day trial with full access. 7-day offline grace period. 2-device seat management. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
 | **Self-learning validation** | When a model rejects your media, modelBridge remembers the constraint and catches it automatically next time. [Docs →](https://docs.modelbridge.app/reference/self-learning/) |
 | **Over-the-air updates** | New error messages, endpoint changes, feature flags — delivered within an hour, no reinstall. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
-| **Background generations** | Long generations move to background automatically. Sound notification when ready. Survives Premiere restart. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
+| **Background generations** | Generations don't hold you hostage — switch models and the run keeps going in the background; restart Premiere and a recovery bar picks it up. Sound notification when ready. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
 | **700+ parameter explanations** | Every non-obvious input has a plain-language tooltip and an Academy link when the topic deserves one. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
 
 ---
@@ -146,11 +145,13 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 | Tier | What it means | When you see it |
 |---|---|---|
 | **Estimated** | A forecast from curated pricing data for your exact settings | Before you run — updates live as you tweak parameters |
-| **From** | A minimum starting price; the final cost can be higher | Before you run, for newer models where surcharges aren't mapped yet |
+| **From** | A starting price — a floor when it comes from fal.ai's published minimum; for not-yet-verified estimates the final cost can be higher or lower | Before you run, for newer models where surcharges aren't mapped yet |
 | **No price** | No pricing source has a rate — modelBridge never invents a number | Before you run, when pricing isn't published |
 | **Metered** | Priced from the usage fal.ai reported for the run — modelBridge's own calculation, not a copy of your fal.ai invoice | After the run |
 | **Calculated** | The run finished but fal.ai reported no usage, so this is modelBridge's formula for your settings | After the run |
-| **Learned** | Sharpened from the median of your own metered runs for this model and settings | After a few runs with the same config |
+| **Learned** | Sharpened from the median of your last few metered runs for this model and settings | After a few runs with the same config |
+
+Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran.
 
 You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
 
@@ -188,16 +189,17 @@ A detailed comparison against hardcoded AI plugins and browser-based tools is be
 
 ## Security and privacy
 
-**Cleanup features never see your footage.** Silence removal, timeline scans, cuts, ripple-delete — all run on your machine through ffmpeg and Premiere. Claude only receives timestamps and clip names to reason about your edit. Nothing uploads for these tools.
+**The heavy lifting stays on your machine.** Silence removal, timeline scans, cuts, ripple-delete — the media processing for all of these runs locally through ffmpeg and Premiere. Your footage is never uploaded to perform them.
 
-For NDA work, every cleanup feature is safe on client material. See the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for a paragraph you can hand to legal.
+What does leave your machine, and where it goes:
 
-Two features touch the cloud — both opt-in per action:
+- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, timecodes, file locations, effect settings — and can include a few preview frames of your selected clip so it can see what you see. Conversations never touch modelBridge servers
+- **Visual scan** sends sampled keyframes to Anthropic when you ask Claude to look at footage
+- **Generate tab** sends media to fal.ai when you click Generate
 
-- **Visual scan** sends a handful of sampled keyframes to Anthropic when you explicitly ask Claude to look at footage
-- **Generate tab** sends media to fal.ai when you use it
+For NDA work, see the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for what each feature does and doesn't share.
 
-Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers. Anonymous error telemetry (error type + fal.ai endpoint + plugin version, no prompts or media) is enabled by default and can be disabled in Settings.
+Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers unless you opt in to anonymous analytics. Anonymous error telemetry (error type + fal.ai endpoint + plugin version, no prompts or media) is off by default — you opt in from Settings.
 
 Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
 
@@ -214,7 +216,7 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 ## Links
 
 - **[Documentation](https://docs.modelbridge.app/what-is-modelbridge/)** — 75+ pages: guides, features, Academy, troubleshooting, legal
-- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — 1,200+ models, refreshed every 30 minutes
+- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — 1,200+ models, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
 - **[Roadmap](ROADMAP.md)** — Team Cost Intelligence, Agent Mode expansion
