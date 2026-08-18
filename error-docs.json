@@ -1,9 +1,30 @@
 {
   "_meta": {
-    "version": 3,
-    "updatedAt": "2026-07-21T00:00:00Z"
+    "version": 8,
+    "updatedAt": "2026-08-16T00:00:00Z"
   },
   "entries": {
+    "MEDIA_TYPE_MISMATCH": {
+      "slug": "media-type-mismatch",
+      "cause": "The file you attached is not one of the formats this model accepts. Every model declares its own input type — an image model will not take a video clip, and vice versa. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
+      "steps": [
+        "Check the formats named in the message — those are what this model accepts",
+        "To turn a video frame into an image, use the Extract frame button on the card",
+        "To convert a clip, use File > Export > Media in Premiere Pro",
+        "Or pick a different model that accepts the file you have"
+      ],
+      "externalLinks": []
+    },
+    "DUAL_MEDIA_TYPE_MISMATCH": {
+      "slug": "dual-mode-media-type-mismatch",
+      "cause": "Dual Mode shares one selected clip between both models. Each model is validated against its own requirements — a clip that satisfies the first model can still be the wrong media type for the second. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
+      "steps": [
+        "Select a different clip on the timeline or in your project bin that matches what the second model needs",
+        "Or paste a URL into the first model’s own media field — this replaces the shared clip for both models, not just the second one",
+        "Or choose a different secondary model that accepts the media type your current clip provides"
+      ],
+      "externalLinks": []
+    },
     "LOCAL_SERVER_DOWN": {
       "slug": "local-server-down",
       "cause": "The local helper server that modelBridge uses to communicate with Premiere Pro is not running or cannot be reached.",
@@ -119,7 +140,7 @@
       "cause": "API keys can be scoped to specific permissions. The key saved in modelBridge is missing the scope required by this model.",
       "steps": [
         "Generate a new API key with full permissions on fal.ai",
-        "Replace the key in the API & Support tab",
+        "Replace the key in the Settings tab",
         "If using a team key, ask your admin to grant the required scope"
       ],
       "externalLinks": [
@@ -133,7 +154,7 @@
       "slug": "invalid-api-key",
       "cause": "Your fal.ai API key is missing, expired, or was entered incorrectly.",
       "steps": [
-        "Open the API & Support tab in modelBridge",
+        "Open the Settings tab in modelBridge",
         "Delete the current key and paste a fresh one from fal.ai",
         "Click Save and try generating again"
       ],
@@ -287,7 +308,7 @@
       "slug": "license-device-limit",
       "cause": "Your modelBridge license has reached the maximum number of activated devices. Each license allows a limited number of simultaneous activations.",
       "steps": [
-        "Go to the API & Support tab and click 'Use on a different device' to release this device",
+        "Go to the Settings tab and click 'Use on a different device' to release this device",
         "Or manage your devices at app.lemonsqueezy.com/my-orders",
         "After releasing a device, try activating again"
       ],
@@ -448,6 +469,27 @@
       ],
       "externalLinks": []
     },
+    "PREMIERE_TIMEOUT_UNCONFIRMED": {
+      "slug": "premiere-not-responding",
+      "cause": "Premiere Pro stopped responding, so modelBridge stopped waiting — but the change may already have been applied. Doing it again could apply it twice.",
+      "steps": [
+        "Check your timeline or project to see whether the change is already there",
+        "If it is not, ask again in the chat",
+        "If Premiere is still unresponsive, look for an open dialog box, then restart it"
+      ],
+      "externalLinks": []
+    },
+    "PREMIERE_TIMEOUT": {
+      "slug": "premiere-not-responding",
+      "cause": "Premiere Pro stopped answering while modelBridge was waiting on it, so the operation was cancelled rather than left hanging. The usual reason is a dialog box open somewhere in Premiere — an unsaved-changes prompt, a missing-media warning, a codec message — which blocks scripting until someone clicks it. A very large project or import can also take longer than the time allowed. Nothing was sent to fal.ai and nothing was charged.",
+      "steps": [
+        "Look at Premiere Pro for an open dialog box and dismiss it — check other monitors, it can open behind the panel",
+        "Try the same request again — this usually succeeds once Premiere is free",
+        "If it was a large project open, save, or import, give it a moment and retry",
+        "If Premiere stays unresponsive, restart it and reopen the modelBridge panel"
+      ],
+      "externalLinks": []
+    },
     "EXTENDSCRIPT": {
       "slug": "premiere-scripting-error",
       "cause": "A Premiere Pro scripting operation failed. This can happen when Premiere Pro is busy, no sequence is open, or the timeline state is unexpected.",
@@ -483,6 +525,51 @@
         "Try a different model"
       ],
       "externalLinks": []
+    },
+    "GENERATION_NOT_FOUND": {
+      "slug": "generation-not-found",
+      "cause": "The generation you were waiting for can no longer be found on fal.ai. Requests expire on fal.ai’s side after a while — this usually happens when a run was left unfinished for a long time, for example across several days or restarts. The model itself is fine.",
+      "steps": [
+        "Open your fal.ai dashboard and check your recent requests — if the run finished, the result can be downloaded from there",
+        "If it is not on the dashboard either, the run never completed — generate again",
+        "Your cost history in modelBridge shows whether fal.ai reported any usage for this run"
+      ],
+      "externalLinks": [
+        {
+          "label": "fal.ai Dashboard",
+          "url": "https://fal.ai/dashboard"
+        }
+      ]
+    },
+    "RUNNER_FAILURE": {
+      "slug": "runner-failure",
+      "cause": "The fal.ai machine assigned to this generation crashed, or fal.ai could not get one at all. This happens on fal.ai’s side — usually when a model is at capacity — and it is not caused by your input or by modelBridge. The run did not finish.",
+      "steps": [
+        "Try again — a fresh run gets a new server",
+        "If it keeps happening, the model may be at capacity right now — wait a few minutes or try a different model",
+        "Check fal.ai’s status page if several models are affected"
+      ],
+      "externalLinks": [
+        {
+          "label": "fal.ai Status",
+          "url": "https://status.fal.ai"
+        }
+      ]
+    },
+    "RESULT_FETCH_FAILED": {
+      "slug": "result-not-retrieved",
+      "cause": "Your generation finished on fal.ai, but modelBridge could not download the result. The run itself succeeded — the file exists on fal.ai — so generating again would create (and pay for) a second run of the same thing.",
+      "steps": [
+        "Open your fal.ai dashboard — the file is under your recent requests and can be downloaded from there",
+        "Check your internet connection and use Check status to try the download again",
+        "Only generate again if the result is not on your dashboard"
+      ],
+      "externalLinks": [
+        {
+          "label": "fal.ai Dashboard",
+          "url": "https://fal.ai/dashboard"
+        }
+      ]
     }
   }
 }
