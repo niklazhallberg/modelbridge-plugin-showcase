@@ -41,10 +41,11 @@ SOFTWARE.
 
 ## Local runtime dependencies
 
-modelBridge's local backend spawns a Node.js Express server and, when available on the user's system, invokes FFmpeg and FFprobe as external processes to extract media from Premiere Pro.
+modelBridge's local backend runs a Node.js Express server and invokes FFmpeg and FFprobe as external processes to extract media from Premiere Pro. FFmpeg and FFprobe ship with the plugin as LGPL-only builds; when they are absent the backend falls back to a copy already present on the user's system.
 
 - Node.js and Express — MIT License
 - Sharp (image processing) — Apache-2.0 License
-- FFmpeg / FFprobe — LGPL-2.1 / GPL-2, invoked as external processes (not linked or bundled)
+- libvips (image processing library used by Sharp) — LGPL-3.0-or-later, dynamically linked and user-replaceable
+- FFmpeg / FFprobe — LGPL, bundled as LGPL-only builds (compiled without GPL or non-free components) and invoked as external processes, never linked
 
 An online copy of these attributions is also published at <https://docs.modelbridge.app/legal/attributions/>.

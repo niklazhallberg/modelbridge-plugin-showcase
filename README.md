@@ -229,7 +229,7 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 
 modelBridge is built for professional editors — freelancers, agency teams, and motion designers who use AI generation as part of real client-delivery work.
 
-Actively migrating toward Adobe's UXP through an incremental adapter strategy — all new code writes against the target model.
+Actively preparing for Adobe's UXP: platform-specific code is moving behind adapters, and the parts that cannot be adapted — process spawning, the script-tag loading model, and timeline operations that depend on Premiere's unsupported QE DOM — are measured and documented rather than assumed away. See [UXP_MIGRATION.md](UXP_MIGRATION.md).
 
 Built by [Niklaz Hallberg](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
 

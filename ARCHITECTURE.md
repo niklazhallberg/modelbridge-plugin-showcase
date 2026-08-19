@@ -130,7 +130,7 @@ modelBridge is a deep Premiere Pro integration, not a standalone panel that happ
 
 **Media awareness.** The plugin reads clip properties from the timeline — dimensions, duration, file path, track index — and uses them for validation, media extraction, and context-aware import decisions (replace in-place vs. insert at playhead vs. route to audio track).
 
-**ExtendScript bridge.** An ExtendScript bridge of 130+ host functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer designed to be swapped for UXP equivalents without changing business logic — all new code routes through it.
+**ExtendScript bridge.** A host layer of 261 global ExtendScript functions (measured 2026-08-19) handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 74 % of host calls route through it today, with the agent layer fully converted and the generation pipeline deliberately left until after launch. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
 
 ---
 
@@ -241,10 +241,11 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 | Dependency | Role | License |
 |---|---|---|
 | Node.js + Express | Local backend server | MIT |
-| FFmpeg / FFprobe | Media extraction (video frames, audio, metadata) | LGPL-2.1 / GPL-2 (used as external process, not linked) |
+| FFmpeg / FFprobe | Media extraction (video frames, audio, metadata) | LGPL — bundled as LGPL-only builds, invoked as external processes |
 | Sharp | Image processing (thumbnails, format conversion) | Apache-2.0 |
+| libvips | Image processing library used by Sharp | LGPL-3.0-or-later (dynamically linked, user-replaceable) |
 
-FFmpeg is invoked as an external process — not linked or bundled — which preserves LGPL compliance. All other runtime dependencies are permissively licensed.
+FFmpeg and FFprobe ship with the plugin as **LGPL-only builds** — compiled without the GPL and non-free components, verified from the build configuration of each binary — and are invoked as separate processes, never linked. libvips is dynamically linked and user-replaceable. Complete attributions, licence texts and build provenance ship with the plugin. All other runtime dependencies are permissively licensed.
 
 ### Proprietary components
 
@@ -263,9 +264,11 @@ FFmpeg is invoked as an external process — not linked or bundled — which pre
 
 Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is designed with this migration in mind — not as a future project, but as an active constraint on all current development.
 
-**Migration plan.** A detailed migration plan is in place, covering interface contracts, an API parity mapping between ExtendScript and UXP equivalents, and a phased timeline. The migration architecture defines four adapter bridges (storage, host communication, shell access, and credential management) that isolate all platform-specific code — the goal is to swap implementations without rewriting business logic.
+**Migration plan.** A detailed migration plan is in place, covering interface contracts, an API parity mapping between ExtendScript and UXP equivalents, and a phased timeline. Adapter layers isolate platform-specific code where that is possible — two surfaces (path construction, external URLs) are at zero remaining direct calls; host calls are at 74 %; file I/O at 43 %, all measured 2026-08-19.
 
-**Migration-first development policy.** All new code follows migration-aware rules enforced across every contribution. New file system access goes through a storage abstraction. New Premiere Pro communication goes through the host adapter. New platform-specific calls are not added directly — they route through the bridge layer. All new storage and host APIs are async-first, matching UXP's async model even though CEP supports synchronous calls. This means the codebase is migrating incrementally with every feature, not accumulating debt that needs to be resolved later.
+**It is a reconstruction, not a port, and three parts of it cannot be adapted at all.** UXP cannot spawn child processes, so the local backend — 13 of whose routes invoke FFmpeg or FFprobe — has to become a separately installed companion application. The panel's 106 script tags must become a bundle. And 22 user-facing timeline operations currently depend on Premiere's unsupported QE DOM, with no supported equivalent today. Our own parity table maps 23 of 261 host functions (8.8 %). The full measurements, the open questions to Adobe, and the places our own early decisions were wrong are in [UXP_MIGRATION.md](UXP_MIGRATION.md).
+
+**Migration-first development policy.** New code follows migration-aware rules enforced on every contribution: file system access through a storage abstraction, Premiere Pro communication through the host adapter, no new direct platform calls. The policy also requires new storage and host APIs to be async-first, matching UXP's async model even though CEP allows synchronous calls — and the storage adapter itself was built synchronous, in violation of that rule, which turns its eventual replacement into a signature change at every call site. That is our own error, reported in [UXP_MIGRATION.md](UXP_MIGRATION.md) alongside what the policy did buy.
 
 **Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), CI automation for the existing test suites, and incremental type annotations.
 

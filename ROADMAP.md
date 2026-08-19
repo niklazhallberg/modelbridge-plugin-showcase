@@ -69,7 +69,9 @@ Users bring their own Anthropic API key. Measured across real usage profiles (20
 
 modelBridge currently runs on CEP (Chromium Extensibility Platform), Adobe's established extension framework for Premiere Pro. Adobe is transitioning to UXP (Unified Extensibility Platform) as the modern replacement.
 
-The modelBridge architecture is already designed for this migration. Platform-specific code is being isolated behind adapter layers — storage, host communication, shell access, and credential management each have defined interfaces that can be swapped without rewriting business logic, and all new code routes through them. The `getDataDir()` storage abstraction and async-first API design mean the transition is incremental, not a rewrite.
+Platform-specific code is being isolated behind adapter layers, and two surfaces are already at zero remaining direct calls. The rest is not incremental: UXP cannot spawn child processes, so the local backend becomes a separately installed companion application; the panel's script-tag loading model has to become a bundle; and a set of timeline operations in the agent layer depend on Premiere's unsupported QE DOM, for which no supported equivalent exists today.
+
+[UXP_MIGRATION.md](UXP_MIGRATION.md) carries the measurements, the open questions to Adobe, the No-Go criteria for our beta, and the places our own early decisions turned out to be wrong.
 
 This migration does not affect current functionality or users. The CEP version will continue to work on all supported Premiere Pro versions.
 
