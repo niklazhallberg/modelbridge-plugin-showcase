@@ -1,5 +1,5 @@
 {
-  "version": "1.6.1",
+  "version": "1.7.0",
   "updatedAt": "2026-08-18T00:00:00Z",
   "minPluginVersion": "1.0.1",
   "enabled": true,
@@ -35,13 +35,6 @@
       "version": "1.1.0",
       "enabled": false,
       "note": "Deliberately off 2026-08-18. The channel is real and pinned, but the agent model allowlist and per-model pricing go live to every installed plugin within an hour with no staging step. BUILTIN_CONFIG (node/claude-models.js) serves until that is a decision someone takes on purpose. Turning it on = publish claude-models.json to the showcase and flip this to true."
-    },
-    "pricing-supplements": {
-      "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/pricing-supplements.json",
-      "sha256": "3b8b7899b14228b1314a5208d12a7f538f91ee32b1751330151f95c2dbc3f8bc",
-      "version": "1.0.2",
-      "enabled": false,
-      "note": "Off by IP decision, not by oversight. The public showcase copy was redacted to a 3-entry example_only stub on 2026-07-13; the real 67-entry table ships bundled at node/public/pricing-supplements.json and is the effective production source. The sha256 here is the real table's, so even flipping this to true fails closed against the stub. Resume remote deploys only when the private endpoint ships (ROADMAP P1)."
     },
     "endpoint-migrations": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/endpoint-migrations.json",

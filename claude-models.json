@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "version": "1.1.0",
+  "updatedAt": "2026-07-23T00:00:00Z",
+  "defaultModel": "claude-haiku-4-5-20251001",
+  "costSavingModel": "claude-haiku-4-5-20251001",
+  "escalationModel": "claude-sonnet-4-6",
+  "models": [
+    {
+      "id": "claude-haiku-4-5-20251001",
+      "label": "Haiku 4.5",
+      "promptName": "Claude Haiku 4.5",
+      "desc": "Fastest, best value",
+      "tip": "Fast and affordable. Handles most editing tasks, QC scans, and quick questions with ease.",
+      "recommended": true,
+      "pricing": { "input": 1, "output": 5, "cacheRead": 0.10, "cacheWrite": 1.25 }
+    },
+    {
+      "id": "claude-sonnet-4-6",
+      "label": "Sonnet 4.6",
+      "promptName": "Claude Sonnet 4.6",
+      "desc": "Best for complex reasoning",
+      "tip": "Use for multi-step workflows, nuanced creative decisions, or when Haiku’s answers feel too shallow.",
+      "recommended": false,
+      "pricing": { "input": 3, "output": 15, "cacheRead": 0.30, "cacheWrite": 3.75 }
+    }
+  ]
+}
