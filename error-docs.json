@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": 8,
-    "updatedAt": "2026-08-16T00:00:00Z"
+    "version": 9,
+    "updatedAt": "2026-08-20T00:00:00Z"
   },
   "entries": {
     "MEDIA_TYPE_MISMATCH": {
@@ -183,7 +183,8 @@
           "label": "fal.ai Support",
           "url": "https://fal.ai/dashboard/support"
         }
-      ]
+      ],
+      "_costTermAllow": "describes fal.ai's own billing model, states no modelBridge dollar"
     },
     "RATE_LIMIT": {
       "slug": "rate-limited",
@@ -270,12 +271,12 @@
       "steps": [
         "Close and reopen the modelBridge panel to retry",
         "If this keeps happening, check that your disk has free space",
-        "Contact support at modelbridge.app if the issue persists"
+        "If it keeps happening, send a report from Settings → Plugin Feature & Bug Report"
       ],
       "externalLinks": [
         {
-          "label": "modelBridge Support",
-          "url": "https://modelbridge.app/support"
+          "label": "Report a problem",
+          "url": "https://docs.modelbridge.app/troubleshooting/reporting-a-bug/"
         }
       ]
     },
@@ -293,14 +294,14 @@
       "slug": "license-invalid",
       "cause": "Your modelBridge subscription could not be verified. The license may have expired, or the license server is temporarily unreachable.",
       "steps": [
-        "Check your subscription status at modelbridge.app",
+        "Check your subscription status in your Lemon Squeezy account",
         "Restart Premiere Pro after renewing",
         "If the issue persists, check your internet connection — license verification requires a brief server check"
       ],
       "externalLinks": [
         {
-          "label": "modelBridge Account",
-          "url": "https://modelbridge.app"
+          "label": "Manage your subscription",
+          "url": "https://app.lemonsqueezy.com/my-orders"
         }
       ]
     },
