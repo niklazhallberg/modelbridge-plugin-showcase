@@ -1,0 +1,87 @@
+name: Verify OTA payloads
+
+# THIS IS THE PUBLISH PATH. The plugin repo's pre-commit hook checks the
+# authoring copies; this checks what is actually SERVED, which is where an
+# unpinned payload reaches installed panels.
+#
+# The fetchers fail CLOSED: a payload whose sha256 does not match the manifest
+# is rejected and the bundled default serves instead — silently. So drift here
+# does not break loudly, it quietly disables a money or gating channel while
+# every surface keeps reporting success.
+#
+# Found the day this was written (2026-08-20), both live in production:
+#   - claude-models.json declared in the manifest, never published -> HTTP 404
+#   - pricing-supplements.json serving a schema-only example against a pin for
+#     the real 67-entry table -> permanently rejected
+# Neither had any signal. This workflow is that signal.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Every declared payload exists and matches its pin
+        run: |
+          python3 - <<'PY'
+          import json, hashlib, os, sys
+
+          MANIFEST = 'ota-manifest.json'
+          if not os.path.exists(MANIFEST):
+              print('::error::ota-manifest.json is missing — nothing declares what is published.')
+              sys.exit(1)
+
+          m = json.load(open(MANIFEST))
+          files = m.get('files') or {}
+          if not files:
+              print('::error::The manifest declares no payloads. A manifest that checks nothing is not a manifest.')
+              sys.exit(1)
+
+          fail = False
+          # Derived from the manifest, never hardcoded: a payload added tomorrow
+          # is covered from the moment it is declared. The predecessor of this
+          # check looped over a hardcoded two of five.
+          for key, spec in files.items():
+              fname = spec.get('url', '').rsplit('/', 1)[-1]
+              pin = spec.get('sha256')
+              ver = spec.get('version', '?')
+
+              if not fname:
+                  print(f'::error::{key}: manifest entry has no url.')
+                  fail = True; continue
+              if not pin:
+                  print(f'::error::{key}: declared with NO sha256. An unpinned money/gating payload is unauthenticated.')
+                  fail = True; continue
+              if not os.path.exists(fname):
+                  print(f'::error::{key}: manifest declares {fname} (v{ver}) but it is NOT PUBLISHED. '
+                        f'Every fetch 404s; the channel is inert and the bundled default serves forever. '
+                        f'Either publish the file, or remove its manifest entry — a declaration nothing '
+                        f'serves is a channel that looks alive.')
+                  fail = True; continue
+
+              actual = hashlib.sha256(open(fname, 'rb').read()).hexdigest()
+              if actual != pin:
+                  print(f'::error::{key}: {fname} does not match its pin (v{ver}). '
+                        f'declared={pin} actual={actual}. The fetcher REJECTS this payload, so whatever '
+                        f'it contains never reaches a user. Publish the manifest and the payload together.')
+                  fail = True; continue
+
+              # Payload and manifest must agree about which version is published.
+              try:
+                  inner = json.load(open(fname)).get('_meta', {}).get('version')
+              except Exception:
+                  inner = None
+              print(f'  OK  {key:22s} {fname:28s} manifest v{ver}' + (f'  payload _meta v{inner}' if inner is not None else ''))
+
+          print()
+          if fail:
+              print(f'::error::OTA payload verification FAILED over {len(files)} declared payload(s).')
+              sys.exit(1)
+          print(f'All {len(files)} declared OTA payload(s) are published and match their pins.')
+          PY
