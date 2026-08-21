@@ -193,7 +193,7 @@ A detailed comparison against hardcoded AI plugins and browser-based tools is be
 
 What does leave your machine, and where it goes:
 
-- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, timecodes, file locations, effect settings — and can include a few preview frames of your selected clip so it can see what you see. Conversations never touch modelBridge servers
+- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, timecodes, file locations, effect settings. While a timeline clip is selected it also sends 3–12 sampled frames of that clip with **every** message, so the agent can see what you see. That is on by default and switched off permanently in Settings → Privacy → "Timeline frames to the agent". Conversations never touch modelBridge servers
 - **Visual scan** sends sampled keyframes to Anthropic when you ask Claude to look at footage
 - **Generate tab** sends media to fal.ai when you click Generate
 

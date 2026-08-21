@@ -10,7 +10,7 @@ modelBridge is a local-first application. The plugin runs entirely inside Adobe 
 
 All user preferences, generation history, API keys, installed models, cost logs, and learned constraints are stored locally on the user's machine. No modelBridge-operated database holds user-generated content or creative assets.
 
-The only modelBridge-operated backend is a Cloudflare Worker that handles three functions: anonymous error telemetry aggregation, license validation (via LemonSqueezy webhooks), and catalog monitoring. This Worker has no access to user prompts, media, generated content, or fal.ai API keys. The one exception is user-initiated: a bug report you choose to send carries your message, optionally your name and email, your prompt only if you tick that box (off by default on every report), and any screenshots you attach — all reviewed by you before sending, retained 180 days.
+modelBridge operates two Cloudflare Workers and nothing else. The first handles license validation (via LemonSqueezy webhooks), catalog monitoring, the in-plugin news feed, model insights, and opt-in error telemetry and analytics. The second backs Mobile Preview: when you send a result to your phone it receives a link to the fal.ai-hosted media, the model's name and an anonymous install ID — never the media itself. This Worker has no access to user prompts, media, generated content, or fal.ai API keys. The one exception is user-initiated: a bug report you choose to send carries your message, optionally your name and email, your prompt only if you tick that box (off by default on every report), and any screenshots you attach — all reviewed by you before sending, retained 180 days.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -56,14 +56,14 @@ The only modelBridge-operated backend is a Cloudflare Worker that handles three 
 | Data Category | What It Contains | Storage Location | Retention | Legal Basis (GDPR Art. 6) | User Control |
 |---|---|---|---|---|---|
 | **fal.ai API key** | User-entered API key | Local `localStorage` + disk file | Until user deletes | Contract (Art. 6(1)(b)) | View, change, or delete in Settings |
-| **Generation history** | Prompts, file paths, model used, cost, timestamp | Local disk (per-project log files) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset in Costs tab (requires typing "DELETE") |
+| **Generation history** | Prompts, file paths, model used, cost, timestamp | Local disk (per-project log files) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset in the Billing tab, behind a confirmation step |
 | **Installed models** | Model IDs, schemas, learned constraints, pricing | Local `localStorage` + disk file | Until user removes | Contract (Art. 6(1)(b)) | Remove individual models or reset all |
 | **User settings** | Preferences, UI state, feature toggles | Local `localStorage` + disk file | Until user resets | Contract (Art. 6(1)(b)) | Settings → Reset |
 | **Cost history** | Per-generation costs, currency rates, project tags | Local disk (cost log files) | Until user resets | Contract (Art. 6(1)(b)) | Manual reset with confirmation |
 | **Learned constraints** | Per-model dimension/duration/size limits from errors | Local `localStorage` + disk file | 30-day soft TTL, refreshed on re-learn | Contract (Art. 6(1)(b)) | Cleared on model removal |
 | **Error telemetry** | Error type, HTTP status, model endpoint, plugin version | Cloudflare KV (aggregated) | Indefinite (aggregated counts only) | Legitimate Interest (Art. 6(1)(f)) | Opt-in — off by default; enable in Settings → Privacy |
 | **Behavioral analytics** | Anonymous event counts (gen_start, gen_done, model_sel, etc.) | Cloudflare KV (per-installation daily aggregate) | 90-day TTL per installation; 365-day global aggregate | Consent (Art. 6(1)(a)) | Opt-in only; disable in Settings → Privacy |
-| **Installation ID** | SHA-256 hash (16-char hex) of machine signals | Local `localStorage` | Until cache clear | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in |
+| **Installation ID** | SHA-256 hash (16-char hex) of four display and locale signals | Local `localStorage` | Derived, not random — clearing local data recreates the same value | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in; switching analytics off is what stops it being sent |
 | **License key** | LemonSqueezy license key + machine instance ID | Local `localStorage` + disk; Cloudflare KV | Active: 3 years; ended: 90 days | Contract (Art. 6(1)(b)) | Deactivate in Settings; DELETE /api/user-data |
 | **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (subscription record) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
 | **IP address** | Request IP for rate limiting | In-memory only (Worker) | ~60 seconds (request lifecycle) | Legitimate Interest (Art. 6(1)(f)) | Not stored; transient only |
