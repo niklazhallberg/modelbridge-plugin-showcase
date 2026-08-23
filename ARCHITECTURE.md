@@ -16,7 +16,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ## Core Design Principles
 
-**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how over 1,200 models are supported without plugin updates — and how new models become available within hours of launch, not weeks.
+**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how over 1,200 models are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
@@ -30,7 +30,9 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ## Model Discovery & Availability
 
-modelBridge continuously monitors the AI model ecosystem. When a provider launches a new model, the system detects it automatically — typically within hours of the model going live.
+modelBridge continuously monitors the AI model ecosystem. When a provider launches a new model, the system detects it automatically — no one adds it by hand, and no plugin release is involved.
+
+**The cadence, stated rather than promised.** The cloud layer wakes every two hours and runs one of three phases in rotation — discover, validate, publish — so each phase comes round roughly every six hours, and the pointer only advances on success, so a failed pass retries rather than skipping ahead. A new model therefore has to be seen, then verified, then published, and what an editor sees adds a CDN hop and the panel's own catalogue cache on top. We describe this as same-day rather than same-hour because the honest bound is the sum of those steps, not the interval of any one of them.
 
 **What happens next depends on what the provider has published:**
 
@@ -91,7 +93,7 @@ flowchart TD
 
 modelBridge integrates with fal.ai at multiple API levels — not just the generation endpoint.
 
-**Model catalog.** The plugin consumes fal.ai's authenticated model listing and browse APIs, including popularity ranking, category classification, and schema endpoints. The catalog is treated as a live data source, not a static list — new models, schema changes, and retirements are detected and handled automatically.
+**Model catalog.** The plugin consumes fal.ai's authenticated model listing and browse APIs, including popularity ranking, category classification, and schema endpoints. The catalog is treated as a live data source, not a static list — new models, schema changes, and retirements are detected and handled automatically. Why the architecture is built on this catalogue rather than a hand-picked subset is set out in [Why fal.ai](https://docs.modelbridge.app/why-fal-ai/).
 
 **Schema parsing.** Every model's OpenAPI specification is fetched, parsed, and used to generate the complete UI — input fields, validation rules, media requirements, and parameter constraints. The plugin supports both fal.ai's queue API and platform API endpoints, with automatic fallback between them.
 
@@ -111,6 +113,8 @@ Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro inte
 - **Finds a way around technical limits.** When Premiere's scripting can't cross a boundary directly, Adept looks for a workaround that still reaches the goal, instead of giving up or handing the problem back.
 - **Checks its own work.** Timeline-shape edits are re-read from the real timeline after they run, and when a change can't be confirmed the agent says so instead of reporting success.
 - **Honest by design.** Adept says plainly when something genuinely can't be done, and never guesses at a cause it can't see.
+- **Reports its own coverage.** Tools that sample rather than read everything return how much of the request they covered — counts of what was expected against what was produced, plus named lists of what was never opened and what could not be read. The schemas instruct the model that a confident verdict over an unread item is a false claim. A truncated result otherwise looks exactly like a complete one, which is the failure mode this closes.
+- **Cannot spend money by itself.** A generation requested in chat is staged, not started: inputs resolved against the model's schema, validated, and returned with a cost estimate. Firing it requires a button the agent can only ask for, and the click re-checks that the model and the media are still the ones that were approved — refusing rather than re-binding if either drifted. The gate is code on the click path, not an instruction in a prompt.
 
 The result: Adept solves problems a raw model would hand back to the user.
 
@@ -118,7 +122,7 @@ The result: Adept solves problems a raw model would hand back to the user.
 
 **Available models.** Claude Haiku 4.5 (default, fast + cheap) and Claude Sonnet 4.6 (deeper reasoning). Editors switch per conversation.
 
-**Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure.
+**Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure. Absolute media paths are replaced with opaque, session-scoped references at a single choke point before anything is sent and resolved back locally on return — a sequence counter rather than a hash, since a hash would be stable across sessions and would itself identify the file. Filenames still travel, because the agent has to name the clip; the boundary is stated in the source rather than implied.
 
 ### Adobe Premiere Pro
 
@@ -250,6 +254,8 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 | libvips | Image processing library used by Sharp | LGPL-3.0-or-later (dynamically linked, user-replaceable) |
 
 FFmpeg and FFprobe ship with the plugin as **LGPL-only builds** — compiled without the GPL and non-free components, verified from the build configuration of each binary — and are invoked as separate processes, never linked. libvips is dynamically linked and user-replaceable. Complete attributions, licence texts and build provenance ship with the plugin. All other runtime dependencies are permissively licensed.
+
+The macOS binaries are built from source rather than downloaded, and the build is a deliberately small one: `--disable-everything` with an explicit allowlist of demuxers, decoders, encoders, muxers and filters, `--disable-autodetect`, and **`--disable-network`** — leaving `file` and `pipe` as the only two protocols compiled in. The media tool the product shells out to for every extraction and probe therefore has no network code in it at all. Each architecture's full configure string and SHA-256 are recorded in `bin/ffmpeg-provenance.json`, which ships inside the extension, so the claim is checkable without trusting this document. See [NOTICE.md](NOTICE.md) for the linked libraries this build carries.
 
 ### Proprietary components
 

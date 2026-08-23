@@ -2,7 +2,7 @@
 
 **Every fal.ai model. Generated and imported inside Adobe Premiere Pro.**
 
-**An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,200 models today, more by the end of the week. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
+**An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,200 models today, and the number moves every week. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
 
 No browser tabs. No downloads. No manual imports. See the result in Premiere's Source Monitor, hit Import, and it lands on your timeline in the right place — automatically.
 
@@ -15,6 +15,23 @@ Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scali
 **Safe on confidential work** — your footage is never uploaded to clean up, scan or analyse a timeline. That work runs on your machine, through Premiere and ffmpeg. What each feature does send, and where, is set out in full: [Security and privacy →](#security-and-privacy)
 
 [Learn more about timeline import →](https://docs.modelbridge.app/features/timeline-import/)
+
+---
+
+## What to read, depending on what you are asking
+
+This repository is written for engineers evaluating the integration, not for editors using the product — the customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app). Five files, and each answers a different question.
+
+| If you want to know | Read |
+|---|---|
+| What it does, and why anyone would run it | The rest of this file |
+| How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, five open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
+| What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
+| Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
+| What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
+
+If you only open one, open `UXP_MIGRATION.md`. It is the file where the numbers have denominators and the mistakes are ours — including the adapter we built in the shape that makes its own replacement hardest, in the one place our own policy warned against it. Every figure in it is dated, because it measures a codebase that changes weekly.
 
 ---
 
@@ -31,7 +48,7 @@ That's how one plugin keeps up with 1,200 models and counting.
 
 > "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
 
-[Schema-driven UI →](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed →](https://docs.modelbridge.app/features/news-feed/)
+[Why fal.ai →](https://docs.modelbridge.app/why-fal-ai/) · [Schema-driven UI →](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed →](https://docs.modelbridge.app/features/news-feed/)
 
 ---
 
@@ -49,6 +66,25 @@ Ask in plain language. The agent reads your timeline, executes edits, verifies i
 The **Adept** layer tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. The result: it solves problems a raw model would hand back to you.
 
 Bring your own Anthropic API key. Two Claude models — Haiku 4.5 by default, one click to switch to Sonnet 4.6 for deeper reasoning. No markup. Session cost tracked in real time.
+
+### The agent can spend your money, and cannot do it alone
+
+Ask Adept to generate something and it does not call fal.ai. It stages the request: resolves every input against the model's schema, validates them, and returns the resolved parameters with a cost estimate. Then it stops. Starting the run requires a button the model can only *ask* for — it emits a token, the panel renders the button, and the click is what fires the generation through the same path the Generate tab uses, licence checks and cost gates included.
+
+An agent that prepares a paid API call and structurally cannot complete it without a human is, we think, the right shape for this. The gate is code on the click path, not a system-prompt instruction — the only version of it that survives a model deciding otherwise.
+
+**What you approved is what runs.** A click before spending is a policy anyone can claim. The harder part is the gap between approving a request and firing it, and two state checks run at the click to close it:
+
+- **The model must still be the one you approved.** If the staged request belongs to a different model than the one now selected, the click refuses. It does not fall back to the current selection.
+- **The media must still be the media you saw.** Media is extracted fresh at fire time and was never part of the staged parameters, so a timeline selection changed after approval — or a different file dropped into the card — would otherwise send something you never reviewed, at a cost you were quoted for something else. A signature captured at staging is compared at the click, and a mismatch refuses.
+
+Neither refusal re-binds silently and neither guesses. Both say what changed and ask you to set the generation up again, because re-preparing is what re-shows you the inputs and the cost — the approval is for a specific request, and a changed request needs a new one.
+
+### It reports what it did not look at
+
+Every tool that samples something — probing media, reading the Generate tab's card, watching a clip — returns how much of the request it actually covered, not just what it found. `probe_media` caps at 50 files per call and returns `expected`, `probed`, `produced`, `coverage`, a `notProbed` list of files never opened and a `failedPaths` list of files ffprobe could not read; its schema tells the model, in as many words, that *"a confident verdict over a file in notProbed is a false claim."* The visual scan carries the same contract in its own terms — `coverage`, `truncated`, `failedFrames`, `failedTimecodeRange`, and a `synthetic` flag on any per-frame entry that is a placeholder rather than a measurement, because a truncated vision response otherwise looks exactly like a complete one.
+
+This exists because the failure it prevents is invisible: a scan that silently covered 40 of 56 frames and reported "no issues" is indistinguishable from a clean sequence. The contract is what makes the difference legible to the model, and therefore to you.
 
 ### Prompt authoring for editors
 
@@ -159,34 +195,6 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 
 ---
 
-## Getting started
-
-1. **Subscribe** via the [subscription page](https://docs.modelbridge.app/billing/subscription/) — 14-day free trial
-2. **Install** the ZXP and paste your license key from the receipt email
-3. **Paste your fal.ai key** from [fal.ai/dashboard/keys](https://fal.ai/dashboard/keys), open modelBridge in Premiere Pro, and generate
-
-[Installation guide →](https://docs.modelbridge.app/getting-started/installation/)
-
----
-
-## Pricing
-
-**$19/month** or **$190/year** — save vs monthly. 14-day free trial with full access, no restrictions. A payment method is required to start the trial; you're not charged until it ends.
-
-- AI generation costs paid directly to fal.ai at their published rates
-- No credit systems, no lock-in, cancel anytime
-- If your subscription lapses → read-only mode. Your data stays. Reactivate anytime
-
-[Pricing details →](https://docs.modelbridge.app/billing/subscription/)
-
----
-
-## How it compares
-
-A detailed comparison against hardcoded AI plugins and browser-based tools is being finalized. In short: over 1,200 continuously-verified models vs. a handful hardcoded, results land on your timeline instead of your downloads folder, and you bring your own API key with no markup.
-
----
-
 ## Security and privacy
 
 **The heavy lifting stays on your machine.** Silence removal, timeline scans, cuts, ripple-delete — the media processing for all of these runs locally through ffmpeg and Premiere. Your footage is never uploaded to perform them.
@@ -197,11 +205,28 @@ What does leave your machine, and where it goes:
 - **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one automatic path — a few frames of the selected clip riding along with your messages, so the agent can see what you see — is on by default and switched off in Settings → Privacy → "Timeline frames to the agent"; turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
 - **Generate tab** sends media to fal.ai when you click Generate
 
+Two of those boundaries are enforced in the build rather than in policy, and both are checkable from files that ship:
+
+- **The media binary has no network code in it.** The FFmpeg that every extraction, probe and conversion runs through is compiled from source with `--disable-everything --disable-network --disable-autodetect` and an explicit allowlist, leaving exactly two protocols enabled: `file` and `pipe`. It cannot open a connection. The configure string and a per-architecture SHA-256 are recorded in `bin/ffmpeg-provenance.json`, which ships inside the extension — you do not have to take our word for the flags.
+- **Source folders never reach Anthropic.** Absolute media paths are swapped for opaque references at a single choke point before anything is sent, and resolved back locally on the return trip. The reference is a sequence counter rather than a hash of the path: a hash would be stable across sessions and would therefore be an identifier in its own right. Six tool schemas were rewritten to tell the model it is holding an opaque token and not a filesystem path. The filename still travels — the agent has to be able to name the clip — and that limit is stated in the source, not glossed.
+
 For NDA work, see the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for what each feature does and doesn't share.
 
 Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers unless you opt in to anonymous analytics. Anonymous error telemetry (error type + fal.ai endpoint + plugin version, no prompts or media) is off by default — you opt in from Settings.
 
 Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
+
+---
+
+## Getting started
+
+Subscribe, install the ZXP, paste your license key and your fal.ai key, and generate — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
+
+---
+
+## Pricing
+
+**$19/month** or **$190/year**, with a 14-day free trial. AI generation is paid directly to fal.ai at their published rates with no markup, no credit system and no revenue share; a lapsed subscription drops to read-only and your data stays. [Pricing details →](https://docs.modelbridge.app/billing/subscription/)
 
 ---
 
@@ -218,7 +243,9 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 - **[Documentation](https://docs.modelbridge.app/what-is-modelbridge/)** — 75+ pages: guides, features, Academy, troubleshooting, legal
 - **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — 1,200+ models, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
+- **[CEP → UXP migration](UXP_MIGRATION.md)** — what is measured, what cannot be adapted, and the open questions to Adobe
 - **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
+- **[Third-party notices](NOTICE.md)** — open-source components and their licences
 - **[Roadmap](ROADMAP.md)** — Team Cost Intelligence, Agent Mode expansion
 - **[Subscribe](https://docs.modelbridge.app/billing/subscription/)** — pricing, trial, and sign-up
 - **[Support](mailto:support@modelbridge.app)**
