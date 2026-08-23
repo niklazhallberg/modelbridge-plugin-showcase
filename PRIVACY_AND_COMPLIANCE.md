@@ -67,9 +67,11 @@ modelBridge operates two Cloudflare Workers and nothing else. The first handles 
 | **License key** | LemonSqueezy license key + machine instance ID | Local `localStorage` + disk; Cloudflare KV | Active: 3 years; ended: 90 days | Contract (Art. 6(1)(b)) | Deactivate in Settings; DELETE /api/user-data |
 | **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (subscription record) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
 | **IP address** | Request IP for rate limiting | In-memory only (Worker) | ~60 seconds (request lifecycle) | Legitimate Interest (Art. 6(1)(f)) | Not stored; transient only |
-| **Anthropic API key** (Agent Mode) | User-entered Anthropic API key for Claude | Local `localStorage` only | Until user deletes | Contract (Art. 6(1)(b)) | Delete in Settings |
+| **Anthropic API key** (Agent Mode) | User-entered Anthropic API key for Claude | Local `localStorage` + disk file | Until user deletes | Contract (Art. 6(1)(b)) | Delete in Settings |
 
-### What is never collected
+### What modelBridge's own servers never receive
+
+The scope is the heading, and it is deliberate. Several of these travel to the two services you bring your own key for — your prompt goes to fal.ai on every generation, filenames go to Anthropic on every agent turn — and that is the product working as described in §4 and §6. What follows is the list of things that never reach infrastructure operated by modelBridge, which is the only infrastructure we control and the only thing this document can promise about.
 
 - Prompts, negative prompts, or any creative text input
 - Generated media, thumbnails, or preview content
@@ -80,7 +82,7 @@ modelBridge operates two Cloudflare Workers and nothing else. The first handles 
 - Third-party analytics SDK data (no Google Analytics, Segment, Mixpanel, etc.)
 - Tracking pixels
 
-The one exception across this list is a bug report you explicitly send (see §1): it carries your message, any contact details you type, and — only if you opt in on that report — your prompt.
+One thing does reach us, and only because you send it: a bug report you explicitly submit (see §1) carries your message, any contact details you type, and — only if you tick that box on the report — your prompt.
 
 ---
 
@@ -176,9 +178,9 @@ Messages are truncated to 300 characters after scrubbing.
 | **Cloudflare** (Workers + KV) | Worker hosting, key-value storage | Aggregated error telemetry, license/subscription state, behavioral analytics aggregates | Cloudflare DPA (standard) |
 | **LemonSqueezy** (Lemon Squeezy Inc.) | Payment processing, subscription management, license validation | License key, customer email, instance ID, payment details | LemonSqueezy DPA (standard) |
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs | User prompts, media files, generated content (direct from user device, authenticated with user's own API key) | Direct controller-to-controller relationship — user contracts directly with fal.ai |
-| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages, project metadata (clip/sequence names, timecodes, file locations, effect settings), preview frames of the selected clip — direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
+| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, **not** the folders your media sits in (source directories are replaced with a session-only reference before anything is sent); frames of a selected clip; and media you have put in the Generate tab, when you ask the agent about it. Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
 | **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata only — no user content | No user PII processed |
-| **Pushover** (Superblock LLC) | Developer operational alerts | Anonymized operational events (catalog counts, error counts) — no user PII | No user PII processed |
+| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health) and subscription events identified by licence key id and subscription id — never an email address, name or any other personal data | Pseudonymous identifiers only; no directly identifying data processed |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
 
 ### fal.ai Data Flow Note
@@ -226,7 +228,14 @@ modelBridge does not act as a data processor for fal.ai generation traffic. The 
 
 Agent Mode allows users to edit the Premiere Pro timeline via natural language chat, powered by Anthropic's Claude API.
 
-**User's own API key.** The user enters their own Anthropic API key in Settings. This key is stored locally in `localStorage` and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
+**User's own API key.** The user enters their own Anthropic API key in Settings. It is stored locally — in the local backend's environment file, with only a short display fragment in `localStorage` — and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
+
+**What reaches Anthropic, as a rule rather than a list.** Two sentences govern every path, present and future:
+
+1. **The agent never sends images on its own initiative unless the user has allowed it.** One setting governs that — Settings → Privacy → "Timeline frames to the agent". It covers the frames that accompany messages while a clip is selected (on by default, 3–12 depending on clip length) and the agent's ability to read the Generate tab's media card by itself. With it off, the agent is told what is in the card — slot, role, filename, media type — and is not shown it, through the same coverage contract that stops it describing anything it did not see.
+2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it; pressing Enhance on a prompt sends the media attached to that prompt so the rewrite can refer to it. These are user actions and each says what it does at the point of use.
+
+*This is written as a rule because the previous version was an enumeration, and an enumeration of exceptions goes false the moment another tool learns to read the media card — which is exactly how it broke.* Project metadata travels on every turn regardless: clip and sequence names, filenames, timecodes, effect settings. Source **directories** do not — they are replaced with a session-scoped reference that is resolved back locally and means nothing outside the session that minted it.
 
 **No conversation data collected.** modelBridge does not intercept, store, proxy, or log any Agent Mode conversation content — no prompts, no Claude responses, no tool calls, no timeline edit commands. A generation triggered from Agent Mode emits the same anonymous generation events (`gen_start`, `gen_done`, `gen_fail`) as one started from the Generate button — subject to the same opt-in and NEVER_TRANSMIT rules. Agent Mode itself emits no events of its own.
 
@@ -262,3 +271,7 @@ Response confirms all deletable records removed. Revocation flags retained for f
 
 **Local Data Deletion:**
 All locally stored data (generation history, cost logs, installed models, API keys, settings, learned constraints) can be cleared from within the plugin via Settings → Reset, or by uninstalling the extension.
+
+---
+
+← [README](README.md) · [Architecture](ARCHITECTURE.md) — where each data flow is implemented · [NOTICE](NOTICE.md) — third-party components

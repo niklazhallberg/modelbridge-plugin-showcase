@@ -12,7 +12,7 @@ No browser tabs. No downloads. No manual imports. See the result in Premiere's S
 
 Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scaling is applied automatically. Nothing to conform, nothing to re-import.
 
-**Safe on confidential work** — cleanup, timeline analysis, and QC scans run locally on your machine, never in the cloud. [More →](#security-and-privacy)
+**Safe on confidential work** — your footage is never uploaded to clean up, scan or analyse a timeline. That work runs on your machine, through Premiere and ffmpeg. What each feature does send, and where, is set out in full: [Security and privacy →](#security-and-privacy)
 
 [Learn more about timeline import →](https://docs.modelbridge.app/features/timeline-import/)
 
@@ -130,9 +130,9 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 | **Discovery & filters** | Paste-tolerant search (smart quotes, dashes and separator variants all match), paste-by-endpoint-ID, category filters, LM Arena leaderboard rankings refreshed several times a day, "Today" filter for new models. [Docs →](https://docs.modelbridge.app/features/trending/) |
 | **Source Monitor preview** | Evaluate results at full res in Premiere's own Source Monitor. Set In/Out to import a subclip. [Docs →](https://docs.modelbridge.app/features/preview-before-import/) |
 | **Mask editor** | Paint inpainting masks in-panel — brush, zoom, eraser, undo. No Photoshop roundtrip. [Docs →](https://docs.modelbridge.app/guides/inpainting/) |
-| **Trial + license lifecycle** | 14-day trial with full access. Keeps working for 7 days between license checks, online or off. Register your license on two machines and move it between them from Settings. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
+| **Trial + license lifecycle** | 14-day trial with full access. Your licence is re-checked when the panel opens and every 12 hours after that, and keeps working for 30 days without reaching us — an outage on our side is never your problem. Register your license on two machines and move it between them from Settings. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
 | **Self-learning validation** | When a model rejects your media, modelBridge remembers the constraint and catches it automatically next time. [Docs →](https://docs.modelbridge.app/reference/self-learning/) |
-| **Over-the-air updates** | New error messages, endpoint changes, feature flags — delivered within an hour, no reinstall. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
+| **Over-the-air updates** | New error messages, endpoint changes, feature flags — no reinstall. The manifest is cached for an hour, and the cache is consulted when the panel opens, so a deploy reaches an editor on their next panel restart rather than mid-session. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
 | **Background generations** | Generations don't hold you hostage — switch models and the run keeps going in the background; restart Premiere and a recovery bar picks it up. Sound notification when ready. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
 | **700+ parameter explanations** | Every non-obvious input has a plain-language tooltip and an Academy link when the topic deserves one. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
 
@@ -193,8 +193,8 @@ A detailed comparison against hardcoded AI plugins and browser-based tools is be
 
 What does leave your machine, and where it goes:
 
-- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, timecodes, file locations, effect settings. While a timeline clip is selected it also sends 3–12 sampled frames of that clip with **every** message, so the agent can see what you see. That is on by default and switched off permanently in Settings → Privacy → "Timeline frames to the agent". Conversations never touch modelBridge servers
-- **Visual scan** sends sampled keyframes to Anthropic when you ask Claude to look at footage
+- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, filenames, timecodes, effect settings. It does not send the folders your media sits in: source paths are replaced with a session-only reference before anything leaves the machine. Conversations never touch modelBridge servers
+- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one automatic path — a few frames of the selected clip riding along with your messages, so the agent can see what you see — is on by default and switched off in Settings → Privacy → "Timeline frames to the agent"; turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
 - **Generate tab** sends media to fal.ai when you click Generate
 
 For NDA work, see the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for what each feature does and doesn't share.

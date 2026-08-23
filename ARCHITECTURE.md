@@ -22,7 +22,7 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every data migration. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
-**Remotely updatable.** Error handling, pricing data, model intelligence, and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response reaches users within an hour — without a plugin release, without user action.
+**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; the manifest carries a one-hour cache, read at panel start, so it reaches an editor the next time they open the panel. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither: they ship bundled in a plugin release, so a cost estimate can never be changed remotely.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
 
@@ -156,7 +156,11 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Operator notifications.** The operator gets daily digests of customer activity, catalog movement, and pipeline health, with instant alerts for anything urgent. Quiet days collapse to a single line — length itself is the signal.
 
-**OTA updates.** Error documentation, error message templates, feature flags, and featured model lists are delivered over-the-air from a remote manifest. Files are integrity-verified (cryptographic hash) before being applied; failures fall back to built-in defaults. Remote config also supports incident banners and kill switches for emergency rollback.
+**OTA updates.** Error documentation, error message templates and endpoint migrations are delivered over-the-air from a remote manifest. Each control is named per channel rather than claimed across all of them:
+
+- **The file payloads are pinned.** Every file the manifest declares carries a SHA-256, verified before the payload is applied. A mismatch, a missing pin or an unreachable file rejects the payload and the copy bundled in the extension serves instead — the channel fails closed, never open.
+- **Remote configuration is constrained, not pinned.** The config file that carries incident banners, kill switches and per-model validation modes is not hash-verified. It is bounded instead: schema sources must match an exact host allowlist, and only the kill switches the channel itself declares may be set, so it cannot reach a flag it does not own.
+- **Feature flags ride in the manifest body**, which carries no hash of itself. What protects them is that the manifest is served from a repository only we can write to — the same trust root as the pins, stated plainly rather than implied by the sentence above.
 
 **Self-learning validation.** When a model rejects media or a setting for a requirement its spec never declared, modelBridge remembers the requirement and enforces it before the next attempt — on the media card and in the form. The lesson survives cache clears and updates, and you're told once, the first time, that it was learned.
 
@@ -234,7 +238,7 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 |---|---|---|
 | fal.ai API | AI model generation, schema, pricing, catalog | Commercial API — user authenticates with their own key |
 | LemonSqueezy | Subscription billing, license validation | Commercial SaaS — webhook integration |
-| GitHub raw content | OTA delivery (error docs, pricing, feature flags) | Public CDN — read-only, no user data sent |
+| GitHub raw content | OTA delivery — error docs, error copy, endpoint migrations (each SHA-256 pinned); remote config and feature flags (host- and switch-allowlisted, not pinned) | Public CDN — read-only, no user data sent |
 
 ### Local runtime dependencies
 
