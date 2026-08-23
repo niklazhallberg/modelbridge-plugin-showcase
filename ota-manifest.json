@@ -33,12 +33,11 @@
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/claude-models.json",
       "sha256": "15225da9faacfae49f8cebd5b333e21972c03bdcc8d8cfc1865a018757fa348d",
       "version": "1.1.0",
-      "enabled": false,
-      "note": "Deliberately off 2026-08-18. The channel is real and pinned, but the agent model allowlist and per-model pricing go live to every installed plugin within an hour with no staging step. BUILTIN_CONFIG (node/claude-models.js) serves until that is a decision someone takes on purpose. Turning it on = publish claude-models.json to the showcase and flip this to true."
+      "enabled": false
     },
     "endpoint-migrations": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/endpoint-migrations.json",
-      "sha256": "be5fafdc5caafae4f820af12aa3782bd9da2bdfe7f49b7f507c9533c822c1f10",
+      "sha256": "08943aaf4abf5f0c3ac6c6f8c513a34720c898046f947a71c49bd453891a2b89",
       "version": "1.0.0",
       "enabled": true
     }

@@ -1,0 +1,14 @@
+Copyright (c) 2025-2026 Niklaz Hallberg. All rights reserved.
+
+The contents of this repository — documentation, architecture and compliance
+material, and the JSON payloads served from it — are made available for viewing
+and evaluation purposes only. No permission is granted to copy, modify,
+distribute, sublicense, or use them in any form, in whole or in part, without
+explicit written permission from the copyright holder.
+
+This repository does not contain the modelBridge plugin source, which is
+separately licensed under the same terms. Third-party open-source components
+incorporated into the plugin are governed by their own licences and are listed
+in NOTICE.md.
+
+For licensing inquiries: niklaz.a.hallberg@gmail.com or visit niklaz.works

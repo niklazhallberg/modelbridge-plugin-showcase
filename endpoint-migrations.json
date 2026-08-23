@@ -1,8 +1,7 @@
 {
   "_meta": {
     "version": "1.0.0",
-    "updatedAt": "2026-07-24T00:00:00Z",
-    "_note": "Old→new fal.ai endpoint aliases. When fal renames/moves an endpoint, add the mapping here and push (no ZXP needed). Gating channel — the fetcher verifies this against the sha256 pinned in ota-manifest.json and fails CLOSED to the builtin table. Recompute after editing: shasum -a 256 endpoint-migrations.json"
+    "updatedAt": "2026-07-24T00:00:00Z"
   },
   "migrations": {
     "fal-ai/flux-realism/v2": "fal-ai/flux-realism"

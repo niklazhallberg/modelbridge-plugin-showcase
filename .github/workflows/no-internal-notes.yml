@@ -1,0 +1,87 @@
+name: No internal notes in OTA payloads
+
+# The manifest and every payload it declares are PUBLIC — they are fetched from
+# raw.githubusercontent.com by every installed panel, and they sit in the repo a
+# partner reads first. Twice now an internal maintainer note has shipped in one:
+#
+#   ota-manifest.json  files.claude-models.note   — named an internal source
+#                       path and stated that a money channel has no staging step
+#   endpoint-migrations.json  _meta._note         — published the fail-closed
+#                       authentication design and the re-pin command
+#
+# Both were flagged in the 2026-08-17 review, both came back, and neither broke
+# anything — which is why nothing caught them. A note is not a defect the
+# fetchers can see; it is only ever a disclosure. So it needs a check of its own.
+#
+# Scope is derived from the manifest, never hardcoded: a payload declared
+# tomorrow is covered the moment it is declared.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  no-internal-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Manifest and declared payloads carry no note keys
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+
+          MANIFEST = 'ota-manifest.json'
+          if not os.path.exists(MANIFEST):
+              print('::error::ota-manifest.json is missing.')
+              sys.exit(1)
+
+          manifest = json.load(open(MANIFEST))
+          files = manifest.get('files') or {}
+
+          targets = [MANIFEST]
+          for key, spec in files.items():
+              name = (spec.get('url') or '').rsplit('/', 1)[-1]
+              if name and os.path.exists(name):
+                  targets.append(name)
+
+          def offending(key):
+              return key == 'note' or key.startswith('_note')
+
+          fail = False
+
+          def walk(node, path):
+              global fail
+              if isinstance(node, dict):
+                  for k, v in node.items():
+                      if offending(k):
+                          preview = str(v)[:120].replace('\n', ' ')
+                          print(f'::error file={path}::"{k}" at {path}{"." if path else ""}{k} — '
+                                f'internal notes must not ship in a public payload. '
+                                f'Move it to a code comment or the internal docs. Value begins: {preview}…')
+                          print(f'::notice file={path}::Removing it CHANGES THE FILE. If {path} is a payload '
+                                f'the manifest declares, recompute its sha256 and update ota-manifest.json in '
+                                f'the same commit — the fetchers fail closed on a pin mismatch, so a stale pin '
+                                f'silently disables the channel and looks exactly like a working one. '
+                                f'shasum -a 256 {path}')
+                          fail = True
+                      walk(v, path)
+              elif isinstance(node, list):
+                  for item in node:
+                      walk(item, path)
+
+          for target in targets:
+              try:
+                  walk(json.load(open(target)), target)
+              except json.JSONDecodeError as e:
+                  print(f'::error file={target}::not valid JSON: {e}')
+                  fail = True
+
+          print()
+          if fail:
+              print(f'::error::Internal notes found across {len(targets)} public payload(s).')
+              sys.exit(1)
+          print(f'Clean — {len(targets)} public payload(s) carry no internal notes.')
+          PY

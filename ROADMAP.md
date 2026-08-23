@@ -31,6 +31,8 @@ Agent Mode allows editors to control the Premiere Pro timeline through natural l
 - Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
 - Persistent editor preferences that shape the agent's behavior across sessions
 
+Users bring their own Anthropic API key, and modelBridge neither marks up nor proxies the calls. Our own estimate, from measured per-operation token counts (2026-06): about $8/month for light use, around $26 for steady daily editing, and roughly $84 for heavy scan-driven work, on the default Haiku model. That is a cost model built from what each operation actually costs in tokens — not a measurement of real customer usage.
+
 **Planned enhancements:**
 
 ### Conversation Intelligence
@@ -57,11 +59,14 @@ This turns the agent from a reactive tool into a continuous quality layer that r
 
 Silence removal is shipped. The next step is content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
 
+- **Cutting by what was said**, not by where the gaps are — "drop the part where she repeats the question", "keep the answer about pricing"
+- **Removing filler and false starts** — the ums, the restarts, the takes that trail off — as one pass rather than one trim at a time
+- **Finding a line across hours of rushes** and cutting straight to it, without scrubbing
+- **A rough assembly from a transcript**, ordered the way the story needs rather than the way it was recorded
+
 ### Essential Graphics Text Editing
 
 Premiere Pro's Motion Graphics Templates (MOGRTs) store text parameters that are readable and writable via the scripting API. The agent will be able to batch-update text content across all title clips in a sequence — font, size, color, and content — enabling one-command brand guide updates and multi-language versioning.
-
-Users bring their own Anthropic API key. Measured across real usage profiles (2026-06): about $8/month for light use, ~$26 for steady daily editing, ~$84 for heavy scan-driven work — on the default Haiku model. modelBridge does not markup or proxy the API calls.
 
 ---
 
@@ -85,3 +90,7 @@ As modelBridge adoption grows in agency and enterprise environments, several cap
 - **Per-editor usage dashboards** — individual editors see their own generation patterns, model preferences, and cost trends
 - **Enterprise license tiers** — volume licensing with centralized seat management and billing
 - **Custom model allowlists** — workspace administrators can define which models are available to their team, ensuring only approved models are used in production workflows
+
+---
+
+← [README](README.md) · [Architecture](ARCHITECTURE.md) — how the shipped half is built · [CEP → UXP](UXP_MIGRATION.md) — the measured migration state

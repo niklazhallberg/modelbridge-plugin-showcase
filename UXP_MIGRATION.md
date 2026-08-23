@@ -287,3 +287,7 @@ things that decide our timeline — frame export and the QE-dependent operations
 — are not ours to decide.
 
 *Measured and written 2026-08-19.*
+
+---
+
+← [README](README.md) · [Architecture](ARCHITECTURE.md) — the CEP system these figures measure · [Roadmap](ROADMAP.md) — where the migration sits among the other work
