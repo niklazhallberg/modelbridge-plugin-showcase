@@ -253,7 +253,7 @@ Agent Mode allows users to edit the Premiere Pro timeline via natural language c
 **Data Controller:**
 Niklaz Hallberg
 Stockholm, Sweden
-support@modelbridge.app
+info@modelbridge.app
 
 **Supervisory Authority:**
 Integritetsskyddsmyndigheten (IMY) — Swedish Authority for Privacy Protection

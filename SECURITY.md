@@ -1,6 +1,6 @@
 # Security
 
-Report a vulnerability to <support@modelbridge.app>. Please include what you
+Report a vulnerability to <info@modelbridge.app>. Please include what you
 found and how to reproduce it; we will confirm receipt and tell you what we
 intend to do about it.
 

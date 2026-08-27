@@ -4,7 +4,7 @@
 
 For the complete list — the Node.js runtime embedded in the backend binaries and its aggregated component licences, Adobe's CEP interface library, every direct and transitive npm dependency, and the full per-binary FFmpeg build configurations — read `THIRD_PARTY_LICENSES.md` in the installed extension, or the online copy at <https://docs.modelbridge.app/legal/attributions/>.
 
-If you find an open-source component in modelBridge that is listed in neither, please contact <support@modelbridge.app> so we can correct the record.
+If you find an open-source component in modelBridge that is listed in neither, please contact <info@modelbridge.app> so we can correct the record.
 
 ---
 

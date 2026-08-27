@@ -248,7 +248,8 @@ Subscribe, install the ZXP, paste your license key and your fal.ai key, and gene
 - **[Third-party notices](NOTICE.md)** — open-source components and their licences
 - **[Roadmap](ROADMAP.md)** — Team Cost Intelligence, Agent Mode expansion
 - **[Subscribe](https://docs.modelbridge.app/billing/subscription/)** — pricing, trial, and sign-up
-- **[Support](mailto:support@modelbridge.app)**
+- **[Support](mailto:info@modelbridge.app)** — bugs, feature requests, and security reports
+- **[Billing](https://app.lemonsqueezy.com/my-orders)** — invoices, refunds and cancellation, handled by Lemon Squeezy as Merchant of Record
 
 ---
 
