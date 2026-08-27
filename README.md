@@ -174,6 +174,37 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 
 ---
 
+## One question, once
+
+Somewhere after your third generation — and only once you have actually kept a
+result — a small card appears above the Generate button.
+
+> **DOES EVERYTHING RUN SMOOTHLY?**
+> 1 2 3 4 5 · *Not at all.* … *Absolutely!*
+
+That is the whole thing. Tap a number and you are done. A low score opens a box
+asking what would make it better; a high score offers the same box behind a
+*Leave a comment* link, because the answers worth reading are not only the angry
+ones. Then a line thanking you, a five-second countdown, and the card removes
+itself. It never comes back — answer it or dismiss it with the x, and that
+install has been asked.
+
+**What goes with it:** the number, your note if you wrote one, and which versions
+of modelBridge, Premiere and your operating system you are running.
+
+**What does not:** your name, your email, your licence key, the model you used,
+your prompt, your filenames, your project, your footage. None of those are
+collected for this and none of them are sent. A random identifier travels along
+so a second answer from the same install is not mistaken for a new voice — it is
+not your licence key and it is not linked to your account.
+
+It exists because "how is it going" is a question a changelog cannot answer.
+Bugs already have a [proper form](https://docs.modelbridge.app/troubleshooting/reporting-a-bug/)
+with room for screenshots; this is for the quieter signal — whether the thing
+feels right to the people using it every day.
+
+---
+
 ## Cost transparency
 
 modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, a measured figure after.
