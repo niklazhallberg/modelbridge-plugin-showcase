@@ -64,6 +64,7 @@ modelBridge operates two Cloudflare Workers and nothing else. The first handles 
 | **Error telemetry** | Error type, HTTP status, model endpoint, plugin version | Cloudflare KV (aggregated) | Indefinite (aggregated counts only) | Legitimate Interest (Art. 6(1)(f)) | Opt-in — off by default; enable in Settings → Privacy |
 | **Behavioral analytics** | Anonymous event counts (gen_start, gen_done, model_sel, etc.) | Cloudflare KV (per-installation daily aggregate) | 90-day TTL per installation; 365-day global aggregate | Consent (Art. 6(1)(a)) | Opt-in only; disable in Settings → Privacy |
 | **Installation ID** | SHA-256 hash (16-char hex) of four display and locale signals | Local `localStorage` | Derived, not random — clearing local data recreates the same value | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in; switching analytics off is what stops it being sent |
+| **Satisfaction rating** | A score of 1–5, an optional comment, plugin/Premiere/OS versions, how many generations had run, and a random rating ID that is neither of the two IDs above | Cloudflare KV | 1 year, then deleted automatically | Legitimate Interest (Art. 6(1)(f)) — an answer the user chose to send | Asked once, after real use; dismissing sends nothing. Not reachable by DELETE /api/user-data — see the note below |
 | **License key** | LemonSqueezy license key + machine instance ID | Local `localStorage` + disk; Cloudflare KV | Active: 3 years; ended: 90 days | Contract (Art. 6(1)(b)) | Deactivate in Settings; DELETE /api/user-data |
 | **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (subscription record) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
 | **IP address** | Request IP for rate limiting | In-memory only (Worker) | ~60 seconds (request lifecycle) | Legitimate Interest (Art. 6(1)(f)) | Not stored; transient only |
@@ -106,9 +107,21 @@ Error telemetry (Stream A) operates under Legitimate Interest (Art. 6(1)(f)). Th
 | Revocation flag | Retained (fraud prevention) | Retained (fraud prevention) |
 | Behavioral analytics (per-installation daily aggregate) | 90 days | 90 days |
 | Global daily aggregate | 365 days | 365 days |
+| Satisfaction rating | 1 year | 1 year |
 | Pushover event buffer | 48 hours | 48 hours |
 
 Enforcement: A daily cleanup function (`cleanupExpiredSubscriptions`) runs as part of the Worker cron schedule, deleting expired subscription records automatically.
+
+### A rating cannot be erased on request, and that is the same fact as its anonymity
+
+A satisfaction rating carries no licence, no email and no installation identifier — its
+random rating ID is minted for that answer alone. So there is nothing to look one up by,
+and `DELETE /api/user-data` cannot reach it. Every rating expires by itself one year
+after it is sent; a specific comment can be removed by quoting its wording to
+info@modelbridge.app.
+
+This is a consequence of the design rather than a shortfall in it: the property that
+keeps an answer untraceable is the property that makes it unfindable.
 
 ### GDPR Article 15 — Right of Access
 
@@ -180,7 +193,7 @@ Messages are truncated to 300 characters after scrubbing.
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs | User prompts, media files, generated content (direct from user device, authenticated with user's own API key) | Direct controller-to-controller relationship — user contracts directly with fal.ai |
 | **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, **not** the folders your media sits in (source directories are replaced with a session-only reference before anything is sent); frames of a selected clip; and media you have put in the Generate tab, when you ask the agent about it. Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
 | **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata only — no user content | No user PII processed |
-| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health) and subscription events identified by licence key id and subscription id — never an email address, name or any other personal data | Pseudonymous identifiers only; no directly identifying data processed |
+| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health) and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating, which carries no identifier of any kind and cannot be traced to an account | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
 
 ### fal.ai Data Flow Note
