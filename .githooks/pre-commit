@@ -1,0 +1,38 @@
+#!/bin/sh
+# Commit-crossing backstop for this repository.
+#
+# WHY IT IS HERE. This repo has no package.json and no husky, and it does not
+# need either: the guard is plain Node with no dependencies. It is wired through
+# `core.hooksPath`, which is versioned — unlike .git/hooks/, which does not
+# survive a clone.
+#
+# ONE COMMAND PER CLONE, and that is deliberate on git's part: a repository
+# cannot set its own hooksPath, because a checkout that could install its own
+# hooks would execute code on clone. So each clone runs, once:
+#
+#     git config core.hooksPath .githooks
+#
+# WHAT IT CHECKS. That a staged file was not written while a different session
+# held this working directory — the case that silently dropped a <script> tag
+# from the panel's index.html on 2026-09-01. The guard and the directory lock
+# it reads both live at ~/.claude/bin/, installed from the panel repo, so this
+# repo depends on no other repository being checked out at any particular path.
+# Absent, the hook is a no-op: a missing guard must never block a commit.
+set -e
+
+GUARD="$HOME/.claude/bin/check-commit-crossing.js"
+CLAIM="$HOME/.claude/bin/claim-workdir.js"
+
+# A commit is activity — refresh this session's hold before checking. Silent,
+# and never blocking: `beat` is a no-op unless we already hold the lock.
+[ -f "$CLAIM" ] && node "$CLAIM" beat >/dev/null 2>&1 || true
+
+if [ -f "$GUARD" ]; then
+  node "$GUARD" || {
+    echo ""
+    echo "Commit blocked by the commit-crossing guard (see above)."
+    echo "Install/refresh the guard from the panel repo if it looks out of date:"
+    echo "    cp scripts/check-commit-crossing.js scripts/claim-workdir.js ~/.claude/bin/"
+    exit 1
+  }
+fi
