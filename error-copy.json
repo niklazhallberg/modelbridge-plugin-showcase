@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": 1,
-    "updatedAt": "2026-03-29T00:00:00Z"
+    "version": 2,
+    "updatedAt": "2026-08-24T00:00:00Z"
   },
   "entries": {
     "image_too_small": {
@@ -69,8 +69,11 @@
       "shortMessage": "Option not available"
     },
     "file_download_error": {
-      "action": "Check that the URL is publicly accessible and try again.",
-      "shortMessage": "File could not be loaded"
+      "action": "fal.ai fetches files from a public link. If you pasted a URL, check that it opens in a browser without signing in. If you added no file, nothing on your side is wrong \u2014 send it from Settings \u2192 Plugin Feature & Bug Report.",
+      "shortMessage": "File could not be loaded",
+      "ctxTemplate": {
+        "message": "fal.ai could not open a file sent with this generation."
+      }
     },
     "audio_duration_too_long": {
       "action": "Trim the audio to a shorter duration.",

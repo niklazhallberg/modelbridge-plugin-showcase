@@ -1,6 +1,6 @@
 {
-  "version": "1.7.0",
-  "updatedAt": "2026-08-18T00:00:00Z",
+  "version": "1.7.3",
+  "updatedAt": "2026-09-01T08:39:52Z",
   "minPluginVersion": "1.0.1",
   "enabled": true,
   "featured_models": [
@@ -21,12 +21,12 @@
   "files": {
     "error-docs": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-docs.json",
-      "sha256": "5756f68ae4d5abec566a0fac808c67de8f222a2a7403a993d7e2ddab15402099",
+      "sha256": "96e69331c3e9b7e993b1d6c2b855c7780b43b67255a5559d59c355a6966de076",
       "version": "1.5.1"
     },
     "error-copy": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-copy.json",
-      "sha256": "fb3c241a73ef2f3c57f544bce1437039e26dde74bdcb7ef049cdeebeef53e3a1",
+      "sha256": "78a0d578e97ecdf176b42f991b2a8e34c35438a8d8b6a337c1685d8c00b219ff",
       "version": "1.2.0"
     },
     "claude-models": {

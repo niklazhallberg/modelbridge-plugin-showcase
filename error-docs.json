@@ -1,9 +1,35 @@
 {
   "_meta": {
-    "version": 9,
-    "updatedAt": "2026-08-20T00:00:00Z"
+    "version": 11,
+    "updatedAt": "2026-08-29T12:00:00Z"
   },
   "entries": {
+    "LICENSE_REFUSED": {
+      "slug": "subscription-not-confirmed",
+      "cause": "modelBridge could not confirm an active subscription on this installation, so the request was stopped before it reached fal.ai or Anthropic. This is your modelBridge subscription — not your fal.ai or Anthropic key, which are unaffected. It happens when the subscription has lapsed, been paused or been revoked, or when modelBridge has not been able to re-check it for 30 days. Nothing was sent to a provider and nothing was charged.",
+      "steps": [
+        "Open Settings → API & Support and read the subscription card — it names the state and what changes it",
+        "If your subscription is active, quit and reopen Premiere Pro to trigger a fresh check, then try again",
+        "If it has lapsed, renew from your Lemon Squeezy account — access returns within a minute of the payment going through",
+        "If you have paid and still see this, send a bug report from Settings → API & Support — it carries the reason word (for example status:expired) that support needs"
+      ],
+      "externalLinks": [
+        {
+          "label": "Manage your subscription",
+          "url": "https://app.lemonsqueezy.com/my-orders"
+        }
+      ]
+    },
+    "LICENSE_CHECK_UNAVAILABLE": {
+      "slug": "subscription-check-unavailable",
+      "cause": "modelBridge could not run its subscription check at all, so the request was stopped as a precaution. This is not a verdict on your subscription: the checker itself failed to load or threw (its reason word is verification_unavailable, core_unavailable or gate_error). Requests are stopped before any provider is contacted, so nothing was sent and nothing was charged.",
+      "steps": [
+        "Quit and reopen Premiere Pro — this reloads the background service and its checker",
+        "If it keeps happening, send a bug report from Settings → API & Support — the reason word in the message tells support which part failed",
+        "Your subscription and your API keys need no action"
+      ],
+      "externalLinks": []
+    },
     "MEDIA_TYPE_MISMATCH": {
       "slug": "media-type-mismatch",
       "cause": "The file you attached is not one of the formats this model accepts. Every model declares its own input type — an image model will not take a video clip, and vice versa. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
@@ -569,6 +595,36 @@
         {
           "label": "fal.ai Dashboard",
           "url": "https://fal.ai/dashboard"
+        }
+      ]
+    },
+    "LICENSE_SEAT_TAKEN": {
+      "slug": "license-in-use-on-another-computer",
+      "cause": "Another of your computers started generating, so this request was stopped before it reached fal.ai or Anthropic. Your plan covers two computers, and one generates at a time: the computer you start working on takes over, and the other one is told the next time it tries. Nothing is wrong with your subscription, nothing was sent to a provider and nothing was charged.",
+      "steps": [
+        "Press Generate (or send your message) again on this computer — that makes it the active one",
+        "The other computer will see this same notice the next time it tries, and its next press takes the license back",
+        "If you do not recognise the computer named in the message, free it up from your Lemon Squeezy account, then paste your license key once under Settings → API & Support"
+      ],
+      "externalLinks": [
+        {
+          "label": "Manage your devices",
+          "url": "https://app.lemonsqueezy.com/my-orders"
+        }
+      ]
+    },
+    "LICENSE_RELEASED": {
+      "slug": "activation-released",
+      "cause": "This computer’s activation was released, so the request was stopped before it reached fal.ai or Anthropic. An activation is released from your Lemon Squeezy account, from the Devices card on another computer, or by modelBridge support. Your subscription itself is unaffected; nothing was sent to a provider and nothing was charged.",
+      "steps": [
+        "Open Settings → API & Support and paste your license key — it is in your Lemon Squeezy receipt email",
+        "Re-entering the key on a computer that was released reuses its slot; it does not use up another one",
+        "If activation answers \"Maximum devices reached\", free up a computer you no longer use from your Lemon Squeezy account first"
+      ],
+      "externalLinks": [
+        {
+          "label": "Manage your devices",
+          "url": "https://app.lemonsqueezy.com/my-orders"
         }
       ]
     }
