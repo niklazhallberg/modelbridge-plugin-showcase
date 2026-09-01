@@ -20,12 +20,13 @@ Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scali
 
 ## What to read, depending on what you are asking
 
-This repository is written for engineers evaluating the integration, not for editors using the product — the customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app). Five files, and each answers a different question.
+This repository is written for engineers evaluating the integration, not for editors using the product — the customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app). Each file answers a different question.
 
 | If you want to know | Read |
 |---|---|
 | What it does, and why anyone would run it | The rest of this file |
 | How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
 | **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, five open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
 | What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
