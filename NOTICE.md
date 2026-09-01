@@ -59,7 +59,9 @@ These carry reproduction requirements of their own, so they are named here rathe
 
 The macOS FFmpeg is built from source rather than downloaded; the Windows build is the released `-win64-lgpl` asset from <https://github.com/BtbN/FFmpeg-Builds>, which links roughly forty further libraries under BSD, MIT and MPL terms. The exact, complete set for the binary actually shipped is the `configuration` string recorded per binary in `bin/ffmpeg-provenance.json` — that file, not this list, is what a licence reviewer should read, because it describes the build in hand rather than the build we last wrote about.
 
-**The macOS build cannot reach the network.** It is configured `--disable-everything` with an explicit allowlist and `--disable-network`, and only two protocols are compiled in: `file` and `pipe`. The media tool your footage passes through has no network code in it. Verifiable from the same `bin/ffmpeg-provenance.json`.
+**The bundled macOS build cannot reach the network.** It is configured `--disable-everything` with an explicit allowlist and `--disable-network`, and only two protocols are compiled in: `file` and `pipe`. That binary has no network code in it.
+
+The claim is about that binary specifically. The Windows binaries are a downloaded LGPL release build, not one compiled here, and network protocols are present in it. And where the bundled binaries are absent the backend uses a system copy instead, as described above — someone else's build, about which nothing can be promised. Which case applies is recorded per binary in `bin/ffmpeg-provenance.json`, alongside the origin, the full configure string and the SHA-256. In every case ffmpeg is handed local file paths only and is never asked to open a URL.
 
 Because the binaries are separate executables and never linked into modelBridge's own code, any of them can be replaced: build FFmpeg from the recorded configure string, or delete the bundled copies and let the backend pick up a system FFmpeg.
 

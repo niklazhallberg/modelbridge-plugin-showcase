@@ -10,7 +10,7 @@ modelBridge is a local-first application. The plugin runs entirely inside Adobe 
 
 All user preferences, generation history, API keys, installed models, cost logs, and learned constraints are stored locally on the user's machine. No modelBridge-operated database holds user-generated content or creative assets.
 
-modelBridge operates two Cloudflare Workers and nothing else. The first handles license validation (via LemonSqueezy webhooks), catalog monitoring, the in-plugin news feed, model insights, and opt-in error telemetry and analytics. The second backs Mobile Preview: when you send a result to your phone it receives a link to the fal.ai-hosted media, the model's name and an anonymous install ID — never the media itself. This Worker has no access to user prompts, media, generated content, or fal.ai API keys. The one exception is user-initiated: a bug report you choose to send carries your message, optionally your name and email, your prompt only if you tick that box (off by default on every report), and any screenshots you attach — all reviewed by you before sending, retained 180 days.
+modelBridge operates two Cloudflare Workers and nothing else. The first handles license validation (via LemonSqueezy webhooks), catalog monitoring, the in-plugin news feed, model insights, and opt-in error telemetry and analytics. The second backs Mobile Preview: when you send a result to your phone it receives a link to the fal.ai-hosted media, the model's name and the Install ID described in §2 — never the media itself. This Worker has no access to user prompts, media, generated content, or fal.ai API keys. The one exception is user-initiated: a bug report you choose to send carries your message, optionally your name and email, your prompt only if you tick that box (off by default on every report), and any screenshots you attach — all reviewed by you before sending, retained 180 days.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -63,12 +63,70 @@ modelBridge operates two Cloudflare Workers and nothing else. The first handles 
 | **Learned constraints** | Per-model dimension/duration/size limits from errors | Local `localStorage` + disk file | 30-day soft TTL, refreshed on re-learn | Contract (Art. 6(1)(b)) | Cleared on model removal |
 | **Error telemetry** | Error type, HTTP status, model endpoint, plugin version | Cloudflare KV (aggregated) | Indefinite (aggregated counts only) | Legitimate Interest (Art. 6(1)(f)) | Opt-in — off by default; enable in Settings → Privacy |
 | **Behavioral analytics** | Anonymous event counts (gen_start, gen_done, model_sel, etc.) | Cloudflare KV (per-installation daily aggregate) | 90-day TTL per installation; 365-day global aggregate | Consent (Art. 6(1)(a)) | Opt-in only; disable in Settings → Privacy |
-| **Installation ID** | SHA-256 hash (16-char hex) of four display and locale signals | Local `localStorage` | Derived, not random — clearing local data recreates the same value | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in; switching analytics off is what stops it being sent |
+| **Analytics ID** | SHA-256 hash (16-char hex) of four display and locale signals | Local `localStorage` | Derived, not random — clearing local data recreates the same value | Consent (Art. 6(1)(a)) — only transmitted when behavioral analytics enabled | Not transmitted unless user opts in; switching analytics off is what stops it being sent |
+| **Install ID** | A one-way salted SHA-256 hash of a stable machine identifier (on macOS, the platform UUID), formatted in the shape of a UUID. The raw identifier never leaves your machine. It carries **no account signal** and nothing about you personally, but it *is* derived from the computer — that is what binds a licence to one installation | Local disk file + `localStorage`. Our Worker stores only a truncated one-way hash of it, never the value itself | 400 days from the last licence check, then expires automatically | Contract (Art. 6(1)(b)) — it is how a licence is bound to one installation | **Not** governed by the analytics toggle, and not covered by DELETE /api/user-data today — see the two notes below |
 | **Satisfaction rating** | A score of 1–5, an optional comment, plugin/Premiere/OS versions, how many generations had run, and a random rating ID that is neither of the two IDs above | Cloudflare KV | 1 year, then deleted automatically | Legitimate Interest (Art. 6(1)(f)) — an answer the user chose to send | Asked once, after real use; dismissing sends nothing. Not reachable by DELETE /api/user-data — see the note below |
 | **License key** | LemonSqueezy license key + machine instance ID | Local `localStorage` + disk; Cloudflare KV | Active: 3 years; ended: 90 days | Contract (Art. 6(1)(b)) | Deactivate in Settings; DELETE /api/user-data |
 | **Customer email** | Email from LemonSqueezy webhook at purchase | Cloudflare KV (subscription record) | Active: 3 years; ended: 90 days; auto-cleaned daily | Contract (Art. 6(1)(b)) | DELETE /api/user-data |
 | **IP address** | Request IP for rate limiting | In-memory only (Worker) | ~60 seconds (request lifecycle) | Legitimate Interest (Art. 6(1)(f)) | Not stored; transient only |
 | **Anthropic API key** (Agent Mode) | User-entered Anthropic API key for Claude | Local `localStorage` + disk file | Until user deletes | Contract (Art. 6(1)(b)) | Delete in Settings |
+
+### Two identifiers, and only one of them is a consent question
+
+They are separate values with separate lifecycles, and until 2026-08-28 this table
+described only the first while calling it "Installation ID" — which read as a promise
+about both.
+
+**The Analytics ID** groups anonymous event counts. It is derived by hashing four
+display and locale settings, is never linked to your licence or fal.ai account, and is
+sent **only** while behavioural analytics is switched on. Switching it off is what stops
+it being sent. This is the consent-bound one.
+
+**The Install ID** is derived from the computer, not randomly generated: a stable
+machine identifier is salted and hashed one-way, and the digest — laid out in the shape
+of a UUID — is written to a file beside the plugin's own data. The raw machine
+identifier never leaves your machine, and the digest cannot be reversed back to it.
+Deriving it rather than randomising it is what makes it survive a reinstall, which is
+what an entitlement bound to one installation needs. It accompanies **every** licence call — activation,
+validation, renewal and device release — and it does so **regardless of the analytics
+setting**, because it is not analytics: it is what binds an entitlement to one
+installation, so a licence file copied to a second machine is refused there, and it is
+what lets a specific installation be blocked without touching the customer's other
+machines. Mobile Preview sends the same value when you push a result to your phone.
+
+It is legally a contract necessity, not a consent item. Because it is derived rather
+than randomised, clearing the plugin's data does **not** mint a new one: the same
+machine re-derives the same id, which is what lets an entitlement survive a reinstall
+without asking you to activate again. The value transmitted is a digest; the machine
+identifier it is computed from never leaves your machine, and the digest cannot be
+reversed back to it.
+
+What our Worker keeps of it is a **truncated one-way hash**, not the value: enough to
+notice that a licence started renewing from a different installation, not enough to
+recover the id. That record expires 400 days after the last licence check.
+
+**One honest gap, stated rather than smoothed over:** the erasure endpoint in §7 removes
+the subscription, trial and licence-to-subscription records, and it does **not** currently
+remove that lineage record. It expires on its own timer instead. Closing this is tracked
+as a defect, not a design choice.
+
+### What a licence check actually carries
+
+Stated in full, because "only the licence key and a device identifier" was shorter than
+the truth. **Sent** with a licence call: your licence key, the LemonSqueezy instance ID
+for this activation, a name for the device (which the plugin sets to "modelBridge", not
+to your computer's name), and the Install ID above. A renewal sends the signed
+entitlement statement it already holds instead of the key.
+
+**Returned** in that statement, and cached locally: the licence key id, the instance id,
+the key status, the activation count and limit, the check timestamp, the product and
+variant ids, trial and renewal dates, subscription status, payment-failure and pause
+flags — and **your name and email address as your payment provider holds them**. They
+come from LemonSqueezy, not from anything the plugin observes, and they are what let the
+panel greet you and let a support request be matched to a purchase.
+
+No prompt, no media, no file path and no project data is sent or returned on any of
+these calls.
 
 ### What modelBridge's own servers never receive
 
@@ -80,6 +138,7 @@ The scope is the heading, and it is deliberate. Several of these travel to the t
 - fal.ai or Anthropic API keys
 - Search queries within the plugin
 - Browsing behavior, cookies beyond localStorage, or fingerprinting
+- Hardware serial numbers, MAC addresses, or any hardware identifier — neither identifier above is derived from one
 - Third-party analytics SDK data (no Google Analytics, Segment, Mixpanel, etc.)
 - Tracking pixels
 
@@ -170,7 +229,7 @@ Messages are truncated to 300 characters after scrubbing.
 - Route: `POST /api/events`
 - Trigger: User explicitly enables in Settings → Privacy
 - Data: Anonymous event type + metadata (model ID, cost, category)
-- Identifier: Installation ID (SHA-256 hash, non-reversible, 16-char hex)
+- Identifier: Analytics ID (SHA-256 hash, non-reversible, 16-char hex)
 - Storage: Per-installation daily aggregate (90-day TTL); raw events discarded after aggregation
 - NEVER_TRANSMIT enforcement at both plugin and Worker level: `prompt`, `negative_prompt`, `filePath`, `fileName`, `apiKey`, `license_key`, `query`, `message`, `content` and credential-named fields are blocked at the plugin, and the Worker independently hard-rejects the core set
 
@@ -224,7 +283,7 @@ modelBridge does not act as a data processor for fal.ai generation traffic. The 
 ### Aggregation Pipeline
 
 1. Plugin queues events in memory (max 20 per batch, flush every 60 seconds)
-2. Batch sent to Worker with installation ID (fire-and-forget, 5-second timeout)
+2. Batch sent to Worker with the Analytics ID (fire-and-forget, 5-second timeout)
 3. Worker validates NEVER_TRANSMIT fields, rate-limits per installation (10 requests/hour)
 4. Worker aggregates into a per-installation daily summary (90-day TTL)
 5. Raw events discarded immediately after aggregation
