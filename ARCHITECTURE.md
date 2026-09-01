@@ -70,7 +70,7 @@ flowchart TD
 | Panel codebase | Tens of thousands of lines of JavaScript and CSS |
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | 75+ pages across guides, reference, Academy, and legal |
-| Automated tests | 2,700+ checks across 78 test suites, plus end-to-end import tests against a live Premiere and a catalog-wide classification audit |
+| Automated tests | 6,080 checks across 253 suite files — 5,972 green, 108 failing, measured 2026-09-01 by one command whose output a pre-commit guard checks every published figure against. Plus 7 catalogue audits and end-to-end import tests against a live Premiere |
 | Built by | One developer — structured for team onboarding and handover (documented conventions, migration plan, and test suites) |
 
 ---
