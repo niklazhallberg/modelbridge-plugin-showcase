@@ -83,7 +83,9 @@ sent **only** while behavioural analytics is switched on. Switching it off is wh
 it being sent. This is the consent-bound one.
 
 **The Install ID** is derived from the computer, not randomly generated: a stable
-machine identifier is salted and hashed one-way, and the digest — laid out in the shape
+machine identifier is salted and hashed one-way (the derivation is `_deriveId` in
+the plugin's `node/installId.js`, and the machine probe is `node/machineIdentity.js`
+— named here so that a change to either is visibly a change to this paragraph), and the digest — laid out in the shape
 of a UUID — is written to a file beside the plugin's own data. The raw machine
 identifier never leaves your machine, and the digest cannot be reversed back to it.
 Deriving it rather than randomising it is what makes it survive a reinstall, which is
