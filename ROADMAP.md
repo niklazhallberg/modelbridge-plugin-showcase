@@ -8,7 +8,7 @@ What's coming next for modelBridge — the problems we're solving and who they'r
 
 Agencies and post-production houses running AI generation across multiple editors face a common problem: every generation across every editor lands on a single fal.ai bill as an undifferentiated lump sum. There's no way to attribute costs to specific clients, projects, or deliverables. When an editor generates 40 AI clips across three client projects in a week, the finance team has no way to allocate those costs — and the editor has no way to prove what was billable.
 
-modelBridge already tracks per-generation costs with model, timestamp, and confidence tier. Team Cost Intelligence extends this into a proper cost attribution system. Editors will be able to tag each generation to a project or client at the point of creation. Cost reports will break down spending by client, by project, by model, and by editor — with both estimated and validated (post-generation actual) costs clearly distinguished.
+modelBridge already tracks per-generation costs with model, timestamp and confidence tier, and editors already tag each generation to a client, project and deliverable at the point of creation. Team Cost Intelligence extends that across a team: cost reports broken down by client, by project, by model, and by editor — with estimated and measured costs clearly distinguished.
 
 The system will also track billable failures separately from caught failures. When modelBridge's validation engine blocks a generation before it reaches the API, that's a prevented cost. When fal.ai charges for a generation that fails partway through processing, that's a billable failure. Both matter for accurate client invoicing — one is a cost saving, the other is a line item.
 

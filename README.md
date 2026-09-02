@@ -119,7 +119,7 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 ## 5. ElevenLabs and Midjourney workflows
 
-**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on the correct audio track at the playhead. Voice-over, dubbing, sound effects, voice conversion — 9 ElevenLabs models, and 100+ audio models overall, work the same way as video.
+**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on the correct audio track at the playhead. Voice-over, dubbing, sound effects, voice conversion — ElevenLabs voice models, and 100+ audio models overall, work the same way as video.
 
 **Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or scrub any frame of any timeline video and click **Extract frame** — the button shows your live playhead timecode so you pick the frame you want, not "roughly." Every frame you extract feeds any fal.ai model instantly.
 
@@ -252,7 +252,9 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 
 ## Getting started
 
-Subscribe, install the ZXP, paste your license key and your fal.ai key, and generate — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
+Subscribe, install the plugin, paste your license key and your fal.ai key, and generate — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
+
+**Requirements:** Adobe Premiere Pro 23.0 or newer (CEP 11). macOS today; Windows packaging is in progress.
 
 ---
 
