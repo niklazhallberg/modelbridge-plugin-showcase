@@ -36,3 +36,19 @@ if [ -f "$GUARD" ]; then
     exit 1
   }
 fi
+
+# Cost-terminology guard — the same check CI runs (cost-terminology.yml), moved
+# to commit time so a violation never reaches the public repo first. This is a
+# PUBLIC repo: CI failing after the push means the forbidden copy is already
+# published, which is how the "Billed" sentence of 2026-09-02 sat live for a
+# day. The guard scans the whole working tree (its own scope), not just staged
+# files — an unstaged violation next to a staged edit is caught here, not
+# after publication. It also byte-checks the vendored term list against the
+# plugin source, so drift is refused on the only machines that can mint it.
+# Unlike the crossing backstop above, this guard lives IN this repo — if the
+# file is missing, the checkout is broken and the commit should not proceed.
+node "$(git rev-parse --show-toplevel)/scripts/check-cost-terminology.js" || {
+  echo ""
+  echo "Commit blocked by the cost-terminology guard (see above)."
+  exit 1
+}
