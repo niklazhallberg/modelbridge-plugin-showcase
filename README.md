@@ -208,7 +208,7 @@ feels right to the people using it every day.
 
 ## Cost transparency
 
-modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, a measured figure after.
+modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, and after the run a measured figure where fal.ai reports usage modelBridge can price — otherwise a formula figure, labelled as such.
 
 | Tier | What it means | When you see it |
 |---|---|---|
@@ -216,10 +216,11 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 | **From** | A starting price — a floor when it comes from fal.ai's published minimum; for not-yet-verified estimates the final cost can be higher or lower | Before you run, for newer models where surcharges aren't mapped yet |
 | **No price** | No pricing source has a rate — modelBridge never invents a number | Before you run, when pricing isn't published |
 | **Metered** | Priced from the usage fal.ai reported for the run — modelBridge's own calculation, not a copy of your fal.ai invoice | After the run |
-| **Calculated** | The run finished but fal.ai reported no usage, so this is modelBridge's formula for your settings | After the run |
+| **Calculated** | The run finished, but fal.ai reported no usage — or reported usage in a unit modelBridge holds no rate for — so this is modelBridge's formula for your settings | After the run |
+| **Charged, amount unknown** | fal.ai reported usage the plugin cannot price — a real charge, shown with fal.ai's count and no amount | After the run |
 | **Learned** | Sharpened from the median of your last few metered runs for this model and settings | After a few runs with the same config |
 
-Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran.
+Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran. A run you stop after fal.ai has started it may still complete and be charged; Billing settles such rows against fal.ai's result afterwards.
 
 You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
 

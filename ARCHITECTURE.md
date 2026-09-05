@@ -132,7 +132,7 @@ The product's cost labels map one-to-one onto what the provider handed over for 
 | Label | Backed by |
 |---|---|
 | **Metered $X** | fal.ai reported a usage quantity for this run — the dollar is that quantity × the known rate |
-| **Calculated $X** | the run finished without a quantity — the dollar is modelBridge's own formula |
+| **Calculated $X** | the run finished without a quantity modelBridge can price — the dollar is modelBridge's own formula |
 | **Estimated $X** | pre-run, from curated per-model pricing |
 | **Learned ≈$X** | pre-run, the median of your own metered history for these exact settings |
 | **From $X** | pre-run, fal.ai's published base rate — a floor, not a prediction |
