@@ -2,7 +2,7 @@
 // Browser: window.costTerms. Node: module.exports.
 //
 // CANONICAL SOURCE for the forbidden user-facing cost vocabulary of
-// .claude/rules/cost-terminology.md. Enforced at TWO points, for the same
+// .claude/rules/cost-terminology.md. Enforced at THREE points, for the same
 // reason js/shared/linkHosts.js is:
 //
 //   1. COMMIT time — scripts/check-cost-terminology.js over js/, css/,
@@ -12,6 +12,10 @@
 //      `shortMessage` and `ctxTemplate.message`, and _remoteOverrides takes
 //      PRECEDENCE over the built-in VALIDATION_TYPE_OVERRIDES — so a payload
 //      is the last word on what an error says.
+//   3. The docs site's pre-commit (modelbridge-site,
+//      starlight-docs/scripts/check-cost-terminology.cjs) requires THIS file
+//      through MB_PLUGIN_ROOT or the plugin's local path — since 2026-09-05,
+//      when its own copy of the list was found to have drifted on case.
 //
 // Measured 2026-08-20: injecting "You were charged for this. See the actual
 // cost you were Billed." into remote/error-copy.json left the commit guard

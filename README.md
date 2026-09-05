@@ -212,13 +212,14 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 
 | Tier | What it means | When you see it |
 |---|---|---|
-| **Estimated** | A forecast from curated pricing data for your exact settings | Before you run — updates live as you tweak parameters |
-| **From** | A starting price — a floor when it comes from fal.ai's published minimum; for not-yet-verified estimates the final cost can be higher or lower | Before you run, for newer models where surcharges aren't mapped yet |
-| **No price** | No pricing source has a rate — modelBridge never invents a number | Before you run, when pricing isn't published |
-| **Metered** | Priced from the usage fal.ai reported for the run — modelBridge's own calculation, not a copy of your fal.ai invoice | After the run |
-| **Calculated** | The run finished, but fal.ai reported no usage — or reported usage in a unit modelBridge holds no rate for — so this is modelBridge's formula for your settings | After the run |
+| **Estimated** | A forecast from fal.ai's published price for this model, applied to your settings — not a quote, because fal.ai publishes a simplified rate rather than the formula behind it | Before you run — updates live as you tweak parameters |
+| **From** | A floor, not a forecast: fal.ai's lowest rate for this model — your settings can bill more, and modelBridge doesn't have the full formula fal.ai applies | Before you run, for models fal.ai publishes one base rate for |
+| **Rate** | fal.ai bills the model per block of tokens — the rate is shown, not a total, because the token count is set by the finished video | Before you run, for token-priced models |
+| **No price** | fal.ai prices the model in a unit that only exists once the run has finished — nothing to multiply beforehand, so no number is shown | Before you run, when fal.ai's unit only exists after the run |
+| **Metered** | Measured: the units fal.ai reported, priced at fal.ai's own rate for them — modelBridge's multiplication, not a copy of your fal.ai invoice | After the run |
+| **Calculated** | Not a measurement: fal.ai reported no usage, or usage in a unit modelBridge can't price at fal.ai's own rate — so the forecast formula stands, kept as the best figure available | After the run |
 | **Charged, amount unknown** | fal.ai reported usage the plugin cannot price — a real charge, shown with fal.ai's count and no amount | After the run |
-| **Learned** | Sharpened from the median of your last few metered runs for this model and settings | After a few runs with the same config |
+| **Learned** | Priced from your own previous runs of this model at these settings — still a forecast | After a few runs with the same config |
 
 Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran. A run you stop after fal.ai has started it may still complete and be charged; Billing settles such rows against fal.ai's result afterwards.
 
