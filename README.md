@@ -223,6 +223,8 @@ modelBridge shows a concrete cost before you generate — updating live as you c
 
 Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran. A run you stop after fal.ai has started it may still complete and be charged; Billing settles such rows against fal.ai's result afterwards.
 
+What fal.ai's billing signals do and do not tell an integration — the usage header, its retention, cancelled runs that complete, the endpoint a run is charged under, and what needs admin scope — is measured and written down in [COST_SIGNALS.md](COST_SIGNALS.md).
+
 You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
 
 [Cost system →](https://docs.modelbridge.app/models/costs/)
