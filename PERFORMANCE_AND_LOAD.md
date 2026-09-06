@@ -134,9 +134,9 @@ can change on the provider's side with nothing in the payload announcing it, and
 a stale rate is not a cosmetic problem in a product whose entire cost display is
 `quantity × rate`: it produces a confidently wrong number, which is worse than no
 number. The refresh is non-blocking, it is skipped entirely where curated data
-already covers the model, and a failed or rate-limited response deliberately does
-**not** stamp the timestamp — otherwise one throttled answer would suppress the
-next attempt for a full day.
+already covers the model, and a failed or rate-limited response does not count as a
+refresh — otherwise one throttled answer would suppress the next attempt for a
+full day.
 
 On the 67-model reference install used for these measurements, 5 models had
 curated pricing and 31 had pricing older than 24 hours, so 31 would each fire one
@@ -154,9 +154,9 @@ making somebody answer more often than the product actually needs.
 
 | Path | Volume | Cadence | Backoff |
 |---|---|---|---|
-| **Polling a running generation** | **mean 37.2 requests per generation** (median 20, p90 92, longest observed 377) | 1 s for polls 1–30, then 3 s to poll 120, then 5 s | Yes — explicit, in the shipping source |
-| Polling a handed-off generation | — | 5 s for 2 min, 15 s to 5 min, then 30 s; 30-minute soft stop | Yes |
-| Catalogue synchronisation | ~26 requests per cycle (the active catalogue paginated 50 at a time) | **once per ~6 hours** | n/a — pointer advances only on success, so it can be slower, never faster |
+| **Polling a running generation** | **mean 37.2 requests per generation** (median 20, p90 92, longest observed 377) | stepped: fast for the first half-minute of a run, then slower in two further steps | Yes — explicit, in the shipping source |
+| Polling a handed-off generation | — | stepped down over the first minutes; 30-minute soft stop | Yes |
+| Catalogue synchronisation | a few dozen requests per cycle, paginated | **a few times a day** | n/a — the pointer advances only on success, so it can be slower, never faster |
 | Platform health probe | 1 | every 5 min while the panel is visible | none |
 | API key validity probe | 1 | once per panel start | n/a |
 | Pricing | 1 per model per 24 h on selection | on demand | pacing only |
@@ -167,22 +167,21 @@ exact cadence constant from the shipping source over 235 real generation
 durations recorded by the product itself. It is not a count taken off the wire.
 The durations are real; the arithmetic converting them to requests is ours.
 
-**The trade, stated plainly.** A one-second first poll exists because a
-five-second generation that takes six seconds to appear feels broken. It steps
-down at poll 30 because by then the run is long enough that a second of latency
-is invisible against the wait, and there is no reason to keep asking at that
-rate. The median generation on this install ran 20 seconds and cost 20 requests;
-the cost of the fast phase is bounded by the fact that it only lasts 30 polls.
+**The trade, stated plainly.** A fast first poll exists because a five-second
+generation that takes six seconds to appear feels broken. It steps down once the
+run is long enough that a second of latency is invisible against the wait, and
+there is no reason to keep asking at that rate. The median generation on this
+install ran 20 seconds and cost 20 requests; the cost of the fast phase is
+bounded by the fact that it ends after the first half-minute.
 
-**The catalogue sync is the cadence we thought hardest about.** The worker runs a
-three-phase rotation on a two-hour cron — discover, validate, catalogue — one
-phase per tick, so each phase lands roughly every six hours. It could have been
-hourly. It is not, because the catalogue changes a handful of times a day and
-nothing in the product degrades when a new model is visible six hours late: the
-cost of that freshness is a badge count and a "new models" chip being briefly
-behind. Discovery pages the active catalogue at 50 per request, so a cycle is
-about 26 requests against a ~1,300-model catalogue, four times a day, for the
-whole customer base — not per customer.
+**The catalogue sync is the cadence we thought hardest about.** The worker runs
+discovery, validation and publication as separate phases in rotation, so each
+comes round a few times a day. It could have been hourly. It is not, because the
+catalogue changes a handful of times a day and nothing in the product degrades
+when a new model is visible a few hours late: the cost of that freshness is a
+badge count and a "new models" chip being briefly behind. A cycle is a few dozen
+requests against a ~1,300-model catalogue, a few times a day, for the whole
+customer base — not per customer.
 
 **One probe we know is wasteful, and have not yet fixed.** The 5-minute platform
 health check fetches a full OpenAPI document and reads only the HTTP status code
@@ -197,11 +196,11 @@ news feed, licensing, and telemetry. Cadences, all read from the shipping source
 
 | Path | Interval | Pauses when the panel is hidden | Deliberate |
 |---|---|---|---|
-| News / status poll | 15 min, tightening to 5 min during a provider incident | yes | adaptive by design |
-| Telemetry flush | 60 s, **and returns immediately when the queue is empty** | no — must run hidden | yes |
-| Licence revalidation | 12 h **plus up to 30 min of jitter** | yes | the jitter exists so installs do not synchronise |
-| Catalogue index | 30 min, served stale-while-revalidate | yes | yes |
-| Blog feed | 1 h, matching the feed's own declared TTL | yes | yes |
+| News / status poll | periodic, tightening during a provider incident | yes | adaptive by design |
+| Telemetry flush | periodic, **and returns immediately when the queue is empty** | no — must run hidden | yes |
+| Licence revalidation | 12 h **plus jitter** | yes | the jitter exists so installs do not synchronise |
+| Catalogue index | periodic, served stale-while-revalidate | yes | yes |
+| Blog feed | matching the feed's own declared TTL | yes | yes |
 
 Boot traffic to the worker, **measured** across four boots on 2026-09-01: one
 model-insights request, one blocklist, one news, and three to four catalogue
@@ -229,24 +228,20 @@ turns recorded by the product between 2026-05-12 and 2026-08-30, all on Haiku 4.
 | **Cache hit ratio** | **84.5 %** |
 
 **A median turn carries 47,495 tokens of prefix to deliver 370 tokens of new
-content.** The prefix is 99,010 characters of always-on instructions (measured at build
-time, 2026-09-01) plus 113 tool schemas, and all 113 go out on every turn
-regardless of what the turn is about.
+content.** The prefix is the always-on instructions plus every tool schema, and all of
+them go out on every turn regardless of what the turn is about.
 That ratio is the honest headline, and it is why the caching is not optional:
 
-- All four available cache breakpoints are in use — tools, static instructions,
-  the per-turn dynamic block, and a sliding history marker.
-- The volatile part of the prompt sits *after* every breakpoint. It did not
-  always: a minute-resolution timestamp lived inside a cached block, changed
-  every 60 seconds, and made the history breakpoint structurally unreachable.
-  Every turn separated from the previous one by more than a minute — which is
-  nearly all of them — re-tokenised the entire conversation at full price. The
-  breakpoint existed and could never hit.
+- Every cache breakpoint the API offers is in use.
+- The volatile part of the prompt is kept out of the cached blocks. It was not
+  always: one changing value sat inside a cached block and made a breakpoint
+  structurally unreachable, so nearly every turn re-tokenised the whole
+  conversation at full price. The breakpoint existed and could never hit.
 - 84.5 % is the evidence it works now.
 
 **A correction we shipped on 2026-09-01.** Cache writes were priced at 1.25× the
 base input rate — the 5-minute rate — while every one of our four cache markers
-requests a 1-hour TTL, which is 2×. Four constants were wrong, in two files.
+requests a 1-hour TTL, which is 2×.
 Across those 1,975 turns the product under-reported its own agent cost by roughly
 27 %: $34.36 shown against ≈$46.90 actual. The rates are corrected; **historical
 records are marked, not recomputed**, because a customer who exported a report
@@ -264,36 +259,29 @@ it applies to, next to the number.
 
 ## 4. Conditional requests: half built, and the measured half is smaller than we first claimed
 
-Until 2026-09-01 the product contained **zero** conditional requests — no
-`If-None-Match`, no ETag handling anywhere. Every recurring fetch pulled its whole
-body whether or not anything had changed.
-
-There is now one revalidation layer, with six consumers: the OTA manifest (which
-three separate modules fetch), the news feed, the catalogue snapshot, and the
-schema blocklist. It owns validators only and never stores response bodies, so
-nothing is cached twice.
+Until 2026-09-01 the product made **zero** conditional requests — every
+recurring fetch pulled its whole body whether or not anything had changed. There
+is now one revalidation layer shared by the recurring fetches. It owns validators
+only and never stores response bodies, so nothing is cached twice.
 
 **What it buys, measured, and what it does not:**
 
 | | Certain? |
 |---|---|
-| Saves the response **body** | **Yes.** Verified live: all four of our statically-hosted payloads return `304` with a zero-byte body when given `If-None-Match` |
+| Saves the response **body** | **Yes.** Verified live: our statically-hosted payloads return `304` with a zero-byte body when given a validator |
 | Saves the **request** | **No.** A conditional GET is still a request |
-| Saves a **KV read** on our worker | **Unmeasured, and not implied** |
+| Saves work on our own worker | **Unmeasured, and not implied** |
 
 That third row is the important one. It holds only if the worker can answer 304
-*without* reading the data it would otherwise have served — from an edge cache in
-front of it, or from a small version key. If the ETag is computed by hashing the
-payload the worker just read, the read still happens and only egress improves.
-**We have not established which is feasible, because the worker half does not
-exist yet.** Our own endpoints send `cache-control` and no ETag, so today every
-one of those requests is still a 200. The client half is wired anyway: adding an
-ETag on the server becomes a deploy on our side with no second change to shipped
-panels.
+*without* reading the data it would otherwise have served, and the worker half
+does not exist yet: our own endpoints send no validators, so today every one of
+those requests is still a 200. The client half is wired anyway, so adding
+validators on the server becomes a deploy on our side with no second change to
+shipped panels.
 
-The measured gain today is small and specific: the OTA manifest went from three
-fetches per boot to two, because concurrent requests for the same document now
-share one call.
+The measured gain today is small and specific: the update manifest went from
+three fetches per boot to two, because concurrent requests for the same document
+now share one call.
 
 ---
 
