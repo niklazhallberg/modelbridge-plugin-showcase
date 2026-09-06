@@ -26,7 +26,7 @@ Agent Mode allows editors to control the Premiere Pro timeline through natural l
 - 100+ tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
 - A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels), color consistency, and editorial polish — ranked Critical / Warning / Info
 - One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
-- Environment-aware silence removal — the agent measures actual noise levels at a point the editor identifies as "quiet", calibrates the detection threshold to that specific recording environment, finds all silent segments, and removes them with ripple delete. Works equally well on clean studio recordings (-50dB noise floor) and noisy street interviews (-20dB). Preview mode places markers for review before cutting.
+- Environment-aware silence removal — the agent calibrates to the recording environment the editor points it at, finds the silent segments, and removes them with ripple delete. Works on clean studio recordings and noisy street interviews alike. Preview mode places markers for review before cutting.
 - Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
 - Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
 - Persistent editor preferences that shape the agent's behavior across sessions
@@ -45,13 +45,13 @@ This is fundamentally different from usage analytics. Usage analytics tells you 
 
 At scale, this creates a feedback loop: editors shape the product through their natural workflows, the product adapts to serve those workflows better, and the result is an editing assistant that understands post-production culture — not just API endpoints.
 
-Privacy architecture is central to the design. The system classifies intent locally on the editor's machine and transmits only structured labels — never prompt text, creative direction, client names, or project content. Editors working under NDA or on confidential brand campaigns can contribute to product improvement without exposing anything about their work. Detailed privacy architecture is documented separately and available under NDA.
+Privacy architecture is central to the design: nothing about prompt text, creative direction, client names or project content leaves the editor's machine. Editors working under NDA or on confidential brand campaigns can contribute to product improvement without exposing anything about their work. Detailed privacy architecture is documented separately and available under NDA.
 
 ### Predictive QC
 
 The agent currently runs quality checks on demand. The next step is proactive detection — monitoring the timeline in real-time and surfacing issues as they appear, before the editor asks.
 
-When an editor imports a 44.1 kHz audio file into a 48 kHz sequence, the agent will flag it immediately. When a clip is added that doesn't match the sequence codec profile, the agent will note the inconsistency. When the edit rhythm on V1 changes dramatically (a section of rapid cuts followed by a 45-second static shot), the agent will observe it without interrupting — and mention it during the next QC scan.
+A sample-rate mismatch on import, a clip that doesn't match the sequence's codec profile, a sudden change in edit rhythm — flagged as they happen where they matter, and observed quietly and raised at the next QC scan where they don't.
 
 This turns the agent from a reactive tool into a continuous quality layer that runs alongside the editor's creative process.
 
