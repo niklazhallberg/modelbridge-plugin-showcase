@@ -47,8 +47,8 @@ unmeasured.
 - `01a070be-e187-7760-8e4f-951310fa7658` (seedance-2.0/mini, 480p, 4 s):
   submitted 2026-09-05 08:45:51 UTC; cancel requested 0.4 s later, while the
   status was `IN_PROGRESS`; fal.ai answered the cancel with `202`. The run
-  completed at 08:47:21 UTC, reported `38.8` units, and the account balance
-  moved $8.74 → $8.47.
+  completed at 08:47:21 UTC, reported `38.8` units, and the account was
+  charged for it.
 
 fal.ai's own documentation says a cancelled in-progress request "may still
 complete". This is one run on one model; whether other models stop earlier is
