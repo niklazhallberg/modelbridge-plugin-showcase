@@ -68,7 +68,7 @@ window:
 | Everything else — path, shell, credentials, host calls | **0** |
 
 We first wrote this up as drift, and it is mostly the opposite. Thirteen of the
-seventeen are in one file, `js/usage/cepHostAdapter.js`, and a pre-commit guard
+seventeen are in one adapter file, and a pre-commit guard
 puts them there on purpose: every other file in that subsystem is mechanically
 forbidden from touching the file system, `CSInterface`, or the ExtendScript
 bridge, so the layer has **one file to rewrite for UXP instead of five**, and a
@@ -158,26 +158,18 @@ it is why "just ship the server separately" is a larger piece of work than it
 sounds.
 
 **What the panel side actually costs, measured 2026-08-30.** The scary-sounding
-half turns out to be the cheap one. `ServerManager` — the module that spawns and
-supervises the backend, and whose whole reason for existing disappears — is
-called **39 times from 13 files**, and the distribution decides the work:
-
-| Method | Calls | Under a companion application |
-|---|---|---|
-| `ensureRunning` | 30 | Same contract ("the backend is up when this resolves"), different body: launch-and-health-check instead of spawn-and-health-check |
-| `restart` | 9 | Becomes a URL-scheme call |
-| `getBackendOrigin` | 5 | Unchanged |
-| `nodeAvailable` | 4 | Disappears — no system Node to find |
-| `isServerDown` | 2 | Unchanged |
-
-Seven call sites survive untouched, thirty change meaning but not shape, four
-disappear. That is a body change on the panel side, not a signature change —
-**provided** the 79 hardcoded `http://localhost:3000` strings across 35 files
-route through `getBackendOrigin()` first. Today they do not, and each one is a
-place where the sidecar's port and scheme are written down again. Consolidating
-them is on our own list as a pre-launch item, because it is a string constant
-with no behaviour attached and it converts the largest remaining unknown in this
-section into a one-function edit.
+half turns out to be the cheap one. The module that spawns and supervises the
+backend — whose whole reason for existing disappears — is called **39 times from
+13 files**, and the distribution decides the work: a handful of call sites
+survive untouched, most change meaning but not shape ("the backend is up when
+this resolves" stays the contract; launch-and-health-check replaces
+spawn-and-health-check), and a few disappear together with the system Node they
+looked for. That is a body change on the panel side, not a signature change —
+**provided** the backend's address is resolved in one place rather than written
+down at each call site. Today it is not, and consolidating that is on our own
+list as a pre-launch item, because it is a string constant with no behaviour
+attached and it converts the largest remaining unknown in this section into a
+one-function edit.
 
 **The launcher is reserved, because it cannot be added later.** A URL scheme is
 registered by the installer, and an installer that has already run does not
@@ -272,23 +264,17 @@ account-bound GUID is not a dependency we need to take. We are reporting this
 because our own earlier planning assumed the opposite, and treated the licence
 chain as something the migration would have to rewrite.
 
-**Measuring that turned up a live defect, and it is worth reporting at its real
-size rather than the size it first sounded.** The panel had a *second* producer
-of the same id: it read its own cached copy first, and when that disagreed with
-the backend's file it wrote its own value back over it. On installs whose cache
-predated the switch to a machine-derived id, the file oscillated — every
-licence-gated request restored the derived value, every use of the mobile-preview
-feature replaced it with a random one.
-
-What that did **not** affect is the licence binding, which is where we first
-expected the damage: the binding compares against the derived value and never
-reads the file as authority, and the panel sends no identifier to any licence
-call. What it did affect is the file's two actual jobs — telling us which install
-we are looking at when a customer writes in, and letting the panel converge on
-the backend's value. Fixed 2026-09-01: one producer, the panel reads and never
-writes, and it now returns nothing rather than inventing an id when the backend
-has not written one yet. Pinned by a test that fails on five assertions against
-the previous build.
+**Measuring that turned up a live defect in our own code, worth reporting at its
+real size rather than the size it first sounded.** The panel had a *second*
+producer of the same id, and on some installs the two disagreed. What that did
+**not** affect is the licence binding, which is where we first expected the
+damage: the binding never reads the file as authority, and the panel sends no
+identifier to any licence call. What it did affect is the file's two actual jobs
+— telling us which install we are looking at when a customer writes in, and
+letting the panel converge on the backend's value. Fixed 2026-09-01: one
+producer, the panel reads and never writes, and it now returns nothing rather
+than inventing an id when the backend has not written one yet. Pinned by a test
+that fails against the previous build.
 
 The general shape is one we keep finding in our own code and have a written rule
 for: the same truth produced independently in two places, agreeing until it
