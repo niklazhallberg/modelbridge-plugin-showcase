@@ -171,7 +171,7 @@ Error telemetry (Stream A) operates under Legitimate Interest (Art. 6(1)(f)). Th
 | Satisfaction rating | 1 year | 1 year |
 | Pushover event buffer | 48 hours | 48 hours |
 
-Enforcement: A daily cleanup function (`cleanupExpiredSubscriptions`) runs as part of the Worker cron schedule, deleting expired subscription records automatically.
+Enforcement: A daily cleanup function runs as part of the Worker cron schedule, deleting expired subscription records automatically.
 
 ### A rating cannot be erased on request, and that is the same fact as its anonymity
 
@@ -292,7 +292,7 @@ modelBridge does not act as a data processor for fal.ai generation traffic. The 
 6. Daily cron compiles a global aggregate (365-day TTL)
 7. Global aggregate available via `GET /api/analytics/daily` (Bearer token, admin only)
 
-### Acquisition-Demo Endpoint
+### Aggregate analytics endpoint
 
 `GET /api/analytics/daily` — returns last 30 days of global usage aggregates. Requires Bearer token authentication. Contains no per-user data — only aggregated counts (active installations, total generations, acceptance rate, top models by category).
 
