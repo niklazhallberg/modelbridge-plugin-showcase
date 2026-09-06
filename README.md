@@ -26,6 +26,7 @@ This repository is written for engineers evaluating the integration, not for edi
 |---|---|
 | What it does, and why anyone would run it | The rest of this file |
 | How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
 | What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
 | **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, five open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
 | What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
