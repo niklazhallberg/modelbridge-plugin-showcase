@@ -1,5 +1,4 @@
 {
-  "_comment": "Operational config, fetched by installed panels (~1 h TTL). Which of these is a real lever, and what each one can actually do, is docs/INCIDENT_PLAYBOOK.md -> \"The levers, and what each one can actually do\". Two notes that belong next to the switches themselves: pricing_display SUPPRESSES every price shown before a run (the panel falls back to its own \"Price not available\" state) and leaves the generation log recording what runs cost — it hides a wrong price, it cannot correct one. strict_schema_validation is declared and allowlisted but NO code reads it: it is not a lever, do not reach for it during an incident.",
   "version": 2,
   "schema": {
     "primary_url": "https://fal.ai/api/openapi/queue/openapi.json",
