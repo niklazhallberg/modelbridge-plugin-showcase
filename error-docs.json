@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": 11,
-    "updatedAt": "2026-08-29T12:00:00Z"
+    "version": 12,
+    "updatedAt": "2026-09-09T12:00:00Z"
   },
   "entries": {
     "LICENSE_REFUSED": {
@@ -109,13 +109,19 @@
     },
     "DOWNLOAD_FAIL": {
       "slug": "download-failed",
-      "cause": "The generated result could not be downloaded from fal.ai. The file may have expired or the connection was interrupted.",
+      "cause": "Result delivery needs attention — your generation may already be complete. fal.ai produced a result for this request and modelBridge could not download it. Completion or charge status has not been confirmed here. Check the existing request before starting another generation: Generate submits a new fal.ai request, which may be charged again.",
       "steps": [
-        "Try generating again — you won't be charged if the result is still cached",
-        "Check your internet connection",
-        "If the issue persists, try a different model or shorter generation"
+        "Use Check status above the Generate button — it works with the existing request and does not start a new one",
+        "Or open your fal.ai dashboard and download the result from your recent requests",
+        "A missing result, dashboard record or usage entry does not prove the original request failed or was free",
+        "Generate starts a new fal.ai request, which may be charged again — choose it knowing that, not as a free retry"
       ],
-      "externalLinks": []
+      "externalLinks": [
+        {
+          "label": "fal.ai Dashboard",
+          "url": "https://fal.ai/dashboard"
+        }
+      ]
     },
     "EXTRACT_FAIL": {
       "slug": "extract-failed",
@@ -555,11 +561,12 @@
     },
     "GENERATION_NOT_FOUND": {
       "slug": "generation-not-found",
-      "cause": "The generation you were waiting for can no longer be found on fal.ai. Requests expire on fal.ai’s side after a while — this usually happens when a run was left unfinished for a long time, for example across several days or restarts. The model itself is fine.",
+      "cause": "The generation you were waiting for can no longer be found on fal.ai. Requests expire on fal.ai’s side after a while — this usually happens when a run was left unfinished for a long time, for example across several days or restarts. The model itself is fine. How that run ended is what modelBridge cannot tell you: completion or charge status has not been confirmed.",
       "steps": [
         "Open your fal.ai dashboard and check your recent requests — if the run finished, the result can be downloaded from there",
-        "If it is not on the dashboard either, the run never completed — generate again",
-        "Your cost history in modelBridge shows whether fal.ai reported any usage for this run"
+        "Your cost history in modelBridge shows whether fal.ai reported any usage for this run",
+        "A missing dashboard record, usage entry or result does not prove the run never completed or was never charged — fal.ai expires old records",
+        "Generate starts a new fal.ai request, which may be charged again — choose it knowing that, not as a free retry"
       ],
       "externalLinks": [
         {
@@ -585,11 +592,12 @@
     },
     "RESULT_FETCH_FAILED": {
       "slug": "result-not-retrieved",
-      "cause": "Your generation finished on fal.ai, but modelBridge could not download the result. The run itself succeeded — the file exists on fal.ai — so generating again would create (and pay for) a second run of the same thing.",
+      "cause": "Your generation finished on fal.ai, but modelBridge could not download the result. The run itself succeeded — the file exists on fal.ai — so generating again would start a second, separately charged run of the same thing.",
       "steps": [
+        "Use Check status — it retries the download on the existing request and does not start a new one",
         "Open your fal.ai dashboard — the file is under your recent requests and can be downloaded from there",
-        "Check your internet connection and use Check status to try the download again",
-        "Only generate again if the result is not on your dashboard"
+        "A missing dashboard record or usage entry does not prove this run failed or was free — check your cost history too",
+        "Generate starts a new fal.ai request, which may be charged again"
       ],
       "externalLinks": [
         {
