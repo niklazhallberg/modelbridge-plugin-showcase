@@ -357,14 +357,13 @@ longest one in this section.
 proven by nothing.
 
 *That correction is now itself out of date, in our favour, so it needs saying
-plainly.* **As of 2026-09-09 the wrapper has a characterisation suite** — 43
-assertions covering backup refusal, a dry run that crashes, a no-op, a clean
-migration, a failure part-way through, and what the wrapper hands the migration
-function. It was verified the honest way rather than by being green: three
+plainly.* **As of 2026-09-09 the wrapper has a characterisation suite** covering
+backup refusal, a dry run that crashes, a no-op, a clean migration, a failure
+part-way through, and what the wrapper hands the migration function. It was verified the honest way rather than by being green: three
 defects were planted in copies of the tree — the backup abort removed, the
 dry-run abort made non-fatal, and a model that fails mid-apply dropped before the
-save — and the suite went red in the right rows for each, 5, 2 and 3
-respectively, while its four controls stayed green in every arm.
+save — and the suite went red in the right rows for each, while its
+controls stayed green in every arm.
 
 *And the sentence beside it was too broad all along.* We wrote "persisted data
 carries a schema version". Measured 2026-09-09 across our durable documents:
