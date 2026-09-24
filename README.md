@@ -234,7 +234,7 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 
 ## Security and privacy
 
-**The heavy lifting stays on your machine.** Silence removal, timeline scans, cuts, ripple-delete — the media processing for all of these runs locally through ffmpeg and Premiere. Your footage is never uploaded to perform them.
+**The heavy lifting stays on your machine.** Silence analysis, timeline scans, cuts, ripple-delete — the media processing for all of these runs locally through ffmpeg and Premiere. Your footage is never uploaded to perform them.
 
 What does leave your machine, and where it goes:
 

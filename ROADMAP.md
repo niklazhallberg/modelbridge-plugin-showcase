@@ -23,10 +23,10 @@ Detailed technical architecture and implementation plan exists and is available 
 Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
 
 **Current capabilities (shipped):**
-- 100+ tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence removal, and export
-- A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels), color consistency, and editorial polish — ranked Critical / Warning / Info
-- One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications, explains why each setting is optimal for the target platform, and exports directly without AME dialogs
-- Environment-aware silence removal — the agent calibrates to the recording environment the editor points it at, finds the silent segments, and removes them with ripple delete. Works on clean studio recordings and noisy street interviews alike. Preview mode places markers for review before cutting.
+- 100+ tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence analysis, and export
+- A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels, proxies and offline media, flash frames), color consistency (Lumetri and source LUTs), and editorial polish — ranked Critical / Warning / Info
+- One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications for the editor to approve, explains why each setting is optimal for the target platform, and runs the export through Adobe Media Encoder with no dialog to click. Premiere's interface freezes for the duration of each export
+- Environment-aware silence **analysis** — the agent calibrates to the recording environment the editor points it at, measures the silent segments, and inverts them into a keeper-range cut list it shows for review. Works on clean studio recordings and noisy street interviews alike. **The cutting itself is not shipped:** multi-range A/V assembly is deferred, so the agent stops at the proposed ranges and hands the editor the manual path — duplicate the sequence, use the ranges as a cut list, ripple-delete after checking linked A/V. Marker-based preview is not the mechanism either; marker creation is bounded to a narrower contract
 - Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
 - Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
 - Persistent editor preferences that shape the agent's behavior across sessions
@@ -49,15 +49,15 @@ Privacy architecture is central to the design: nothing about prompt text, creati
 
 ### Predictive QC
 
-The agent currently runs quality checks on demand. The next step is proactive detection — monitoring the timeline in real-time and surfacing issues as they appear, before the editor asks.
+Partly shipped, and this section overstated how much of it was still ahead. A proactive layer already runs: while the Assistant tab is open the panel diffs the project state every few seconds, evaluates local heuristics, and surfaces coaching notices the editor can dismiss or snooze — no model calls, so it costs nothing per check.
 
-A sample-rate mismatch on import, a clip that doesn't match the sequence's codec profile, a sudden change in edit rhythm — flagged as they happen where they matter, and observed quietly and raised at the next QC scan where they don't.
+What remains is the half that needs judgement rather than a heuristic: a clip that doesn't match the sequence's codec profile, a sudden change in edit rhythm, and the decision about which findings deserve an interruption as they happen versus a quiet note at the next QC scan.
 
 This turns the agent from a reactive tool into a continuous quality layer that runs alongside the editor's creative process.
 
 ### AI-Driven Interview Editing (Beyond Silence)
 
-Silence removal is shipped. The next step is content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
+Silence *analysis* is shipped, and the cut list it produces is executed by the editor (see the capabilities list above). Two steps are ahead: performing the cut, and content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
 
 - **Cutting by what was said**, not by where the gaps are — "drop the part where she repeats the question", "keep the answer about pricing"
 - **Removing filler and false starts** — the ums, the restarts, the takes that trail off — as one pass rather than one trim at a time

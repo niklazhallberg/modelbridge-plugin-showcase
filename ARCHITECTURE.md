@@ -161,7 +161,7 @@ Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro inte
 
 The result: Adept solves problems a raw model would hand back to the user.
 
-**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence removal, quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
+**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence analysis — measurement and a keeper-range cut list, with the cut itself left to the editor because multi-range A/V assembly is deferred — quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
 
 **Available models.** Claude Haiku 4.5 (default, fast + cheap) and Claude Sonnet 4.6 (deeper reasoning). Editors switch per conversation.
 
