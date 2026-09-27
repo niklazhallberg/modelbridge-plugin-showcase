@@ -12,12 +12,9 @@
 #
 #     git config core.hooksPath .githooks
 #
-# WHAT IT CHECKS. That a staged file was not written while a different session
-# held this working directory — the case that silently dropped a <script> tag
-# from the panel's index.html on 2026-09-01. The guard and the directory lock
-# it reads both live at ~/.claude/bin/, installed from the panel repo, so this
-# repo depends on no other repository being checked out at any particular path.
-# Absent, the hook is a no-op: a missing guard must never block a commit.
+# WHAT IT CHECKS. First, a per-machine commit-time backstop where one is installed:
+# that a staged file was not written while another session held this working
+# directory. It is optional by design — a missing backstop must never block a commit.
 set -e
 
 GUARD="$HOME/.claude/bin/check-commit-crossing.js"

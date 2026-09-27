@@ -85,10 +85,8 @@ The panel is supported by a local backend process on the customer's machine.
   process while the panel is running.
 - Caller-supplied output names are stripped to a bare filename before any write, so
   no request can place a file outside its intended directory.
-- Unused routes are deleted rather than left dormant. A prior audit pass removed
-  roughly 370 lines across seven unreferenced endpoints — including latent file and
-  network primitives — on the principle that an unreachable capability behind a local
-  port is still a capability.
+- Unused routes are deleted rather than left dormant, on the principle that an
+  unreachable capability behind a local port is still a capability.
 
 ---
 
@@ -161,16 +159,12 @@ a public issue for anything security-relevant.
 Contact: `info@modelbridge.app` — include what you found and how to reproduce it. We
 will confirm receipt and tell you what we intend to do about it.
 
-**In scope, in this repository.** Two things here are live infrastructure rather than
-documentation:
-
-- **The over-the-air payloads** (`ota-manifest.json` and the JSON files it declares).
-  Installed panels fetch these. Each payload is pinned by SHA-256 in the manifest and
-  the fetchers fail closed to the copy bundled in the extension, so a mismatch disables
-  a channel rather than applying it — but the manifest itself is unsigned, so anyone who
-  can write to this repository controls both a payload and its pin. Findings that widen
-  that, or that get past the pin, are in scope.
-- **The data-erasure endpoint** documented in `PRIVACY_AND_COMPLIANCE.md` §7.
+**In scope, in this repository.** The payloads published here are live infrastructure
+rather than documentation: installed panels fetch them, and the channel fails closed to
+the copy bundled in the extension on an integrity mismatch. Write access to this
+repository is therefore the channel's trust root, and is protected accordingly.
+Findings that would widen that boundary are in scope, as are the data-access and
+erasure paths described in the privacy material.
 
 **In scope, elsewhere.** The plugin source is not in this repository, so an issue in the
 panel, the local backend or the Premiere Pro integration cannot be reproduced from here

@@ -19,16 +19,13 @@
  * marker comment on the same line — or, in a JSON payload where comments cannot
  * exist, a "_costTermAllow": "<reason>" key on the enclosing object.
  *
- * ONE list, one source. The forbidden-term regexes come from the plugin repo's
- * js/shared/costTerms.js, vendored byte-for-byte at scripts/vendor/costTerms.js
- * because CI checks out this repo alone and cannot require across repositories.
- * This guard byte-compares the vendored copy against the plugin source whenever
- * that source is present on disk (every machine that could mint drift has both
- * repos), and FAILS on divergence — drift is an error, not a silent property.
- * Where the source is absent (CI), that is said out loud rather than skipped
- * silently. This repo carried its own copy of the list until 2026-09-02, and it
- * had drifted: the plugin's \bBilled\b went case-insensitive on 2026-08-18 and
- * the copy here stayed case-sensitive, so a rendered lowercase "billed" passed.
+ * ONE list, one source. The forbidden-term list is vendored byte-for-byte from the
+ * product's own shared module at scripts/vendor/costTerms.js, because CI checks out
+ * this repo alone and cannot require across repositories. This guard byte-compares the
+ * vendored copy against that source wherever the source is present, and FAILS on
+ * divergence — drift is an error, not a silent property. Where the source is absent
+ * (CI), that is said out loud rather than skipped silently. This repo carried its own
+ * copy of the list until 2026-09-02, and it had drifted on letter case.
  *
  * Run: node scripts/check-cost-terminology.js   (also wired in CI — see
  * .github/workflows/cost-terminology.yml — and in .githooks/pre-commit)

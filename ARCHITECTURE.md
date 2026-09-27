@@ -249,9 +249,11 @@ Full data architecture, retention policies, and third-party data flows are docum
 
 ## Security & Privacy
 
-User API keys are stored locally and used exclusively for direct communication with fal.ai — they never transit modelBridge infrastructure. The OTA update channel (GitHub raw content) is read-only and carries no user data. License validation transmits only the license key and a device identifier over HTTPS.
+User API keys are stored locally and used exclusively for direct communication with fal.ai — they never transit modelBridge infrastructure. The update channel is read-only and carries no user data.
 
-The local backend runs on localhost only and is not exposed to the network. Anonymous error telemetry is opt-in (off by default) and contains no prompts, file paths, media, or personal information. Behavioral analytics is opt-in only.
+A licence check carries the information needed to validate product access and support device management. A device name can be included; because device names often reflect the computer hostname, they can contain personal information. The service returns the subscription status and access information needed by the product. Licence checks are not used to transfer creative project content.
+
+The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting is off by default and carries technical error context, filtered and truncated before it is sent. Optional usage measurement is opt-in only.
 
 For full data inventory, GDPR compliance measures, subprocessor list, and retention policies, see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md).
 
