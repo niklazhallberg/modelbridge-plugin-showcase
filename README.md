@@ -9,9 +9,20 @@
 > currently available to users. **Measured** means the document gives its date and
 > method. **Roadmap / under consideration** means direction, not a product commitment.
 
-**Every fal.ai model. Generated and imported inside Adobe Premiere Pro.**
+**fal.ai image, video, and audio generation—inside Adobe Premiere Pro.**
 
-**An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,200 models today, and the number moves every week. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
+> **Coverage.** ModelBridge covers fal.ai image, video, and audio generation or
+> transformation categories used in an editorial workflow: image-to-image,
+> text-to-image, image-to-video, video-to-video, text-to-video, text-to-audio,
+> audio-to-audio, text-to-speech, audio-to-video, video-to-audio, and
+> speech-to-speech. The catalogue measured 1,286 models in these 11 categories on
+> 2026-09-25 and changes over time.
+>
+> Models outside this editorial media-generation workflow are intentionally out of
+> scope, including 3D, training, transcription, captioning, text/structured-data
+> output, and general language or vision models.
+
+**An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,280 currently catalogued models, and the catalogue changes over time. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
 
 No browser tabs. No downloads. No manual imports. See the result in Premiere's Source Monitor, hit Import, and it lands on your timeline in the right place — automatically.
 
@@ -57,7 +68,7 @@ This repository is written for engineers evaluating the integration, not for edi
 
 **Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day and notifies you the moment a new model goes live. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project the second you see it in the panel. You don't update, you don't configure, you don't wait.
 
-That's how one plugin keeps up with 1,200 models and counting.
+That's how one plugin keeps up with over 1,280 currently catalogued models.
 
 - **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
 - **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
@@ -299,7 +310,7 @@ Subscribe, install the plugin, paste your license key and your fal.ai key, and g
 ## Links
 
 - **[Documentation](https://docs.modelbridge.app/what-is-modelbridge/)** — 75+ pages: guides, features, Academy, troubleshooting, legal
-- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — 1,200+ models, refreshed several times a day
+- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — over 1,280 currently catalogued models, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[CEP → UXP migration](UXP_MIGRATION.md)** — what is measured, what cannot be adapted, and the open questions to Adobe
 - **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
