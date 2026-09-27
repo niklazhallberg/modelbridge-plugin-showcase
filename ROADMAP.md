@@ -78,7 +78,7 @@ Platform-specific code is being isolated behind adapter layers, and two surfaces
 
 [UXP_MIGRATION.md](UXP_MIGRATION.md) carries the measurements, the open questions to Adobe, the No-Go criteria for our beta, and the places our own early decisions turned out to be wrong.
 
-This migration does not affect current functionality or users. The CEP version will continue to work on all supported Premiere Pro versions.
+This migration does not change how the current build behaves for users today. The CEP build keeps working on the Premiere versions that support CEP — and that window is Adobe's to set, not ours. See [UXP_MIGRATION.md](UXP_MIGRATION.md) §7 for Adobe's stated plan and how we are planning against it.
 
 ---
 

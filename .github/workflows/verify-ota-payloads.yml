@@ -9,11 +9,9 @@ name: Verify OTA payloads
 # does not break loudly, it quietly disables a money or gating channel while
 # every surface keeps reporting success.
 #
-# Found the day this was written (2026-08-20), both live in production:
-#   - claude-models.json declared in the manifest, never published -> HTTP 404
-#   - pricing-supplements.json serving a schema-only example against a pin for
-#     the real 67-entry table -> permanently rejected
-# Neither had any signal. This workflow is that signal.
+# Found the day this was written: two declared payloads were inert in production with
+# no signal at all — one never published, one permanently rejected against its pin.
+# Neither failed loudly. This workflow is that signal.
 
 on:
   push:
@@ -72,7 +70,8 @@ jobs:
                         f'it contains never reaches a user. Publish the manifest and the payload together.')
                   fail = True; continue
 
-              # Payload and manifest must agree about which version is published.
+              # Informational: the manifest's channel version and the payload's own
+              # version use different numbering, so they are printed, not compared.
               try:
                   inner = json.load(open(fname)).get('_meta', {}).get('version')
               except Exception:

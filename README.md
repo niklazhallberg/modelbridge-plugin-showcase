@@ -1,5 +1,14 @@
 # modelBridge.app
 
+> **What this repository is.** A public engineering record for ModelBridge, a
+> Premiere Pro extension built around fal.ai workflows. The plugin source is private;
+> customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app).
+>
+> **How to read the claims.** **Implemented** means it is present in the product
+> described here. **Built but disabled** means implementation exists but is not
+> currently available to users. **Measured** means the document gives its date and
+> method. **Roadmap / under consideration** means direction, not a product commitment.
+
 **Every fal.ai model. Generated and imported inside Adobe Premiere Pro.**
 
 **An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,200 models today, and the number moves every week. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
@@ -12,7 +21,7 @@ No browser tabs. No downloads. No manual imports. See the result in Premiere's S
 
 Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scaling is applied automatically. Nothing to conform, nothing to re-import.
 
-**Safe on confidential work** — your footage is never uploaded to clean up, scan or analyse a timeline. That work runs on your machine, through Premiere and ffmpeg. What each feature does send, and where, is set out in full: [Security and privacy →](#security-and-privacy)
+**The heavy media work stays on your machine** — silence analysis, timeline scans, cuts and ripple-delete run locally through Premiere and ffmpeg; your footage is not uploaded to perform them. Agent Mode asks before it sends frames of your timeline, and NDA mode blocks them outright. What each feature sends, and where, is set out in full: [Security and privacy →](#security-and-privacy)
 
 [Learn more about timeline import →](https://docs.modelbridge.app/features/timeline-import/)
 
@@ -28,12 +37,19 @@ This repository is written for engineers evaluating the integration, not for edi
 | How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
 | What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
-| **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, five open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
+| **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
 | What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
 | What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
 
-If you only open one, open `UXP_MIGRATION.md`. It is the file where the numbers have denominators and the mistakes are ours — including the adapter we built in the shape that makes its own replacement hardest, in the one place our own policy warned against it. Every figure in it is dated, because it measures a codebase that changes weekly.
+**For fal.ai reviewers.** In order, about twenty-five minutes:
+
+1. The workflow and cost sections below — the editorial problem, and how cost is shown before a run.
+2. [ARCHITECTURE.md](ARCHITECTURE.md) → *Consuming the fal.ai API in production* — the schema as the interface, why a status word is not the whole status, and why every cost label names whose arithmetic produced it.
+3. [COST_SIGNALS.md](COST_SIGNALS.md) — what a provider's billing signals do and do not tell an integration.
+4. [PERFORMANCE_AND_LOAD.md](PERFORMANCE_AND_LOAD.md) — what we ask of each service, at what cadence, and the largest thing we have not measured.
+5. [UXP_MIGRATION.md](UXP_MIGRATION.md) §8 claim register and §4 — what we got wrong.
+6. [SECURITY.md](SECURITY.md) → *What is accepted, and why*.
 
 ---
 
@@ -98,7 +114,10 @@ The agent is trained specifically for editorial work — not generic "AI cinemat
 
 ## 3. Mobile Preview
 
-Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview lets you review every generation on your actual delivery screen without leaving Premiere.
+**Status: temporarily unavailable in the current build.**
+Mobile Preview is a built ModelBridge capability for sending generated results to a phone for review. It is currently disabled while the preview flow is reviewed before re-enablement.
+
+Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview is designed to let you review a generation on your actual delivery screen without leaving Premiere.
 
 - Scan the QR once — every future generation appears on your phone in seconds while the app is open
 - Installs as a PWA — fullscreen, no browser chrome, autoplays muted, loops
@@ -238,18 +257,18 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 
 What does leave your machine, and where it goes:
 
-- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, filenames, timecodes, effect settings. It does not send the folders your media sits in: source paths are replaced with a session-only reference before anything leaves the machine. Conversations never touch modelBridge servers
-- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one automatic path — a few frames of the selected clip riding along with your messages, so the agent can see what you see — is on by default and switched off in Settings → Privacy → "Timeline frames to the agent"; turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
+- **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, filenames, timecodes, effect settings. Media paths are masked before transmission where applicable. The masking boundary is described in the privacy material. Conversations never touch modelBridge servers
+- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one path the agent can take on its own — a few frames of the selected clip travelling with your messages, so the agent can see what you see — is **asked for the first time it would happen**, and sends nothing until you answer; the answer can be changed in Settings → Privacy, NDA mode blocks it whatever you answered, and turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
 - **Generate tab** sends media to fal.ai when you click Generate
 
 Two of those boundaries are enforced in the build rather than in policy, and both are checkable from files that ship:
 
 - **The media binary has no network code in it.** The FFmpeg that every extraction, probe and conversion runs through is compiled from source with `--disable-everything --disable-network --disable-autodetect` and an explicit allowlist, leaving exactly two protocols enabled: `file` and `pipe`. It cannot open a connection. The configure string and a per-architecture SHA-256 are recorded in `bin/ffmpeg-provenance.json`, which ships inside the extension — you do not have to take our word for the flags.
-- **Source folders never reach Anthropic.** Absolute media paths are swapped for opaque references at a single choke point before anything is sent, and resolved back locally on the return trip. The reference is scoped to the session by construction, so it is not an identifier in its own right, and the tool schemas tell the model it is holding an opaque token and not a filesystem path. The filename still travels — the agent has to be able to name the clip — and that limit is stated in the source, not glossed.
+- **Media paths are masked before transmission where applicable.** Absolute media paths are replaced with session-scoped references at a single choke point before anything is sent, and resolved back locally on the return trip; the model is told it is holding an opaque reference rather than a filesystem path. The filename still travels — the agent has to be able to name the clip. The masking boundary is described in the privacy material rather than implied here.
 
 For NDA work, see the [NDA editing guide](https://docs.modelbridge.app/guides/editing-nda-footage/) for what each feature does and doesn't share.
 
-Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers unless you opt in to anonymous analytics. Anonymous error telemetry (error type + fal.ai endpoint + plugin version, no prompts or media) is off by default — you opt in from Settings.
+Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers unless you opt in to anonymous analytics. Optional error reporting is off by default — you opt in from Settings — and carries technical error context, filtered and truncated before it is sent: no prompts, no media, no file paths and no identifier.
 
 Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
 
