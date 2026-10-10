@@ -81,7 +81,7 @@ That's how one plugin keeps up with over 1,280 currently catalogued models.
 
 ---
 
-## 2. Agent Mode — with the Adept intelligence layer
+## 2. Agent Mode (Beta) — with Adept
 
 Ask in plain language. The agent reads your timeline, executes edits, verifies its own work, and reports back.
 
@@ -92,9 +92,9 @@ Ask in plain language. The agent reads your timeline, executes edits, verifies i
 - *"Explain this model"* — honest walkthrough of a fal.ai model with one-click install
 - *"Build me a reverse shot from this frame"* — coverage prompt handed straight to the Generate tab
 
-The **Adept** layer tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. The result: it solves problems a raw model would hand back to you.
+**Adept** tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. Anything you could not undo — a deletion, an export, opening or closing a project — is confirmed with you first. The result: it solves problems a raw model would hand back to you.
 
-Bring your own Anthropic API key. Two Claude models — Haiku 4.5 by default, one click to switch to Sonnet 4.6 for deeper reasoning. No markup. Session cost tracked in real time.
+Bring your own Anthropic API key. Claude Haiku 5.5 by default, Sonnet 5.5 one click away. No markup — usage goes straight onto your own Anthropic account. Ask the agent what a session has cost.
 
 ### The agent can spend your money, and cannot do it alone
 
@@ -117,7 +117,7 @@ This exists because the failure it prevents is invisible: a scan that silently c
 
 ### Prompt authoring for editors
 
-The agent is trained specifically for editorial work — not generic "AI cinematic" output. Attach a frame from your timeline and ask for coverage: reverse shots, over-the-shoulder, wides, inserts, B-roll. The prompt it writes locks face, wardrobe, set, and lighting to your reference so the new shot cuts directly into the scene. Scene matching across multiple generations reuses the same visual lock across every prompt in a chat. Motion-ready first frames are shaped so the identity survives the image-to-video pass. When the prompt is ready, one click sends it to the Generate tab with your reference frame pre-attached.
+The agent is built specifically for editorial work — not generic "AI cinematic" output. Attach a frame from your timeline and ask for coverage: reverse shots, over-the-shoulder, wides, inserts, B-roll. The prompt it writes locks face, wardrobe, set, and lighting to your reference so the new shot cuts directly into the scene. Scene matching across multiple generations reuses the same visual lock across every prompt in a chat. Motion-ready first frames are shaped so the identity survives the image-to-video pass. When the prompt is ready, one click sends it to the Generate tab with your reference frame pre-attached.
 
 [Agent Mode →](https://docs.modelbridge.app/features/agent-mode/) · [Agent Export →](https://docs.modelbridge.app/features/agent-export/)
 

@@ -150,7 +150,7 @@ This section is about what the API demands. How often we ask of it — poll volu
 
 Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro integration. Editors describe what they want in plain language; the agent reads the timeline, plans the operation, executes edits, and reports back.
 
-**Adept — the intelligence layer.** Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge applies an intelligence layer called Adept that tailors the agent for Adobe's environment:
+**Adept.** Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds Adept, built to tailor the agent for Adobe's environment:
 
 - **Wired into the Premiere toolkit.** Adept reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
 - **Finds a way around technical limits.** When Premiere's scripting can't cross a boundary directly, Adept looks for a workaround that still reaches the goal, instead of giving up or handing the problem back.
@@ -161,9 +161,9 @@ Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro inte
 
 The result: Adept solves problems a raw model would hand back to the user.
 
-**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence analysis — measurement and a keeper-range cut list, with the cut itself left to the editor because multi-range A/V assembly is deferred — quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
+**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence analysis — measurement, a keeper-range cut list, and on the editor's go-ahead a new sequence assembled from those ranges with per-range readback, the working sequence left untouched — quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
 
-**Available models.** Claude Haiku 4.5 (default, fast + cheap) and Claude Sonnet 4.6 (deeper reasoning). Editors switch per conversation.
+**Available models.** Claude Haiku 5.5 (default, fast + cheap) and Claude Sonnet 5.5 (deeper reasoning). Editors switch per conversation.
 
 **Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure. Absolute media paths are replaced with opaque, session-scoped references at a single choke point before anything is sent and resolved back locally on return — session-scoped by construction, so the reference does not itself identify the file across sessions. Filenames still travel, because the agent has to name the clip; the boundary is stated in the source rather than implied.
 
