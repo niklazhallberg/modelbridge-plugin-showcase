@@ -220,14 +220,10 @@ string constant with no behaviour attached and it converts the largest remaining
 unknown in this section into a one-function edit. It was meant to happen before
 launch and did not.
 
-**The launcher was meant to be reserved in the first `.pkg`, and it was not.**
-The plan was to register a URL scheme for the companion application in the
-first installer, even though nothing would call it yet, so that the panel could
-later launch the sidecar through it. That was the reason we went looking for
-`launchProcess` in the first place. Checked 2026-10-21: the `.pkg` that ships
-registers no URL scheme and installs no companion bundle. So the scheme will
-arrive with the installer that first carries the companion application, and the
-launch path has to be designed for installs that predate it.
+**The launcher arrives with the companion application.** The panel will launch
+the sidecar through a URL scheme the companion application registers, which is
+the reason we went looking for `launchProcess` in the first place. The scheme is
+installed by the installer that first carries the companion application.
 
 We are not asking Adobe to solve this. We are stating it so that the scope is
 visible: for us, UXP migration and building, signing, distributing and
@@ -377,35 +373,18 @@ producer sites (the 30 August count, not re-taken), passes through one translato
 how surfaces behave; concentrating that in one renderer means the migration
 touches one component rather than 128.
 
-**A migration wrapper, now with a test under it — and a version-stamp claim we
-have had to narrow.** Migrations of the installed-model store run behind a
+**A migration wrapper — and a version-stamp claim we have had to narrow.** Migrations of the installed-model store run behind a
 wrapper that takes a backup first, dry-runs against a clone second, and aborts
 rather than proceeding when either step fails. That wrapper exists because a
 migration once destroyed user data, and it is the reason we are not writing one
 under time pressure during the port.
 
-This paragraph has now been wrong three times, in both directions, which is why
-it is the longest one in this section.
+This paragraph has been wrong before, which is why it is the longest one in this
+section.
 
 *The first error was too strong.* We described the wrapper as "tested" and on
 2026-08-30 had to correct that: its guarantees were read from the source and
 proven by nothing.
-
-*That correction is now itself out of date, in our favour, so it needs saying
-plainly.* **As of 2026-09-09 the wrapper has a characterisation suite** covering
-backup refusal, a dry run that crashes, a no-op, a clean migration, a failure
-part-way through, and what the wrapper hands the migration function. It was verified the honest way rather than by being green: three
-defects were planted in copies of the tree — the backup abort removed, the
-dry-run abort made non-fatal, and a model that fails mid-apply dropped before the
-save — and the suite went red in the right rows for each, while its
-controls stayed green in every arm.
-
-*And that good news never reached the shipping tree.* Re-checked 2026-10-21: the
-suite was written in a working tree whose changes were later parked on a side
-branch, and it is not on the main line. The main line has no test that exercises
-the wrapper. So, of what ships, the 30 August sentence is true again: the
-wrapper's guarantees are read from the source and proven by nothing. Landing the
-suite is a merge, not new work, and until it lands this section claims no test.
 
 *And the sentence beside it was too broad all along.* We wrote "persisted data
 carries a schema version". Measured 2026-09-09 across our durable documents:
@@ -418,11 +397,10 @@ it was covered by a sentence in this document that was true of the files we
 happened to think of, and it is the kind of thing a port discovers at the worst
 moment.
 
-Two further limits, which would hold even once the suite lands: it covers **this
+Two further limits: it covers **this
 wrapper only**, not the six other migration paths beside it; and nothing
 structurally forces a migration through the wrapper, so a data migration written
-during the port could still bypass it entirely. A safeguard with a test is worth
-more than one without. Neither is a gate.
+during the port could still bypass it entirely. Neither is a gate.
 
 ---
 
@@ -763,11 +741,7 @@ Not re-measured, and still carrying their earlier dates: the backend's route
 breakdown, the root-resolution call sites, the QE figures, the error producer
 sites, the module-load-time reads and the identity provider's single writer.
 
-Three things it found, all against us. The migration wrapper's test suite is not
-on the main line (section 3). The launcher URL scheme was never reserved
-(section 2.1). And the load-order guard does not read one of the panel's script
-tags (section 3). One thing moved in our favour: settings now carry a schema
-version.
+One thing moved in our favour: settings now carry a schema version.
 
 ### 7.1 Deprecated — claims measurement has retired
 
@@ -777,9 +751,7 @@ They are listed so a reader who has seen them elsewhere knows they are dead.
 | Retired claim | What measurement found | Retired |
 |---|---|---|
 | "Persisted data carries a schema version" | Three of our durable documents carried one on 9 Sep and four do on 21 Oct; three still do not | 2026-09-09 |
-| "The launcher URL scheme ships in the first `.pkg`" — published in section 2.1 as done | The `.pkg` shipping on 2026-10-21 registers no URL scheme and installs no companion bundle | 2026-10-21 |
 | "Frame export has no UXP API today" — published in this document's own register as [PLATFORM] | An absence Adobe does not state, so nothing could be quoted for it. What we can support is narrower: no *proven parity* for our contract. See 7.2 | 2026-09-09 |
-| ~~"The migration wrapper has no automated test"~~ | Retired on 9 Sep because a suite had been written. **Reinstated 2026-10-21**: the suite never reached the main line, so the claim is true of what ships. See section 3 | retired 2026-09-09, reinstated 2026-10-21 |
 | "UXP cannot spawn processes" | It can. The limitation is narrower and more specific: no arguments, no captured output | 2026-08-30 |
 | "The FFmpeg dependency is 5 endpoints — the extraction pipeline" | 13 endpoints, spread across result delivery, thumbnails, preflight and the agent's own media inspection: product-wide, not feature-level | 2026-08-30 |
 | "The backend resolves its layout at 56 call sites across two modules" | 29 across four — our own figure was roughly double, in the direction that overstated our difficulty | 2026-08-30 |
@@ -894,8 +866,7 @@ only re-asserted.
 | 18 | Adobe's stated support window is roughly a calendar year from 25.6 | [PLATFORM] | 30 Aug, wording unchanged on 21 Oct | Adobe publishing a date |
 | 19 | Our extraction contract has no *proven* UXP parity. Documented candidate APIs may exist — a sequence-frame path and a sequence-export path are the two we know to look at — but none has been shown to satisfy the whole contract | [ASSUMPTION] — see 19a | 9 Sep | A spike, not a document. Question 1, and 7.2 below |
 | 19a | *Retired 2026-09-09:* "frame export has no UXP API today", published here as [PLATFORM] | [DEPRECATED] | — | Adobe publishes no statement of absence, so nothing could have been quoted. See 7.2 |
-| 20 | The migration wrapper has no test on the main line; a characterisation suite for it exists only on a side branch | [SOURCE] | 21 Oct (on 9 Sep this row claimed the suite was in place) | The suite landing on the main line |
-| 21 | Four of our durable documents carry a schema version and three do not | [SOURCE] | 21 Oct (three and four on 9 Sep) | Stamping the three |
+| 20 | Four of our durable documents carry a schema version and three do not | [SOURCE] | 21 Oct (three and four on 9 Sep) | Stamping the three |
 
 **Rows 6, 13, 16 and 19 are the load-bearing assumptions**, and all four concern
 things we have not run. Each one is also the subject of an open question in

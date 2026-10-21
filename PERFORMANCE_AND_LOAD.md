@@ -169,7 +169,7 @@ making somebody answer more often than the product actually needs.
 | API key validity probe | 1 | once per panel start | n/a |
 | Pricing | 1 per model per 24 h on selection | on demand | pacing only |
 | Media upload | 1 per media input per generation | on demand; since 2026-10-21 bounded by stalled progress rather than by a clock, so a slow but moving upload is never cut off | n/a |
-| Blog tab feeds — fal.ai's blog and its Learn articles | one refresh per source per hour, fetched by the local backend; the Learn source also re-reads article pages whose date has changed | hourly, paused while the panel is hidden | n/a |
+| Blog tab feeds — fal.ai's blog and fal.ai/learn | the Blog tab shows fal.ai/learn articles with links back to fal.ai; each source refreshes once an hour | hourly, paused while the panel is hidden | n/a |
 
 **Method for the poll figure.** Derived, and stated as derived: we replayed the
 exact cadence constant from the shipping source over 235 real generation

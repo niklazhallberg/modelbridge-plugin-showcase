@@ -217,7 +217,7 @@ fail is treated as a step, not a check.
 customer installer. A release build is refused unless `scripts/release-guard.js`
 passes: the branch is `main`, the working tree is clean including untracked files,
 `main` equals `origin/main` after a fresh fetch, and the version's tag does not exist
-yet. It also refuses to start without the signing and notarisation credentials, a
+yet. It also refuses to start without a
 bundled ffmpeg that carries every filter the backend uses, and a bundle id that
 matches the extension manifest. The packaged extension content is staged only when
 the compiled backend and every cached panel script match their sources by hash. A

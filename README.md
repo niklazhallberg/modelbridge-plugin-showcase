@@ -186,7 +186,7 @@ When the rejection names a requirement modelBridge can check — image size, fil
 
 ## Blog — fal.ai news, right next to your timeline
 
-fal.ai's official blog and fal.ai/learn articles inside the panel. Model launches, deep-dives, platform updates — read them where you work.
+fal.ai's official blog inside the panel. The Blog tab shows fal.ai/learn articles with links back to fal.ai. Model launches, deep-dives, platform updates — read them where you work.
 
 - **Read → Add → Generate.** modelBridge scans each article for model references and lists them with one-click **Add** buttons (**Try model** once installed). Article to timeline in three clicks
 - **NEW badges** on posts since your last visit
@@ -274,7 +274,7 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 What does leave your machine, and where it goes:
 
 - **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, filenames, timecodes, effect settings. Media paths are masked before transmission where applicable. The masking boundary is described in the privacy material. Conversations never touch modelBridge servers
-- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one path the agent can take on its own — a few frames of the selected clip travelling with your messages, so the agent can see what you see — is **asked for the first time it would happen**, and sends nothing until you answer; the answer can be changed in Settings → Privacy, NDA mode blocks it whatever you answered, and turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
+- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one path the agent can take on its own — a few frames of the selected clip travelling with your messages, so the agent can see what you see — is **asked for the first time it would happen**, and sends nothing until you answer; the answer can be changed in Settings → Privacy, NDA mode blocks it whatever you answered, and turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip sends sampled frames too, so it answers to the same setting: with it off, no frame goes by any path. Pressing Enhance on a prompt sends what it says it sends
 - **Generate tab** sends media to fal.ai when you click Generate
 
 Two of those boundaries are enforced in the build rather than in policy, and both are checkable from files that ship:
@@ -329,7 +329,7 @@ each claim, is in [RELIABILITY.md](RELIABILITY.md).
 
 Download the installer, double-click it, restart Premiere, start your trial from inside the panel and add your fal.ai key (and your Anthropic key for Agent Mode) — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
 
-**Requirements:** macOS 12 or later and Adobe Premiere Pro 23.0 or newer (CEP 11). modelBridge installs from a single signed `.pkg`. macOS only today; Windows is not supported yet.
+**Requirements:** macOS 12 or later and Adobe Premiere Pro 23.0 or newer (CEP 11). modelBridge installs from a macOS `.pkg` installer. macOS only for now.
 
 ---
 
