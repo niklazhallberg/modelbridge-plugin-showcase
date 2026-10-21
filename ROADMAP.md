@@ -24,14 +24,14 @@ Agent Mode allows editors to control the Premiere Pro timeline through natural l
 
 **Current capabilities (shipped):**
 - 100+ tools spanning timeline editing, QC analysis, color/LUT management, AI model operations, media probing, silence analysis, and export
-- A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels, proxies and offline media, flash frames), color consistency (Lumetri and source LUTs), and editorial polish — ranked Critical / Warning / Info
-- One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications for the editor to approve, explains why each setting is optimal for the target platform, and runs the export through Adobe Media Encoder with no dialog to click. Premiere's interface freezes for the duration of each export
+- A prioritized quality-control scan covering technical compliance (fps, resolution, codec, sample rate, channels, proxies and offline media, flash frames), color consistency (Lumetri and source LUTs), and editorial structure flagged as candidates for review rather than defects — ranked Critical / Warning / Info
+- One-command multi-format export with platform-optimized presets (Instagram, TikTok, YouTube, Twitter/X, LinkedIn, Facebook) — the agent presents exact export specifications and the destination, explains why each setting suits the target platform, and the export cannot start until the editor has said go after seeing them. It runs in Adobe Media Encoder in the background, so Premiere stays usable; if Media Encoder cannot take the job, the export runs inside Premiere, which is locked until it finishes, and the agent says so
 - Environment-aware silence **analysis** — the agent calibrates to the recording environment the editor points it at, measures the silent segments, and inverts them into a keeper-range cut list it shows for review. Works on clean studio recordings and noisy street interviews alike. On the editor's go-ahead the agent assembles the keeper ranges into a **new** sequence, reading each range back to confirm it landed; the working sequence is never cut in place, so an editor who wants the pauses removed from the existing timeline still uses the ranges as a cut list
 - Media intelligence via ffprobe integration — the agent reads codec, bitrate, sample rate, and channel information that Premiere Pro's own scripting API doesn't expose
 - Proxy workflow visibility — instant audit of which project clips have proxies, which need them, and which are offline
 - Persistent editor preferences that shape the agent's behavior across sessions
 
-Users bring their own Anthropic API key, and modelBridge neither marks up nor proxies the calls. A 15-message editing session measured on 2026-10-10 cost about $0.15 with the larger model stepping in for two multi-step edits, and about 2 cents when only Haiku 5.5 ran. That is one measured session on the default model — not a measurement of real customer usage over a month.
+Users bring their own Anthropic API key; the calls go from the editor's machine to Anthropic, not through modelBridge's servers, and modelBridge adds no markup. A 15-turn editing session measured on 2026-10-10 cost $0.146, 91% of it from two turns the agent had switched to the larger Sonnet model for. That automatic switch was removed the same day — Claude Haiku 5.5 now runs every turn unless the editor picks Sonnet 5.5 — and at Haiku 5.5's measured per-turn cost the same session works out to roughly 2–4 cents. That last figure is a calculation from measured turns, not a second measurement, and neither is a measurement of real customer usage over a month.
 
 **Planned enhancements:**
 
@@ -49,7 +49,7 @@ Privacy architecture is central to the design: nothing about prompt text, creati
 
 ### Predictive QC
 
-Partly shipped, and this section overstated how much of it was still ahead. A proactive layer already runs: while the Assistant tab is open the panel diffs the project state every few seconds, evaluates local heuristics, and surfaces coaching notices the editor can dismiss or snooze — no model calls, so it costs nothing per check.
+Partly shipped, and this section overstated how much of it was still ahead. A proactive layer already runs: while the Agent tab is open the panel diffs the project state every few seconds — backing off on heavy timelines — evaluates local heuristics, and surfaces coaching notices the editor can dismiss or snooze — no model calls, so it costs nothing per check.
 
 What remains is the half that needs judgement rather than a heuristic: a clip that doesn't match the sequence's codec profile, a sudden change in edit rhythm, and the decision about which findings deserve an interruption as they happen versus a quiet note at the next QC scan.
 
@@ -57,7 +57,7 @@ This turns the agent from a reactive tool into a continuous quality layer that r
 
 ### AI-Driven Interview Editing (Beyond Silence)
 
-Silence *analysis* is shipped, and the cut list it produces is executed by the editor (see the capabilities list above). Two steps are ahead: performing the cut, and content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
+Silence analysis is shipped, and on the editor's go-ahead the agent assembles the keeper ranges into a new sequence (see the capabilities list above). What is ahead is content-aware editing — understanding not just when it's quiet, but what's being said. Combining speech-to-text with the agent's timeline tools would enable:
 
 - **Cutting by what was said**, not by where the gaps are — "drop the part where she repeats the question", "keep the answer about pricing"
 - **Removing filler and false starts** — the ums, the restarts, the takes that trail off — as one pass rather than one trim at a time
@@ -66,7 +66,7 @@ Silence *analysis* is shipped, and the cut list it produces is executed by the e
 
 ### Essential Graphics Text Editing
 
-Premiere Pro's Motion Graphics Templates (MOGRTs) store text parameters that are readable and writable via the scripting API. The agent will be able to batch-update text content across all title clips in a sequence — font, size, color, and content — enabling one-command brand guide updates and multi-language versioning.
+Partly shipped: the agent can already set the text of a Motion Graphics Template (MOGRT) clip on the timeline and reads it back to confirm the change. Planned is the batch version — updating text across all title clips in a sequence, including font, size and color — enabling one-command brand guide updates and multi-language versioning.
 
 ---
 
@@ -74,7 +74,7 @@ Premiere Pro's Motion Graphics Templates (MOGRTs) store text parameters that are
 
 modelBridge currently runs on CEP (Chromium Extensibility Platform), Adobe's established extension framework for Premiere Pro. Adobe is transitioning to UXP (Unified Extensibility Platform) as the modern replacement.
 
-Platform-specific code is being isolated behind adapter layers, and two surfaces are already at zero remaining direct calls. The rest is not incremental: UXP cannot spawn child processes, so the local backend becomes a separately installed companion application; the panel's script-tag loading model has to become a bundle; and a set of timeline operations in the agent layer depend on Premiere's unsupported QE DOM, for which no supported equivalent exists today.
+Platform-specific code is being isolated behind adapter layers, and some surfaces are already at zero remaining direct calls — [UXP_MIGRATION.md](UXP_MIGRATION.md) §1 has the counts. The rest is not incremental: UXP cannot spawn child processes, so the local backend becomes a separately installed companion application; the panel's script-tag loading model has to become a bundle; and a set of timeline operations in the agent layer depend on Premiere's unsupported QE DOM, for which no supported equivalent exists today.
 
 [UXP_MIGRATION.md](UXP_MIGRATION.md) carries the measurements, the open questions to Adobe, the No-Go criteria for our beta, and the places our own early decisions turned out to be wrong.
 
