@@ -29,8 +29,9 @@ steer the request to a runner that already holds the right weights in memory.
 Investigated as a cold-start optimization.
 
 **Verified in code.** Every generation submit lives in the local backend — the
-panel never talks to fal directly. Three submit paths exist: one through the
-official client, taken for curated-adapter endpoints, and two raw queue submits.
+panel never submits to fal directly. Three submit paths existed on that date: one
+through the official client, taken for curated-adapter endpoints, and two raw
+queue submits.
 Every endpoint string is either a user-installed model from fal's public catalog
 or a fal-owned public model. A sweep of the codebase and every planning document
 found no own fal deployment, existing or planned, and zero references to
@@ -43,9 +44,15 @@ neither know nor influence whether any of the catalog models implements the
 server half.
 
 **Reconsider when.** modelBridge ever deploys its own fal app under its own
-account. The hint would then be set at the submit sites (a header on the raw calls, an
-option on the client call), and `provide_hints()` would report the loaded
-model/LoRA.
+account. The hint would then be set at the submit sites (a header on the raw queue
+calls), and `provide_hints()` would report the loaded model/LoRA.
+
+**Re-checked 2026-10-21.** The decision stands; one fact under it moved. The
+client-library submit path was retired after a 2026-09-25 measurement showed the
+raw queue reaching every endpoint, curated ones included, so both remaining submit
+paths are raw queue submits. The official client is still used, but only for storage
+uploads and as a fallback for fetching a result. Still no own fal deployment, and
+still no reference to `provide_hints` or runner hints anywhere in the code.
 
 ### 2026-09-01: Cloudflare AI Gateway in front of fal.ai calls — not implemented
 
@@ -91,6 +98,15 @@ is zero.
 **Reconsider when.** Generation traffic ever originates from infrastructure
 we operate with our own fal credentials — the privacy and resilience calculus
 inverts at that point.
+
+**Re-checked 2026-10-21.** The decision stands, and so do findings 2–4. One
+detail of the storage path changed on this date: a storage upload is no longer
+cut off by a fixed clock. The backend now hands the client library a fetch that
+watches the upload's progress and gives up only when nothing has moved for 30
+seconds, and the panel follows that progress instead of timing the request
+itself. So a slow upload of a large clip completes as long as it keeps moving.
+The bytes still go straight to fal's storage, outside any gateway's base URL.
+Nothing in this changes the gateway arithmetic above.
 
 ## How this file is used
 

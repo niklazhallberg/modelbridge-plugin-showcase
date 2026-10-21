@@ -3,7 +3,8 @@
 modelBridge is a Premiere Pro panel that renders generation forms from fal.ai's
 OpenAPI documents, runs the generations, and reports what they cost. It talks to
 three outside parties: fal.ai, a Cloudflare Worker we operate, and — when the
-editor supplies their own key — the Anthropic API.
+editor supplies their own key — the Anthropic API. Its update payloads are static
+files served from GitHub.
 
 This document reports two things we measured. First, how fast the panel is,
 because a fixed-canvas tool inside a timeline application is judged on whether
@@ -21,7 +22,10 @@ produce from the hardware we have.
 
 **Figures measured 2026-09-01** against a live panel over the Chrome DevTools
 Protocol, unless a row says otherwise. Two figures are carried forward from an
-internal audit of 2026-08-30 and say so where they appear.
+internal audit of 2026-08-30 and say so where they appear. **Every cadence and
+code path described here was re-checked against the source on 2026-10-21**; the
+measured timings were not re-taken that day, and where the code has moved since
+they were taken, the row says so.
 
 This document does not describe how fal.ai works internally. We have no view of
 that. It describes what we ask of their infrastructure, which is the part we are
@@ -60,6 +64,10 @@ the build rather than of the network that morning.
 and warm local storage. It does not measure the local backend process starting,
 a genuinely first-run install with empty caches, or a Premiere launch. Those
 three are unmeasured, and we say so rather than model them.
+
+**What has moved since.** On 2026-10-21 the panel loads 139 deferred scripts, not
+108. The timings above were not re-measured against that build, so they describe
+the 2026-09-01 build only.
 
 ### 1.2 DOMContentLoaded, before and after a deletion pass
 
@@ -155,12 +163,13 @@ making somebody answer more often than the product actually needs.
 | Path | Volume | Cadence | Backoff |
 |---|---|---|---|
 | **Polling a running generation** | **mean 37.2 requests per generation** (median 20, p90 92, longest observed 377) | stepped: fast for the first half-minute of a run, then slower in two further steps | Yes — explicit, in the shipping source |
-| Polling a handed-off generation | — | stepped down over the first minutes; 30-minute soft stop | Yes |
+| Polling a handed-off generation | — | stepped down over the first five minutes, then a steady slow cadence; no time limit — it ends when fal.ai returns a result or an explicit failure, or the editor cancels | Yes |
 | Catalogue synchronisation | a few dozen requests per cycle, paginated | **a few times a day** | n/a — the pointer advances only on success, so it can be slower, never faster |
 | Platform health probe | 1 | every 5 min while the panel is visible | none |
 | API key validity probe | 1 | once per panel start | n/a |
 | Pricing | 1 per model per 24 h on selection | on demand | pacing only |
-| Media upload | 1 per media input per generation | on demand | n/a |
+| Media upload | 1 per media input per generation | on demand; since 2026-10-21 bounded by stalled progress rather than by a clock, so a slow but moving upload is never cut off | n/a |
+| Blog tab feeds — fal.ai's blog and its Learn articles | one refresh per source per hour, fetched by the local backend; the Learn source also re-reads article pages whose date has changed | hourly, paused while the panel is hidden | n/a |
 
 **Method for the poll figure.** Derived, and stated as derived: we replayed the
 exact cadence constant from the shipping source over 235 real generation
@@ -187,7 +196,7 @@ customer base — not per customer.
 health check fetches a full OpenAPI document and reads only the HTTP status code
 from it. The cadence is defensible; downloading a schema document 288 times a day
 to look at one integer is not. It is a one-line change gated on confirming the
-endpoint answers `HEAD`, and it is open.
+endpoint answers `HEAD`, and it is still open on 2026-10-21.
 
 ### 3.2 Our own Cloudflare Worker
 
@@ -200,7 +209,6 @@ news feed, licensing, and telemetry. Cadences, all read from the shipping source
 | Telemetry flush | periodic, **and returns immediately when the queue is empty** | no — must run hidden | yes |
 | Licence revalidation | 12 h **plus jitter** | yes | the jitter exists so installs do not synchronise |
 | Catalogue index | periodic, served stale-while-revalidate | yes | yes |
-| Blog feed | matching the feed's own declared TTL | yes | yes |
 
 Boot traffic to the worker, **measured** across four boots on 2026-09-01: one
 model-insights request, one blocklist, one news, and three to four catalogue
@@ -274,8 +282,8 @@ only and never stores response bodies, so nothing is cached twice.
 
 That third row is the important one. It holds only if the worker can answer 304
 *without* reading the data it would otherwise have served, and the worker half
-does not exist yet: our own endpoints send no validators, so today every one of
-those requests is still a 200. The client half is wired anyway, so adding
+does not exist yet: our own endpoints send no validators (still true of the
+production worker on 2026-10-21), so every one of those requests is still a 200. The client half is wired anyway, so adding
 validators on the server becomes a deploy on our side with no second change to
 shipped panels.
 

@@ -11,8 +11,10 @@ measurements of a moving codebase, not properties of it. Anything we have not
 measured is marked as unmeasured rather than estimated.
 
 **Figures measured 2026-08-19, re-measured 2026-08-30, with a live host check on
-2026-09-01. Classified, and partially re-checked, 2026-09-09.** Where two readings
-differ, both are shown. Anything carried forward without re-measuring says so.
+2026-09-01. Classified, and partially re-checked, 2026-09-09. Our own source
+re-measured again on 2026-10-21**, with the search patterns of the first reading
+(section 7 says what that pass did and did not cover). Where two readings differ,
+both are shown. Anything carried forward without re-measuring says so.
 
 ## How to read this document: five classes of claim
 
@@ -36,9 +38,10 @@ that reads as confidence. Where we have not run something, the row says so and n
 argument downstream leans on it.
 
 **One boundary worth stating plainly: no new platform check was run for the
-2026-09-09 pass.** That pass re-measured our own source and classified what was
-already here. Every [PLATFORM] row still carries the date of the check that
-established it, and the oldest of those is now more than a week old. A [PLATFORM]
+2026-09-09 pass, and the 2026-10-21 pass re-read only one Adobe statement** (the
+support window, section 7). Both passes re-measured our own source. Every
+[PLATFORM] row still carries the date of the check that established it, and the
+oldest of those is now seven weeks old. A [PLATFORM]
 row is a statement about what Adobe said on a date, never about what is true now.
 
 ---
@@ -49,25 +52,34 @@ The strategy has been to put platform-specific calls behind adapters inside the
 CEP codebase, so the migration becomes a swap of implementations rather than a
 rewrite of everything that touches them. Progress, as quotas with denominators:
 
-Re-measured 2026-08-30, eleven days after the first reading, and both readings are
-shown because the movement is the more useful number:
+Re-measured 2026-10-21 with the same search patterns as the first reading. The
+right-hand column is the same search run against the 30 August commit, so the
+two columns compare like with like; the movement is the more useful number:
 
-| Platform surface | Routed | Direct left | Adoption | 19 Aug |
+| Platform surface | Routed | Direct left | Adoption | 30 Aug, same search |
 |---|---|---|---|---|
-| Path construction | 72 | **0** | **100 %** | 57 / 0 — 100 % |
-| Opening external URLs | 20 | **0** | **100 %** | 20 / 0 — 100 % |
-| Provider API key storage | 16 | **0** | **100 %** | 13 / 0 — 100 % |
-| Premiere host calls | 141 | 43 | **77 %** | 133 / 47 — 74 % |
-| File system, by acquisition site | 44 | 46 | **49 %** | 34 / 45 — 43 % |
-| File system, by API invocation | 44 | 82 | **35 %** | 34 / 107 — 24 % |
-| **Browser storage (`localStorage`)** | 0 | **384** | **0 %** | *not measured* |
+| Path construction | 76 | **0** | **100 %** | 71 / 0 — 100 % |
+| Opening external URLs | 26 | **0** | **100 %** | 20 / 0 — 100 % |
+| Provider API key storage | 16 | **0** | **100 %** | 16 / 0 — 100 % |
+| Premiere host calls | 163 | 35 | **82 %** | 134 / 44 — 75 % |
+| File system, by acquisition site | 57 | 45 | **56 %** | 42 / 46 — 48 % |
+| File system, by API invocation | 57 | 99 | **37 %** | 42 / 91 — 32 % |
+| **Browser storage (`localStorage`)** | 0 | **400** | **0 %** | 0 / 384 — 0 % |
 
-**The last row is new, and it is the reason to re-read the other six.** Until
-2026-09-01 this table had six rows, and the panel's largest platform dependency
-was not one of them. `localStorage` is 384 call sites across 50 files — more than
-the file-system invocations, the host calls and our hardcoded backend URLs
-combined — and UXP does not provide it. Its replacement is asynchronous, so it is
-the same signature change as the file-system row at roughly three times the size.
+The figures we published on 30 August came from a working tree rather than a
+commit, and differ from the right-hand column by at most nine in any cell. Two
+`require('path')` calls now sit inside the storage adapter; they are counted as
+routed, because they will be rewritten with that adapter rather than on their
+own.
+
+**The last row is the reason to re-read the other six.** Until 2026-09-01 this
+table had six rows, and the panel's largest platform dependency was not one of
+them. `localStorage` is 400 call sites across 55 files on 2026-10-21 (384 across
+50 on 1 September) — still more than the direct file-system invocations, all the
+host calls and our hardcoded backend addresses combined (99 + 198 + 82) — and UXP
+does not provide it. Its replacement is asynchronous, so it is the same signature
+change as the file-system row, at about two and a half times the whole
+file-system surface, routed and direct together.
 
 We are not building the adapter, deliberately, and section 4 says why. What we
 are doing is refusing to publish an adoption percentage over a denominator that
@@ -78,16 +90,16 @@ Three surfaces are finished: not "mostly", but zero remaining direct calls,
 verified by search across the panel source. (The first version of this table said
 "two", while listing three — an editing error rather than a measurement one, but
 it is exactly the kind of slip that makes a reader stop trusting the table, so we
-would rather correct it than quietly fix it.) Host calls are three-quarters
+would rather correct it than quietly fix it.) Host calls are about four-fifths
 converted. File I/O is the laggard, and the two file-system rows are given
 separately on purpose — counting acquisition sites flatters the number, because
 most files acquire the module once and then call it many times.
 
 ### A surface holds where something holds it
 
-Every quota above held or improved over eleven days. What the totals hide is
-where the new work went. Counting only lines **added** to the panel in that
-window:
+Every quota held or improved between 19 and 30 August, and again between
+30 August and 21 October. What the totals hide is where the new work went.
+Counting only lines **added** to the panel in the August window:
 
 | Direct platform call added, 19–30 Aug | Count |
 |---|---|
@@ -114,19 +126,21 @@ system absorbs new work at whatever rate new work is written.
 
 ### The distribution matters more than the average
 
-Adoption is not a uniform 77 %. It is split by subsystem, and that is a
-deliberate ordering rather than an accident:
+Adoption is not a uniform 82 %. It is split by subsystem, and that is a
+deliberate ordering rather than an accident (figures of 2026-10-21):
 
-- **The agent layer is essentially fully bridged** — 129 of its host calls go
-  through the adapter.
-- **The generation pipeline is essentially unbridged** — 40 direct calls across
-  four modules that carry media extraction, validation, preview and dual-model
-  runs.
+- **The agent layer is essentially fully bridged** — 153 of its 154 host calls
+  go through the adapter.
+- **The generation pipeline is essentially unbridged** — 31 direct calls across
+  the four modules that carry media extraction, validation, preview and
+  dual-model runs (40 on 30 August). None of the four calls the adapter yet, so
+  the drop is code that was removed, not code that was converted.
 
 The generation pipeline is the launch-critical path, and the adapter wraps calls
 in promises with deadline semantics. Converting it changes timeout and error
-behaviour in the code where a failure costs a customer money. We are converting
-it after launch, deliberately, rather than reporting a rounder number now.
+behaviour in the code where a failure costs a customer money. We chose to convert
+it after launch rather than report a rounder number before it. The product has
+launched since, and that conversion is still ahead of us.
 
 ---
 
@@ -156,15 +170,21 @@ what the platform can do instead.)
 
 Measured against the current backend:
 
-- **61 routes** in total (58 on 19 Aug). **25 are network-only** and could move to
-  direct `fetch()` from the panel or to our existing edge worker.
+- **74 routes** in the main server on 2026-10-21 (61 on 30 Aug, 58 on 19 Aug),
+  plus 11 more registered by the agent module, which no reading has counted.
+  **25 are network-only** and could move to direct `fetch()` from the panel or to
+  our existing edge worker.
 - **16 routes spawn a child process. 13 of those invoke FFmpeg or FFprobe.**
 - **1 native addon** (image processing), used by 3 routes, which must load from
-  real disk rather than from a packed snapshot.
+  real disk rather than from a packed snapshot. Still the only native addon in
+  the backend's dependencies on 2026-10-21.
 
-Only the route total was re-measured on 30 Aug; the three breakdowns below it are
-the 19 Aug reading, carried forward unverified. We are saying so rather than
-letting a re-dated header imply all four moved together.
+Only the route total was re-measured, on 30 Aug and again on 21 Oct; the
+breakdowns are the 19 Aug reading, carried forward unverified. A rougher search
+over the 21 Oct tree finds eight more routes touching media tooling than the
+same search found on 30 Aug, new audio-analysis and loudness routes among them,
+so read 13 as a floor. We are saying so rather than letting a re-dated header
+imply all four moved together.
 
 An earlier internal plan put the FFmpeg dependency at 5 endpoints and described
 it as "the extraction pipeline". Re-measuring found 13, and the eight it had
@@ -188,23 +208,26 @@ sounds.
 **What the panel side actually costs, measured 2026-08-30.** The scary-sounding
 half turns out to be the cheap one. The module that spawns and supervises the
 backend — whose whole reason for existing disappears — is called **39 times from
-13 files**, and the distribution decides the work: a handful of call sites
+13 files** (the same search gives the same count on 2026-10-21), and the distribution decides the work: a handful of call sites
 survive untouched, most change meaning but not shape ("the backend is up when
 this resolves" stays the contract; launch-and-health-check replaces
 spawn-and-health-check), and a few disappear together with the system Node they
 looked for. That is a body change on the panel side, not a signature change —
 **provided** the backend's address is resolved in one place rather than written
-down at each call site. Today it is not, and consolidating that is on our own
-list as a pre-launch item, because it is a string constant with no behaviour
-attached and it converts the largest remaining unknown in this section into a
-one-function edit.
+down at each call site. It is not: on 2026-10-21 the address is written out 82
+times across 40 panel files. Consolidating it is on our own list, because it is a
+string constant with no behaviour attached and it converts the largest remaining
+unknown in this section into a one-function edit. It was meant to happen before
+launch and did not.
 
-**The launcher is reserved, because it cannot be added later.** A URL scheme is
-registered by the installer, and an installer that has already run does not
-re-register itself. So the scheme ships in the first `.pkg` even though nothing
-calls it yet — a scheme chosen after customers are installed is a forced
-reinstall, not an update. This is the one packaging decision we could not defer,
-and the reason we went looking for `launchProcess` in the first place.
+**The launcher was meant to be reserved in the first `.pkg`, and it was not.**
+The plan was to register a URL scheme for the companion application in the
+first installer, even though nothing would call it yet, so that the panel could
+later launch the sidecar through it. That was the reason we went looking for
+`launchProcess` in the first place. Checked 2026-10-21: the `.pkg` that ships
+registers no URL scheme and installs no companion bundle. So the scheme will
+arrive with the installer that first carries the companion application, and the
+launch path has to be designed for installs that predate it.
 
 We are not asking Adobe to solve this. We are stating it so that the scope is
 visible: for us, UXP migration and building, signing, distributing and
@@ -213,10 +236,11 @@ auto-launching a companion desktop application are the same project.
 ### 2.2 The panel loads as 114 script tags, which UXP does not support  
 *[SOURCE] on the count · [PLATFORM] on the bundled entry point*
 
-The panel is 114 script tags — 107 of them panel modules, all deferred, sharing
-state through 802 distinct globals. (106 / 99 / 753 on 19 Aug; the surface grew
-by eight modules and forty-nine globals in eleven days, which is worth knowing
-when reading any of the numbers in this document as a fixed property.) UXP requires a
+On 2026-10-21 the panel is 146 script tags — 139 of them panel modules, all
+deferred, sharing state through 896 `window` globals by the load-order guard's
+count. (114 / 107 / 802 on 30 Aug; 106 / 99 / 753 on 19 Aug. The surface grew by
+32 modules and 94 globals in seven weeks, which is worth knowing when reading any
+of the numbers in this document as a fixed property.) UXP requires a
 bundled entry point. This is a known, mechanical rebuild, and we treat it as
 such; the interesting part is section 4, where we describe the one thing we did
 that made it tractable.
@@ -247,6 +271,10 @@ Two things sharpen the picture:
   product survives QE loss; the agent layer, which is our differentiator, does
   not.
 
+These are the 19 August figures and were not re-measured on 21 October. A rough
+search shows more QE entry points in the tree than on 30 August, so read them as
+floors.
+
 We are not claiming this is Adobe's problem to fix on our schedule. We are
 saying that our most differentiated functionality currently rests on an
 unsupported API, we know exactly how much of it does, and we would rather ask
@@ -255,16 +283,20 @@ now than discover the answer during a beta.
 ### 2.4 The ExtendScript surface is larger than our own mapping  
 *[SOURCE] on both numbers · [DEPRECATED] on the parity table read as coverage*
 
-Our host layer defines **276 global ExtendScript functions** (261 on 19 Aug —
-the surface we have to port is growing while we measure it). Our own
-CEP→UXP parity table covers **23 of them with a live mapping — 8.3 %**. The
-unmapped 91 % is not evenly distributed: it is concentrated in the agent tool
-layer and the QE-dependent operations above.
+Our host layer defines **about 380 global ExtendScript functions** on 2026-10-21
+(276 published on 30 Aug, 261 on 19 Aug — the surface we have to port is growing
+while we measure it). The search behind the new figure reads 257 at the commit
+the 19 Aug figure came from and 262 at the 30 Aug commit, whose published 276
+came from a working tree; so it may undercount slightly, and the growth is real
+either way. Our own CEP→UXP parity table still covers **23 of them with a live
+mapping — about 6 %**. The unmapped remainder is not evenly distributed: it is
+concentrated in the agent tool layer and the QE-dependent operations above.
 
 We are reporting this number because the alternative — quoting the parity table
 as though it described the whole surface — is how a migration plan becomes
 comforting instead of useful. The table's own summary reads "0 confirmed
-impossible", and that holds only over the 9 % it examined.
+impossible", and that holds only over the small share it examined — about 6 % of
+today's surface.
 
 ### 2.5 Machine identity, and what an account-bound identity would do to a seat  
 *[PLATFORM] on the identifier UXP offers · [ASSUMPTION] on what it would do to a seat model · [SOURCE] on our own identity provider*
@@ -324,8 +356,11 @@ classes — that turned out to be migration groundwork.
 
 **One machine-checked dependency graph.** A pre-commit guard parses the panel's
 script order and every global provider, and fails the commit when a module reads
-a global whose provider loads later. It maps 802 providers across 107 scripts and
-currently reports zero violations. It was built because that failure mode had
+a global whose provider loads later. On 2026-10-21 it maps 896 providers across
+138 of the panel's 139 scripts and reports zero violations. (The one it does not
+read is a script tag written with its attributes in a different order, which its
+parser does not match. We found that while re-measuring for this document; it is
+not yet fixed.) It was built because that failure mode had
 shipped twice, in two different disguises. Its side effect is that the
 inter-file half of the import graph a bundler needs already exists as a
 machine-checked artifact rather than as folklore — which is exactly the thing
@@ -338,7 +373,7 @@ resolve, does this generation count as spend, is this licence state indeterminat
 of finding the fourth copy in production.
 
 **One error pipeline.** Every user-facing error in the product, from 128
-producer sites, passes through one translator and one renderer. UXP will change
+producer sites (the 30 August count, not re-taken), passes through one translator and one renderer. UXP will change
 how surfaces behave; concentrating that in one renderer means the migration
 touches one component rather than 128.
 
@@ -349,8 +384,8 @@ rather than proceeding when either step fails. That wrapper exists because a
 migration once destroyed user data, and it is the reason we are not writing one
 under time pressure during the port.
 
-This paragraph has now been wrong in both directions, which is why it is the
-longest one in this section.
+This paragraph has now been wrong three times, in both directions, which is why
+it is the longest one in this section.
 
 *The first error was too strong.* We described the wrapper as "tested" and on
 2026-08-30 had to correct that: its guarantees were read from the source and
@@ -365,27 +400,36 @@ dry-run abort made non-fatal, and a model that fails mid-apply dropped before th
 save — and the suite went red in the right rows for each, while its
 controls stayed green in every arm.
 
+*And that good news never reached the shipping tree.* Re-checked 2026-10-21: the
+suite was written in a working tree whose changes were later parked on a side
+branch, and it is not on the main line. The main line has no test that exercises
+the wrapper. So, of what ships, the 30 August sentence is true again: the
+wrapper's guarantees are read from the source and proven by nothing. Landing the
+suite is a merge, not new work, and until it lands this section claims no test.
+
 *And the sentence beside it was too broad all along.* We wrote "persisted data
 carries a schema version". Measured 2026-09-09 across our durable documents:
-**three carry one and four do not** — installed models, generation logs and
-external costs are stamped; settings, two learned-value stores and the licence
-store are not. Our own policy requires the stamp. This is a gap in the product,
+**three carried one and four did not** — installed models, generation logs and
+external costs were stamped; settings, two learned-value stores and the licence
+store were not. Re-checked 2026-10-21: settings have been stamped since
+2026-09-27, so **four carry one and three do not** — the two learned-value stores
+and the licence store. Our own policy requires the stamp. This is a gap in the product,
 it was covered by a sentence in this document that was true of the files we
 happened to think of, and it is the kind of thing a port discovers at the worst
 moment.
 
-Two limits on the good news, so it is not read as more than it is: the suite
-covers **this wrapper only**, not the six other migration paths beside it; and
-nothing structurally forces a migration through the wrapper, so a data migration
-written during the port could still bypass it entirely. A safeguard with a test
-is worth more than one without. Neither is a gate.
+Two further limits, which would hold even once the suite lands: it covers **this
+wrapper only**, not the six other migration paths beside it; and nothing
+structurally forces a migration through the wrapper, so a data migration written
+during the port could still bypass it entirely. A safeguard with a test is worth
+more than one without. Neither is a gate.
 
 ---
 
 ## 4. What we got wrong  — [SOURCE], and [DEPRECATED] for what they retire
 
-Two substantive errors, both still live as of this writing, and one smaller one
-we have closed. Neither of the first two is fixed by this update — reporting them
+Two substantive errors, both still live on 2026-10-21, and one smaller one we
+have closed. Neither of the first two is fixed by this update — reporting them
 is not the same as having dealt with them, and we would rather the distinction be
 visible than flattering.
 
@@ -394,23 +438,25 @@ visible than flattering.
 Our development policy says new storage and host APIs must return promises, so
 that CEP's synchronous behaviour does not leak into call sites that will have to
 be asynchronous under UXP. The host-call adapter and the credential adapter
-follow it. The storage adapter does not: all ten of its methods return values
-directly.
+follow it. The storage adapter does not: on 2026-10-21 it has seventeen methods
+(ten on 30 August), and every one of them returns values directly.
 
 The consequence is precise. UXP's file system API is asynchronous, so replacing
 the adapter's implementation is not a body swap — it is a signature change at
-every one of its 44 call sites, plus the 82 file-system invocations not yet
-converted, plus **19 module-load-time reads** that will have to be restructured
-because they run before anything can await. (34 and 9 on 19 Aug. Both halves of
-this mistake grew.) We built the largest of our adapters in the shape that makes
+every one of its 57 call sites (44 on 30 Aug, 34 on 19 Aug), plus the 99
+file-system invocations not yet converted, plus the **19 module-load-time reads**
+counted on 30 Aug (9 on 19 Aug; not re-counted since) that will have to be
+restructured because they run before anything can await. Every half of this
+mistake has grown at every reading. We built the largest of our adapters in the shape that makes
 its own replacement hardest, in the one place our policy explicitly warned
 against it.
 
 ### 4.2 The largest platform dependency in the panel had no quota row until today
 
-The panel makes **384 `localStorage` calls across 50 files**, and UXP provides no
-`localStorage`. That is the same asynchronous signature change as the file-system
-one, at roughly three times the size.
+The panel makes **400 `localStorage` calls across 55 files** on 2026-10-21 (384
+across 50 on 1 September), and UXP provides no `localStorage`. That is the same
+asynchronous signature change as the file-system one, at about two and a half
+times its size.
 
 It had no adapter, no row in the table in section 1, and no mention in our
 migration plan except as a data-migration footnote. So the error is not that the
@@ -422,7 +468,7 @@ every one of them accurate, which is what makes this the more serious of the two
 the numbers were right and the frame was wrong.
 
 The row is in section 1 as of 2026-09-01. The adapter is deliberately not built —
-384 sites is the largest mechanical change in the codebase, and building it
+400 sites is the largest mechanical change in the codebase, and building it
 against a storage API we have not yet used is how you commit to the wrong shape
 at the worst possible scale. We would rather carry a visible 0 % than an
 invisible one.
@@ -559,11 +605,13 @@ subsystem it treated as migration work turned out to be dead code we then
 deleted. Four of our own documents at one point stated four different values for
 the same count.
 
-Re-checked monthly: Adobe's CEP timeline; whether frame export has arrived in
-UXP; **whether hybrid plugins can do what our companion application does** (see
-below); the Source Monitor and secure storage answers above; marketplace guidance
-for companion applications; and our own adoption quotas, which are produced by
-search over the source rather than by hand.
+Meant to be re-checked monthly: Adobe's CEP timeline; whether frame export has
+arrived in UXP; **whether hybrid plugins can do what our companion application
+does** (see below); the Source Monitor and secure storage answers above;
+marketplace guidance for companion applications; and our own adoption quotas,
+which are produced by search over the source rather than by hand. We have not
+kept that cadence: after the 30 August – 1 September check, the next platform
+reading was a single statement re-read on 21 October.
 
 **The two checks that could retire an architecture, and what would have to be
 true.** Both are written as falsifiable conditions rather than as things to keep
@@ -594,6 +642,7 @@ extensibilty." A calendar year from 25.6 lands around November 2026. We have see
 "several years" quoted second-hand elsewhere, and Adobe has published no date, so
 we are treating this as a range rather than a deadline — but the short end of the
 range is months, not years, and we had been planning against the long end.
+Re-read 2026-10-21: the sentence in Adobe's ReadMe is unchanged.
 
 **CEP still works in Premiere Pro 26.3.2. We measured it rather than inferred
 it.** There is a widely-linked bug report against another extension titled "CEP
@@ -626,6 +675,11 @@ as more reassuring than it is:
   CEP is not a commitment that the next one will.
 - We plan against the short end of the range regardless. The measurement removes
   a false alarm; it does not buy time.
+
+Re-checked 2026-10-21, more narrowly: the panel was loaded and running in
+**Premiere Pro 26.5.1** (CEP 12.0.1), and its local backend answered its health
+check. No generation was run for that check, so the end-to-end chain above stands
+as verified on 26.3.2 only.
 
 **UXP can launch a process, but not the one we need.** There is a documented
 `launchProcess` manifest permission and a `shell` module with `openPath()` and
@@ -691,6 +745,30 @@ produced by a different search is a different measurement, not a correction, and
 publishing it as an update to the table would be the same error in a new
 direction. They carry their 30 August reading.
 
+### What the 21 October pass re-measured
+
+It re-ran the section 1 quotas, the script and global counts, the route total,
+the ExtendScript function count and the storage adapter's shape against the
+commit that was current on 2026-10-21, using the search patterns the first
+reading wrote down: adapter call sites against direct calls outside the adapter,
+comment lines excluded. Before trusting a pattern, we ran it against the
+30 August commit and compared it with what was published that day. Three rows
+reproduced exactly (URLs, key storage, `localStorage`), and so did
+the load-order guard's script and global counts. The rest landed within nine,
+because the 30 August figures came from a working tree rather than a commit. That
+is why the section 1 table compares against the same search on the 30 August
+commit, not against the published numbers.
+
+Not re-measured, and still carrying their earlier dates: the backend's route
+breakdown, the root-resolution call sites, the QE figures, the error producer
+sites, the module-load-time reads and the identity provider's single writer.
+
+Three things it found, all against us. The migration wrapper's test suite is not
+on the main line (section 3). The launcher URL scheme was never reserved
+(section 2.1). And the load-order guard does not read one of the panel's script
+tags (section 3). One thing moved in our favour: settings now carry a schema
+version.
+
 ### 7.1 Deprecated — claims measurement has retired
 
 These were published, by us or by our own earlier internal plan (April 2026).
@@ -698,18 +776,19 @@ They are listed so a reader who has seen them elsewhere knows they are dead.
 
 | Retired claim | What measurement found | Retired |
 |---|---|---|
-| "Persisted data carries a schema version" | Three of our durable documents carry one; four do not | 2026-09-09 |
+| "Persisted data carries a schema version" | Three of our durable documents carried one on 9 Sep and four do on 21 Oct; three still do not | 2026-09-09 |
+| "The launcher URL scheme ships in the first `.pkg`" — published in section 2.1 as done | The `.pkg` shipping on 2026-10-21 registers no URL scheme and installs no companion bundle | 2026-10-21 |
 | "Frame export has no UXP API today" — published in this document's own register as [PLATFORM] | An absence Adobe does not state, so nothing could be quoted for it. What we can support is narrower: no *proven parity* for our contract. See 7.2 | 2026-09-09 |
-| "The migration wrapper has no automated test" | It has one, with red-first evidence — see section 3 | 2026-09-09 |
+| ~~"The migration wrapper has no automated test"~~ | Retired on 9 Sep because a suite had been written. **Reinstated 2026-10-21**: the suite never reached the main line, so the claim is true of what ships. See section 3 | retired 2026-09-09, reinstated 2026-10-21 |
 | "UXP cannot spawn processes" | It can. The limitation is narrower and more specific: no arguments, no captured output | 2026-08-30 |
 | "The FFmpeg dependency is 5 endpoints — the extraction pipeline" | 13 endpoints, spread across result delivery, thumbnails, preflight and the agent's own media inspection: product-wide, not feature-level | 2026-08-30 |
 | "The backend resolves its layout at 56 call sites across two modules" | 29 across four — our own figure was roughly double, in the direction that overstated our difficulty | 2026-08-30 |
 | "The parity table shows 0 confirmed impossible" | True only over the 9 % of the ExtendScript surface it examined; quoting it as coverage is what made it comforting | 2026-08-30 |
 | "Two of four platform surfaces are at 100 %" | Three were, in the same table that said two — an editing error, corrected rather than quietly fixed | 2026-08-30 |
 | Adoption percentages published before 2026-09-01 | Computed over a denominator that excluded the panel's largest platform dependency | 2026-09-01 |
-| Plan: "81 script tags" | 114 | 2026-08-30 |
+| Plan: "81 script tags" | 114 on 30 Aug; 146 on 21 Oct | 2026-08-30 |
 | Plan: "58 direct path calls across 25 files" | 0 — fully routed through an adapter | 2026-08-19 |
-| Plan: "73 direct file-system acquisitions across 27 files" | 44 routed / 46 direct at the last reading | 2026-08-30 |
+| Plan: "73 direct file-system acquisitions across 27 files" | 57 routed / 45 direct on 21 Oct | 2026-08-30 |
 | Plan: "the host-call adapter has not been built" | It exists under a different name and was already three-quarters adopted; the plan never mentions that name | 2026-08-19 |
 | Plan: adapters needed for platform events and file dialogs | The surfaces they would cover measured two listeners and zero dialog calls. Not built — see section 4.3 | 2026-08-19 |
 | Plan: a named file is "the CEP bootstrap" | It is loaded by nothing. Dead code, since deleted | 2026-08-19 |
@@ -795,13 +874,13 @@ only re-asserted.
 
 | # | Claim | Class | Established | Falsified by |
 |---|---|---|---|---|
-| 1 | Three platform surfaces have zero direct calls left | [SOURCE] | 30 Aug, re-checked 9 Sep | A direct call appearing outside the adapter |
-| 2 | Host calls are ~77 % routed; the generation pipeline is the unbridged subsystem | [SOURCE] | 30 Aug | Re-running the same search |
-| 3 | The panel makes ~384 `localStorage` calls and has no adapter for them | [SOURCE] | 1 Sep, adapter absence re-checked 9 Sep | An adapter landing, or the sites being removed |
+| 1 | Three platform surfaces have zero direct calls left | [SOURCE] | 30 Aug, re-checked 9 Sep and 21 Oct | A direct call appearing outside the adapter |
+| 2 | Host calls are ~82 % routed; the generation pipeline is the unbridged subsystem | [SOURCE] | 21 Oct (75 % on 30 Aug by the same search) | Re-running the same search |
+| 3 | The panel makes ~400 `localStorage` calls and has no adapter for them | [SOURCE] | 1 Sep, re-measured 21 Oct | An adapter landing, or the sites being removed |
 | 4 | UXP provides no `localStorage` | [PLATFORM] | 1 Sep | Adobe shipping one |
 | 5 | UXP can launch a process but cannot pass arguments or capture output | [PLATFORM] | 30 Aug | Adobe changing the documented limitation |
 | 6 | Therefore the backend must become a companion application | [ASSUMPTION] | 30 Aug | Row 5 changing, or row 10 resolving in our favour |
-| 7 | 13 backend endpoints invoke external media tooling | [SOURCE] | 19 Aug, carried forward | Re-measuring |
+| 7 | 13 backend endpoints invoke external media tooling | [SOURCE] | 19 Aug, carried forward; a rougher 21 Oct search suggests more | Re-measuring |
 | 8 | UXP requires a bundled entry point | [PLATFORM] | 19 Aug | Adobe supporting script tags |
 | 9 | 22 user-facing operations have an unsupported host API as their only implementation | [SOURCE] | 19 Aug | Supported equivalents arriving — question 2 |
 | 10 | A hybrid plugin might link a media library directly instead of shelling out | [ASSUMPTION] | 30 Aug | Adobe documenting the sandbox boundary — question 4 |
@@ -811,17 +890,17 @@ only re-asserted.
 | 14 | Our identity provider is a single function inside the process that becomes the companion app, so the sandbox never needs it | [SOURCE] | 30 Aug, still single-writer 9 Sep | A second producer appearing — it has happened once |
 | 15 | Secure storage is documented as a cache, not persistent storage | [PLATFORM] | 30 Aug | Adobe restating it |
 | 16 | A lost seat record cannot be regenerated without consuming a second slot | [ASSUMPTION] | 30 Aug | A supported cleared-vs-never-written signal — question 5 |
-| 17 | CEP still works end to end in Premiere Pro 26.3.2 | [SOURCE] — a live host measurement | 1 Sep | Any later version. **One version, one platform, one machine** |
-| 18 | Adobe's stated support window is roughly a calendar year from 25.6 | [PLATFORM] | 30 Aug | Adobe publishing a date |
+| 17 | CEP still works end to end in Premiere Pro 26.3.2 | [SOURCE] — a live host measurement | 1 Sep; the panel also loaded and its backend answered in 26.5.1 on 21 Oct, with no generation run | Any later version. **One version, one platform, one machine** |
+| 18 | Adobe's stated support window is roughly a calendar year from 25.6 | [PLATFORM] | 30 Aug, wording unchanged on 21 Oct | Adobe publishing a date |
 | 19 | Our extraction contract has no *proven* UXP parity. Documented candidate APIs may exist — a sequence-frame path and a sequence-export path are the two we know to look at — but none has been shown to satisfy the whole contract | [ASSUMPTION] — see 19a | 9 Sep | A spike, not a document. Question 1, and 7.2 below |
 | 19a | *Retired 2026-09-09:* "frame export has no UXP API today", published here as [PLATFORM] | [DEPRECATED] | — | Adobe publishes no statement of absence, so nothing could have been quoted. See 7.2 |
-| 20 | The migration wrapper's behaviour is pinned by a characterisation suite | [SOURCE] | 9 Sep | A row going red |
-| 21 | Three of our durable documents carry a schema version and four do not | [SOURCE] | 9 Sep | Stamping the four |
+| 20 | The migration wrapper has no test on the main line; a characterisation suite for it exists only on a side branch | [SOURCE] | 21 Oct (on 9 Sep this row claimed the suite was in place) | The suite landing on the main line |
+| 21 | Four of our durable documents carry a schema version and three do not | [SOURCE] | 21 Oct (three and four on 9 Sep) | Stamping the three |
 
 **Rows 6, 13, 16 and 19 are the load-bearing assumptions**, and all four concern
 things we have not run. Each one is also the subject of an open question in
 section 5, which is not a coincidence: an assumption we could settle ourselves
-would not be a question for the platform owner. If any of the three is wrong, the
+would not be a question for the platform owner. If any of the four is wrong, the
 architecture that follows from it is wrong, and we would rather that be legible
 in a table than buried in a paragraph that reads like a conclusion.
 
@@ -856,7 +935,9 @@ worsens is not being re-read.
 Host chain verified live against Premiere Pro 26.3.2 and the `localStorage` row
 added 2026-09-01. Source re-checked in part, every claim classified, and the
 retired claims collected, 2026-09-09 — with no new platform check in that pass.
-Every figure carries the reading it came from.*
+Source re-measured with the first reading's search patterns, three claims
+corrected against us and one platform statement re-read, 2026-10-21. Every figure
+carries the reading it came from.*
 
 ---
 
