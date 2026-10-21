@@ -36,8 +36,9 @@ completed and was charged regardless. fal.ai's own documentation says a cancelle
 in-progress request "may still complete". This was one run on one model; whether other
 models stop earlier is unmeasured.
 
-Consequence: an accepted cancellation is not "no charge". The row stays open until the
-result has been re-read.
+Consequence: an accepted cancellation is not "no charge". The cancelled row is re-read
+from fal.ai afterwards — at start-up and when Billing opens, for up to six days — and is
+counted as spend if the result then reports usage.
 
 ## 4. The endpoint a run is accounted under may not be the one it was submitted to
 

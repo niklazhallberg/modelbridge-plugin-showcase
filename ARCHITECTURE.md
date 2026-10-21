@@ -16,13 +16,13 @@ The cloud layer runs autonomously — detecting new models, verifying schemas, a
 
 ## Core Design Principles
 
-**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how over 1,280 currently catalogued models across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
+**Adaptive.** Most models get their interface generated automatically from the provider's API specification — no per-model code. When a specification isn't available, the system still builds a working interface from what it knows about the model. High-demand models can receive a hand-tuned interface with richer controls. All three paths produce the same result for the user: a complete, ready-to-use generation form. This is how 1,296 installable models (the panel's catalogue count, measured 2026-10-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every data migration. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
-**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; the manifest carries a one-hour cache, read at panel start, so it reaches an editor the next time they open the panel. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither: they ship bundled in a plugin release, so a cost estimate can never be changed remotely.
+**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; the manifest carries a one-hour cache, read at panel start, so it reaches an editor the next time they open the panel. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release. The panel would accept a remote pricing file only if the update manifest pinned its hash, and the manifest pins none, so a cost estimate cannot currently be changed remotely.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
 
@@ -66,10 +66,10 @@ flowchart TD
 
 | | |
 |---|---|
-| Supported AI models | over 1,280 currently catalogued models across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
+| Supported AI models | 1,296 installable models (measured 2026-10-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
 | Panel codebase | Tens of thousands of lines of JavaScript and CSS |
 | Design system | Token-driven — visual consistency across every surface |
-| Documentation site | 75+ pages across guides, reference, Academy, and legal |
+| Documentation site | About 90 pages across guides, reference, Academy, and legal (counted 2026-10-21), plus a parameter index generated from the live catalogue |
 | Automated tests | A harness of offline suites and live-panel (CDP) suites, run by one command that writes the run as an artefact; a pre-commit guard refuses any published test count that does not come from that artefact, so no figure is copied by hand — which is also why none is printed here. Plus catalogue audits and end-to-end import tests against a live Premiere |
 | Built by | One developer — structured for team onboarding and handover (documented conventions, migration plan, and test suites) |
 
@@ -83,7 +83,7 @@ flowchart TD
 
 **Conventions and rules.** Coding conventions, commit standards, and architectural rules are documented and enforced consistently. Every error must go through the translation layer — no raw API output reaches users. Every data migration must create a backup first. Every bug fix must check for the same class of problem elsewhere in the codebase.
 
-**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases ship as a macOS installer package (`.pkg`) with version-tracked changelogs.
+**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases ship as a signed macOS installer package (`.pkg`) with version-tracked changelogs.
 
 ---
 
@@ -93,7 +93,7 @@ flowchart TD
 
 modelBridge integrates with fal.ai at multiple API levels — not just the generation endpoint.
 
-**Model catalog.** The plugin consumes fal.ai's authenticated model listing and browse APIs, including popularity ranking, category classification, and schema endpoints. The catalog is treated as a live data source, not a static list — new models, schema changes, and retirements are detected and handled automatically. Why the architecture is built on this catalogue rather than a hand-picked subset is set out in [Why fal.ai](https://docs.modelbridge.app/why-fal-ai/).
+**Model catalog.** The plugin consumes fal.ai's model listing and search APIs (authenticated with the editor's own key when one is set), its category classification, and its per-model schema endpoints. The Trending order in Browse is not a fal.ai signal: it comes from a public model leaderboard, matched to the catalogue by modelBridge's cloud layer. The catalog is treated as a live data source, not a static list — new models, schema changes, and retirements are detected and handled automatically. Why the architecture is built on this catalogue rather than a hand-picked subset is set out in [Why fal.ai](https://docs.modelbridge.app/why-fal-ai/).
 
 **Schema parsing.** Every model's OpenAPI specification is fetched, parsed, and used to generate the complete UI — input fields, validation rules, media requirements, and parameter constraints. The plugin supports both fal.ai's queue API and platform API endpoints, with automatic fallback between them.
 
@@ -122,7 +122,9 @@ Some things do not derive at all. 18 of the 1,497 schemas declare no inputs. Som
 - **Terminality is classified from the whole payload, not the status word.** The rule was derived from the two captured payloads and is conservative in the direction that matters: an ambiguous in-flight payload passes through untouched, because a false terminal would kill a live run.
 - **An unknown status renders as unknown, never as progress.** One shared resolver maps status words to progress stations for every surface, so a value outside the known vocabulary cannot be painted as motion by one component and as unknown by another (shipped 2026-08-16).
 - **"Generating" carries a freshness requirement.** A running generation that has gone too long without an understood response flips to an explicit checking state showing when contact was last confirmed. Progress is a claim backed by a recent, understood answer, not by the absence of a terminal one.
-- **A 30-minute wall ends the wait honestly.** The run settles as stopped on every surface and points at the fal.ai dashboard — the charge may be real even when delivery is not, so the terminal state names where the authoritative record lives.
+- **No clock ends the wait.** A run is watched for as long as it is running on fal.ai — there is no fixed deadline, because a long video run can legitimately outlast any deadline we would pick. A watch ends when the run finishes, when the editor cancels, or after three minutes of unbroken lost contact; the last two point at the fal.ai dashboard, because the charge may be real even when delivery is not, so the terminal state names where the authoritative record lives. A run interrupted by a Premiere restart resumes watching on the next panel open, within 24 hours of last contact and 72 hours of submission. *(Corrected 2026-10-21: this bullet described a 30-minute wall. No such deadline exists in the shipping code; 30 minutes is only the scale of the progress display.)*
+- **"Not sent" and "unconfirmed" are different answers.** A run that ended before anything reached fal.ai — a refused upload, a failed extraction, a declined warning — is shown as "Not sent" and never counts as spend. A submission that fal.ai never confirmed with a request id is booked as *unconfirmed* and marked "Charged?" in Billing, because the request may have been accepted. Storage uploads are bounded by stall rather than by a clock: an upload is abandoned only after 30 seconds with no bytes moving, and the panel's wait follows the backend's progress heartbeat, so a large file on a slow line is not cut off mid-transfer — and an upload the panel loses track of is booked as unconfirmed, never as "Not sent".
+- **Cost settles after the fact.** A cancelled run, a failed run without a usage count, or a success that arrived without one is re-read from fal.ai at start-up and when Billing opens, for up to six days, and is priced from the count fal.ai then reports.
 - **`X-Fal-Retryable` outranks local heuristics.** When the header is present, the provider's own retryability verdict overrides every client-side guess.
 
 **The dollar is a derivation, and every label says whose.** What the API emits about money is precise but partial. `x-fal-billable-units` on a result is a quantity — never a dollar. `GET /v1/models/pricing` is a per-unit rate. The identity `cost = units × unit price` reproduced fal.ai's own arithmetic in all four metered runs, across three model classes, in which it was tested (2026-08-25), fractional quantities included. But the unit is the model author's own convention, with no cross-catalog rule to lean on — measured the same day: one video family normalizes resolution into the quantity (the same second of output bills a different unit count at 720p than at 1080p), another books usage in token blocks, and the same model reached through an endpoint alias is a separate pricing row in a third unit. Quantity follows the nominal request, not the delivered output (a 5-second request bills as 5 seconds even when the delivered clip runs a fraction longer). The function from parameters to units — the thing a pre-run estimate actually needs — is not machine-readable anywhere: the rate is published; the quantity rule is not.
@@ -137,6 +139,9 @@ The product's cost labels map one-to-one onto what the provider handed over for 
 | **Learned ≈$X** | pre-run, the median of your own metered history for these exact settings |
 | **From $X** | pre-run, fal.ai's published base rate — a floor, not a prediction |
 | **No price** | no source qualifies, so no number is shown |
+| **Metered / Calculated (failed run)** | post-run — the run failed, but fal.ai reported usage for it or reported it completed, so it is counted as spend |
+| **Charged, amount unknown** | post-run — fal.ai reported usage in a unit modelBridge has no rate for, so the count is shown and no amount |
+| **Charged?** | Billing only — the submission was never confirmed with a request id, so a charge is possible and not proven |
 
 About 61 % of the active catalog (856 of 1,392, measured 2026-07-24) prices in a unit that converts to a per-output figure and can carry a "From $X" floor; the rest show "No price" rather than an approximation. No label in the product presents a figure as fal.ai's invoice: fal.ai reports a usage quantity, never a per-request dollar, so every dollar shown is that quantity × modelBridge's rate, or modelBridge's own formula. And when the pricing API omits its `unit` field, the absence is treated as unknown and falls to "No price" — an earlier version defaulted the missing field to per-request, which silently repriced per-second models as flat-rate, and that class of confident wrong number is exactly what the labelling discipline exists to make impossible.
 
@@ -165,19 +170,19 @@ The result: Adept solves problems a raw model would hand back to the user.
 
 **Available models.** Claude Haiku 5.5 (default, fast + cheap) and Claude Sonnet 5.5 (deeper reasoning). Editors switch per conversation.
 
-**Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure. Absolute media paths are replaced with opaque, session-scoped references at a single choke point before anything is sent and resolved back locally on return — session-scoped by construction, so the reference does not itself identify the file across sessions. Filenames still travel, because the agent has to name the clip; the boundary is stated in the source rather than implied.
+**Privacy.** Conversations are sent directly to Anthropic's API using the editor's own key. modelBridge does not store, log, or relay conversation content. No conversation data transits modelBridge infrastructure. Absolute media paths are replaced with opaque, session-scoped references at a single choke point before anything is sent and resolved back locally on return — session-scoped by construction, so the reference does not itself identify the file across sessions. The project file's own path is handled the same way. Filenames still travel, because the agent has to name the clip, and three kinds of path travel as written: a path the editor types into the chat, anything inside raw XMP text, and the candidates of a disk search for an offline file. The boundary is stated in the source rather than implied, and in full in [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) §6.
 
 ### Adobe Premiere Pro
 
 modelBridge is a deep Premiere Pro integration, not a standalone panel that happens to run inside the application.
 
-**Timeline interaction.** The plugin reads and writes to the active sequence — clip selection, track identification, In/Out points, playhead position, and sequence metadata. Generated media is placed on the correct track, at the correct timecode, with frame-accurate positioning.
+**Timeline interaction.** The plugin reads and writes to the active sequence — clip selection, track identification, In/Out points, playhead position, and sequence metadata. Generated media is placed on the correct track, at the correct timecode, with frame-accurate positioning. An extend-video result that confidently matches the timeline clip it was made from is placed as only the new footage, directly after that clip on the same track; otherwise it imports like any other result. When an image model needs a still and a video is selected, a camera button extracts the frame at the playhead into the empty image slot.
 
 **Source Monitor.** Results can be opened directly in Premiere Pro's Source Monitor for full-resolution evaluation. Editors can set In/Out points in the Source Monitor and import only the selected range.
 
 **Media awareness.** The plugin reads clip properties from the timeline — dimensions, duration, file path, track index — and uses them for validation, media extraction, and context-aware import decisions (replace in-place vs. insert at playhead vs. route to audio track).
 
-**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 77 % of host calls route through it today, with the agent layer fully converted and the generation pipeline deliberately left until after launch. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
+**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 77 % of host calls routed through it when last measured (2026-08-30), with the agent layer fully converted and the generation pipeline deliberately left until after launch. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
 
 ---
 
@@ -195,17 +200,17 @@ The cloud operations layer is deployed on an edge runtime and runs continuously,
 
 The following systems operate autonomously — reducing manual maintenance and keeping the plugin current between releases.
 
-**Catalog pipeline.** The cloud layer watches the full fal.ai catalog around the clock. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted the moment it becomes usable. Models that disappear from fal.ai are confirmed over multiple checks before being marked gone, so a temporary API glitch never wipes anything — and a model that returns is restored automatically.
+**Catalog pipeline.** The cloud layer watches the full fal.ai catalog around the clock. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted the moment it becomes usable. Verification runs from two places — the cloud layer itself, and a scheduled catalogue check in CI twice a day — and when they disagree, a model the cloud layer has verified stays available unless the CI check proves it cannot run or finds its specification behind an authentication wall; an inconclusive CI result does not withdraw it. Models that disappear from fal.ai are confirmed over multiple checks before being marked gone, so a temporary API glitch never wipes anything — and a model that returns is restored automatically.
 
 **Plugin-side health checks.** Installed models are re-verified quietly in the background, without ever blocking the user. Renamed endpoints are migrated silently; a model whose spec changed gets its interface rebuilt on next open; and only models that fal.ai has genuinely removed are surfaced — with a one-click cleanup — never on the strength of a single failed check.
 
-**News feed.** New models in news-worthy categories are automatically published as news items. The plugin displays these as compact banners with a "Today" badge and one-click install. The feed also supports manual entries (feature updates, maintenance notices, tips) via an admin API.
+**News feed.** New models in news-worthy categories are automatically published as news items. The plugin displays these as compact banners with a "Today" badge and one-click install. The feed also carries manual entries (feature updates, maintenance notices, tips) published by the operator.
 
 **Operator notifications.** The operator gets daily digests of customer activity, catalog movement, and pipeline health, with instant alerts for anything urgent. Quiet days collapse to a single line — length itself is the signal.
 
 **OTA updates.** Error documentation, error message templates and endpoint migrations are delivered over-the-air from a remote manifest. Each control is named per channel rather than claimed across all of them:
 
-- **The file payloads are pinned.** Every file the manifest declares carries a SHA-256, verified before the payload is applied. A mismatch, a missing pin or an unreachable file rejects the payload and the copy bundled in the extension serves instead — the channel fails closed, never open.
+- **The file payloads are pinned.** Every file the manifest declares carries a SHA-256, verified before the payload is applied. A mismatch, a missing pin, a panel that cannot compute the hash or an unreachable file rejects the payload, and the last verified copy — or, on a fresh install, the one bundled in the extension — serves instead. The channel fails closed, never open.
 - **Remote configuration is constrained, not pinned.** The config file that carries incident banners, kill switches and per-model validation modes is not hash-verified. It is bounded instead: schema sources must match an exact host allowlist, and only the kill switches the channel itself declares may be set, so it cannot reach a flag it does not own.
 - **Feature flags ride in the manifest body**, which carries no hash of itself. What protects them is that the manifest is served from a repository only we can write to — the same trust root as the pins, stated plainly rather than implied by the sentence above.
 
@@ -215,13 +220,13 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Generation time learning.** After a few generations with a model, its card shows a time estimate based on your own runs — and it keeps converging toward your actual experience.
 
-**Background generation recovery.** If Premiere Pro restarts during an active generation, recovery data persists locally. On next panel open, a recovery bar lets the user resume polling with the original request ID.
+**Background generation recovery.** If Premiere Pro restarts during an active generation, recovery data persists locally. On next panel open, watching resumes automatically with the original request ID; a recovery bar with a status check appears only for a run whose watch had already stopped.
 
 **Model insights enrichment.** Editor-focused highlights for each model are generated in the cloud, cached locally, and refreshed quietly in the background — every model card tells you what the model is actually good at, in an editor's terms.
 
-**Capability badges.** Model cards show what a model can do — HD, 4K, audio, LoRA support, extendable duration — derived automatically from the model's own spec, so new models arrive correctly labeled with no manual list to maintain.
+**Capability badges.** Model cards show what a model can do — HD, 4K, audio, LoRA support, extendable duration. Resolution and extendable duration are derived from the model's own spec, so new models arrive labelled without a manual list. Two badges are not yet spec-derived everywhere: on one surface the audio badge reads curated pricing data, and LoRA support falls back to the model's name.
 
-**License revalidation.** Subscription status is reverified periodically. An offline grace period allows the plugin to function without connectivity. Trial countdowns, payment grace periods, and status transitions are handled without user action.
+**License revalidation.** Licences are verified server-side with signed snapshots. Status is re-checked at start-up, every 12 hours and when paid work starts; if the licence service cannot be reached, the plugin keeps working for 14 days since the last successful check, and never answers an unreachable service by asking for the licence key again. Trial countdowns, a failed renewal while the payment provider retries, and other status transitions are handled without user action. Each of the 13 licence states that needs the customer's attention — from an expired trial to a refunded order — reads the same wording on Generate, Agent and Settings, from one shared copy table.
 
 **Exchange rates.** Cost displays support multiple currencies with live rates from a public API. Fallback defaults are used when the API is unreachable. Historical rates are stored per generation for accurate retrospective reporting.
 
@@ -229,9 +234,9 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Visibility-aware polling.** When the panel is hidden, non-critical background work pauses automatically. Generation polling, the backend keep-alive and a few bounded housekeeping tasks continue; everything else waits.
 
-**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type, HTTP status, model endpoint, plugin version — no prompts, paths, keys, or personal data). This is how new error types are discovered for documentation. Off by default — enabled only if you opt in from Settings.
+**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Off by default — enabled only if you opt in from Settings.
 
-**Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons across all models. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
+**Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons. A field that has no curated explanation yet still gets a working ⓘ, linked to its entry in a parameter index on the docs site that is rebuilt from the live catalogue — so a new model's settings are explained from the day it arrives, and the curated text follows. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
 
 ---
 
@@ -241,7 +246,7 @@ All user data — saved models, settings, generation history, cost logs, and lea
 
 The cloud operations layer stores catalog state (model availability, schema verification status) and licensing state (subscription status, device identifiers). It does not store user-generated content, prompts, API keys, or personal information beyond what is provided during license activation — or in a bug report you explicitly choose to send.
 
-API keys are stored locally and transmitted only to fal.ai directly — never to modelBridge infrastructure. Anonymous error telemetry (error type, model endpoint, plugin version) can be disabled by the user at any time.
+API keys are stored locally and transmitted only to their own provider directly — the fal.ai key to fal.ai, the Anthropic key to Anthropic — never to modelBridge infrastructure. Anonymous error telemetry (error type, HTTP status, plugin and Premiere version) is off until the user turns it on, and can be turned off again at any time.
 
 Full data architecture, retention policies, and third-party data flows are documented in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
 
@@ -249,9 +254,9 @@ Full data architecture, retention policies, and third-party data flows are docum
 
 ## Security & Privacy
 
-User API keys are stored locally and used exclusively for direct communication with fal.ai — they never transit modelBridge infrastructure. The update channel is read-only and carries no user data.
+User API keys are stored locally and used exclusively for direct communication with their own provider (fal.ai, and Anthropic for Agent Mode) — they never transit modelBridge infrastructure. The update channel is read-only and carries no user data.
 
-A licence check carries the information needed to validate product access and support device management. A device name can be included; because device names often reflect the computer hostname, they can contain personal information. The service returns the subscription status and access information needed by the product. Licence checks are not used to transfer creative project content.
+A licence check carries the information needed to validate product access and support device management, including a device name made of the platform, the processor model and a random four-character tag (for example "macOS · Apple M2 Pro · 3f9a"). Since 2026-09-27 the device name no longer contains the computer's network name; a device activated by an earlier build keeps its old name, which did, until it is activated again. The service returns the subscription status and access information needed by the product. Licence checks are not used to transfer creative project content.
 
 The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting is off by default and carries technical error context, filtered and truncated before it is sent. Optional usage measurement is opt-in only.
 
@@ -267,11 +272,11 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **Panel and backend.** Run locally per user. Scaling is linear — each new user is an independent instance with no shared state.
 
-**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (currently over 1,280 catalogued models), not by the number of modelBridge users.
+**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (1,296 installable models on 2026-10-21), not by the number of modelBridge users.
 
 **OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
 
-**Known limits.** The local backend processes one media extraction at a time per generation. Background generations queue at the fal.ai API level, not locally. The primary scaling constraint is fal.ai's own API rate limits, which apply per user API key. Current scale and functional constraints are documented in [Known Limitations](https://docs.modelbridge.app/reference/limitations/).
+**Known limits.** Background generations queue at the fal.ai API level, not locally. The primary scaling constraint is fal.ai's own API rate limits, which apply per user API key. Current scale and functional constraints are documented in [Known Limitations](https://docs.modelbridge.app/reference/limitations/).
 
 ---
 
@@ -302,9 +307,9 @@ FFmpeg and FFprobe ship with the plugin as **LGPL-only builds** — compiled wit
 
 The macOS binaries are built from source rather than downloaded, and the build is a deliberately small one: `--disable-everything` with an explicit allowlist of demuxers, decoders, encoders, muxers and filters, `--disable-autodetect`, and **`--disable-network`** — leaving `file` and `pipe` as the only two protocols compiled in. That bundled macOS binary has no network code in it at all.
 
-**The guarantee is about that binary, not about every ffmpeg the product may end up running,** and the distinction is worth stating precisely because it is the kind that gets rounded off. Two cases fall outside it. The Windows binaries are a downloaded LGPL release build rather than one we compile, and it is a general-purpose build with network protocols present. And on either platform, if the bundled binaries are missing, the backend falls back to a copy already installed on the machine — the user's own ffmpeg, built by someone else, about which no build claim can be made. Each binary's origin, full configure string and SHA-256 are recorded in `bin/ffmpeg-provenance.json`, which ships inside the extension, so which case you are in is checkable without trusting this document.
+**The guarantee is about that binary, not about every ffmpeg the product may end up running,** and the distinction is worth stating precisely because it is the kind that gets rounded off. Two cases fall outside it. No Windows build ships today — the product is macOS-only — and when one does, its binaries are planned as a downloaded LGPL release build rather than one we compile, a general-purpose build with network protocols present. And if the bundled binaries are missing, the backend falls back to a copy already installed on the machine — the user's own ffmpeg, built by someone else, about which no build claim can be made. Each binary's origin, full configure string and SHA-256 are recorded in `bin/ffmpeg-provenance.json`, which ships inside the extension, so which case you are in is checkable without trusting this document.
 
-In all three cases ffmpeg is invoked on local file paths only, as a separate process, and nothing in the product asks it to open a URL. The narrower claim — that the macOS build *cannot* reach the network even if asked — holds for the bundled macOS build alone. See [NOTICE.md](NOTICE.md) for the linked libraries these builds carry.
+In every case ffmpeg is invoked on local file paths only, as a separate process, and nothing in the product asks it to open a URL. The narrower claim — that the macOS build *cannot* reach the network even if asked — holds for the bundled macOS build alone. See [NOTICE.md](NOTICE.md) for the linked libraries these builds carry.
 
 ### Proprietary components
 
@@ -315,7 +320,7 @@ In all three cases ffmpeg is invoked on local file paths only, as a separate pro
 - Error translation and handling pipeline
 - OTA update infrastructure
 - Cloud operations worker (catalog monitoring, insights, licensing)
-- All 75+ documentation pages
+- All documentation pages
 
 ---
 
@@ -323,19 +328,19 @@ In all three cases ffmpeg is invoked on local file paths only, as a separate pro
 
 Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is designed with this migration in mind — not as a future project, but as an active constraint on all current development.
 
-**Migration plan.** A detailed migration plan is in place, covering interface contracts, an API parity mapping between ExtendScript and UXP equivalents, and a phased timeline. Adapter layers isolate platform-specific code where that is possible — three surfaces (path construction, external URLs, credential storage) are at zero remaining direct calls; host calls are at 77 %; file I/O at 49 %, all measured 2026-08-30. One surface has no adapter at all: 384 `localStorage` calls across 50 files, which UXP does not provide.
+**Migration plan.** A detailed migration plan is in place, covering interface contracts, an API parity mapping between ExtendScript and UXP equivalents, and a phased timeline. Adapter layers isolate platform-specific code where that is possible — three surfaces (path construction, external URLs, credential storage) are at zero remaining direct calls; host calls are at 77 %; file I/O at 49 %, all measured 2026-08-30. One surface has no adapter at all: 384 `localStorage` calls across 50 files (also measured 2026-08-30), which UXP does not provide.
 
-**It is a reconstruction, not a port, and three parts of it cannot be adapted at all.** UXP can launch a process but cannot pass it arguments or read its output, so the local backend — 13 of whose routes invoke FFmpeg or FFprobe — has to become a separately installed companion application. The panel's 114 script tags must become a bundle. And 22 user-facing timeline operations currently depend on Premiere's unsupported QE DOM, with no supported equivalent today. Our own parity table maps 23 of 276 host functions (8.3 %). The full measurements, the open questions to Adobe, and the places our own early decisions were wrong are in [UXP_MIGRATION.md](UXP_MIGRATION.md).
+**It is a reconstruction, not a port, and three parts of it cannot be adapted at all.** UXP can launch a process but cannot pass it arguments or read its output, so the local backend — 13 of whose routes invoke FFmpeg or FFprobe — has to become a separately installed companion application. The panel's 140 script tags (counted 2026-10-21; 114 on 2026-08-30) must become a bundle. And 22 user-facing timeline operations currently depend on Premiere's unsupported QE DOM, with no supported equivalent today. Our own parity table maps 23 of 276 host functions (8.3 %). The full measurements, the open questions to Adobe, and the places our own early decisions were wrong are in [UXP_MIGRATION.md](UXP_MIGRATION.md).
 
 **The support window, as Adobe states it.** Adobe's PProPanel sample documentation records that CEP extensions were superseded by UXP as of Premiere Pro 25.6, and that the plan is to support both "for a calendar year, after which we will remove support for CEP extensibilty." No end date has been published. We plan against the short reading of that range rather than the long one.
 
-**CEP works in Premiere Pro 26.3.2, measured 2026-09-01.** A widely-linked bug report against a different extension claims CEP extensions no longer load in Premiere 2026. We ran the full chain against 26.3.2 — panel loads, backend spawns, a generation completes, the result imports to the timeline through the ExtendScript bridge — and all four steps work, which makes that report an installation-path problem rather than a platform removal. This is one version on one platform: support can be withdrawn in a point release, and a version that still loads CEP is not a commitment that the next one will. It removes a false alarm; it does not extend the window.
+**CEP works in Premiere Pro 26.3.2, measured 2026-09-01.** A widely-linked bug report against a different extension claims CEP extensions no longer load in Premiere 2026. We ran the full chain against 26.3.2 — panel loads, backend spawns, a generation completes, the result imports to the timeline through the ExtendScript bridge — and all four steps work, which makes that report an installation-path problem rather than a platform removal. This is one version on one platform: support can be withdrawn in a point release, and a version that still loads CEP is not a commitment that the next one will. It removes a false alarm; it does not extend the window. On 2026-10-21 the development panel was running in Premiere Pro 26.5.1.
 
 **Migration-first development policy.** New code follows migration-aware rules: file system access through a storage abstraction, Premiere Pro communication through the host adapter, no new direct platform calls. The policy also requires new storage and host APIs to be async-first, matching UXP's async model even though CEP allows synchronous calls — and the storage adapter itself was built synchronous, in violation of that rule, which turns its eventual replacement into a signature change at every call site.
 
 **How much of that policy is actually enforced, measured 2026-08-30.** This paragraph previously said the rules were "enforced on every contribution". They are not, and the measurement is unambiguous: seventeen new direct file-system calls entered the panel in the eleven days after the last audit. Seventeen commit hooks run on every commit, and none of them is a general guard on direct platform calls. What exists is one *subsystem-scoped* guard — the newest layer in the tree is mechanically prevented from touching the file system or the host outside a single named adapter file, which is why that layer did not drift. So the honest statement is: the policy is written down, one subsystem enforces it mechanically and stays clean, and everywhere else it depends on the author remembering. Both our own errors here — the synchronous storage adapter, and a 384-call-site `localStorage` dependency we were not counting at all — are reported in [UXP_MIGRATION.md](UXP_MIGRATION.md) alongside what the policy did buy.
 
-**Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), CI automation for the existing test suites, and incremental type annotations.
+**Planned modernization.** Introducing a module bundler (prerequisite for UXP — UXP does not support the current script-tag loading model), running the panel's test suites in CI (today CI runs the catalogue verification, the ExtendScript ES3 guard and the dual-mode offline suites, not the whole harness), and incremental type annotations.
 
 For the product roadmap (Agent Mode expansion, Team Cost Intelligence, Enterprise features), see [ROADMAP.md](ROADMAP.md).
 

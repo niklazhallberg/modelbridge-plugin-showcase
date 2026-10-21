@@ -18,9 +18,8 @@ unreadable would be false, so none is made here.
 
 The design target is therefore not impossibility. It is three properties:
 
-1. **The server is the authority for entitlement state.** Entitlement is issued and
-   signed by the hosted service. It cannot be minted, extended or transferred by the
-   client.
+1. **The server is the authority for entitlement state.** Entitlement is issued by
+   the hosted service. It cannot be minted, extended or transferred by the client.
 2. **Circumvention costs ongoing effort.** A bypass must be repeated by each person
    who wants one, and repeated again after each release — it cannot be performed once
    and distributed as a durable artifact.
@@ -33,26 +32,18 @@ Property 3 is the one that gets audited. Properties 1 and 2 are design constrain
 
 ## Entitlement integrity
 
-- **Signed state, verified locally, failing closed.** Entitlement is carried as a
-  signed statement issued by the service. Verification failure denies rather than
-  degrades: an unreadable or unverifiable statement never resolves to "allowed".
+Licences are verified server-side with signed snapshots. What that means for a
+customer, stated as behaviour rather than mechanism:
 
-- **Statements are minted for one installation.** An entitlement statement is issued
-  against a specific installation and is refused on any other, so a licence file
-  lifted from one machine does not activate a second seat by itself.
-
-- **Time is not client-supplied.** Offline tolerance is measured against a signed
-  reference issued by the service. Moving the system clock backwards does not extend
-  or reset an offline allowance.
-
-- **Revocation is an operator action, not a release.** A compromised or shared key can
-  be revoked centrally and takes effect on the next contact with the service, without
-  shipping a new build to anyone.
-
-- **Abuse controls on the licence path.** Activation is rate limited per source
-  address and renewal per installation. Structurally malformed input is classified and
-  rejected before it reaches any cryptographic or third-party call, so a malformed
-  request cannot be used to probe, amplify, or generate noise in operational alerting.
+- **A licence covers two computers, one of them active at a time.**
+- **Offline is tolerated for 14 days.** A panel that cannot reach the licence service
+  keeps working for 14 days since its last successful check before it stops starting
+  paid work, and it never responds to an unreachable service by asking for the licence
+  key again. Generation itself needs the internet, so this window only matters to
+  someone who can reach fal.ai but not us.
+- **Revocation is an operator action, not a release.** A refunded or revoked licence
+  stops working on the next contact with the service, without shipping a new build to
+  anyone.
 
 ---
 
@@ -97,9 +88,11 @@ The panel is supported by a local backend process on the customer's machine.
 - Your project stays on your machine. What you send to a model goes to that provider
   under your own key — nothing passes through modelBridge's servers, and nothing about
   your footage is sent for entitlement purposes.
-- Entitlement traffic carries the licence key, the installation's identifiers, and the
-  subscription facts the service returns — including the name and email held by the
-  payment provider. It carries no prompt, media or project data.
+- Entitlement traffic carries the licence key, the installation's identifiers and a
+  device name (platform, processor model and a random tag; since 2026-09-27 never
+  the computer's network name), and the subscription facts the service returns — including the name
+  and email held by the payment provider. It carries no prompt, media or project
+  data.
 
 ---
 
@@ -146,7 +139,7 @@ Stating this is part of the posture, not a caveat to it.
   The exposure is subscription revenue from a single machine, not cost.
 
 - **What is defended against is scale.** The properties above exist to ensure that no
-  single act — a copied file, a moved clock, a shared key — can be turned into
+  single act — a copied file or a shared key — can be turned into
   unlimited access for others. That is the boundary that is actually enforced.
 
 ---
@@ -160,8 +153,9 @@ Contact: `info@modelbridge.app` — include what you found and how to reproduce 
 will confirm receipt and tell you what we intend to do about it.
 
 **In scope, in this repository.** The payloads published here are live infrastructure
-rather than documentation: installed panels fetch them, and the channel fails closed to
-the copy bundled in the extension on an integrity mismatch. Write access to this
+rather than documentation: installed panels fetch them, and the channel fails closed on
+an integrity mismatch, keeping the last verified copy or the one bundled in the
+extension. Write access to this
 repository is therefore the channel's trust root, and is protected accordingly.
 Findings that would widen that boundary are in scope, as are the data-access and
 erasure paths described in the privacy material.
