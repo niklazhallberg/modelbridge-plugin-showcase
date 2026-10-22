@@ -8,17 +8,27 @@ Privacy posture for modelBridge.app — data categories, recipients, and user co
 
 **Re-checked 2026-10-21** against the shipping panel, backend and production Worker. Corrected: the device name (no network name since 2026-09-27), what a bug report carries (licence key ID, installation ID and product state were missing) and what reaches Resend, the Enhance frame size, the visual-scan frame budget, when scan logs are removed, which project metadata travels on every turn, where the Anthropic key is stored, what Reset clears, how payment-provider message copies are stored, and which analytics events the Worker drops. The larger corrections are also marked where they were made.
 
+**Updated 2026-10-22:** Mobile Preview ships, as *Live preview in mobile*. This document described it as disabled pending review, and named a phone cookie that carried the installation ID. The phone link was redesigned before the feature was switched on: it is now a random link unrelated to your licence or your machine, and you can replace or stop it. §1, §2 and §4 describe what it sends.
+
 ---
 
 ## 1. Architecture Overview — Privacy by Design
 
-modelBridge is a local-first application. The plugin runs entirely inside Adobe Premiere Pro as a CEP panel extension. There is no modelBridge server sitting between the editor and fal.ai. User prompts, media files, and generated content flow directly from the user's device to fal.ai's API — authenticated with the user's own API key — and back. modelBridge infrastructure never sees, stores, or proxies this content.
+modelBridge is a local-first application. The plugin runs entirely inside Adobe Premiere Pro as a CEP panel extension. There is no modelBridge server sitting between the editor and fal.ai. User prompts, media files, and generated content flow directly from the user's device to fal.ai's API — authenticated with the user's own API key — and back. modelBridge infrastructure never sees, stores, or proxies this content. The one exception is a feature you turn on yourself: after you open *Live preview in mobile* in Premiere, the link to each new result on fal.ai's servers, with the model's name, reaches modelBridge's preview service (below). The media itself is not copied to us.
 
 All user preferences, generation history, API keys, installed models, cost logs, and learned constraints are stored locally on the user's machine. No modelBridge-operated database holds user-generated content or creative assets.
 
 modelBridge uses cloud services to support licence validation, catalog monitoring, the in-plugin news feed, model insights, and optional error reporting and analytics.
 
-Mobile Preview is a built capability that is currently disabled pending further review and validation. It is designed to support previewing provider-generated results without transferring source media through ModelBridge. When it is enabled, the phone's preview page sets one first-party cookie, `mb_install_id`, used only to send a phone that opens the bare preview address back to its own preview page. It is HttpOnly and Secure, and lasts 7 days, the same as a preview's retention, renewed on each visit; the year-long lifetime it had before is shortened in the release that re-enables the feature.
+**Live preview in mobile** shows your results on a phone. After a generation you open *Live preview in mobile* under the result, scan the QR code with the phone's camera, and each new result appears on the phone.
+
+- **Nothing is sent until you open it.** Opening *Live preview in mobile* in Premiere is the opt-in, and the plugin's local backend refuses to send anything before that (plugin: `node/mobilePreviewChannel.js`, route `/mobile-preview/send` in `node/server.js`). Sending also needs an active subscription or trial.
+- **What is sent, per result:** the link to the result file hosted by fal.ai, whether it is an image, a video or audio, the model's name and category, and the time it was sent. Never the source footage, the project or the prompt. The media is not copied to modelBridge; the phone loads it from fal.ai.
+- **The link.** The QR code carries a random link made for this purpose only. It is not derived from your licence or your machine, and it can show results but cannot change them. Anyone who has the link sees the results sent to it, so treat it as private. **New link** replaces it: the old link stops working at once and what was sent to it is deleted. **Stop sharing** does the same and stops sending; opening the QR code again creates a new link. A link that receives no new result for 7 days expires on its own, with everything sent to it.
+- **NDA mode** blocks it entirely: nothing is sent while NDA mode is on (plugin: `js/mobilePreview.js`).
+- **One cookie, on the preview site only.** The phone's preview page sets one first-party cookie, `mb_feed`, used only to reopen the right page from a Home Screen shortcut. It is HttpOnly and Secure and lasts 7 days (preview service: `src/worker.js` in modelbridge-preview-service). The Premiere plugin itself sets no cookies.
+
+*Corrected 2026-10-22:* this paragraph described the feature as disabled, and named its cookie as `mb_install_id`, carrying the installation ID, with a year-long lifetime to be shortened on re-enablement. That design was replaced before the feature shipped; the installation ID is not part of the phone link or the cookie.
 
 One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session, a technical model packet (the selected model, its settings and the properties of the selected media — never the media itself or its path), the product's own state (plugin and backend version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and your installation's ID (never the licence key itself), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt is therefore never included, and nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
 
@@ -92,7 +102,7 @@ user-rights information.
 | **Licence and subscription information** | ModelBridge services and the payment provider | Manage product access locally; contact us through the customer privacy process |
 | **Feedback and satisfaction ratings** | ModelBridge services, when you choose to submit them | Do not submit feedback; contact us through the customer privacy process |
 | **Bug reports and attachments** | ModelBridge services and service providers used to deliver support communications | Choose what to submit; contact us through the customer privacy process |
-| **Mobile Preview** | Currently disabled pending further review and validation | — |
+| **Live preview in mobile** | ModelBridge services, only after you open it in Premiere: the link to each result on fal.ai's servers, its media type, the model's name and category, and the time sent. Kept at most 7 days after the last send | Off until you open it; **New link** replaces the link, **Stop sharing** stops it; NDA mode blocks it |
 | **Network and service-security information** | ModelBridge services | Used to protect the service and investigate abuse |
 
 ### Device and analytics identifiers
@@ -133,7 +143,7 @@ product. Licence checks are not used to transfer creative project content.
 The scope is the heading, and it is deliberate. Several of these travel to the two services you bring your own key for — your prompt goes to fal.ai on every generation, filenames go to Anthropic on every agent turn — and that is the product working as described in §4 and §6. What follows is the list of things that never reach infrastructure operated by modelBridge, which is the only infrastructure we control and the only thing this document can promise about.
 
 - Prompts, negative prompts, or any creative text input — except in a bug report you write and send
-- Generated media, thumbnails, or preview content
+- Generated media or thumbnails. **Links are a narrower promise:** while *Live preview in mobile* is on, the link to each new result on fal.ai's servers reaches our preview service (§1); the media itself does not
 - File paths. **Filenames are a narrower promise:** a screenshot you attach to a bug report keeps its original filename
 - fal.ai or Anthropic API keys
 - Search queries within the plugin
@@ -143,7 +153,7 @@ The scope is the heading, and it is deliberate. Several of these travel to the t
 
 **Three claims that used to be on this list and are not true, removed rather than softened:**
 
-- *"No cookies beyond localStorage."* Removed because Mobile Preview's phone page has set a first-party cookie. It is named here because the earlier absolute claim was wrong, not because the mechanism belongs in this document.
+- *"No cookies beyond localStorage."* Removed because the phone page of *Live preview in mobile* sets a first-party cookie (§1). It is named here because the earlier absolute claim was wrong, not because the mechanism belongs in this document.
 - *"No fingerprinting."* Removed because the identifier used for optional usage measurement does not support that absolute claim. The customer-facing privacy policy describes the identifier and the controls over it.
 - *"No hardware identifier."* Removed because the installation identifier is derived from the device. The raw machine identifier does not leave the device.
 
@@ -195,6 +205,10 @@ may follow separate retention, legal, or fraud-prevention requirements. Where an
 automated process cannot safely complete a request, it is handled through a manual
 review path.
 
+Preview links from *Live preview in mobile* are not tied to your licence, so an erasure
+request cannot find them. **Stop sharing** in Premiere deletes them at once, and they
+expire on their own 7 days after the last result sent (§1).
+
 The customer-facing privacy policy is the governing source for current retention,
 request procedures, and user-rights information.
 
@@ -223,7 +237,7 @@ customer-facing privacy policy is the governing description.
 
 | Processor | Role | Data Received | DPA Status |
 |---|---|---|---|
-| **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, and network information | Cloudflare DPA (standard) |
+| **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, network information, and — only after you open *Live preview in mobile* — the preview links it sends (the link to each result on fal.ai's servers, its media type, the model's name and category and the time sent, kept at most 7 days after the last send) | Cloudflare DPA (standard) |
 | **LemonSqueezy** (Lemon Squeezy Inc.) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
 | **Google** (via fal.ai) | The model that runs Enhance — `google/gemini-2.5-flash-lite`, reached through `fal-ai/any-llm` | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached as part of fal.ai's `any-llm` endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
@@ -235,7 +249,7 @@ customer-facing privacy policy is the governing description.
 
 ### fal.ai Data Flow Note
 
-modelBridge does not act as a data processor for fal.ai generation traffic. The user's device communicates directly with fal.ai's API using the user's own API key. modelBridge infrastructure has no access to this communication channel. The user's relationship with fal.ai is governed by fal.ai's own Terms of Service and Privacy Policy.
+modelBridge does not act as a data processor for fal.ai generation traffic. The user's device communicates directly with fal.ai's API using the user's own API key. modelBridge infrastructure has no access to this communication channel. The one thing from it that reaches us is the link to a finished result, and only when you turn on *Live preview in mobile* (§1). The user's relationship with fal.ai is governed by fal.ai's own Terms of Service and Privacy Policy.
 
 ### Enhance — the one path where a model we did not name until now reads your prompt
 

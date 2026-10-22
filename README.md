@@ -128,20 +128,19 @@ The agent is built specifically for editorial work — not generic "AI cinematic
 
 ---
 
-## 3. Mobile Preview
+## 3. Live preview in mobile
 
-**Status: temporarily unavailable in the current build.**
-Mobile Preview is a built ModelBridge capability for sending generated results to a phone for review. It is currently disabled while the preview flow is reviewed before re-enablement.
+Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Live preview in mobile lets you review a generation on the screen it is made for, without leaving Premiere.
 
-Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview is designed to let you review a generation on your actual delivery screen without leaving Premiere. As built, it works like this:
+- Under a result, open **Live preview in mobile** and scan the QR code with your phone's camera. From then on, every new result appears on your phone within seconds
+- Add the page to your Home Screen and it opens fullscreen, like an app — videos autoplay muted and loop
+- Dual Mode results appear as labelled slides — swipe to compare on the screen your client will actually use
 
-- Scan the QR once — every future generation appears on your phone in seconds while the app is open
-- Installs as a PWA — fullscreen, no browser chrome, autoplays muted, loops
-- Dual Mode results appear as labeled slides — swipe to compare on the screen your client will actually use
+Requires an active licence. Nothing is shared until you open it, and the phone loads each result straight from fal.ai, so it works over cellular. Latest generation only (each new one replaces the previous).
 
-Requires an active license. Runs on the fal.ai CDN, so it works over cellular. Latest generation only (each new one replaces the previous).
+The link is yours to control. It is a random link, not tied to your licence or your computer. Anyone who has it sees the results you send, so you can hand it to a colleague — and **New link** cuts the old one off at once. **Stop sharing** turns it off. A link that gets no new result for 7 days stops working on its own, and NDA mode blocks the feature entirely.
 
-[Mobile Preview →](https://docs.modelbridge.app/features/mobile-preview/)
+[Live preview in mobile →](https://docs.modelbridge.app/features/mobile-preview/)
 
 ---
 
