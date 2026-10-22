@@ -7,14 +7,45 @@
 Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
 - **Over 1,300 fal.ai image, video and audio models**, linked into Premiere (1,304 on 2026-10-22, [live catalog](https://docs.modelbridge.app/models/available-models/))
-- **In sync with fal.ai several times a day.** New models appear in your panel without a plugin update
+- **New models arrive on their own, controls already built.** modelBridge syncs with fal.ai several times a day, and every model's sliders, dropdowns and media inputs are generated from its own spec. No plugin update, no per-model code
 - **Your own fal.ai key, no markup.** You pay fal.ai directly at its published rates
 - **Optional Agent Mode, powered by Claude**, on your own Anthropic key
 
-[Documentation](https://docs.modelbridge.app) · [Live catalog](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing)
+[Documentation](https://docs.modelbridge.app) · [Live catalog](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing) · [For engineers](#about-this-repository)
 
 <p align="center">
   <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+</p>
+
+---
+
+## 1. A plugin that grows on its own
+
+**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait.
+
+That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21.
+
+**From a fal.ai launch to your timeline:**
+
+1. fal.ai publishes a new model
+2. modelBridge's catalog sync picks it up and checks it, usually within hours
+3. The news banner in your panel offers it with one-click **Add**
+4. Its controls are built from its spec the moment you open it
+5. You generate, preview in the Source Monitor and import, inside your Premiere project
+
+- **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
+- **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
+- **Live in-panel notification.** New models appear in an in-panel news banner with a one-click Add. From "just went live on fal.ai" to "running in your project" in a couple of clicks
+- **Adaptive fallbacks.** When a model is live but its spec isn't published yet, modelBridge builds a streamlined interface immediately and upgrades it once the full spec appears — the next time the panel starts or you open the model
+
+> "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
+
+[Why fal.ai →](https://docs.modelbridge.app/why-fal-ai/) · [Schema-driven UI →](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed →](https://docs.modelbridge.app/features/news-feed/)
+
+<p align="center"><strong>Bridging the gap between imagination and execution.</strong></p>
+
+<p align="center">
+  <img src="assets/modelbridge-gallery.webp" alt="A gallery of cinematic stills: a surfer on a snowy beach, a diver beside a whale, a figure in a suit facing a crowd, a man wading into the sea, a lizard resting on a face" width="100%">
 </p>
 
 ---
@@ -35,74 +66,9 @@ The original stays in your Project Bin, and fit-to-frame scaling is applied for 
 
 Silence analysis, timeline scans, cuts and ripple-delete run locally through Premiere and ffmpeg. Your footage is not uploaded to do them. Agent Mode asks before it sends frames of your timeline, and NDA mode blocks them outright. [Security and privacy →](#security-and-privacy)
 
-## About this repository
-
-A public engineering record for modelBridge. The plugin source is private, and customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app).
-
-**Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. The panel counted 1,296 installable models in them on 2026-10-21; the [live catalog](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
-
-**How to read the claims.**
-
-| Label | Means |
-|---|---|
-| **Implemented** | Present in the product described here |
-| **Built but disabled** | Implemented, but not currently available to users |
-| **Measured** | The document gives the date and the method |
-| **Roadmap / under consideration** | A direction, not a product commitment |
-
 ---
 
-## What to read, depending on what you are asking
-
-This repository is written for engineers evaluating the integration, not for editors using the product — the customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app). Each file answers a different question.
-
-| If you want to know | Read |
-|---|---|
-| What it does, and why anyone would run it | The rest of this file |
-| How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
-| What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
-| **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
-| How a growing catalog is kept from breaking the panel — scheduled catalog verification, the full-catalog interpretation sweep, shared resolvers, parameter-help coverage, guards, deploy provenance, and the licence-state simulator, with today's figures | [RELIABILITY.md](RELIABILITY.md) |
-| What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
-| Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
-| What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
-
-**For fal.ai reviewers.** In order, about twenty-five minutes:
-
-1. The workflow and cost sections below — the editorial problem, and how cost is shown before a run.
-2. [ARCHITECTURE.md](ARCHITECTURE.md) → *Consuming the fal.ai API in production* — the schema as the interface, why a status word is not the whole status, and why every cost label names whose arithmetic produced it.
-3. [COST_SIGNALS.md](COST_SIGNALS.md) — what a provider's billing signals do and do not tell an integration.
-4. [PERFORMANCE_AND_LOAD.md](PERFORMANCE_AND_LOAD.md) — what we ask of each service, at what cadence, and the largest thing we have not measured.
-5. [UXP_MIGRATION.md](UXP_MIGRATION.md) §8 claim register and §4 — what we got wrong.
-6. [SECURITY.md](SECURITY.md) → *What is accepted, and why*.
-
----
-
-## 1. A plugin that grows on its own
-
-**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait.
-
-That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21.
-
-- **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
-- **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
-- **Live in-panel notification.** New models appear in an in-panel news banner with a one-click Add. From "just went live on fal.ai" to "running in your project" in a couple of clicks
-- **Adaptive fallbacks.** When a model is live but its spec isn't published yet, modelBridge builds a streamlined interface immediately and upgrades it once the full spec appears — the next time the panel starts or you open the model
-
-> "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
-
-[Why fal.ai →](https://docs.modelbridge.app/why-fal-ai/) · [Schema-driven UI →](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed →](https://docs.modelbridge.app/features/news-feed/)
-
-<p align="center"><strong>Bridging the gap between imagination and execution.</strong></p>
-
-<p align="center">
-  <img src="assets/modelbridge-gallery.webp" alt="A gallery of cinematic stills: a surfer on a snowy beach, a diver beside a whale, a figure in a suit facing a crowd, a man wading into the sea, a lizard resting on a face" width="100%">
-</p>
-
----
-
-## 2. Agent Mode — with Adept
+## 2. Agent Mode
 
 Ask in plain language. The agent reads your timeline, executes edits, checks the result against the timeline, and reports back.
 
@@ -113,13 +79,13 @@ Ask in plain language. The agent reads your timeline, executes edits, checks the
 - *"Explain this model"* — honest walkthrough of a fal.ai model with one-click install
 - *"Build me a reverse shot from this frame"* — coverage prompt handed straight to the Generate tab
 
-**Adept** tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. A timeline edit Premiere can undo, a deletion you asked for included, runs at once, and Cmd+Z brings it back. What Premiere cannot undo waits for you: writing metadata into your source files and opening or closing a project sit behind a confirmation card the agent cannot press, and an export runs only after its settings and destination have been shown and you have said go. Both holds are in the panel's code, not in the agent's instructions. The result: it solves problems a raw model would hand back to you.
+**Agent Mode** tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. A timeline edit Premiere can undo, a deletion you asked for included, runs at once, and Cmd+Z brings it back. What Premiere cannot undo waits for you: writing metadata into your source files and opening or closing a project sit behind a confirmation card the agent cannot press, and an export runs only after its settings and destination have been shown and you have said go. Both holds are in the panel's code, not in the agent's instructions. The result: it solves problems a raw model would hand back to you.
 
 Bring your own Anthropic API key. Claude Haiku 5.5 by default, Sonnet 5.5 one click away. No markup — usage goes straight onto your own Anthropic account. Ask the agent what a session has cost.
 
 ### The agent can spend your money, and cannot do it alone
 
-Ask Adept to generate something and it does not call fal.ai. It stages the request: resolves every input against the model's schema, validates them, and returns the resolved parameters with a cost estimate. Then it stops. Starting the run requires a button the model can only *ask* for — the click is what fires the generation, through the same path the Generate tab uses, licence checks and cost gates included.
+Ask the agent to generate something and it does not call fal.ai. It stages the request: resolves every input against the model's schema, validates them, and returns the resolved parameters with a cost estimate. Then it stops. Starting the run requires a button the model can only *ask* for — the click is what fires the generation, through the same path the Generate tab uses, licence checks and cost gates included.
 
 An agent that prepares a paid API call and structurally cannot complete it without a human is, we think, the right shape for this. The gate is code on the click path, not a system-prompt instruction — the only version of it that survives a model deciding otherwise.
 
@@ -141,6 +107,50 @@ This exists because the failure it prevents is invisible: a scan that silently c
 The agent is built specifically for editorial work — not generic "AI cinematic" output. Attach a frame from your timeline and ask for coverage: reverse shots, over-the-shoulder, wides, inserts, B-roll. The prompt it writes locks face, wardrobe, set, and lighting to your reference so the new shot cuts directly into the scene. Scene matching across multiple generations reuses the same visual lock across every prompt in a chat. Motion-ready first frames are shaped so the identity survives the image-to-video pass. When the prompt is ready, one click sends it to the Generate tab with your reference frame pre-attached.
 
 [Agent Mode →](https://docs.modelbridge.app/features/agent-mode/) · [Agent Export →](https://docs.modelbridge.app/features/agent-export/)
+
+---
+
+## Costs you can hand to your client
+
+Every generation is tagged, priced, and logged. When the delivery goes out, so does the receipt.
+
+- **Per-project attribution.** Tag each generation to a client or deliverable at the point of creation. Export HTML reports or CSV for external audit
+- **Commercial-license documentation.** modelBridge tracks fal.ai's `license_type` metadata per generation. Reports carry compliance badges showing the percentage of generations using commercially licensed models — so you can *document and demonstrate* your due diligence to clients. This is a convenience feature, not a legal guarantee — the source of truth remains each model's own license
+- **External AI costs.** Import costs from Midjourney, KREA, Weavy — or any vendor — via a simple CSV template. One dashboard for total AI spend across every tool
+- **No markup, ever.** You pay fal.ai directly at their published rates using your own API key. modelBridge adds no per-generation fees
+
+[Commercial use →](https://docs.modelbridge.app/legal/commercial-use/) · [Cost tracking →](https://docs.modelbridge.app/guides/cost-tracking/)
+
+### Cost transparency
+
+modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, and after the run a measured figure where fal.ai reports usage modelBridge can price — otherwise a formula figure, labelled as such.
+
+| Tier | What it means | When you see it |
+|---|---|---|
+| **Estimated** | A forecast from fal.ai's published price for this model, applied to your settings — not a quote, because fal.ai publishes a simplified rate rather than the formula behind it | Before you run — updates live as you tweak parameters |
+| **From** | A floor, not a forecast: fal.ai's lowest rate for this model — your settings can bill more, and modelBridge doesn't have the full formula fal.ai applies | Before you run, for models fal.ai publishes one base rate for |
+| **Rate** | fal.ai bills the model per block of tokens — the rate is shown, not a total, because the token count is set by the finished video | Before you run, for token-priced models |
+| **No price** | fal.ai prices the model in a unit that only exists once the run has finished — nothing to multiply beforehand, so no number is shown | Before you run, when fal.ai's unit only exists after the run |
+| **Metered** | Measured: the units fal.ai reported, priced at fal.ai's own rate for them — modelBridge's multiplication, not a copy of your fal.ai invoice | After the run |
+| **Calculated** | Not a measurement: fal.ai reported no usage, or usage in a unit modelBridge can't price at fal.ai's own rate — so the forecast formula stands, kept as the best figure available | After the run |
+| **Charged, amount unknown** | fal.ai charged for this run and reported it in a unit with no rate modelBridge can apply — the count is shown, the amount isn't available, and it counts as spend | After the run |
+| **Learned** | Priced from your own previous runs of this model at these settings — still a forecast | After a few runs with the same config |
+
+Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran. A run you stop after fal.ai has started it may still complete and be charged; Billing settles such rows against fal.ai's result afterwards.
+
+What fal.ai's billing signals do and do not tell an integration — the usage header, its retention, cancelled runs that complete, the endpoint a run is charged under, and what needs admin scope — is measured and written down in [COST_SIGNALS.md](COST_SIGNALS.md).
+
+You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
+
+[Cost system →](https://docs.modelbridge.app/models/costs/)
+
+### Errors that don't cost you money
+
+When fal.ai returns an error, you don't see raw JSON or HTTP status codes. Errors are translated into what happened, why, and what to do — with a link to the matching help page when one exists, and a plain fallback, not the raw response, for an error modelBridge does not recognise yet. The exact constraint from fal.ai's structured response drives live copy: *"Image too small (128×128, minimum 300×300)"* rather than *"422 Unprocessable Entity."*
+
+When the rejection names a requirement modelBridge can check — image size, file size, duration, aspect ratio — it is saved for that model and checked before the next attempt, so the same mistake is caught before it can cost you another run.
+
+[Error handling →](https://docs.modelbridge.app/troubleshooting/how-errors-work/) · [Self-learning validation →](https://docs.modelbridge.app/reference/self-learning/)
 
 ---
 
@@ -178,27 +188,6 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 ---
 
-## Costs you can hand to your client
-
-Every generation is tagged, priced, and logged. When the delivery goes out, so does the receipt.
-
-- **Per-project attribution.** Tag each generation to a client or deliverable at the point of creation. Export HTML reports or CSV for external audit
-- **Commercial-license documentation.** modelBridge tracks fal.ai's `license_type` metadata per generation. Reports carry compliance badges showing the percentage of generations using commercially licensed models — so you can *document and demonstrate* your due diligence to clients. This is a convenience feature, not a legal guarantee — the source of truth remains each model's own license
-- **External AI costs.** Import costs from Midjourney, KREA, Weavy — or any vendor — via a simple CSV template. One dashboard for total AI spend across every tool
-- **No markup, ever.** You pay fal.ai directly at their published rates using your own API key. modelBridge adds no per-generation fees
-
-[Commercial use →](https://docs.modelbridge.app/legal/commercial-use/) · [Cost tracking →](https://docs.modelbridge.app/guides/cost-tracking/)
-
-### Errors that don't cost you money
-
-When fal.ai returns an error, you don't see raw JSON or HTTP status codes. Errors are translated into what happened, why, and what to do — with a link to the matching help page when one exists, and a plain fallback, not the raw response, for an error modelBridge does not recognise yet. The exact constraint from fal.ai's structured response drives live copy: *"Image too small (128×128, minimum 300×300)"* rather than *"422 Unprocessable Entity."*
-
-When the rejection names a requirement modelBridge can check — image size, file size, duration, aspect ratio — it is saved for that model and checked before the next attempt, so the same mistake is caught before it can cost you another run.
-
-[Error handling →](https://docs.modelbridge.app/troubleshooting/how-errors-work/)
-
----
-
 ## Blog — fal.ai news, right next to your timeline
 
 fal.ai's official blog inside the panel. The Blog tab shows fal.ai/learn articles with links back to fal.ai. Model launches, deep-dives, platform updates — read them where you work.
@@ -219,66 +208,10 @@ fal.ai's official blog inside the panel. The Blog tab shows fal.ai/learn article
 | **Source Monitor preview** | Evaluate results at full res in Premiere's own Source Monitor. Set In/Out to import a subclip. [Docs →](https://docs.modelbridge.app/features/preview-before-import/) |
 | **Mask editor** | Paint inpainting masks in-panel — brush, zoom, eraser, undo. No Photoshop roundtrip. [Docs →](https://docs.modelbridge.app/guides/inpainting/) |
 | **Trial + license lifecycle** | 14-day trial with full access. Your licence is re-checked every 12 hours while the panel is open (and when it opens, if the last check is more than a day old), and keeps working for 14 days without reaching us, so a short outage on our side does not lock you out. One licence covers two computers, one in use at a time; release a computer from Settings. Every licence state — trial, renewal due, failed payment, expired and the rest — is explained on Generate, Agent and Settings, each with the action that resolves it. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
-| **Self-learning validation** | When a model rejects your media, modelBridge remembers the constraint and catches it automatically next time. [Docs →](https://docs.modelbridge.app/reference/self-learning/) |
 | **Over-the-air updates** | New error messages, endpoint changes, feature flags — no reinstall. The manifest is cached for an hour, and the cache is consulted when the panel opens, so a deploy reaches an editor on their next panel restart rather than mid-session. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
 | **Background generations** | Generations don't hold you hostage — switch models and the run keeps going in the background; restart Premiere and a recovery bar picks it up. Sound notification when ready. A run that stopped before anything reached fal.ai is marked *Not sent*; one that was sent but never answered is shown as unconfirmed rather than failed, because fal.ai may still have taken it. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
 | **700+ parameter explanations** | Every setting has an ⓘ. 700+ carry a plain-language explanation written for editors; every one links to its entry in the [parameter index](https://docs.modelbridge.app/academy/parameter-index/), which updates on its own twice a day, so a field from a model released this week still has a description and a link. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
-
----
-
-## One question, once
-
-After your third generation — and only once you have actually kept a result —
-a small card appears above the Generate button.
-
-> **DOES EVERYTHING RUN SMOOTHLY?**
-> 1 2 3 4 5 · *Not at all.* … *Absolutely!*
-
-That is the whole thing. Tap a number and you are done. A low score opens a box
-asking what would make it better; a high score offers the same box behind a
-*Leave a comment* link, because the answers worth reading are not only the angry
-ones. Then a line thanking you, a five-second countdown, and the card removes
-itself. It never comes back — answer it or dismiss it with the x, and that
-install has been asked.
-
-**What goes with it:** the number, your note if you wrote one, and which versions
-of modelBridge, Premiere and your operating system you are running.
-
-**What does not:** your name, your email, your licence key, the model you used,
-your prompt, your filenames, your project, your footage. None of those are
-collected for this and none of them are sent. A random identifier travels along
-so a second answer from the same install is not mistaken for a new voice — it is
-not your licence key and it is not linked to your account.
-
-It exists because "how is it going" is a question a changelog cannot answer.
-Bugs already have a [proper form](https://docs.modelbridge.app/troubleshooting/reporting-a-bug/)
-with room for screenshots; this is for the quieter signal — whether the thing
-feels right to the people using it every day.
-
----
-
-## Cost transparency
-
-modelBridge shows a concrete cost before you generate — updating live as you change duration, resolution, and audio settings. Every number carries a confidence tier, so you always know how sure it is: a forecast before you run, and after the run a measured figure where fal.ai reports usage modelBridge can price — otherwise a formula figure, labelled as such.
-
-| Tier | What it means | When you see it |
-|---|---|---|
-| **Estimated** | A forecast from fal.ai's published price for this model, applied to your settings — not a quote, because fal.ai publishes a simplified rate rather than the formula behind it | Before you run — updates live as you tweak parameters |
-| **From** | A floor, not a forecast: fal.ai's lowest rate for this model — your settings can bill more, and modelBridge doesn't have the full formula fal.ai applies | Before you run, for models fal.ai publishes one base rate for |
-| **Rate** | fal.ai bills the model per block of tokens — the rate is shown, not a total, because the token count is set by the finished video | Before you run, for token-priced models |
-| **No price** | fal.ai prices the model in a unit that only exists once the run has finished — nothing to multiply beforehand, so no number is shown | Before you run, when fal.ai's unit only exists after the run |
-| **Metered** | Measured: the units fal.ai reported, priced at fal.ai's own rate for them — modelBridge's multiplication, not a copy of your fal.ai invoice | After the run |
-| **Calculated** | Not a measurement: fal.ai reported no usage, or usage in a unit modelBridge can't price at fal.ai's own rate — so the forecast formula stands, kept as the best figure available | After the run |
-| **Charged, amount unknown** | fal.ai charged for this run and reported it in a unit with no rate modelBridge can apply — the count is shown, the amount isn't available, and it counts as spend | After the run |
-| **Learned** | Priced from your own previous runs of this model at these settings — still a forecast | After a few runs with the same config |
-
-Runs that fail after usage was already metered still show in your history, marked as failed — the receipt matches what actually ran. A run you stop after fal.ai has started it may still complete and be charged; Billing settles such rows against fal.ai's result afterwards.
-
-What fal.ai's billing signals do and do not tell an integration — the usage header, its retention, cancelled runs that complete, the endpoint a run is charged under, and what needs admin scope — is measured and written down in [COST_SIGNALS.md](COST_SIGNALS.md).
-
-You pay fal.ai directly at their published rates. modelBridge takes no markup, no revenue share, no per-generation fee. Your fal.ai dashboard is always the final word on exact charges.
-
-[Cost system →](https://docs.modelbridge.app/models/costs/)
+| **One question, once** | After your third generation, and only once you have kept a result, a small card asks whether everything runs smoothly, on a 1–5 scale. It is asked once per install and never again. It sends the score, your note if you write one, your modelBridge, Premiere and OS versions, and a random identifier that is not linked to your licence or account — no name, email, licence key, model, prompt, files or footage. Bugs have their own [report form](https://docs.modelbridge.app/troubleshooting/reporting-a-bug/). |
 
 ---
 
@@ -355,6 +288,50 @@ Download the installer, double-click it, restart Premiere, start your trial from
 ## Pricing
 
 **$19/month** or **$190/year**, plus VAT or sales tax where it applies, sold through Lemon Squeezy as Merchant of Record. The 14-day free trial starts with a card or PayPal, and Lemon Squeezy takes the first payment on day 15 unless you cancel before then. No generations are included: you bring your own fal.ai key — and your own Anthropic key for Agent Mode — and pay those providers directly at their published rates, with no markup, no credit system and no revenue share. A lapsed subscription drops to read-only and your data stays. [Pricing details →](https://docs.modelbridge.app/billing/subscription/)
+
+---
+
+## About this repository
+
+A public engineering record for modelBridge. The plugin source is private, and customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app).
+
+**Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. The panel counted 1,296 installable models in them on 2026-10-21; the [live catalog](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
+
+**How to read the claims.**
+
+| Label | Means |
+|---|---|
+| **Implemented** | Present in the product described here |
+| **Built but disabled** | Implemented, but not currently available to users |
+| **Measured** | The document gives the date and the method |
+| **Roadmap / under consideration** | A direction, not a product commitment |
+
+---
+
+## What to read, depending on what you are asking
+
+This repository is written for engineers evaluating the integration, not for editors using the product — the customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app). Each file answers a different question.
+
+| If you want to know | Read |
+|---|---|
+| What it does, and why anyone would run it | The sections above |
+| How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
+| What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
+| **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
+| How a growing catalog is kept from breaking the panel — scheduled catalog verification, the full-catalog interpretation sweep, shared resolvers, parameter-help coverage, guards, deploy provenance, and the licence-state simulator, with today's figures | [RELIABILITY.md](RELIABILITY.md) |
+| What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
+| Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
+| What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
+
+**For fal.ai reviewers.** In order, about twenty-five minutes:
+
+1. The workflow and cost sections above — the editorial problem, and how cost is shown before a run.
+2. [ARCHITECTURE.md](ARCHITECTURE.md) → *Consuming the fal.ai API in production* — the schema as the interface, why a status word is not the whole status, and why every cost label names whose arithmetic produced it.
+3. [COST_SIGNALS.md](COST_SIGNALS.md) — what a provider's billing signals do and do not tell an integration.
+4. [PERFORMANCE_AND_LOAD.md](PERFORMANCE_AND_LOAD.md) — what we ask of each service, at what cadence, and the largest thing we have not measured.
+5. [UXP_MIGRATION.md](UXP_MIGRATION.md) §8 claim register and §4 — what we got wrong.
+6. [SECURITY.md](SECURITY.md) → *What is accepted, and why*.
 
 ---
 
