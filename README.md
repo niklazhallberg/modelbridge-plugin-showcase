@@ -15,20 +15,24 @@
 > transformation categories used in an editorial workflow: image-to-image,
 > text-to-image, image-to-video, video-to-video, text-to-video, text-to-audio,
 > audio-to-audio, text-to-speech, audio-to-video, video-to-audio, and
-> speech-to-speech. The catalogue measured 1,286 models in these 11 categories on
-> 2026-09-25 and changes over time.
+> speech-to-speech. The panel counted 1,296 installable models in these 11
+> categories on 2026-10-21; the number moves as fal.ai adds and retires models, and
+> the [live catalog](https://docs.modelbridge.app/models/available-models/) carries
+> today's figure.
 >
 > Models outside this editorial media-generation workflow are intentionally out of
 > scope, including 3D, training, transcription, captioning, text/structured-data
 > output, and general language or vision models.
 
-**An automated, intelligent plugin that grows on its own — like nothing else on the market.** Over 1,280 currently catalogued models, and the catalogue changes over time. modelBridge watches fal.ai for you and every new model appears in your panel with its interface already built — ready to try in your Premiere project the moment it lands. You don't update. You don't hunt.
+**A plugin that grows on its own.** 1,296 installable models on 2026-10-21, and the catalogue changes week to week. modelBridge watches fal.ai for you, and every new model that passes verification appears in your panel with its interface already built — ready to try in your Premiere project without a plugin update. You don't update. You don't hunt.
 
 No browser tabs. No downloads. No manual imports. See the result in Premiere's Source Monitor, hit Import, and it lands on your timeline in the right place — automatically.
 
 - **Image-to-video** replaces the source clip at the same track and timecode
 - **Text-to-video** inserts at the playhead on the first available track
-- **First-frame + end-frame** replaces both source clips as a single clip spanning their combined duration
+- **First-frame + end-frame** replaces both source clips as a single clip spanning their combined duration, when the two sit side by side on one track
+- **Extend** places the new footage right after the clip it continues, on the same track — and when the model returns your original together with the extension, only the new part is placed. When modelBridge can't establish which of the two the model returned, or that clip has moved, been trimmed or is locked, the result goes to the playhead instead
+- **Audio** lands on an empty audio track — at the start of the clip it was made from, or at the playhead for text-to-speech
 
 Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scaling is applied automatically. Nothing to conform, nothing to re-import.
 
@@ -49,6 +53,7 @@ This repository is written for engineers evaluating the integration, not for edi
 | Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
 | What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
 | **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, three things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
+| How a growing catalog is kept from breaking the panel — scheduled catalog verification, the full-catalog interpretation sweep, shared resolvers, parameter-help coverage, guards, deploy provenance, and the licence-state simulator, with today's figures | [RELIABILITY.md](RELIABILITY.md) |
 | What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
 | What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
@@ -66,14 +71,14 @@ This repository is written for engineers evaluating the integration, not for edi
 
 ## 1. A plugin that grows on its own
 
-**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day and notifies you the moment a new model goes live. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project the second you see it in the panel. You don't update, you don't configure, you don't wait.
+**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait.
 
-That's how one plugin keeps up with over 1,280 currently catalogued models.
+That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21.
 
 - **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
 - **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
 - **Live in-panel notification.** New models appear in an in-panel news banner with a one-click Add. From "just went live on fal.ai" to "running in your project" in a couple of clicks
-- **Adaptive fallbacks.** When a model is live but its spec isn't published yet, modelBridge builds a streamlined interface immediately and upgrades it the moment the full spec appears
+- **Adaptive fallbacks.** When a model is live but its spec isn't published yet, modelBridge builds a streamlined interface immediately and upgrades it once the full spec appears — the next time the panel starts or you open the model
 
 > "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
 
@@ -81,20 +86,20 @@ That's how one plugin keeps up with over 1,280 currently catalogued models.
 
 ---
 
-## 2. Agent Mode — with the Adept intelligence layer
+## 2. Agent Mode — with Adept
 
-Ask in plain language. The agent reads your timeline, executes edits, verifies its own work, and reports back.
+Ask in plain language. The agent reads your timeline, executes edits, checks the result against the timeline, and reports back.
 
-- *"Scan my timeline"* — a prioritized QC scan: offline media, flash frames, sync drift, fps and sample-rate mismatches, orphaned audio, LUT consistency and more — ranked Critical / Warning / Info
+- *"Scan my timeline"* — a prioritized QC scan: offline media and proxies, flash frames, fps and sample-rate mismatches, codecs and resolution, LUT consistency and more — ranked Critical / Warning / Info
 - *"Prep today's footage"* — identifies cameras, groups clips, sets color labels
 - *"Close all the gaps on V1"* — every gap detected and rippled closed
 - *"Reframe for Reels"* — new vertical sequence via Adobe's Auto Reframe (Sensei)
 - *"Explain this model"* — honest walkthrough of a fal.ai model with one-click install
 - *"Build me a reverse shot from this frame"* — coverage prompt handed straight to the Generate tab
 
-The **Adept** layer tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. The result: it solves problems a raw model would hand back to you.
+**Adept** tailors Claude specifically for Premiere Pro — wired into 100+ tools, it checks its work against the real timeline and says so when a change can't be confirmed, honest by design about what it can't do. A timeline edit Premiere can undo, a deletion you asked for included, runs at once, and Cmd+Z brings it back. What Premiere cannot undo waits for you: writing metadata into your source files and opening or closing a project sit behind a confirmation card the agent cannot press, and an export runs only after its settings and destination have been shown and you have said go. Both holds are in the panel's code, not in the agent's instructions. The result: it solves problems a raw model would hand back to you.
 
-Bring your own Anthropic API key. Two Claude models — Haiku 4.5 by default, one click to switch to Sonnet 4.6 for deeper reasoning. No markup. Session cost tracked in real time.
+Bring your own Anthropic API key. Claude Haiku 5.5 by default, Sonnet 5.5 one click away. No markup — usage goes straight onto your own Anthropic account. Ask the agent what a session has cost.
 
 ### The agent can spend your money, and cannot do it alone
 
@@ -117,7 +122,7 @@ This exists because the failure it prevents is invisible: a scan that silently c
 
 ### Prompt authoring for editors
 
-The agent is trained specifically for editorial work — not generic "AI cinematic" output. Attach a frame from your timeline and ask for coverage: reverse shots, over-the-shoulder, wides, inserts, B-roll. The prompt it writes locks face, wardrobe, set, and lighting to your reference so the new shot cuts directly into the scene. Scene matching across multiple generations reuses the same visual lock across every prompt in a chat. Motion-ready first frames are shaped so the identity survives the image-to-video pass. When the prompt is ready, one click sends it to the Generate tab with your reference frame pre-attached.
+The agent is built specifically for editorial work — not generic "AI cinematic" output. Attach a frame from your timeline and ask for coverage: reverse shots, over-the-shoulder, wides, inserts, B-roll. The prompt it writes locks face, wardrobe, set, and lighting to your reference so the new shot cuts directly into the scene. Scene matching across multiple generations reuses the same visual lock across every prompt in a chat. Motion-ready first frames are shaped so the identity survives the image-to-video pass. When the prompt is ready, one click sends it to the Generate tab with your reference frame pre-attached.
 
 [Agent Mode →](https://docs.modelbridge.app/features/agent-mode/) · [Agent Export →](https://docs.modelbridge.app/features/agent-export/)
 
@@ -128,7 +133,7 @@ The agent is trained specifically for editorial work — not generic "AI cinemat
 **Status: temporarily unavailable in the current build.**
 Mobile Preview is a built ModelBridge capability for sending generated results to a phone for review. It is currently disabled while the preview flow is reviewed before re-enablement.
 
-Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview is designed to let you review a generation on your actual delivery screen without leaving Premiere.
+Your timeline plays on a 27-inch monitor. Your audience watches on a phone. Mobile Preview is designed to let you review a generation on your actual delivery screen without leaving Premiere. As built, it works like this:
 
 - Scan the QR once — every future generation appears on your phone in seconds while the app is open
 - Installs as a PWA — fullscreen, no browser chrome, autoplays muted, loops
@@ -150,9 +155,9 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 ## 5. ElevenLabs and Midjourney workflows
 
-**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on the correct audio track at the playhead. Voice-over, dubbing, sound effects, voice conversion — ElevenLabs voice models, and 100+ audio models overall, work the same way as video.
+**ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on an empty audio track, back at the clip it came from, or at the playhead for text-to-speech. Voice-over, dubbing, sound effects, voice conversion — ElevenLabs voice models, and 100+ audio models overall, work the same way as video.
 
-**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or scrub any frame of any timeline video and click **Extract frame** — the button shows your live playhead timecode so you pick the frame you want, not "roughly." Every frame you extract feeds any fal.ai model instantly.
+**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or select a video clip on your timeline, park the playhead on the frame you want and click **Extract frame from video** — the button shows the live playhead timecode, so you pick the frame you want, not "roughly." The frame goes straight into the image input of the model you have open — or into its Start or End frame.
 
 [Voice-over with ElevenLabs →](https://docs.modelbridge.app/academy/voice-over-elevenlabs/) · [Midjourney → Premiere →](https://docs.modelbridge.app/academy/midjourney-to-premiere/)
 
@@ -171,9 +176,9 @@ Every generation is tagged, priced, and logged. When the delivery goes out, so d
 
 ### Errors that don't cost you money
 
-When fal.ai returns an error, you don't see raw JSON or HTTP status codes. Every error type is translated into what happened, why, and what to do — with a link to the specific fal.ai docs page when one exists. The exact constraint from fal.ai's structured response drives live copy: *"Image too small (128×128, minimum 300×300)"* rather than *"422 Unprocessable Entity."*
+When fal.ai returns an error, you don't see raw JSON or HTTP status codes. Errors are translated into what happened, why, and what to do — with a link to the matching help page when one exists, and a plain fallback, not the raw response, for an error modelBridge does not recognise yet. The exact constraint from fal.ai's structured response drives live copy: *"Image too small (128×128, minimum 300×300)"* rather than *"422 Unprocessable Entity."*
 
-Every learned constraint gets cached per model and enforced before the next attempt — the same rejection is caught before it can cost you again.
+When the rejection names a requirement modelBridge can check — image size, file size, duration, aspect ratio — it is saved for that model and checked before the next attempt, so the same mistake is caught before it can cost you another run.
 
 [Error handling →](https://docs.modelbridge.app/troubleshooting/how-errors-work/)
 
@@ -181,9 +186,9 @@ Every learned constraint gets cached per model and enforced before the next atte
 
 ## Blog — fal.ai news, right next to your timeline
 
-fal.ai's official blog inside the panel. Model launches, deep-dives, platform updates — read them where you work.
+fal.ai's official blog inside the panel. The Blog tab shows fal.ai/learn articles with links back to fal.ai. Model launches, deep-dives, platform updates — read them where you work.
 
-- **Read → Install → Generate.** modelBridge scans each article for model references and surfaces them as one-click **Install** buttons. Article to timeline in three clicks
+- **Read → Add → Generate.** modelBridge scans each article for model references and lists them with one-click **Add** buttons (**Try model** once installed). Article to timeline in three clicks
 - **NEW badges** on posts since your last visit
 - Cached articles stay readable when your connection drops
 
@@ -195,21 +200,21 @@ fal.ai's official blog inside the panel. Model launches, deep-dives, platform up
 
 | Feature | What it does |
 |---|---|
-| **Discovery & filters** | Paste-tolerant search (smart quotes, dashes and separator variants all match), paste-by-endpoint-ID, category filters, LM Arena leaderboard rankings refreshed several times a day, "Today" filter for new models. [Docs →](https://docs.modelbridge.app/features/trending/) |
+| **Discovery & filters** | Paste-tolerant search (smart quotes, dashes and separator variants all match), paste-by-endpoint-ID, a filter for each category, and task filters — First + End Frame, Next Scene, Extend, Upscale & Enhance, Voice-over, Dubbing, Ratio Reframe & Expand, Add & Remove Objects. A model's place under a task filter is read from its own schema wherever the panel has it, so new models usually land in the right place without a release. Second rows narrow further by what a model returns or needs: Extend by *Full clip* or *Continuation*, Img-to-Img by *Image only*, *With a description* or *With a mask*, TTS and Voice-over by *Built-in voices*, *Your voice sample* or *Described voice*. Plus "Today's models", "Last 14 days" and LM Arena rankings. [Docs →](https://docs.modelbridge.app/features/trending/) |
 | **Source Monitor preview** | Evaluate results at full res in Premiere's own Source Monitor. Set In/Out to import a subclip. [Docs →](https://docs.modelbridge.app/features/preview-before-import/) |
 | **Mask editor** | Paint inpainting masks in-panel — brush, zoom, eraser, undo. No Photoshop roundtrip. [Docs →](https://docs.modelbridge.app/guides/inpainting/) |
-| **Trial + license lifecycle** | 14-day trial with full access. Your licence is re-checked when the panel opens and every 12 hours after that, and keeps working for 30 days without reaching us — an outage on our side is never your problem. Register your license on two machines and move it between them from Settings. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
+| **Trial + license lifecycle** | 14-day trial with full access. Your licence is re-checked every 12 hours while the panel is open (and when it opens, if the last check is more than a day old), and keeps working for 14 days without reaching us, so a short outage on our side does not lock you out. One licence covers two computers, one in use at a time; release a computer from Settings. Every licence state — trial, renewal due, failed payment, expired and the rest — is explained on Generate, Agent and Settings, each with the action that resolves it. [Docs →](https://docs.modelbridge.app/billing/subscription/) |
 | **Self-learning validation** | When a model rejects your media, modelBridge remembers the constraint and catches it automatically next time. [Docs →](https://docs.modelbridge.app/reference/self-learning/) |
 | **Over-the-air updates** | New error messages, endpoint changes, feature flags — no reinstall. The manifest is cached for an hour, and the cache is consulted when the panel opens, so a deploy reaches an editor on their next panel restart rather than mid-session. Curated pricing corrections ship bundled, in a plugin release. [Docs →](https://docs.modelbridge.app/features/ota-updates/) |
-| **Background generations** | Generations don't hold you hostage — switch models and the run keeps going in the background; restart Premiere and a recovery bar picks it up. Sound notification when ready. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
-| **700+ parameter explanations** | Every non-obvious input has a plain-language tooltip and an Academy link when the topic deserves one. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
+| **Background generations** | Generations don't hold you hostage — switch models and the run keeps going in the background; restart Premiere and a recovery bar picks it up. Sound notification when ready. A run that stopped before anything reached fal.ai is marked *Not sent*; one that was sent but never answered is shown as unconfirmed rather than failed, because fal.ai may still have taken it. [Docs →](https://docs.modelbridge.app/features/background-generations/) |
+| **700+ parameter explanations** | Every setting has an ⓘ. 700+ carry a plain-language explanation written for editors; every one links to its entry in the [parameter index](https://docs.modelbridge.app/academy/parameter-index/), which updates on its own twice a day, so a field from a model released this week still has a description and a link. [Docs →](https://docs.modelbridge.app/features/parameter-help/) |
 
 ---
 
 ## One question, once
 
-Somewhere after your third generation — and only once you have actually kept a
-result — a small card appears above the Generate button.
+After your third generation — and only once you have actually kept a result —
+a small card appears above the Generate button.
 
 > **DOES EVERYTHING RUN SMOOTHLY?**
 > 1 2 3 4 5 · *Not at all.* … *Absolutely!*
@@ -269,7 +274,7 @@ You pay fal.ai directly at their published rates. modelBridge takes no markup, n
 What does leave your machine, and where it goes:
 
 - **Agent Mode** talks to Anthropic through your own API key. To reason about your edit it shares project metadata — clip and sequence names, filenames, timecodes, effect settings. Media paths are masked before transmission where applicable. The masking boundary is described in the privacy material. Conversations never touch modelBridge servers
-- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one path the agent can take on its own — a few frames of the selected clip travelling with your messages, so the agent can see what you see — is **asked for the first time it would happen**, and sends nothing until you answer; the answer can be changed in Settings → Privacy, NDA mode blocks it whatever you answered, and turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip, or pressing Enhance on a prompt, sends what it says it sends
+- **Pictures follow one rule.** The agent never sends images on its own initiative unless you allow it, and anything you click that is about a piece of media sends that media. The one path the agent can take on its own — a few frames of the selected clip travelling with your messages, so the agent can see what you see — is **asked for the first time it would happen**, and sends nothing until you answer; the answer can be changed in Settings → Privacy, NDA mode blocks it whatever you answered, and turning it off also stops the agent looking at the Generate tab by itself. Asking it to watch a clip sends sampled frames too, so it answers to the same setting: with it off, no frame goes by any path. Pressing Enhance on a prompt sends what it says it sends
 - **Generate tab** sends media to fal.ai when you click Generate
 
 Two of those boundaries are enforced in the build rather than in policy, and both are checkable from files that ship:
@@ -285,17 +290,52 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 
 ---
 
+## How modelBridge is built for reliability
+
+Every model's interface is built from its own schema, and fal.ai adds models every
+week, so a per-model fix does not scale. These are the practices that keep a new
+model or a code change from reaching an editor as a broken form or a refused run.
+Figures measured 2026-10-21; the full write-up, with the script or workflow behind
+each claim, is in [RELIABILITY.md](RELIABILITY.md).
+
+- **The catalog is verified on a schedule.** A CI job twice a day fetches every
+  model's schema and classifies it with the same check the panel runs on install:
+  1,225 verified, 69 offered through a prompt interface while their schema is
+  unavailable, 8 blocked because their output can never reach Premiere.
+- **Every field of every model is run through every layer.** A sweep sends 90,738
+  candidate values for 11,919 fields of 1,289 models through each layer of the
+  product, and the build fails when the panel and the backend disagree about a value.
+  Its first run found 4,231 such rows, and the fixes that followed left 9.
+- **One resolver per question, not one rule per model.** Enum, numeric and
+  conditional-requirement answers each come from one shared resolver that every
+  layer calls, so a new schema shape is handled once, for every model carrying it.
+- **Every field has help, and AI drafts are gated.** A commit that introduces an
+  unexplained catalog field fails. Every field also has an entry on the generated
+  [parameter index](https://docs.modelbridge.app/academy/parameter-index/).
+  AI-drafted help texts are discarded unless they quote their source and every
+  number traces to the provider, and a person merges them.
+- **Guards run before a commit, a push and a release**, and each guard is proven
+  able to fail on a planted defect before a push is accepted.
+- **What runs is recorded.** Panel and Worker deploys are recorded by commit and can
+  be checked against production at any moment.
+- **Every licence state is replayed through the real Worker.** 25 scenarios cover the
+  13 licence states and the transitions between them.
+- **Findings are confirmed in the running panel and with the cheapest real
+  generation that settles them.**
+
+---
+
 ## Getting started
 
-Subscribe, install the plugin, paste your license key and your fal.ai key, and generate — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
+Download the installer, double-click it, restart Premiere, start your trial from inside the panel and add your fal.ai key (and your Anthropic key for Agent Mode) — the full sequence is on the [installation guide](https://docs.modelbridge.app/getting-started/installation/).
 
-**Requirements:** Adobe Premiere Pro 23.0 or newer (CEP 11). macOS today; Windows packaging is in progress.
+**Requirements:** macOS 12 or later and Adobe Premiere Pro 23.0 or newer (CEP 11). modelBridge installs from a macOS `.pkg` installer. macOS only for now.
 
 ---
 
 ## Pricing
 
-**$19/month** or **$190/year**, with a 14-day free trial. AI generation is paid directly to fal.ai at their published rates with no markup, no credit system and no revenue share; a lapsed subscription drops to read-only and your data stays. [Pricing details →](https://docs.modelbridge.app/billing/subscription/)
+**$19/month** or **$190/year**, plus VAT or sales tax where it applies, sold through Lemon Squeezy as Merchant of Record. The 14-day free trial starts with a card or PayPal, and Lemon Squeezy takes the first payment on day 15 unless you cancel before then. No generations are included: you bring your own fal.ai key — and your own Anthropic key for Agent Mode — and pay those providers directly at their published rates, with no markup, no credit system and no revenue share. A lapsed subscription drops to read-only and your data stays. [Pricing details →](https://docs.modelbridge.app/billing/subscription/)
 
 ---
 
@@ -310,8 +350,9 @@ Subscribe, install the plugin, paste your license key and your fal.ai key, and g
 ## Links
 
 - **[Documentation](https://docs.modelbridge.app/what-is-modelbridge/)** — 75+ pages: guides, features, Academy, troubleshooting, legal
-- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — over 1,280 currently catalogued models, refreshed several times a day
+- **[Live catalog](https://docs.modelbridge.app/models/available-models/)** — 1,296 installable models on 2026-10-21, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
+- **[Built for reliability](RELIABILITY.md)** — catalog verification, the interpretation sweep, guards and deploy provenance, with measured figures
 - **[CEP → UXP migration](UXP_MIGRATION.md)** — what is measured, what cannot be adapted, and the open questions to Adobe
 - **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
 - **[Third-party notices](NOTICE.md)** — open-source components and their licences

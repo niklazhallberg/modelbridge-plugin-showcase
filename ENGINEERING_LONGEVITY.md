@@ -28,6 +28,27 @@ data directory; the readings are of the install as it was. This is one
 developer's machine after six months of heavy use, which makes it an upper
 reference point, not a typical customer.
 
+**Re-read 2026-10-21 on the same development machine**, read only, with Premiere Pro 26.5.1 on
+CEP 12. The 2026-09-06 figures below are kept, because the difference between
+the two readings is itself the longevity evidence. What moved:
+
+| | 2026-09-06 | 2026-10-21 |
+|---|---|---|
+| Installed models | 75 | 120 |
+| Installed-model registry on disk | 726 KB, about 9.7 KB per model | 1.6 MB, about 13.5 KB per model |
+| Its browser-storage mirror | 898 KB | 1,487 KB |
+| Browser storage, whole origin | 92 keys, 5,552 KB, 54.2 % of quota | 91 keys, 5,721 KB, 55.9 % |
+| Catalogue snapshot on disk | 569 KB, 1,295 entries | 574 KB, 1,299 entries |
+| Migration backups of the registry | 21 files, 13.1 MB | 34 files, 26 MB |
+| Ledger archive | empty | 8 rotated slots, 12 MB |
+| Data directory total | 32.7 MB | about 90 MB, not counting two developer-only backup folders a customer install does not have |
+
+All figures in this table were measured on a development machine, not on a customer install.
+
+Models went up by 60 % and the share of browser storage barely moved. Disk grew
+faster than the model count, mostly in the two places §5 already names (the
+migration backups and the ledger archive).
+
 ---
 
 ## 1. Three phases, and what each one leaves behind
@@ -78,8 +99,10 @@ cadence and its per-generation request count are in
 [`PERFORMANCE_AND_LOAD.md`](PERFORMANCE_AND_LOAD.md) §3.1. Two properties are
 the longevity-relevant ones, both **read from source**: the pollers keep running
 when the panel is hidden, because a paid run has to be collected whichever tab
-the editor is looking at; and every poll has a 30-minute soft stop, after which
-the run is written as stopped rather than polled forever.
+the editor is looking at; and no poll has a time limit. A run is watched until
+fal.ai returns a result or an explicit failure, or the editor cancels. If the
+panel restarts mid-run, the run is resumed only if its last contact was within 24
+hours and it was submitted within the last 72.
 
 What one generation leaves on disk, **measured** across the reference install's
 ledgers:
@@ -87,14 +110,16 @@ ledgers:
 | Written per generation | Bound |
 |---|---|
 | One row in the project's ledger file | about 1.7 KB per row (3.5 MB across 2,296 rows); the file rotates, §2 |
-| One row in the project's browser-storage mirror | capped per project, and mirrors for projects no longer on disk are pruned |
+| One row in the project's browser-storage mirror | capped at 200 rows, and only the active project keeps a mirror once the other projects' disk logs have been read back successfully |
 | One small thumbnail | swept on a schedule |
-| A recovery token | deleted when the run succeeds |
+| A recovery token in browser storage | deleted when the run succeeds |
 | A completed-result marker | expires on its own |
 | Learned pricing and generation statistics | keyed by endpoint and settings, so bounded by variety, not by volume |
 
-Media staged for upload lives in a directory with a short TTL and is swept
-continuously. Nothing a generation writes is unbounded.
+Media staged for upload lives in a directory with a one-hour TTL, swept every
+30 minutes. Since 2026-10-21 one exception sits beside it: the source actually
+submitted to an extend model is kept for up to 48 hours, so the result can be
+measured against it.
 
 ### 1.3 Catalogue rendering
 
@@ -107,9 +132,10 @@ whole TTL. The backend keeps its own short-lived copy of the catalogue walk.
 
 Rendering a model's form reads the model's schema from a local cache, not from
 the network — [`PERFORMANCE_AND_LOAD.md`](PERFORMANCE_AND_LOAD.md) §2 measures
-that path. The cache is keyed by endpoint and expires each entry after a fixed number of
-days rather than capping their count; on the reference install it held about
-100 entries at about 16 KB each. Browse render timing is measured in the same document, §1.3.
+that path. The cache is keyed by endpoint and expires each entry after 24 to 36
+hours (a day plus a per-model offset, so entries do not all expire at once)
+rather than capping their count; on the reference install it held about 100
+entries at about 16 KB each. Browse render timing is measured in the same document, §1.3.
 
 Installed models are re-verified in the background on a daily cycle against an
 unauthenticated schema endpoint. That check touches installed models only, never
@@ -133,14 +159,14 @@ are **read from source**.
 | Settings | per change | 2.2 KB | fixed set of keys | — | unreadable → defaults |
 | Learned pricing, learned constraints, generation statistics, unknown-error counters | per event | under 40 KB together | keyed by endpoint (and settings), so by variety | — | ignored and regenerated |
 | Generation ledger, per project (disk) | per generation | 3.5 MB, 9 files, 2,296 rows | the live file rotates in fixed-size slots; a small number of rotated slots stay beside it | rotation | a corrupt file is renamed aside and the project reads as empty until the next write; rotated slots and the archive are untouched |
-| Ledger archive | when a rotated slot rolls off | empty today | no cap — see §5; grows at the ledger's per-row size, derived | nothing | — |
-| Ledger browser-storage mirror | per generation | — | capped per project; mirrors for projects no longer on disk are pruned; a protected family with a declared budget | prune on load | falls back to disk |
+| Ledger archive | when a rotated slot rolls off | empty on 2026-09-06; 8 slots, 12 MB on 2026-10-21 | no cap — see §5 | nothing | — |
+| Ledger browser-storage mirror | per generation | — | capped at 200 rows; only the active project keeps one once the others' disk logs read back; a protected family with a declared budget | prune on save | the disk copy is the record; the mirror is read only if no disk log can be read at all |
 | Exported reports | per export | 8.4 MB, 46 files | user-owned; a name collision gets a numbered suffix rather than an overwrite | nothing | — |
 | Thumbnails | per generation | 512 KB, 107 files | an age-based sweep, run shortly after the backend starts | sweep | — |
-| Upload staging | per upload or extraction | 0 | a short TTL, swept continuously | sweep | — |
+| Upload staging | per upload or extraction | 0 on 2026-09-06 | a one-hour TTL, swept every 30 minutes; an extend model's submitted source is kept up to 48 hours | sweep | — |
 | Usage events | per event | 12 KB | a capped active set and a capped archive | prune | — |
 | Agent scan logs | per agent scan | — | an age-based sweep | sweep | — |
-| Backend in-memory schema cache | per fetched endpoint | — | the backend process's lifetime; the backend is stopped when the panel unloads | process exit | — |
+| Backend in-memory schema cache | per fetched endpoint | — | a 24-hour freshness window, and the backend process's lifetime; the backend is stopped when the panel unloads | expiry, process exit | — |
 
 Data directory total on the reference install: 32.7 MB, of which 13.1 MB is
 migration backups and 8.4 MB is reports the user exported.
@@ -176,8 +202,9 @@ Three things keep that number from becoming a failure:
   from eviction, so each protected prefix declares a worst-case byte budget and
   the reason it is a ceiling, and a pre-commit guard fails the commit if a
   protected prefix has no budget or the declared sum crosses the eviction
-  threshold (§4). The installed-model mirror, at a measured 898 KB today, sits inside its
-  declared budget.
+  threshold (§4). The installed-model mirror measured 898 KB on 2026-09-06, inside
+  its declared 1,400 KB budget, and the origin as a whole sat at 55.9 % of its
+  quota on 2026-10-21, well under the eviction threshold.
 - **A failed write is recorded, not lost.** When a browser-storage write fails
   for a key that also has a disk copy, the key is marked stale on disk, so the
   disk copy wins the next read instead of an older browser copy being served
@@ -214,15 +241,15 @@ axis at all.
 
 | Axis | What grows with it | Rate | Class |
 |---|---|---|---|
-| Installed models | the registry on disk | about 9.7 KB per model | derived from 726 KB / 75 |
-| | its browser-storage mirror | about 9–12 KB per model, inside a declared budget | derived |
+| Installed models | the registry on disk | about 9.7 KB per model; about 13.5 KB at 120 models on 2026-10-21 | derived from 726 KB / 75 and 1.6 MB / 120 |
+| | its browser-storage mirror | about 9–12 KB per model; 12.4 KB at 120 models on 2026-10-21 | derived |
 | | each migration backup | one whole registry per migration event: about 0.7 MB at 75 models, about 0.2 MB at 20 | derived |
 | | the daily background re-verification | one unauthenticated request per installed model per day | read from source |
 | Catalogue entries | the disk snapshot | 439 bytes per entry — about 1.1 MB at 2,500 | derived from 569 KB / 1,295 |
 | | the backend's copy | the same order | measured at 931 KB |
 | Generations | the live ledger | bounded by rotation | read from source |
-| | the archive | about 1.7 KB per archived row, never trimmed | derived |
-| | what the panel loads into memory | grows with the number of projects, not with rows — rotated slots and the archive are never read on load | read from source |
+| | the archive | about 3.6 KB per generation, because archived slots overlap by half; never trimmed | derived from the 2026-10-21 archive |
+| | what the panel loads into memory | grows with the number of projects, not with rows — rotated slots and the archive are never read on load. A Billing query for a period does read the rotated and archived slots that can hold rows in that period | read from source |
 
 **Constructed not to grow with the catalogue.** Browser storage: the snapshot
 lives on disk and only its timestamp and marker are in the quota. The schema
@@ -257,23 +284,24 @@ no fails the commit too:
   worst-case budget, and the declared sum must stay under the eviction
   threshold.
 
-**Regression suites.** The test count, its pass state and the date it was
-measured are in [`ARCHITECTURE.md`](ARCHITECTURE.md), where a guard checks the
-published figure against the run that produced it. It is not repeated here,
-because a number quoted from another document is how a test count goes stale.
+**Regression suites.** No test count is quoted here, or in
+[`ARCHITECTURE.md`](ARCHITECTURE.md), which describes the harness: a number copied
+from one document into another is how a test count goes stale.
 
 **One visibility guard, and a stated run-hidden set.** The visibility guard is
 applied in one place rather than rewritten per timer, and a timer that must keep
 running says so where it is started. The set that runs hidden today, **read from
 source**: generation polling; the backend keep-alive; a liveness sweep of
 background rows; the telemetry flush, which returns immediately on an empty
-queue; and the project-template sync, which holds one host call in flight at a
-time and pauses while the agent or a generation is busy. Every other recurring
+queue; the project-template sync, which holds one host call in flight at a
+time and pauses while the agent or a generation is busy; and, since 2026-10-21,
+the progress watch on an upload in flight, which asks only the local backend and
+ends with the upload. Every other recurring
 timer skips its work while the panel is hidden, apart from short-lived UI
 countdowns that clear themselves. Of the timers that reach fal.ai at all, none
-reaches an endpoint that charges: the recurring ones fetch public schema
-documents, and a running generation's status poll reads a request that was
-already paid for at submit. Money leaves only at submit, which is user-initiated.
+reaches an endpoint that charges: the recurring ones fetch public documents
+(schemas, and fal.ai's blog and Learn feeds), and a running generation's status
+poll reads a request that was already paid for at submit. Money leaves only at submit, which is user-initiated.
 
 **Log rotation that archives.** The per-project ledger rotates in fixed-size
 slots rather than on every append, keeps a small number of rotated slots beside
@@ -305,13 +333,14 @@ with releases, not with use. We chose the disk.
 
 **The ledger archive is never deleted.** Cost history is the receipt an editor
 hands to a client, and rotation already bounds what the panel loads. Deleting
-history to save disk in the order of a megabyte per several hundred generations
-is a decision we would rather leave with the editor, who can reset it from the
-Billing tab.
+history to save disk in the order of a few megabytes per thousand generations is
+a decision we would rather leave with the editor. The control that clears generation history lives in Settings.
 
 **Generation polling runs while the panel is hidden.** A run the editor has
 paid for is collected whichever tab is in front. The cost is local requests to
-the backend, not money, and the 30-minute soft stop bounds it.
+the backend, not money. It is bounded by the run itself — a result, an explicit
+failure or a cancel ends it — and not by a clock: once the run is more than five
+minutes old, a handed-off poll asks every 30 seconds.
 
 **The projection is deferred, not dropped.** The numbers that decide where
 memory or render time bends — heap per installed model, milliseconds per
@@ -352,7 +381,7 @@ open, and reads the install rather than instrumenting it.
   and how often it asks each service; the cadence and traffic figures this
   document refers to rather than restates.
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) — how the layers fit, and the test
-  figure with its guard.
+  harness.
 - [`UXP_MIGRATION.md`](UXP_MIGRATION.md) — the same reporting form applied to
   the platform transition, including the migration wrapper's test state.
 - [`PRIVACY_AND_COMPLIANCE.md`](PRIVACY_AND_COMPLIANCE.md) — what each stored

@@ -6,6 +6,8 @@ Privacy posture for modelBridge.app — data categories, recipients, and user co
 
 **Revised 2026-09-24** against two internal audits — a privacy and security pass (2026-08-29) and a media-exfiltration pass (2026-09-07) — plus a re-read of the shipping code. Twenty statements in the previous version were wrong, and the ones that were wrong in an absolute form have been replaced rather than qualified: no cookies, no fingerprinting, no hardware identifier, "everything we hold", the device name, the erasure scope, the telemetry field list, and the claim that no source directory ever reaches Anthropic. Google is named as a recipient for the first time. Each correction says what the document used to claim, because a compliance reference that quietly changes its answer is worth less than one that shows the change.
 
+**Re-checked 2026-10-21** against the shipping panel, backend and production Worker. Corrected: the device name (no network name since 2026-09-27), what a bug report carries (licence key ID, installation ID and product state were missing) and what reaches Resend, the Enhance frame size, the visual-scan frame budget, when scan logs are removed, which project metadata travels on every turn, where the Anthropic key is stored, what Reset clears, how payment-provider message copies are stored, and which analytics events the Worker drops. The larger corrections are also marked where they were made.
+
 ---
 
 ## 1. Architecture Overview — Privacy by Design
@@ -16,9 +18,9 @@ All user preferences, generation history, API keys, installed models, cost logs,
 
 modelBridge uses cloud services to support licence validation, catalog monitoring, the in-plugin news feed, model insights, and optional error reporting and analytics.
 
-Mobile Preview is a built capability that is currently disabled pending further review and validation. It is designed to support previewing provider-generated results without transferring source media through ModelBridge.
+Mobile Preview is a built capability that is currently disabled pending further review and validation. It is designed to support previewing provider-generated results without transferring source media through ModelBridge. When it is enabled, the phone's preview page sets one first-party cookie, `mb_install_id`, used only to send a phone that opens the bare preview address back to its own preview page. It is HttpOnly and Secure, and lasts 7 days, the same as a preview's retention, renewed on each visit; the year-long lifetime it had before is shortened in the release that re-enables the feature.
 
-One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session, a technical model packet, and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt is therefore never included, and nothing else in the report can be struck before sending. Reports are retained 180 days.
+One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session, a technical model packet (the selected model, its settings and the properties of the selected media — never the media itself or its path), the product's own state (plugin and backend version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and your installation's ID (never the licence key itself), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt is therefore never included, and nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
 
 **One model outside this architecture sees your prompt.** The ✨ Enhance button next to a prompt field sends that prompt — and, when media is attached, up to four sampled frames of it — to `fal-ai/any-llm`, which runs it on **Google's `gemini-2.5-flash-lite`**. It runs on your own fal.ai key and your own fal.ai credit, and only when you press the button. The full flow, including when Anthropic is used instead, is in §4.
 
@@ -35,7 +37,7 @@ One thing reaches us because you send it, and it carries more than this document
 │  │             │                         │              │
 │  │  ┌──────────┴──────────────────────┐  │              │
 │  │  │  Local Node.js Backend          │  │              │
-│  │  │  (local loopback only — see §2) │  │              │
+│  │  │  (loopback only — SECURITY.md)  │  │              │
 │  │  └─────────────────────────────────┘  │              │
 │  └───────────────────────────────────────┘              │
 └────────────┬──────────────┬──────────────┬──────────────┘
@@ -44,10 +46,10 @@ One thing reaches us because you send it, and it carries more than this document
      ┌───────────┐  ┌──────────────┐  ┌───────────────┐
      │  fal.ai   │  │  Cloudflare  │  │  LemonSqueezy │
      │           │  │  Worker      │  │               │
-     │ Prompts,  │  │ Error telem. │  │ License key   │
-     │ media,    │  │ License val. │  │ + instance ID │
-     │ generated │  │ Catalog mon. │  │               │
-     │ content   │  │              │  │               │
+     │ Prompts,  │  │ Error telem. │  │ License key,  │
+     │ media,    │  │ License val. │  │ device name — │
+     │ generated │  │ Catalog mon. │  │ relayed by the│
+     │ content   │  │              │  │ Worker        │
      │           │  │ (no prompts, │  │ (no prompts,  │
      │ (user's   │  │  no media,   │  │  no media,    │
      │  own key) │  │  no API keys)│  │  no API keys) │
@@ -58,6 +60,10 @@ One thing reaches us because you send it, and it carries more than this document
      never leaves      Remote config, error docs,
      this path         pricing supplements
 ```
+
+The plugin never calls Lemon Squeezy's API itself: the licence key and device name reach
+Lemon Squeezy through modelBridge's licence service, and your browser talks to Lemon
+Squeezy directly only when you open checkout or the customer portal.
 
 The local backend is not a media-only component, and the diagram's fal.ai column is
 not the whole of what fal.ai carries. The backend also relays licence checks to
@@ -94,12 +100,16 @@ user-rights information.
 The product uses separate identifiers for separate purposes.
 
 **An installation identifier is used to support licensing and device management.**
-The raw machine identifier does not leave the device. Associated licence and
+It is a one-way hash of the computer's hardware identifier, so it stays the same after a
+reinstall or after the plugin's data is cleared. The raw machine identifier does not
+leave the device. Associated licence and
 activation data can be addressed through the customer privacy process.
 
-**Optional usage measurement uses a separate identifier.** It is used only while
-optional usage measurement is enabled and is not used to associate usage
-measurements with a licence or provider account.
+**Optional usage measurement uses a separate identifier.** It is a short hash of
+properties the panel's browser engine reports — user agent, screen size, time zone and
+language — kept locally once made. It is sent only while optional usage measurement is
+enabled and is not used to associate usage measurements with a licence or provider
+account. Optional error reporting carries no identifier at all.
 
 The customer-facing privacy policy contains the governing information about these
 data categories and the available privacy controls.
@@ -107,8 +117,13 @@ data categories and the available privacy controls.
 ### Licence checks
 
 A licence check carries the information needed to validate product access and support
-device management. A device name can be included; because device names often reflect
-the computer hostname, they can contain personal information.
+device management, including a device name made of the platform, the processor model
+and a random four-character tag — for example "macOS · Apple M2 Pro · 3f9a". The device
+name is passed on to the payment provider so the two computers on a licence can be told
+apart. **Corrected 2026-10-21:** this section said device names often reflect the
+computer's hostname. That was true until 2026-09-27; since then the name contains no
+network name. A device activated by an earlier build keeps its old name, which did,
+until it is activated again.
 
 The service returns the subscription status and access information needed by the
 product. Licence checks are not used to transfer creative project content.
@@ -132,7 +147,7 @@ The scope is the heading, and it is deliberate. Several of these travel to the t
 - *"No fingerprinting."* Removed because the identifier used for optional usage measurement does not support that absolute claim. The customer-facing privacy policy describes the identifier and the controls over it.
 - *"No hardware identifier."* Removed because the installation identifier is derived from the device. The raw machine identifier does not leave the device.
 
-One thing does reach us because you send it: a bug report (see §1). It carries your message, any contact details you type, the last three error messages, a model packet and any screenshots — and, since 2026-09-20, it has no preview step and no prompt tick-box, so the prompt is never included and nothing else can be struck.
+One thing does reach us because you send it: a bug report (see §1). It carries your message, any contact details you type, the last three error messages, a model packet, the product's own state, your licence key's ID and your installation's ID, and any screenshots — and, since 2026-09-20, it has no preview step and no prompt tick-box, so the prompt is never included and nothing else can be struck.
 
 ---
 
@@ -146,8 +161,9 @@ and user-rights information.*
 
 Disabled by default. When you enable it, it carries technical error context so that a
 failure the product does not yet explain properly can be recognised and given a proper
-message. It is not designed to carry creative content, file paths, or a user
-identifier, and message text is filtered and truncated before it is sent.
+message. It carries the error's type and source from a fixed list, the HTTP status,
+whether it was retryable, the plugin and Premiere versions and the platform — no message
+text, no model, no creative content, no file paths and no identifier of any kind.
 
 ### Retention
 
@@ -207,15 +223,15 @@ customer-facing privacy policy is the governing description.
 
 | Processor | Role | Data Received | DPA Status |
 |---|---|---|---|
-| **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the payment provider's subscription messages (which carry your name and email), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, and network information | Cloudflare DPA (standard) |
+| **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, and network information | Cloudflare DPA (standard) |
 | **LemonSqueezy** (Lemon Squeezy Inc.) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
 | **Google** (via fal.ai) | The model that runs Enhance — `google/gemini-2.5-flash-lite`, reached through `fal-ai/any-llm` | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached as part of fal.ai's `any-llm` endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
-| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **some absolute paths**: media paths are masked at a single choke point, but the project's own path, whole-disk search results, template folders and anything inside raw XMP are not (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
-| **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata only — no user content | No user PII processed |
-| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health) and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating, which carries no identifier of any kind and cannot be traced to an account | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
+| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **paths as follows**: media paths and the project file's own path are replaced by session handles at a single choke point, while a path you type into the chat yourself, anything inside raw XMP and the candidate paths of a disk search for an offline file travel as written (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
+| **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata, and public facts about a model's creator — no user content | No user PII processed |
+| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating, which carries no identifier of any kind and cannot be traced to an account | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
-| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report text, any supplied reply email address, and attached screenshots with their original filenames. This flow is not designed to send prompts, generated media, project data, or licence keys to Resend | Processor — characterisation and DPA status pending legal review |
+| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and your installation's ID, the model, product-state and media-property context, the three recent error messages, and attached screenshots with their original filenames. This flow does not send prompts, generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor — characterisation and DPA status pending legal review |
 
 ### fal.ai Data Flow Note
 
@@ -236,11 +252,13 @@ differ:
 What travels: the prompt text as typed; the model's display name and category; the
 configured duration, aspect ratio, resolution or image size; and, when media is attached,
 at most four images from at most three media slots — up to two sampled frames per video,
-long edge 1568 px, sent inline in the request body rather than as links. Each image is
+long edge 1092 px, sent inline in the request body rather than as links. Each image is
 labelled by its slot role and field name, for example `[start (image_url)]`. **No
-filenames, no file paths and no project data are included.** The request needs an active
-subscription and a fal.ai key, spends your own fal.ai credit, and happens only on the
-press.
+filenames, no file paths and no project data are included.** NDA mode strips the frames and
+forces the text-only rewrite. The request needs an active subscription and a fal.ai key,
+spends your own fal.ai credit (or, on the Anthropic branch, your Anthropic credit, on
+Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21: this paragraph
+gave the frame size as 1568 px; frames are sent at 1092 px.)*
 
 Some provider-specific processing disclosures are not yet surfaced at every in-product
 decision point. Improving that transparency is tracked product work.
@@ -268,9 +286,11 @@ decision point. Improving that transparency is tracked product work.
 
 Corrected 2026-09-24 in both directions: `gen_start` carries no category and `model_sel`
 no source, which this table claimed; `gen_done` also carries a duration, `gen_abandon` a
-source, `cat_browse` a category, and `settings_change` a value, which it did not. Four of
-the twelve — `dual_gen`, `cat_browse`, `cost_view` and `settings_change` — are emitted by
-the plugin and **dropped by the Worker's own switch**, so they are sent and not stored.
+source, `cat_browse` a category, and `settings_change` a value, which it did not. Three of
+the twelve — `dual_gen`, `cost_view` and `settings_change` — are emitted by the plugin and
+**dropped by the Worker's own switch**, so they are sent and not stored. (A fourth,
+`cat_browse`, was dropped the same way until the Worker began storing it; re-checked
+2026-10-21.)
 
 ### How measurements are aggregated
 
@@ -285,20 +305,20 @@ authenticated.
 
 Agent Mode allows users to edit the Premiere Pro timeline via natural language chat, powered by Anthropic's Claude API.
 
-**User's own API key.** The user enters their own Anthropic API key in Settings. It is stored locally — in the local backend's environment file, with only a short display fragment in `localStorage` — and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
+**User's own API key.** The user enters their own Anthropic API key in Settings. It is stored locally — in an environment file in the plugin's data folder, readable only by your user account; no copy or fragment of it is kept in `localStorage` — and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
 
 **What reaches Anthropic, as a rule rather than a list.** Two sentences govern every path, present and future:
 
-1. **The agent never sends images on its own initiative unless the user has allowed it.** One setting governs that — Settings → Privacy → "Timeline frames to the agent". It covers the frames that accompany messages while a clip is selected (3–12 depending on clip length, and **asked before the first send** — nothing is sent until you answer) and the agent's ability to read the Generate tab's media card by itself. NDA mode blocks it whatever you answered. With it off, the agent is told what is in the card — slot, role, filename, media type — and is not shown it, through the same coverage contract that stops it describing anything it did not see. One property worth knowing: the frames are sampled across the **whole source file**, not the part you trimmed into the timeline, so a three-second selection inside a long interview sends frames from across the whole interview.
-2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it — up to about a hundred for a long clip, with a cost dialog only above $0.20; pressing Enhance on a prompt sends the media attached to that prompt, to Anthropic or to Google depending on the branch in §4.
+1. **The agent never sends images on its own initiative unless the user has allowed it.** One setting governs that — Settings → Privacy → "Timeline frames to the agent". With it off, no frame from your timeline or media goes to the agent by any path. It covers the frames that accompany a message while a clip is selected (3–12 depending on clip length, sent once per clip per conversation, and **asked before the first send** — nothing is sent until you answer) and the agent's ability to read the Generate tab's media card by itself, and, since 2026-10-21, a visual scan. NDA mode blocks it whatever you answered. With it off, the agent is told what is in the card — slot, role, filename, media type — and is not shown it, through the same coverage contract that stops it describing anything it did not see. One property worth knowing: the frames are sampled across the **whole source file**, not the part you trimmed into the timeline, so a three-second selection inside a long interview sends frames from across the whole interview.
+2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it — for an overview up to a hundred evenly spaced frames plus samples around detected scene changes, at most 300; for a search up to 600 — with a cost dialog above $0.08. It also needs the timeline-frames setting above: if you have not answered yet, the panel asks first, and with the setting off or NDA mode on, no scan runs; pressing Enhance on a prompt sends the media attached to that prompt, to Anthropic or to Google depending on the branch in §4.
 
 *This is written as a rule because the previous version was an enumeration, and an enumeration of exceptions goes false the moment another tool learns to read the media card — which is exactly how it broke.*
 
-**Project metadata travels on every turn**, and more of it than this document used to list: clip and sequence names, filenames, timecodes, effect settings, marker names and comments verbatim, dailies XMP fields, camera make, model and creation time, the client name if you are in Client-project mode, your alias, and any custom instructions you saved.
+**Project metadata travels to Anthropic**, and more of it than this document used to list. On every turn: the client name if you are in Client-project mode, your alias, any custom instructions you saved, and your local time and time zone. Whenever the agent reads the project or timeline, which is most turns: clip and sequence names, filenames, timecodes, effect settings, marker names and comments verbatim, dailies XMP fields, and camera make, model and creation time.
 
-**Paths: what is masked and what is not.** Until 2026-09-24 this section said source directories do not travel. That is true of the media path keys — `sourceFile`, `mediaPath` and `proxyPath` are swapped for an opaque session-scoped reference at a single choke point and resolved back locally. It is **not** true as a general statement, because the masking is keyed on those names: the project's own path travels absolute in a project overview, a disk search for offline media returns up to twenty absolute candidate paths including external volume names, template lookups return paths under your data directory (which contains your OS username), and anything embedded in raw XMP text travels as written. The narrow claim holds; the absolute one did not, so it has been replaced rather than qualified.
+**Paths: what is masked and what is not.** Until 2026-09-24 this section said source directories do not travel. That is true of the media path keys — `sourceFile`, `mediaPath` and `proxyPath` are swapped for an opaque session-scoped reference at a single choke point and resolved back locally. Since 2026-09-27 the project file's own path is handled the same way: it travels as a session handle, never as the absolute path, and the agent's exact-target checks compare handles. A path you type into the chat yourself travels as you wrote it, anything embedded in raw XMP text travels as written, and when you ask the agent to find an offline file on your disk, the candidate paths it finds (up to 20) travel as found. The narrow claim holds; the absolute one did not, so it has been replaced rather than qualified.
 
-**No conversation data collected — with one local exception.** modelBridge does not intercept, store, proxy, or log Agent Mode conversation content on any server of ours: no prompts, no Claude responses, no tool calls, no timeline edit commands. On your own disk there is one exception: when you ask the agent to watch a clip, the sampled frames, the absolute media path, the prompt and the model's reply are written to `uploads/scan-logs/` and swept after seven days. A generation triggered from Agent Mode emits the same anonymous generation events (`gen_start`, `gen_done`, `gen_fail`) as one started from the Generate button — subject to the same opt-in and NEVER_TRANSMIT rules. Agent Mode emits no events of its own to our servers; it does write to the local usage store, which is never transmitted.
+**No conversation data collected — with one local exception.** modelBridge does not intercept, store, proxy, or log Agent Mode conversation content on any server of ours: no prompts, no Claude responses, no tool calls, no timeline edit commands. On your own disk there is one exception: when you ask the agent to watch a clip, the sampled frames, the absolute media path, the clip name, the prompt and the model's reply are written to `uploads/scan-logs/` in the plugin's data folder. Folders older than seven days are removed when the local backend next starts, so a log can outlive seven days on a machine where the backend keeps running. A generation triggered from Agent Mode emits the same anonymous generation events (`gen_start`, `gen_done`, `gen_fail`) as one started from the Generate button — subject to the same opt-in and NEVER_TRANSMIT rules. Agent Mode emits no events of its own to our servers; it does write to the local usage store, which is never transmitted.
 
 **Customizable system instructions.** Users can configure custom system instructions for the Agent. These are stored locally only and included in requests sent directly to Anthropic's API. modelBridge infrastructure never sees them.
 
@@ -323,7 +343,7 @@ imy.se
 **Data access and erasure requests:** email info@modelbridge.app from the address associated with your purchase, or include your order reference. Requests are handled through the customer privacy process described in the privacy policy.
 
 **Local Data Deletion:**
-All locally stored data (generation history, cost logs, installed models, API keys, settings, learned constraints) can be cleared from within the plugin via Settings → Reset, or by uninstalling the extension.
+Settings → Data → "Reset all data" clears the generation history and cost logs the panel shows, external costs and client/project data, and — if you tick the box — installed models. It does not remove your API keys, your licence, Agent Mode preferences, learned constraints or local scan logs. Keys are removed and the licence is released in Settings; the rest lives in the plugin's data folder in your user Library (`~/Library/Application Support/modelBridge`), which is kept across reinstalls by design, so uninstalling the extension does not delete it — deleting that folder does. *(Corrected 2026-10-21: this section said Reset clears everything, including API keys, settings and learned constraints. It does not.)*
 
 ---
 
