@@ -2,6 +2,8 @@
 
 ### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
 
+**Bridging the gap** between a video editor's working environment and the best AI video, image and audio models available.
+
 Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
 - **Over 1,300 fal.ai image, video and audio models**, linked into Premiere (1,304 on 2026-10-22, [live catalog](https://docs.modelbridge.app/models/available-models/))
