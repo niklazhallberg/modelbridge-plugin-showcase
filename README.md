@@ -1,44 +1,47 @@
+<p align="center">
+  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+</p>
+
 # modelBridge.app
 
-> **What this repository is.** A public engineering record for ModelBridge, a
-> Premiere Pro extension built around fal.ai workflows. The plugin source is private;
-> customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app).
->
-> **How to read the claims.** **Implemented** means it is present in the product
-> described here. **Built but disabled** means implementation exists but is not
-> currently available to users. **Measured** means the document gives its date and
-> method. **Roadmap / under consideration** means direction, not a product commitment.
+### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
 
-**fal.ai image, video, and audio generation—inside Adobe Premiere Pro.**
+Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
-> **Coverage.** ModelBridge covers fal.ai image, video, and audio generation or
-> transformation categories used in an editorial workflow: image-to-image,
-> text-to-image, image-to-video, video-to-video, text-to-video, text-to-audio,
-> audio-to-audio, text-to-speech, audio-to-video, video-to-audio, and
-> speech-to-speech. The panel counted 1,296 installable models in these 11
-> categories on 2026-10-21; the number moves as fal.ai adds and retires models, and
-> the [live catalog](https://docs.modelbridge.app/models/available-models/) carries
-> today's figure.
->
-> Models outside this editorial media-generation workflow are intentionally out of
-> scope, including 3D, training, transcription, captioning, text/structured-data
-> output, and general language or vision models.
+[Documentation](https://docs.modelbridge.app) · [Live catalog](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing)
 
-**A plugin that grows on its own.** 1,296 installable models on 2026-10-21, and the catalogue changes week to week. modelBridge watches fal.ai for you, and every new model that passes verification appears in your panel with its interface already built — ready to try in your Premiere project without a plugin update. You don't update. You don't hunt.
+---
 
-No browser tabs. No downloads. No manual imports. See the result in Premiere's Source Monitor, hit Import, and it lands on your timeline in the right place — automatically.
+## Where the result lands
 
-- **Image-to-video** replaces the source clip at the same track and timecode
-- **Text-to-video** inserts at the playhead on the first available track
-- **First-frame + end-frame** replaces both source clips as a single clip spanning their combined duration, when the two sit side by side on one track
-- **Extend** places the new footage right after the clip it continues, on the same track — and when the model returns your original together with the extension, only the new part is placed. When modelBridge can't establish which of the two the model returned, or that clip has moved, been trimmed or is locked, the result goes to the playhead instead
-- **Audio** lands on an empty audio track — at the start of the clip it was made from, or at the playhead for text-to-speech
+| You generate | It lands |
+|---|---|
+| **Image-to-video** | In place of the source clip, same track and timecode |
+| **Text-to-video** | At the playhead, on the first free track |
+| **First frame + end frame** | In place of both clips, as one clip spanning their combined length, when the two sit side by side on one track |
+| **Extend** | Right after the clip it continues, on the same track. Only the new part is placed. If that clip has moved, been trimmed or is locked, or modelBridge can't tell which part is new, it goes to the playhead instead |
+| **Audio** | On an empty audio track, at the start of its source clip, or at the playhead for text-to-speech |
 
-Non-destructive. The original clip stays in your Project Bin. Fit-to-frame scaling is applied automatically. Nothing to conform, nothing to re-import.
+The original stays in your Project Bin, and fit-to-frame scaling is applied for you. [More on timeline import →](https://docs.modelbridge.app/features/timeline-import/)
 
-**The heavy media work stays on your machine** — silence analysis, timeline scans, cuts and ripple-delete run locally through Premiere and ffmpeg; your footage is not uploaded to perform them. Agent Mode asks before it sends frames of your timeline, and NDA mode blocks them outright. What each feature sends, and where, is set out in full: [Security and privacy →](#security-and-privacy)
+## Your footage stays on your machine
 
-[Learn more about timeline import →](https://docs.modelbridge.app/features/timeline-import/)
+Silence analysis, timeline scans, cuts and ripple-delete run locally through Premiere and ffmpeg. Your footage is not uploaded to do them. Agent Mode asks before it sends frames of your timeline, and NDA mode blocks them outright. [Security and privacy →](#security-and-privacy)
+
+## About this repository
+
+A public engineering record for modelBridge. The plugin source is private, and customer documentation lives at [docs.modelbridge.app](https://docs.modelbridge.app).
+
+**Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. The panel counted 1,296 installable models in them on 2026-10-21; the [live catalog](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
+
+**How to read the claims.**
+
+| Label | Means |
+|---|---|
+| **Implemented** | Present in the product described here |
+| **Built but disabled** | Implemented, but not currently available to users |
+| **Measured** | The document gives the date and the method |
+| **Roadmap / under consideration** | A direction, not a product commitment |
 
 ---
 
