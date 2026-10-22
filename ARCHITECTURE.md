@@ -151,22 +151,22 @@ The mitigation is that a rejection teaches. When a generation fails validation, 
 
 This section is about what the API demands. How often we ask of it — poll volume per generation and the backoff behind it, the catalogue synchronisation cadence and what that cadence costs in freshness, and the same accounting for the other two services modelBridge depends on — is in [`PERFORMANCE_AND_LOAD.md`](PERFORMANCE_AND_LOAD.md), together with the panel-side measurements and the findings we got wrong.
 
-### Agent Mode (Adept)
+### Agent Mode
 
 Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro integration. Editors describe what they want in plain language; the agent reads the timeline, plans the operation, executes edits, and reports back.
 
-**Adept.** Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds Adept, built to tailor the agent for Adobe's environment:
+Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds a layer built to tailor the agent for Adobe's environment:
 
-- **Wired into the Premiere toolkit.** Adept reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
-- **Finds a way around technical limits.** When Premiere's scripting can't cross a boundary directly, Adept looks for a workaround that still reaches the goal, instead of giving up or handing the problem back.
+- **Wired into the Premiere toolkit.** It reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
+- **Finds a way around technical limits.** When Premiere's scripting can't cross a boundary directly, the agent looks for a workaround that still reaches the goal, instead of giving up or handing the problem back.
 - **Checks its own work.** Timeline-shape edits are re-read from the real timeline after they run, and when a change can't be confirmed the agent says so instead of reporting success.
-- **Honest by design.** Adept says plainly when something genuinely can't be done, and never guesses at a cause it can't see.
+- **Honest by design.** It says plainly when something genuinely can't be done, and never guesses at a cause it can't see.
 - **Reports its own coverage.** Tools that sample rather than read everything return how much of the request they covered — counts of what was expected against what was produced, plus named lists of what was never opened and what could not be read. The schemas instruct the model that a confident verdict over an unread item is a false claim. A truncated result otherwise looks exactly like a complete one, which is the failure mode this closes.
 - **Cannot spend money by itself.** A generation requested in chat is staged, not started: inputs resolved against the model's schema, validated, and returned with a cost estimate. Firing it requires a button the agent can only ask for, and the click re-checks that the model and the media are still the ones that were approved — refusing rather than re-binding if either drifted. The gate is code on the click path, not an instruction in a prompt.
 
-The result: Adept solves problems a raw model would hand back to the user.
+The result: Agent Mode solves problems a raw model would hand back to the user.
 
-**What Adept can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence analysis — measurement, a keeper-range cut list, and on the editor's go-ahead a new sequence assembled from those ranges with per-range readback, the working sequence left untouched — quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
+**What Agent Mode can do today.** Timeline introspection, clip editing (move, trim, split, delete), property adjustment (scale, position, opacity, speed, Lumetri), effect and transition management, track and sequence operations, LUT scans and batch color operations, multi-platform export (Instagram / TikTok / YouTube / Twitter / X / LinkedIn / Facebook), environment-aware silence analysis — measurement, a keeper-range cut list, and on the editor's go-ahead a new sequence assembled from those ranges with per-range readback, the working sequence left untouched — quality-control inspection, and direct handoff into modelBridge generation flows for AI-driven edits.
 
 **Available models.** Claude Haiku 5.5 (default, fast + cheap) and Claude Sonnet 5.5 (deeper reasoning). Editors switch per conversation.
 
