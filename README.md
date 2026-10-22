@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
-</p>
-
 # modelBridge.app
 
 ### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
@@ -9,6 +5,10 @@
 Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
 [Documentation](https://docs.modelbridge.app) · [Live catalog](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing)
+
+<p align="center">
+  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+</p>
 
 ---
 
