@@ -94,6 +94,8 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 
 [Why fal.ai →](https://docs.modelbridge.app/why-fal-ai/) · [Schema-driven UI →](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed →](https://docs.modelbridge.app/features/news-feed/)
 
+<p align="center"><strong>Bridging the gap between imagination and execution.</strong></p>
+
 <p align="center">
   <img src="assets/modelbridge-gallery.webp" alt="A gallery of cinematic stills: a surfer on a snowy beach, a diver beside a whale, a figure in a suit facing a crowd, a man wading into the sea, a lizard resting on a face" width="100%">
 </p>
