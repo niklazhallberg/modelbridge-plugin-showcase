@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.9.2",
   "updatedAt": "2026-09-24T05:48:42Z",
   "minPluginVersion": "1.0.1",
   "enabled": true,
@@ -22,8 +22,8 @@
   "files": {
     "error-docs": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-docs.json",
-      "sha256": "9a3cccd15e0c48a7169d3f67883612aed6266da7697c0a59b8e7b2fbabcc1e8f",
-      "version": "1.8.0"
+      "sha256": "855a9bdab0c09621a6905f004751f3ae8046639db4f1a6df69034790a86c9a25",
+      "version": "1.8.2"
     },
     "error-copy": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-copy.json",
