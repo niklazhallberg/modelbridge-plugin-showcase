@@ -23,7 +23,7 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 
 **Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait. Bridging the gap between imagination and execution.
 
-That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21.
+That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21. Every model is listed by category under [Available models ↗](https://docs.modelbridge.app/models/available-models/) in the modelBridge documentation, refreshed several times a day.
 
 **From a fal.ai launch to your timeline:**
 
@@ -36,7 +36,7 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 - **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
 - **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
 - **Live in-panel notification.** New models appear in an in-panel news banner with a one-click Add. From "just went live on fal.ai" to "running in your project" in a couple of clicks
-- **Adaptive fallbacks.** When a model is live but its spec isn't published yet, modelBridge builds a streamlined interface immediately and upgrades it once the full spec appears — the next time the panel starts or you open the model
+- **Adaptive fallbacks.** When a model is live but its spec stays unpublished, modelBridge keeps checking, and after about two days offers it with a prompt-only interface. That interface upgrades to the full form once the spec appears — the next time the panel starts or you open the model
 
 > "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
 
@@ -180,7 +180,7 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 **ElevenLabs on the timeline.** Select a voice clip, pick a TTS or voice-changer model, click Generate — the result lands on an empty audio track, back at the clip it came from, or at the playhead for text-to-speech. Voice-over, dubbing, sound effects, voice conversion — ElevenLabs voice models, and 100+ audio models overall, work the same way as video.
 
-**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or select a video clip on your timeline, park the playhead on the frame you want and click **Extract frame from video** — the button shows the live playhead timecode, so you pick the frame you want, not "roughly." The frame goes straight into the image input of the model you have open — or into its Start or End frame.
+**Midjourney → fal.ai in three keystrokes.** Copy a Midjourney URL, Cmd/Ctrl+V it into any media card's URL field, generate on it. Or select a video clip on your timeline, park the playhead on the frame you want and click the camera button (**Capture frame**) — its hover text names the live playhead timecode, so you pick the frame you want, not "roughly." The frame goes straight into the image input of the model you have open — or into its Start or End frame.
 
 [Voice-over with ElevenLabs ↗](https://docs.modelbridge.app/academy/voice-over-elevenlabs/) · [Midjourney → Premiere ↗](https://docs.modelbridge.app/academy/midjourney-to-premiere/)
 
