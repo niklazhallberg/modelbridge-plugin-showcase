@@ -21,7 +21,7 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 
 ## 1. A plugin that grows on its own
 
-**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait.
+**Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait. Bridging the gap between imagination and execution.
 
 That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,296 installable models on 2026-10-21.
 
@@ -41,8 +41,6 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 > "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
 
 [Why fal.ai ↗](https://docs.modelbridge.app/why-fal-ai/) · [Schema-driven UI ↗](https://docs.modelbridge.app/features/schema-driven-ui/) · [News feed ↗](https://docs.modelbridge.app/features/news-feed/)
-
-<p align="center"><strong>Bridging the gap between imagination and execution.</strong></p>
 
 <p align="center">
   <img src="assets/modelbridge-gallery.webp" alt="A gallery of cinematic stills: a surfer on a snowy beach, a diver beside a whale, a figure in a suit facing a crowd, a man wading into the sea, a lizard resting on a face" width="100%">
