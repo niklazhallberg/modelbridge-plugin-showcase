@@ -1,17 +1,17 @@
 {
   "_meta": {
-    "version": 12,
-    "updatedAt": "2026-09-09T12:00:00Z"
+    "version": 13,
+    "updatedAt": "2026-10-23T12:00:00Z"
   },
   "entries": {
     "LICENSE_REFUSED": {
       "slug": "subscription-not-confirmed",
-      "cause": "modelBridge could not confirm an active subscription on this installation, so the request was stopped before it reached fal.ai or Anthropic. This is your modelBridge subscription — not your fal.ai or Anthropic key, which are unaffected. It happens when the subscription has lapsed, been paused or been revoked, or when modelBridge has not been able to re-check it for 30 days. Nothing was sent to a provider and nothing was charged.",
+      "cause": "modelBridge could not confirm an active subscription on this installation, so the request was stopped before it reached fal.ai or Anthropic. This is your modelBridge subscription — not your fal.ai or Anthropic key, which are unaffected. It happens when the subscription has lapsed, been paused or been revoked, or when modelBridge has gone too long without being able to re-check it. Nothing was sent to a provider and nothing was charged.",
       "steps": [
-        "Open Settings → API & Support and read the subscription card — it names the state and what changes it",
+        "Open Settings → Subscription and read the card — it names the state and what changes it",
         "If your subscription is active, quit and reopen Premiere Pro to trigger a fresh check, then try again",
-        "If it has lapsed, renew from your Lemon Squeezy account — access returns within a minute of the payment going through",
-        "If you have paid and still see this, send a bug report from Settings → API & Support — it carries the reason word (for example status:expired) that support needs"
+        "If it has lapsed, subscribe again from that card — a new subscription comes with a new license key by email; paste it there. If a payment failed instead, update your payment method in the Lemon Squeezy customer portal — the same key works again once modelBridge has re-checked the subscription",
+        "If you have paid and still see this, send a bug report from Settings → Plugin Feature & Bug Report — it carries the reason word (for example status:expired) that support needs. Questions about a charge, a card or a refund go to Lemon Squeezy, who handle billing as Merchant of Record"
       ],
       "externalLinks": [
         {
@@ -25,7 +25,7 @@
       "cause": "modelBridge could not run its subscription check at all, so the request was stopped as a precaution. This is not a verdict on your subscription: the checker itself failed to load or threw (its reason word is verification_unavailable, core_unavailable or gate_error). Requests are stopped before any provider is contacted, so nothing was sent and nothing was charged.",
       "steps": [
         "Quit and reopen Premiere Pro — this reloads the background service and its checker",
-        "If it keeps happening, send a bug report from Settings → API & Support — the reason word in the message tells support which part failed",
+        "If it keeps happening, send a bug report from Settings → Plugin Feature & Bug Report — the reason word in the message tells support which part failed",
         "Your subscription and your API keys need no action"
       ],
       "externalLinks": []
@@ -35,7 +35,7 @@
       "cause": "The file you attached is not one of the formats this model accepts. Every model declares its own input type — an image model will not take a video clip, and vice versa. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
       "steps": [
         "Check the formats named in the message — those are what this model accepts",
-        "To turn a video frame into an image, use the Extract frame button on the card",
+        "To turn a video frame into an image, use the camera button (Capture frame) below the card",
         "To convert a clip, use File > Export > Media in Premiere Pro",
         "Or pick a different model that accepts the file you have"
       ],
@@ -172,7 +172,7 @@
       "cause": "API keys can be scoped to specific permissions. The key saved in modelBridge is missing the scope required by this model.",
       "steps": [
         "Generate a new API key with full permissions on fal.ai",
-        "Replace the key in the Settings tab",
+        "Replace the key in Settings → API keys",
         "If using a team key, ask your admin to grant the required scope"
       ],
       "externalLinks": [
@@ -186,7 +186,7 @@
       "slug": "invalid-api-key",
       "cause": "Your fal.ai API key is missing, expired, or was entered incorrectly.",
       "steps": [
-        "Open the Settings tab in modelBridge",
+        "Open Settings → API keys in modelBridge",
         "Delete the current key and paste a fresh one from fal.ai",
         "Click Save and try generating again"
       ],
@@ -326,9 +326,9 @@
       "slug": "license-invalid",
       "cause": "Your modelBridge subscription could not be verified. The license may have expired, or the license server is temporarily unreachable.",
       "steps": [
-        "Check your subscription status in your Lemon Squeezy account",
-        "Restart Premiere Pro after renewing",
-        "If the issue persists, check your internet connection — license verification requires a brief server check"
+        "Open Settings → Subscription — the card names the state and what changes it",
+        "If you bought a new subscription, paste the new license key from its email there — buying again comes with a new key",
+        "If the license service was unreachable, check your internet connection — license verification requires a brief server check"
       ],
       "externalLinks": [
         {
@@ -339,11 +339,11 @@
     },
     "LICENSE_DEVICE_LIMIT": {
       "slug": "license-device-limit",
-      "cause": "Your modelBridge license has reached the maximum number of activated devices. Each license allows a limited number of simultaneous activations.",
+      "cause": "Your modelBridge license is already active on two computers — the most your plan allows.",
       "steps": [
-        "Go to the Settings tab and click 'Use on a different device' to release this device",
-        "Or manage your devices at app.lemonsqueezy.com/my-orders",
-        "After releasing a device, try activating again"
+        "On the computer you no longer use, open Settings → Devices and release it",
+        "Or release it in your Lemon Squeezy customer portal at app.lemonsqueezy.com/my-orders",
+        "Then activate again on this computer"
       ],
       "externalLinks": [
         {
@@ -612,7 +612,7 @@
       "steps": [
         "Press Generate (or send your message) again on this computer — that makes it the active one",
         "The other computer will see this same notice the next time it tries, and its next press takes the license back",
-        "If you do not recognise the computer named in the message, free it up from your Lemon Squeezy account, then paste your license key once under Settings → API & Support"
+        "If you do not recognise the computer named in the message, free it up in your Lemon Squeezy customer portal, then paste your license key once under Settings → Subscription"
       ],
       "externalLinks": [
         {
@@ -625,9 +625,9 @@
       "slug": "activation-released",
       "cause": "This computer’s activation was released, so the request was stopped before it reached fal.ai or Anthropic. An activation is released from your Lemon Squeezy account, from the Devices card on another computer, or by modelBridge support. Your subscription itself is unaffected; nothing was sent to a provider and nothing was charged.",
       "steps": [
-        "Open Settings → API & Support and paste your license key — it is in your Lemon Squeezy receipt email",
+        "Open Settings → Subscription and paste your license key — it is in your Lemon Squeezy receipt email",
         "Re-entering the key on a computer that was released reuses its slot; it does not use up another one",
-        "If activation answers \"Maximum devices reached\", free up a computer you no longer use from your Lemon Squeezy account first"
+        "If activation answers that the license is already active on two computers, release one you no longer use first — in Settings → Devices on that computer, or in your Lemon Squeezy customer portal"
       ],
       "externalLinks": [
         {
