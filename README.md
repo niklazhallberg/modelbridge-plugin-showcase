@@ -14,7 +14,7 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 [Documentation ↗](https://docs.modelbridge.app) · [Live catalog ↗](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing) · [For engineers](#about-this-repository)
 
 <p align="center">
-  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+  <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge inside Adobe Premiere Pro: the Generate tab docked beside the Program monitor, listing new fal.ai models with one-click Add above the installed model and its prompt field" width="100%">
 </p>
 
 ---
@@ -368,3 +368,7 @@ Actively preparing for Adobe's UXP: platform-specific code is moving behind adap
 Built by [Niklaz Hallberg ↗](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
 
 2025–2026.
+
+<p align="center">
+  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+</p>
