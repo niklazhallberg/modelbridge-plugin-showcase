@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "version": 13,
-    "updatedAt": "2026-10-23T12:00:00Z"
+    "version": 17,
+    "updatedAt": "2026-11-14T12:00:00Z"
   },
   "entries": {
     "LICENSE_REFUSED": {
       "slug": "subscription-not-confirmed",
-      "cause": "modelBridge could not confirm an active subscription on this installation, so the request was stopped before it reached fal.ai or Anthropic. This is your modelBridge subscription — not your fal.ai or Anthropic key, which are unaffected. It happens when the subscription has lapsed, been paused or been revoked, or when modelBridge has gone too long without being able to re-check it. Nothing was sent to a provider and nothing was charged.",
+      "cause": "{{b:modelBridge could not confirm an active subscription on this installation, so the request was stopped before it reached fal.ai or Anthropic.}} This is your modelBridge subscription — not your fal.ai or Anthropic key, which are unaffected. It happens when the subscription has lapsed, been paused or been revoked, or when modelBridge has gone too long without being able to re-check it. Nothing was sent to a provider and nothing was charged.",
       "steps": [
         "Open Settings → Subscription and read the card — it names the state and what changes it",
-        "If your subscription is active, quit and reopen Premiere Pro to trigger a fresh check, then try again",
+        "If your subscription is active, try again in a moment — modelBridge re-checks your subscription as soon as a request is refused",
         "If it has lapsed, subscribe again from that card — a new subscription comes with a new license key by email; paste it there. If a payment failed instead, update your payment method in the Lemon Squeezy customer portal — the same key works again once modelBridge has re-checked the subscription",
         "If you have paid and still see this, send a bug report from Settings → Plugin Feature & Bug Report — it carries the reason word (for example status:expired) that support needs. Questions about a charge, a card or a refund go to Lemon Squeezy, who handle billing as Merchant of Record"
       ],
@@ -22,7 +22,7 @@
     },
     "LICENSE_CHECK_UNAVAILABLE": {
       "slug": "subscription-check-unavailable",
-      "cause": "modelBridge could not run its subscription check at all, so the request was stopped as a precaution. This is not a verdict on your subscription: the checker itself failed to load or threw (its reason word is verification_unavailable, core_unavailable or gate_error). Requests are stopped before any provider is contacted, so nothing was sent and nothing was charged.",
+      "cause": "{{b:modelBridge could not run its subscription check at all, so the request was stopped as a precaution.}} This is not a verdict on your subscription: the checker itself failed to load or threw (its reason word is verification_unavailable, core_unavailable or gate_error). Requests are stopped before any provider is contacted, so nothing was sent and nothing was charged.",
       "steps": [
         "Quit and reopen Premiere Pro — this reloads the background service and its checker",
         "If it keeps happening, send a bug report from Settings → Plugin Feature & Bug Report — the reason word in the message tells support which part failed",
@@ -32,7 +32,7 @@
     },
     "MEDIA_TYPE_MISMATCH": {
       "slug": "media-type-mismatch",
-      "cause": "The file you attached is not one of the formats this model accepts. Every model declares its own input type — an image model will not take a video clip, and vice versa. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
+      "cause": "{{b:The file you attached is not one of the formats this model accepts.}} Every model declares its own input type — an image model will not take a video clip, and vice versa. This is caught before anything is uploaded, so no generation was started and nothing was charged.",
       "steps": [
         "Check the formats named in the message — those are what this model accepts",
         "To turn a video frame into an image, use the camera button (Capture frame) below the card",
@@ -57,13 +57,13 @@
       "steps": [
         "Close and reopen Premiere Pro",
         "If the issue persists, restart your computer",
-        "Check that no firewall or antivirus is blocking port 3000"
+        "Check that a firewall or antivirus is not blocking modelBridge’s background helper"
       ],
       "externalLinks": []
     },
     "NET_ERROR": {
       "slug": "network-error",
-      "cause": "modelBridge could not reach fal.ai. This is usually a temporary network issue.",
+      "cause": "modelBridge could not reach fal.ai. This is usually a temporary network issue. Your settings are preserved.",
       "steps": [
         "Check your internet connection",
         "Try again in a moment",
@@ -71,7 +71,7 @@
       ],
       "externalLinks": [
         {
-          "label": "fal.ai Status",
+          "label": "fal.ai status",
           "url": "https://status.fal.ai"
         }
       ]
@@ -109,12 +109,12 @@
     },
     "DOWNLOAD_FAIL": {
       "slug": "download-failed",
-      "cause": "Result delivery needs attention — your generation may already be complete. fal.ai produced a result for this request and modelBridge could not download it. Completion or charge status has not been confirmed here. Check the existing request before starting another generation: Generate submits a new fal.ai request, which may be charged again.",
+      "cause": "modelBridge could not download the generated file. The output link may have expired or the connection was interrupted. This does not confirm the charge status.",
       "steps": [
-        "Use Check status above the Generate button — it works with the existing request and does not start a new one",
-        "Or open your fal.ai dashboard and download the result from your recent requests",
-        "A missing result, dashboard record or usage entry does not prove the original request failed or was free",
-        "Generate starts a new fal.ai request, which may be charged again — choose it knowing that, not as a free retry"
+        "Use Retry downloads if it is shown, or Check status, to recover the existing request without submitting a new generation",
+        "Check your connection and available disk space, or open the original request on your fal.ai dashboard",
+        "A missing result or usage entry does not prove that the original request failed or was free",
+        "Generate starts a new fal.ai request, which may be charged again"
       ],
       "externalLinks": [
         {
@@ -169,11 +169,11 @@
     },
     "ACCESS_SCOPE": {
       "slug": "insufficient-scope",
-      "cause": "API keys can be scoped to specific permissions. The key saved in modelBridge is missing the scope required by this model.",
+      "cause": "A fal.ai key can be made with limited permissions. The key saved in modelBridge is not allowed to use this model.",
       "steps": [
         "Generate a new API key with full permissions on fal.ai",
         "Replace the key in Settings → API keys",
-        "If using a team key, ask your admin to grant the required scope"
+        "If you use a team key, ask your admin for a key with full access"
       ],
       "externalLinks": [
         {
@@ -186,7 +186,7 @@
       "slug": "invalid-api-key",
       "cause": "Your fal.ai API key is missing, expired, or was entered incorrectly.",
       "steps": [
-        "Open Settings → API keys in modelBridge",
+        "Open Settings → API keys in modelBridge.",
         "Delete the current key and paste a fresh one from fal.ai",
         "Click Save and try generating again"
       ],
@@ -204,7 +204,7 @@
         "Go to fal.ai billing and add funds",
         "Return to modelBridge and try again",
         "Check that your payment method is valid",
-        "If you've already added credits and still see this error, your account may need to be manually unlocked — contact fal.ai support"
+        "If you’ve already added credits and still see this error, your account may need to be manually unlocked — contact fal.ai support"
       ],
       "externalLinks": [
         {
@@ -222,7 +222,7 @@
       "slug": "rate-limited",
       "cause": "fal.ai enforces per-account request limits to protect model availability. The limit resets automatically after a short cooldown.",
       "steps": [
-        "Wait 30–60 seconds and try again",
+        "Wait 30-60 seconds and try again",
         "Avoid clicking Generate multiple times in quick succession"
       ],
       "externalLinks": [
@@ -244,39 +244,39 @@
     },
     "TIMEOUT": {
       "slug": "api-timeout",
-      "cause": "The generation took too long and fal.ai stopped waiting. This can happen with complex prompts or busy servers.",
+      "cause": "The generation took too long and fal.ai stopped waiting. This can happen with complex prompts or busy servers. Your settings are preserved.",
       "steps": [
         "Try again — timeouts are often temporary",
         "Try a shorter duration or simpler prompt",
-        "If the model is new, it may need time to warm up — try again in a minute"
+        "Check fal.ai status if the error persists"
       ],
       "externalLinks": [
         {
-          "label": "fal.ai Status",
+          "label": "fal.ai status",
           "url": "https://status.fal.ai"
         }
       ]
     },
     "SERVER_ERROR": {
       "slug": "server-error",
-      "cause": "The model's GPU worker crashed or returned an unexpected response. This is on fal.ai's side, not your input.",
+      "cause": "fal.ai’s servers returned an error. This happens when their infrastructure is under heavy load or undergoing maintenance. Your settings are preserved. Server-side failures typically do not affect your balance.",
       "steps": [
-        "Try again in a moment — server errors are usually temporary",
-        "If the error persists, the model may be experiencing issues",
-        "Try a different model as a workaround"
+        "Wait a moment, then try again",
+        "If it persists, the platform may be experiencing a wider outage",
+        "Check fal.ai status if the error persists"
       ],
       "externalLinks": [
         {
-          "label": "fal.ai Status",
+          "label": "fal.ai status",
           "url": "https://status.fal.ai"
         }
       ]
     },
     "PORT_CONFLICT": {
       "slug": "port-conflict",
-      "cause": "Another application is already using port 3000, which modelBridge needs for its local helper server.",
+      "cause": "Another app is already using the connection modelBridge needs for its background helper.",
       "steps": [
-        "Close other applications that may use port 3000 (e.g., other dev servers)",
+        "Quit other apps that might be using it, or restart Premiere Pro",
         "Restart Premiere Pro",
         "If the issue persists, restart your computer to free the port"
       ],
@@ -284,9 +284,9 @@
     },
     "MODEL_NOT_FOUND": {
       "slug": "model-not-found",
-      "cause": "Models on fal.ai can be removed, renamed, or replaced without notice. The endpoint this model was installed from no longer exists.",
+      "cause": "Models on fal.ai can be removed, renamed, or replaced without notice. The address this model was installed from no longer exists.",
       "steps": [
-        "Search for the model by name — it may have a new endpoint",
+        "Search for the model by name. It may have a new address",
         "Remove the model from your list and add the updated version",
         "Check the fal.ai model page for migration guidance"
       ],
@@ -308,13 +308,13 @@
       "externalLinks": [
         {
           "label": "Report a problem",
-          "url": "https://docs.modelbridge.app/troubleshooting/reporting-a-bug/"
+          "url": "https://docs.modelbridge.app/troubleshooting/reporting-a-bug/#how-to-send-one"
         }
       ]
     },
     "SCHEMA_FAIL": {
       "slug": "schema-failed",
-      "cause": "modelBridge could not load the model's configuration from fal.ai. The model's API schema may be temporarily unavailable.",
+      "cause": "modelBridge could not load this model's settings from fal.ai. They may be temporarily unavailable.",
       "steps": [
         "Try again in a moment",
         "Remove and re-add the model",
@@ -341,7 +341,7 @@
       "slug": "license-device-limit",
       "cause": "Your modelBridge license is already active on two computers — the most your plan allows.",
       "steps": [
-        "On the computer you no longer use, open Settings → Devices and release it",
+        "On the computer you no longer use, open Settings → Activations → Devices and release it",
         "Or release it in your Lemon Squeezy customer portal at app.lemonsqueezy.com/my-orders",
         "Then activate again on this computer"
       ],
@@ -379,7 +379,7 @@
     },
     "RESULT_NO_MEDIA_URL": {
       "slug": "no-media-in-result",
-      "cause": "fal.ai completed the generation but the response did not contain a downloadable media file. The model may have returned metadata or an unsupported output format.",
+      "cause": "fal.ai completed the generation but the response did not contain a downloadable media file. The model may have answered with text or numbers instead of a picture, video or sound.",
       "steps": [
         "Try generating again — this is sometimes a transient issue",
         "Try a different model",
@@ -394,11 +394,11 @@
     },
     "VALIDATION_DURATION": {
       "slug": "mask-duration",
-      "cause": "Video inpainting models require a mask video clip, not a still image. The mask was either a single frame or shorter than the model's minimum duration.",
+      "cause": "Video inpainting models require a mask video clip, not a still image. The mask was either a single frame or shorter than the model’s minimum duration.",
       "steps": [
         "Use the Draw Mask tool — it automatically creates a video mask at the correct duration",
         "If using a URL, make sure it points to a video file, not an image",
-        "Trim your mask clip to meet the model's minimum duration, then try again"
+        "Trim your mask clip to meet the model’s minimum duration, then try again"
       ],
       "externalLinks": []
     },
@@ -447,22 +447,22 @@
       "cause": "The audio clip is shorter than the minimum duration this model requires.",
       "steps": [
         "Use a longer audio clip",
-        "For voice cloning models, use at least 3–5 seconds of clear speech",
+        "For voice cloning models, use at least 3-5 seconds of clear speech",
         "Use a longer audio clip that meets the model's minimum duration, then try again"
       ],
       "externalLinks": []
     },
     "DOWNSTREAM_ERROR": {
       "slug": "external-service-error",
-      "cause": "A third-party service that this model depends on returned an error. This is not caused by your input.",
+      "cause": "A third-party service that this model depends on returned an error. This is not caused by your input. Your settings are preserved.",
       "steps": [
         "Try again in a few minutes",
         "If the issue persists, the model's external dependency may be experiencing an outage",
-        "Try a different model as a workaround"
+        "Check fal.ai status if the error persists"
       ],
       "externalLinks": [
         {
-          "label": "fal.ai Status",
+          "label": "fal.ai status",
           "url": "https://status.fal.ai"
         }
       ]
@@ -484,7 +484,7 @@
     },
     "INVALID_LORA_URL": {
       "slug": "invalid-lora-url",
-      "cause": "The model tried to load a LoRA (fine-tuning) weight file from a URL that could not be resolved.",
+      "cause": "The model tried to load a LoRA (fine-tuning) weight file from a URL that could not be resolved. This can happen if the LoRA was removed or the URL is incorrect.",
       "steps": [
         "If you provided a LoRA URL, check that it is correct and publicly accessible",
         "Try removing the LoRA URL and generating without it",
@@ -514,12 +514,22 @@
     },
     "PREMIERE_TIMEOUT": {
       "slug": "premiere-not-responding",
-      "cause": "Premiere Pro stopped answering while modelBridge was waiting on it, so the operation was cancelled rather than left hanging. The usual reason is a dialog box open somewhere in Premiere — an unsaved-changes prompt, a missing-media warning, a codec message — which blocks scripting until someone clicks it. A very large project or import can also take longer than the time allowed. Nothing was sent to fal.ai and nothing was charged.",
+      "cause": "{{b:Premiere Pro stopped answering while modelBridge was waiting on it, so the operation was cancelled rather than left hanging.}} The usual reason is a dialog box open somewhere in Premiere — an unsaved-changes prompt, a missing-media warning, a codec message — which blocks scripting until someone clicks it. A very large project or import can also take longer than the time allowed. Check whether the operation already completed before retrying. An existing generation may already have incurred a charge; this local timeout does not establish its cost.",
       "steps": [
         "Look at Premiere Pro for an open dialog box and dismiss it — check other monitors, it can open behind the panel",
         "Try the same request again — this usually succeeds once Premiere is free",
         "If it was a large project open, save, or import, give it a moment and retry",
         "If Premiere stays unresponsive, restart it and reopen the modelBridge panel"
+      ],
+      "externalLinks": []
+    },
+    "PREMIERE_RESULT_UNCONFIRMED": {
+      "slug": "premiere-scripting-error",
+      "cause": "Premiere returned an answer that modelBridge could not read. The operation may already have changed the project or written a file; the unreadable reply proves neither success nor failure.",
+      "steps": [
+        "Inspect the affected timeline, project item or output file before doing anything again",
+        "Repeat the operation only after confirming that the requested change was not applied",
+        "If the outcome remains unclear, do not repeat the operation; send a report from Settings"
       ],
       "externalLinks": []
     },
@@ -535,38 +545,38 @@
     },
     "SERVER_STARTUP_TIMEOUT": {
       "slug": "model-cold-start",
-      "cause": "The model took too long to load into GPU memory. This happens when a model hasn't been used recently and needs a \"cold start.\"",
+      "cause": "The model took too long to load into GPU memory. This happens when a model hasn’t been used recently and needs a \"cold start.\"",
       "steps": [
         "Try again immediately — the model is likely still loading from your first attempt",
-        "If it fails again, wait 1–2 minutes and retry",
+        "If it fails again, wait 1-2 minutes and retry",
         "Try a more popular variant of the same model family"
       ],
       "externalLinks": [
         {
-          "label": "fal.ai Status",
+          "label": "fal.ai status",
           "url": "https://status.fal.ai"
         }
       ]
     },
     "CONTENT_POLICY_NO_MEDIA": {
       "slug": "no-output-generated",
-      "cause": "The model ran but produced no usable output. Unlike a content violation, the model wasn't blocked — it simply couldn't create anything from your input and settings.",
+      "cause": "The provider returned no usable output. Without an explicit reason, this does not establish moderation, a particular input problem or charge status.",
       "steps": [
         "Try a more specific, descriptive prompt",
         "Use a source image with more detail and contrast",
-        "Use moderate settings: guidance scale 7–12, standard aspect ratio, mid-range duration",
+        "Use settings supported by this model; check the existing request before generating again",
         "Try a different model"
       ],
       "externalLinks": []
     },
     "GENERATION_NOT_FOUND": {
       "slug": "generation-not-found",
-      "cause": "The generation you were waiting for can no longer be found on fal.ai. Requests expire on fal.ai’s side after a while — this usually happens when a run was left unfinished for a long time, for example across several days or restarts. The model itself is fine. How that run ended is what modelBridge cannot tell you: completion or charge status has not been confirmed.",
+      "cause": "{{b:The generation you were waiting for can no longer be found on fal.ai.}} The request record may have expired. This response alone does not show whether the request completed or was charged.",
       "steps": [
         "Open your fal.ai dashboard and check your recent requests — if the run finished, the result can be downloaded from there",
-        "Your cost history in modelBridge shows whether fal.ai reported any usage for this run",
-        "A missing dashboard record, usage entry or result does not prove the run never completed or was never charged — fal.ai expires old records",
-        "Generate starts a new fal.ai request, which may be charged again — choose it knowing that, not as a free retry"
+        "A missing dashboard record or usage entry does not prove the request failed or was free",
+        "Generate starts a new fal.ai request, which may be charged again",
+        "Your cost history in modelBridge shows whether fal.ai reported any usage for this run"
       ],
       "externalLinks": [
         {
@@ -577,7 +587,7 @@
     },
     "RUNNER_FAILURE": {
       "slug": "runner-failure",
-      "cause": "The fal.ai machine assigned to this generation crashed, or fal.ai could not get one at all. This happens on fal.ai’s side — usually when a model is at capacity — and it is not caused by your input or by modelBridge. The run did not finish.",
+      "cause": "{{b:The fal.ai machine assigned to this generation crashed, or fal.ai could not get one at all.}} This happens on fal.ai’s side — usually when a model is at capacity — and it is not caused by your input or by modelBridge. The run did not finish.",
       "steps": [
         "Try again — a fresh run gets a new server",
         "If it keeps happening, the model may be at capacity right now — wait a few minutes or try a different model",
@@ -592,11 +602,11 @@
     },
     "RESULT_FETCH_FAILED": {
       "slug": "result-not-retrieved",
-      "cause": "Your generation finished on fal.ai, but modelBridge could not download the result. The run itself succeeded — the file exists on fal.ai — so generating again would start a second, separately charged run of the same thing.",
+      "cause": "modelBridge could not retrieve the result response for an existing fal.ai request. Its completion and charge status may still be unconfirmed.",
       "steps": [
-        "Use Check status — it retries the download on the existing request and does not start a new one",
-        "Open your fal.ai dashboard — the file is under your recent requests and can be downloaded from there",
-        "A missing dashboard record or usage entry does not prove this run failed or was free — check your cost history too",
+        "Use Check status to check the existing request; it does not submit a new generation",
+        "If Retry downloads is shown, use it to retrieve the missing files from that request",
+        "Check the original request on your fal.ai dashboard; a missing dashboard or usage record does not prove it failed or was free",
         "Generate starts a new fal.ai request, which may be charged again"
       ],
       "externalLinks": [
@@ -608,7 +618,7 @@
     },
     "LICENSE_SEAT_TAKEN": {
       "slug": "license-in-use-on-another-computer",
-      "cause": "Another of your computers started generating, so this request was stopped before it reached fal.ai or Anthropic. Your plan covers two computers, and one generates at a time: the computer you start working on takes over, and the other one is told the next time it tries. Nothing is wrong with your subscription, nothing was sent to a provider and nothing was charged.",
+      "cause": "{{b:Another of your computers started generating, so this request was stopped before it reached fal.ai or Anthropic.}} Your plan covers two computers, and one generates at a time: the computer you start working on takes over, and the other one is told the next time it tries. Nothing is wrong with your subscription, nothing was sent to a provider and nothing was charged.",
       "steps": [
         "Press Generate (or send your message) again on this computer — that makes it the active one",
         "The other computer will see this same notice the next time it tries, and its next press takes the license back",
@@ -623,11 +633,11 @@
     },
     "LICENSE_RELEASED": {
       "slug": "activation-released",
-      "cause": "This computer’s activation was released, so the request was stopped before it reached fal.ai or Anthropic. An activation is released from your Lemon Squeezy account, from the Devices card on another computer, or by modelBridge support. Your subscription itself is unaffected; nothing was sent to a provider and nothing was charged.",
+      "cause": "{{b:This computer’s activation was released, so the request was stopped before it reached fal.ai or Anthropic.}} An activation is released from your Lemon Squeezy account, from the Devices card on another computer, or by modelBridge support. Your subscription itself is unaffected; nothing was sent to a provider and nothing was charged.",
       "steps": [
         "Open Settings → Subscription and paste your license key — it is in your Lemon Squeezy receipt email",
         "Re-entering the key on a computer that was released reuses its slot; it does not use up another one",
-        "If activation answers that the license is already active on two computers, release one you no longer use first — in Settings → Devices on that computer, or in your Lemon Squeezy customer portal"
+        "If activation answers that the license is already active on two computers, release one you no longer use first — in Settings → Activations → Devices on that computer, or in your Lemon Squeezy customer portal"
       ],
       "externalLinks": [
         {
@@ -635,6 +645,24 @@
           "url": "https://app.lemonsqueezy.com/my-orders"
         }
       ]
+    },
+    "IMPORT_FAILED": {
+      "slug": "import-failed",
+      "cause": "The generated file was downloaded but Premiere Pro could not import it. The file may be in a format Premiere does not support.",
+      "steps": [
+        "Try importing the file manually from the downloads folder",
+        "Check that the file is not corrupted by opening it in another application",
+        "If the model outputs an unsupported format, try a different model"
+      ],
+      "externalLinks": []
+    },
+    "VALIDATION_ONE_OF": {
+      "slug": "parameter-constraints",
+      "cause": "The selected value is not one of the options supported by this model.",
+      "steps": [
+        "Choose one of the supported options shown in the error."
+      ],
+      "externalLinks": []
     }
   }
 }
