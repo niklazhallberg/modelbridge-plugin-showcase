@@ -1,6 +1,6 @@
 {
-  "version": "1.9.2",
-  "updatedAt": "2026-09-24T05:48:42Z",
+  "version": "1.9.10",
+  "updatedAt": "2026-10-25T21:25:16Z",
   "minPluginVersion": "1.0.1",
   "enabled": true,
   "featured_models": [
@@ -22,24 +22,30 @@
   "files": {
     "error-docs": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-docs.json",
-      "sha256": "855a9bdab0c09621a6905f004751f3ae8046639db4f1a6df69034790a86c9a25",
-      "version": "1.8.2"
+      "sha256": "96193b489cd35f22fc116131f808a6bd5fdd45db21caabf337b70f8e5f998035",
+      "version": "1.8.8"
     },
     "error-copy": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/error-copy.json",
-      "sha256": "78a0d578e97ecdf176b42f991b2a8e34c35438a8d8b6a337c1685d8c00b219ff",
-      "version": "1.3.0"
+      "sha256": "e0cac418c1a49735a1269caca2963405cc26f58623027987e98f82199f1fabfc",
+      "version": "1.3.1"
     },
     "claude-models": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/claude-models.json",
-      "sha256": "b0da38b97a37e3a3344105675a0f1577a95f0aaca40efa4ad93a312503ecd705",
-      "version": "1.2.0",
+      "sha256": "f8ab3753cd0e6d34d84d45418543ea1cbc813fd804996797b042c340312eded7",
+      "version": "1.4.0",
       "enabled": false
     },
     "endpoint-migrations": {
       "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/endpoint-migrations.json",
       "sha256": "08943aaf4abf5f0c3ac6c6f8c513a34720c898046f947a71c49bd453891a2b89",
       "version": "1.0.0",
+      "enabled": true
+    },
+    "config": {
+      "url": "https://raw.githubusercontent.com/niklazhallberg/modelbridge-plugin-showcase/main/config.json",
+      "sha256": "89a03266b0fb7c4a55b43b34b560b0d485ba44ed1c81555f8aa6c2c8cf63afb6",
+      "version": "2",
       "enabled": true
     }
   }

@@ -65,7 +65,7 @@
       "shortMessage": "Unsupported audio format"
     },
     "feature_not_supported": {
-      "action": "This option is listed in the model's schema but isn't supported by fal.ai's backend. Try a different value.",
+      "action": "fal.ai doesn't support this option for this model yet. Choose a different value and try again.",
       "shortMessage": "Option not available"
     },
     "file_download_error": {
@@ -108,8 +108,8 @@
       }
     },
     "gpu_memory_exceeded": {
-      "action": "Try again — GPU allocation varies between attempts. A lower resolution or shorter duration may help.",
-      "shortMessage": "GPU memory exceeded"
+      "action": "Try again. If it happens again, use a lower resolution or a shorter duration.",
+      "shortMessage": "Too large to process"
     },
     "invalid_lora_url": {
       "action": "Check the LoRA URL or try generating without it.",
