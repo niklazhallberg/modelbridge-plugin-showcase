@@ -32,7 +32,7 @@ Property 3 is the one that gets audited. Properties 1 and 2 are design constrain
 
 ## Entitlement integrity
 
-Licences are verified server-side with signed snapshots. What that means for a
+Licences are verified server-side. What that means for a
 customer, stated as behaviour rather than mechanism:
 
 - **A licence covers two computers, one of them active at a time.**
@@ -71,13 +71,13 @@ screen, so two surfaces cannot disagree about the same customer.
 The panel is supported by a local backend process on the customer's machine.
 
 - It binds the loopback interface only and is not reachable from the network.
-- Write requests that arrive carrying a browser origin are rejected, which closes the
-  class of attack where a hostile web page open in any browser drives the local
-  process while the panel is running.
+- Every route except two read-only status checks requires the request to come from
+  the panel itself or to carry a private caller token kept on the machine. A request
+  carrying any other browser origin is refused, which closes the class of attack
+  where a hostile web page open in any browser drives the local process while the
+  panel is running.
 - Caller-supplied output names are stripped to a bare filename before any write, so
   no request can place a file outside its intended directory.
-- Unused routes are deleted rather than left dormant, on the principle that an
-  unreachable capability behind a local port is still a capability.
 
 ---
 
@@ -131,8 +131,8 @@ Stating this is part of the posture, not a caveat to it.
 
 - **Run-time enforcement is a client-side gate.** Generation runs directly from the
   customer's machine to their model provider under their own key, so no server of ours
-  sits in that path to enforce it. The gate fails closed, but it is a gate the machine
-  owner can reach. This is a documented limit, not an oversight.
+  sits in that path to enforce it. The gate fails closed. This is a documented limit,
+  not an oversight.
 
 - **The economics are deliberately unattractive.** Because customers supply their own
   provider keys, a circumvented installation consumes none of modelBridge's compute.
@@ -155,10 +155,8 @@ will confirm receipt and tell you what we intend to do about it.
 **In scope, in this repository.** The payloads published here are live infrastructure
 rather than documentation: installed panels fetch them, and the channel fails closed on
 an integrity mismatch, keeping the last verified copy or the one bundled in the
-extension. Write access to this
-repository is therefore the channel's trust root, and is protected accordingly.
-Findings that would widen that boundary are in scope, as are the data-access and
-erasure paths described in the privacy material.
+extension. Findings that would weaken that check are in scope, as are the data-access
+and erasure paths described in the privacy material.
 
 **In scope, elsewhere.** The plugin source is not in this repository, so an issue in the
 panel, the local backend or the Premiere Pro integration cannot be reproduced from here

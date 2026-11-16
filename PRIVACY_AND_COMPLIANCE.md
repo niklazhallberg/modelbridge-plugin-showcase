@@ -10,6 +10,8 @@ Privacy posture for modelBridge.app — data categories, recipients, and user co
 
 **Updated 2026-10-22:** Mobile Preview ships, as *Live preview in mobile*. This document described it as disabled pending review, and named a phone cookie that carried the installation ID. The phone link was redesigned before the feature was switched on: it is now a random link unrelated to your licence or your machine, and you can replace or stop it. §1, §2 and §4 describe what it sends.
 
+**Corrected 2026-11-16:** what a bug report carries (the installation ID has not been part of it since 2026-09-27; the error-log lines, the most recent run and the operating-system version were missing; "the prompt is never included" was too strong), what a satisfaction rating carries (a random identifier kept for the installation, which this document denied), and the size at which Enhance sends a still image.
+
 ---
 
 ## 1. Architecture Overview — Privacy by Design
@@ -22,15 +24,15 @@ modelBridge uses cloud services to support licence validation, catalog monitorin
 
 **Live preview in mobile** shows your results on a phone. After a generation you open *Live preview in mobile* under the result, scan the QR code with the phone's camera, and each new result appears on the phone.
 
-- **Nothing is sent until you open it.** Opening *Live preview in mobile* in Premiere is the opt-in, and the plugin's local backend refuses to send anything before that (plugin: `node/mobilePreviewChannel.js`, route `/mobile-preview/send` in `node/server.js`). Sending also needs an active subscription or trial.
+- **Nothing is sent until you open it.** Opening *Live preview in mobile* in Premiere is the opt-in, and the plugin's local backend refuses to send anything before that. Sending also needs an active subscription or trial.
 - **What is sent, per result:** the link to the result file hosted by fal.ai, whether it is an image, a video or audio, the model's name and category, and the time it was sent. Never the source footage, the project or the prompt. The media is not copied to modelBridge; the phone loads it from fal.ai.
 - **The link.** The QR code carries a random link made for this purpose only. It is not derived from your licence or your machine, and it can show results but cannot change them. Anyone who has the link sees the results sent to it, so treat it as private. **New link** replaces it: the old link stops working at once and what was sent to it is deleted. **Stop sharing** does the same and stops sending; opening the QR code again creates a new link. A link that receives no new result for 7 days expires on its own, with everything sent to it.
-- **NDA mode** blocks it entirely: nothing is sent while NDA mode is on (plugin: `js/mobilePreview.js`).
-- **One cookie, on the preview site only.** The phone's preview page sets one first-party cookie, `mb_feed`, used only to reopen the right page from a Home Screen shortcut. It is HttpOnly and Secure and lasts 7 days (preview service: `src/worker.js` in modelbridge-preview-service). The Premiere plugin itself sets no cookies.
+- **NDA mode** blocks it entirely: nothing is sent while NDA mode is on.
+- **One cookie, on the preview site only.** The phone's preview page sets one first-party cookie, `mb_feed`, used only to reopen the right page from a Home Screen shortcut. It is HttpOnly and Secure and lasts 7 days. The Premiere plugin itself sets no cookies.
 
 *Corrected 2026-10-22:* this paragraph described the feature as disabled, and named its cookie as `mb_install_id`, carrying the installation ID, with a year-long lifetime to be shortened on re-enablement. That design was replaced before the feature shipped; the installation ID is not part of the phone link or the cookie.
 
-One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session, a technical model packet (the selected model, its settings and the properties of the selected media — never the media itself or its path), the product's own state (plugin and backend version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and your installation's ID (never the licence key itself), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt is therefore never included, and nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
+One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session and up to 25 recent lines of the panel's error log, a technical model packet (the selected model and its field definitions, the request ID, status and settings of the most recent run of that model, and the properties of the selected media — never the media itself or its path), the product's own state (plugin, Premiere and backend version, the operating system and its version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and the payment provider's activation ID for this computer (never the licence key itself, and since 2026-09-27 not your installation's ID), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt field is therefore not attached; log lines are filtered for known patterns, which is not a guarantee that no prompt text appears in one. Nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
 
 **One model outside this architecture sees your prompt.** The ✨ Enhance button next to a prompt field sends that prompt — and, when media is attached, up to four sampled frames of it — to `fal-ai/any-llm`, which runs it on **Google's `gemini-2.5-flash-lite`**. It runs on your own fal.ai key and your own fal.ai credit, and only when you press the button. The full flow, including when Anthropic is used instead, is in §4.
 
@@ -157,7 +159,7 @@ The scope is the heading, and it is deliberate. Several of these travel to the t
 - *"No fingerprinting."* Removed because the identifier used for optional usage measurement does not support that absolute claim. The customer-facing privacy policy describes the identifier and the controls over it.
 - *"No hardware identifier."* Removed because the installation identifier is derived from the device. The raw machine identifier does not leave the device.
 
-One thing does reach us because you send it: a bug report (see §1). It carries your message, any contact details you type, the last three error messages, a model packet, the product's own state, your licence key's ID and your installation's ID, and any screenshots — and, since 2026-09-20, it has no preview step and no prompt tick-box, so the prompt is never included and nothing else can be struck.
+One thing does reach us because you send it: a bug report (see §1). It carries your message, any contact details you type, the last three error messages and recent error-log lines, a model packet, the product's own state, your licence key's ID and the payment provider's activation ID, and any screenshots — and, since 2026-09-20, it has no preview step and no prompt tick-box, so the prompt field is not attached (log lines are filtered for known patterns) and nothing else can be struck.
 
 ---
 
@@ -184,15 +186,19 @@ security information. A retention period elapsing is not the same thing as a pri
 request being fulfilled, which is why the two are described separately. The
 customer-facing privacy policy holds the current periods.
 
-### A rating cannot be looked up, and that is the same fact as its unlinkability
+### A rating cannot be looked up by licence, and that is the same fact as its unlinkability
 
-A satisfaction rating is not submitted with information that identifies you or your
-licence, so there is nothing to look one up by, and a licence-based request cannot
-reach it. A specific comment can be removed by quoting its wording to
+A satisfaction rating is not submitted with your name, your email or your licence. It
+carries a random identifier kept for the installation, so that two answers from one
+install can be told apart, together with the score, an optional comment, the number of
+generations run, the time, and the plugin, Premiere and operating-system versions. The
+identifier is not linked to your licence or account, so a licence-based request cannot
+reach a rating. A specific comment can be removed by quoting its wording to
 info@modelbridge.app.
 
 This is a consequence of the design rather than a shortfall in it: the property that
-keeps an answer unlinkable is the property that makes it unfindable.
+keeps an answer unlinked from your licence is the property that makes it unfindable
+through one.
 
 ### Data requests and erasure
 
@@ -243,9 +249,9 @@ customer-facing privacy policy is the governing description.
 | **Google** (via fal.ai) | The model that runs Enhance — `google/gemini-2.5-flash-lite`, reached through `fal-ai/any-llm` | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached as part of fal.ai's `any-llm` endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
 | **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **paths as follows**: media paths and the project file's own path are replaced by session handles at a single choke point, while a path you type into the chat yourself, anything inside raw XMP and the candidate paths of a disk search for an offline file travel as written (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
 | **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata, and public facts about a model's creator — no user content | No user PII processed |
-| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating, which carries no identifier of any kind and cannot be traced to an account | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
+| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating. A rating carries a random installation identifier and is not linked to a licence or account (§3) | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
-| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and your installation's ID, the model, product-state and media-property context, the three recent error messages, and attached screenshots with their original filenames. This flow does not send prompts, generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor — characterisation and DPA status pending legal review |
+| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and the payment provider's activation ID, the model, product-state and media-property context, the three recent error messages and the filtered error-log lines, and attached screenshots with their original filenames. This flow does not attach the prompt field, and does not send generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor — characterisation and DPA status pending legal review |
 
 ### fal.ai Data Flow Note
 
@@ -266,13 +272,17 @@ differ:
 What travels: the prompt text as typed; the model's display name and category; the
 configured duration, aspect ratio, resolution or image size; and, when media is attached,
 at most four images from at most three media slots — up to two sampled frames per video,
-long edge 1092 px, sent inline in the request body rather than as links. Each image is
+long edge 1092 px; a still image as it is when the file is 5 MB or smaller, and otherwise
+scaled down to a long edge of 1568 px (a HEIC still is always converted to JPEG at no
+more than that size). All are sent inline in the request body rather
+than as links. Each image is
 labelled by its slot role and field name, for example `[start (image_url)]`. **No
 filenames, no file paths and no project data are included.** NDA mode strips the frames and
 forces the text-only rewrite. The request needs an active subscription and a fal.ai key,
 spends your own fal.ai credit (or, on the Anthropic branch, your Anthropic credit, on
 Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21: this paragraph
-gave the frame size as 1568 px; frames are sent at 1092 px.)*
+gave the frame size as 1568 px; frames are sent at 1092 px. Corrected 2026-11-16: 1092 px
+applies to video frames only; the size of a still image is now stated separately.)*
 
 Some provider-specific processing disclosures are not yet surfaced at every in-product
 decision point. Improving that transparency is tracked product work.

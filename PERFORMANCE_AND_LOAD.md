@@ -22,8 +22,9 @@ produce from the hardware we have.
 
 **Figures measured 2026-09-01** against a live panel over the Chrome DevTools
 Protocol, unless a row says otherwise. Two figures are carried forward from an
-internal audit of 2026-08-30 and say so where they appear. **Every cadence and
-code path described here was re-checked against the source on 2026-10-21**; the
+internal audit of 2026-08-30 and say so where they appear. **Most cadences and
+code paths described here were re-checked against the source on 2026-10-21. That
+pass was not complete**, and a row corrected after it carries its own date. The
 measured timings were not re-taken that day, and where the code has moved since
 they were taken, the row says so.
 
@@ -136,17 +137,24 @@ immediately beforehand, and each model's pricing timestamp read before and after
 schema fetch fired on any of the three switches. The form you see on a returning
 model is rendered from a document already on the machine.
 
-The one call that does go out is a pricing refresh, once per model per 24 hours,
-and only for models not covered by curated pricing. **It needs to go.** A rate
+The one call that does go out is a pricing refresh, once per model per 24 hours.
+**That call is necessary.** A rate
 can change on the provider's side with nothing in the payload announcing it, and
 a stale rate is not a cosmetic problem in a product whose entire cost display is
 `quantity × rate`: it produces a confidently wrong number, which is worse than no
-number. The refresh is non-blocking, it is skipped entirely where curated data
-already covers the model, and a failed or rate-limited response does not count as a
-refresh — otherwise one throttled answer would suppress the next attempt for a
-full day.
+number. The refresh is non-blocking, and a failed or rate-limited response does
+not count as a refresh — otherwise one throttled answer would suppress the next
+attempt for a full day.
 
-On the 67-model reference install used for these measurements, 5 models had
+**What has moved since.** The table above describes the 2026-09-01 build, in
+which a model with curated pricing was never re-fetched. Since 2026-09-05 those
+models are refreshed on the same terms as the rest — one pricing request per
+model per 24 hours on selection — so that the unit and rate used for metering
+stay current. The zero-request row for curated pricing therefore holds only
+inside the 24-hour window, and the count of 31 below would be higher. Neither
+was re-measured.
+
+On 2026-09-01, on the 67-model reference install used for these measurements, 5 models had
 curated pricing and 31 had pricing older than 24 hours, so 31 would each fire one
 request on their next selection. That is the intended steady state, not a defect.
 
@@ -163,8 +171,10 @@ making somebody answer more often than the product actually needs.
 | Path | Volume | Cadence | Backoff |
 |---|---|---|---|
 | **Polling a running generation** | **mean 37.2 requests per generation** (median 20, p90 92, longest observed 377) | stepped: fast for the first half-minute of a run, then slower in two further steps | Yes — explicit, in the shipping source |
-| Polling a handed-off generation | — | stepped down over the first five minutes, then a steady slow cadence; no time limit — it ends when fal.ai returns a result or an explicit failure, or the editor cancels | Yes |
-| Catalogue synchronisation | a few dozen requests per cycle, paginated | **a few times a day** | n/a — the pointer advances only on success, so it can be slower, never faster |
+| Polling a handed-off generation | — | stepped down over the first five minutes, then a steady slow cadence; no limit on how long a run may take — the watch ends on a result, an explicit failure, a cancel, or several unbroken minutes without contact; in that last case the run stays recoverable and the editor can check its status | Yes |
+| Catalogue synchronisation (our worker, once for all customers) | a few dozen requests per cycle, paginated | **a few times a day** | n/a — the pointer advances only on success, so it can be slower, never faster |
+| Catalogue read by each install's local backend | a few dozen requests per read, paginated | only when the panel asks for the catalogue and the install's own copy is older than 20 minutes; a fresher copy is answered from disk | n/a — one read at a time per install; panel opens that coincide share it |
+| Installed-model access check | at most 1 schema read per installed model per 24 h | on selection, when the model's last check is older than 24 h | none |
 | Platform health probe | 1 | every 5 min while the panel is visible | none |
 | API key validity probe | 1 | once per panel start | n/a |
 | Pricing | 1 per model per 24 h on selection | on demand | pacing only |
@@ -190,7 +200,11 @@ catalogue changes a handful of times a day and nothing in the product degrades
 when a new model is visible a few hours late: the cost of that freshness is a
 badge count and a "new models" chip being briefly behind. A cycle is a few dozen
 requests against a ~1,300-model catalogue, a few times a day, for the whole
-customer base — not per customer.
+customer base — the worker's sync is not per customer. The two rows below it in
+the table are per install: each install's local backend also reads fal.ai's
+model list itself when its own copy is older than 20 minutes, and checks access
+to an installed model at most once a day. That load grows with the number of
+installs.
 
 **One probe we know is wasteful, and have not yet fixed.** The 5-minute platform
 health check fetches a full OpenAPI document and reads only the HTTP status code
@@ -222,6 +236,8 @@ and we are not publishing arithmetic dressed as observation.
 
 Agent Mode runs on the editor's own Anthropic key. **Method:** 1,975 real agent
 turns recorded by the product between 2026-05-12 and 2026-08-30, all on Haiku 4.5.
+Haiku 4.5 was the default model until 2026-10-08. Token counts and dollar amounts
+below describe that model and have not been re-measured.
 
 | Per turn | Median | Mean | p90 |
 |---|---|---|---|
@@ -235,17 +251,20 @@ turns recorded by the product between 2026-05-12 and 2026-08-30, all on Haiku 4.
 | Prefix delivered (read + written) | 108.1 M tokens |
 | **Cache hit ratio** | **84.5 %** |
 
-**A median turn carries 47,495 tokens of prefix to deliver 370 tokens of new
-content.** The prefix is the always-on instructions plus every tool schema, and all of
-them go out on every turn regardless of what the turn is about.
-That ratio is the honest headline, and it is why the caching is not optional:
+**A median turn carried 47,495 tokens of prefix to deliver 370 tokens of new
+content.** In the measured period the prefix was the always-on instructions plus
+every tool schema, and all of them went out on every turn regardless of what the
+turn was about. Since 2026-09-14 tool schemas are loaded when a turn needs them,
+so the prefix measured here is not the one the current build sends.
+That ratio is the honest headline for the measured period, and it is why the
+caching is not optional:
 
 - Every cache breakpoint the API offers is in use.
 - The volatile part of the prompt is kept out of the cached blocks. It was not
   always: one changing value sat inside a cached block and made a breakpoint
   structurally unreachable, so nearly every turn re-tokenised the whole
   conversation at full price. The breakpoint existed and could never hit.
-- 84.5 % is the evidence it works now.
+- 84.5 % over the measured period is the evidence that the fix works.
 
 **A correction we shipped on 2026-09-01.** Cache writes were priced at 1.25× the
 base input rate — the 5-minute rate — while every one of our four cache markers
