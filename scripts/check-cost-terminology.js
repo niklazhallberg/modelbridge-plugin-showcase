@@ -33,18 +33,26 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
-var os = require('os');
 
 var ROOT = path.resolve(__dirname, '..');
 var EXCLUDE_RE = /(^|\/)(node_modules|\.git)(\/|$)/i;
 
 // ---- Parity: the vendored list must equal the plugin source, where visible ----
 var VENDORED = path.join(__dirname, 'vendor', 'costTerms.js');
-var SOURCE = process.env.MB_COSTTERMS_SOURCE || path.join(
-  os.homedir(),
-  'Library/Application Support/Adobe/CEP/extensions/com.fittoframe/js/shared/costTerms.js'
-);
-if (fs.existsSync(SOURCE)) {
+// Where the source lives is told, not guessed: MB_COSTTERMS_SOURCE names the file,
+// or MB_PLUGIN_ROOT names the plugin checkout (the same variable the docs site's
+// guard reads). A hardcoded install path was here until 2026-11-16; the folder it
+// named no longer exists, so the comparison was skipped on every machine.
+var SOURCE = process.env.MB_COSTTERMS_SOURCE || (process.env.MB_PLUGIN_ROOT
+  ? path.join(process.env.MB_PLUGIN_ROOT, 'js', 'shared', 'costTerms.js')
+  : null);
+if (SOURCE && !fs.existsSync(SOURCE)) {
+  // A source that was named and is not there is a broken setup, not CI.
+  console.error('\nCost-terminology guard FAILED — the plugin source named for the parity check does not exist:');
+  console.error('  ' + SOURCE + '\n');
+  process.exit(1);
+}
+if (SOURCE) {
   var vendoredBytes = fs.readFileSync(VENDORED);
   var sourceBytes = fs.readFileSync(SOURCE);
   if (!vendoredBytes.equals(sourceBytes)) {
@@ -56,9 +64,9 @@ if (fs.existsSync(SOURCE)) {
     process.exit(1);
   }
 } else {
-  // CI has no plugin checkout — the vendored copy is used as-is here, and the
-  // parity check runs at commit time on the machine where drift can be minted.
-  console.log('costTerms parity: source not present (CI?) — vendored copy used unverified here; parity is enforced by the pre-commit hook where both repos exist.');
+  // CI has no plugin checkout — the vendored copy is used as-is there. On a machine
+  // that has the plugin checkout, set MB_PLUGIN_ROOT so the comparison runs.
+  console.log('costTerms parity: NOT CHECKED — no plugin source named. Set MB_PLUGIN_ROOT to the plugin checkout to compare the vendored list with its source.');
 }
 
 var CHECKS = require(VENDORED).CHECKS;

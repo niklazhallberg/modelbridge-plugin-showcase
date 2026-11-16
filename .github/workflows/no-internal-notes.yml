@@ -8,8 +8,8 @@ name: No internal notes in OTA payloads
 # see, only a disclosure. So it needs a check of its own.
 #
 # Scope is derived from the manifest, never hardcoded: a payload declared
-# tomorrow is covered the moment it is declared. config.json is the one
-# addition, by name, because panels fetch it outside the manifest.
+# tomorrow is covered the moment it is declared. config.json is also added by
+# name, as a backstop: it has been declared in the manifest since 2026-10-24.
 
 on:
   push:
@@ -41,8 +41,8 @@ jobs:
               name = (spec.get('url') or '').rsplit('/', 1)[-1]
               if name and os.path.exists(name):
                   targets.append(name)
-          # Fetched by installed panels from a hardcoded URL, never declared in
-          # the manifest — so the loop above cannot reach it.
+          # Backstop: config.json is declared in the manifest, so the loop above
+          # normally reaches it; this keeps it covered if that entry is removed.
           if os.path.exists('config.json') and 'config.json' not in targets:
               targets.append('config.json')
 

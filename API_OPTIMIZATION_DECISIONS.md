@@ -102,8 +102,8 @@ inverts at that point.
 **Re-checked 2026-10-21.** The decision stands, and so do findings 2–4. One
 detail of the storage path changed on this date: a storage upload is no longer
 cut off by a fixed clock. The backend now hands the client library a fetch that
-watches the upload's progress and gives up only when nothing has moved for 30
-seconds, and the panel follows that progress instead of timing the request
+watches the upload's progress and gives up only when nothing has moved for a short
+while, and the panel follows that progress instead of timing the request
 itself. So a slow upload of a large clip completes as long as it keeps moving.
 The bytes still go straight to fal's storage, outside any gateway's base URL.
 Nothing in this changes the gateway arithmetic above.
