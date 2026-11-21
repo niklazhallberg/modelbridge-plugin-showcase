@@ -1,7 +1,7 @@
 {
-  "version": "1.9.10",
+  "version": "1.9.11",
   "updatedAt": "2026-10-25T21:25:16Z",
-  "minPluginVersion": "1.0.1",
+  "minPluginVersion": "1.0.0",
   "enabled": true,
   "featured_models": [
     "fal-ai/flux/dev",
