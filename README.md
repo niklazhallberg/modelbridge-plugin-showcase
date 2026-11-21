@@ -6,7 +6,7 @@
 
 Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
-- **Over 1,200 fal.ai image, video and audio models**, linked into Premiere (1,235 in the live catalog on 2026-11-16, [live catalog ↗](https://docs.modelbridge.app/models/available-models/))
+- **About 1,200 fal.ai image, video and audio models**, linked into Premiere (1,190 in the live catalog on 2026-11-21, [live catalog ↗](https://docs.modelbridge.app/models/available-models/))
 - **New models arrive on their own, controls already built.** modelBridge syncs with fal.ai several times a day, and every model's sliders, dropdowns and media inputs are generated from its own spec. No plugin update, no per-model code
 - **Your own fal.ai key, no markup.** You pay fal.ai directly at its published rates
 - **Optional Agent Mode, powered by Claude**, on your own Anthropic key
@@ -23,7 +23,7 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 
 **Two automatic systems compound.** New models arrive on their own — modelBridge watches fal.ai several times a day, and the panel's news banner tells you when new ones are ready. And every one of those new models arrives with its input fields already built, generated from its schema at runtime, so it's ready to try inside your Premiere project as soon as you see it in the panel. You don't update, you don't configure, you don't wait. Bridging the gap between imagination and execution.
 
-That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,235 models in the live catalog on 2026-11-16. Every model is listed by category under [Available models ↗](https://docs.modelbridge.app/models/available-models/) in the modelBridge documentation, refreshed several times a day.
+That's how one plugin keeps up with the whole fal.ai catalogue in these categories — 1,190 models in the live catalog on 2026-11-21. Every model is listed by category under [Available models ↗](https://docs.modelbridge.app/models/available-models/) in the modelBridge documentation, refreshed several times a day.
 
 **From a fal.ai launch to your timeline:**
 
@@ -36,7 +36,7 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 - **Automatic growth.** A cloud service syncs the fal.ai catalog several times a day. New models are detected, verified, and published to your panel with no plugin release, no action from you
 - **Automatic input rendering.** Every model's parameters — sliders, dropdowns, media pickers, toggles — are built from the model's own spec at runtime. No per-model UI code. New models render correctly on first open
 - **Live in-panel notification.** New models appear in an in-panel news banner with a one-click Add. From "just went live on fal.ai" to "running in your project" in a couple of clicks
-- **Adaptive fallbacks.** When a model is live but its spec stays unpublished, modelBridge keeps checking, and after about two days offers it with a prompt-only interface. That interface upgrades to the full form once the spec appears — the next time the panel starts or you open the model
+- **Adaptive fallbacks.** When a model is live but its spec stays unpublished, modelBridge keeps checking and, after repeated checks, offers it with a prompt-only interface. That interface upgrades to the full form once the spec appears — the next time the panel starts or you open the model
 
 > "When the next breakthrough model launches on fal.ai, you won't be waiting for a plugin update. You'll be generating with it."
 
@@ -244,13 +244,13 @@ model or a code change from reaching an editor as a broken form or a refused run
 Figures measured 2026-10-21; the full write-up, with the script or workflow behind
 each claim, is in [RELIABILITY.md](RELIABILITY.md).
 
-- **The catalog is verified on a schedule.** A CI job twice a day fetches every
-  model's schema and classifies it with the same check the panel runs on install:
+- **The catalog is verified on a schedule.** A CI job twice a day checks every
+  model in the catalog with the same check the panel runs on install:
   1,225 verified, 69 offered through a prompt interface while their schema is
   unavailable, 8 blocked because their output can never reach Premiere.
 - **Every field of every model is run through every layer.** A sweep sends 90,738
   candidate values for 11,919 fields of 1,289 models through each layer of the
-  product, and the build fails when the panel and the backend disagree about a value.
+  product, and any new disagreement between the panel and the backend raises an alert.
   Its first run found 4,231 such rows, and the fixes that followed left 9.
 - **One resolver per question, not one rule per model.** Enum, numeric and
   conditional-requirement answers each come from one shared resolver that every
@@ -345,7 +345,7 @@ This repository is written for engineers evaluating the integration, not for edi
 ## Links
 
 - **[Documentation ↗](https://docs.modelbridge.app/what-is-modelbridge/)** — 90+ pages: guides, features, Academy, troubleshooting, legal
-- **[Live catalog ↗](https://docs.modelbridge.app/models/available-models/)** — over 1,200 models, refreshed several times a day
+- **[Live catalog ↗](https://docs.modelbridge.app/models/available-models/)** — about 1,200 models, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[Built for reliability](RELIABILITY.md)** — catalog verification, the interpretation sweep, guards and deploy provenance, with measured figures
 - **[CEP → UXP migration](UXP_MIGRATION.md)** — what is measured, what cannot be adapted, and the open questions to Adobe

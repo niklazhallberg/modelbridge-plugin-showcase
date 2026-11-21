@@ -34,7 +34,7 @@ modelBridge uses cloud services to support licence validation, catalog monitorin
 
 One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session and up to 25 recent lines of the panel's error log, a technical model packet (the selected model and its field definitions, the request ID, status and settings of the most recent run of that model, and the properties of the selected media — never the media itself or its path), the product's own state (plugin, Premiere and backend version, the operating system and its version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and the payment provider's activation ID for this computer (never the licence key itself, and since 2026-09-27 not your installation's ID), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt field is therefore not attached; log lines are filtered for known patterns, which is not a guarantee that no prompt text appears in one. Nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
 
-**One model outside this architecture sees your prompt.** The ✨ Enhance button next to a prompt field sends that prompt — and, when media is attached, up to four sampled frames of it — to `fal-ai/any-llm`, which runs it on **Google's `gemini-2.5-flash-lite`**. It runs on your own fal.ai key and your own fal.ai credit, and only when you press the button. The full flow, including when Anthropic is used instead, is in §4.
+**One model outside this architecture sees your prompt.** The ✨ Enhance button next to a prompt field sends that prompt — and, when media is attached, up to four sampled frames of it — to a language-model endpoint on fal.ai, which runs it on **a Google Gemini model**. It runs on your own fal.ai key and your own fal.ai credit, and only when you press the button. The full flow, including when Anthropic is used instead, is in §4.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -246,7 +246,7 @@ customer-facing privacy policy is the governing description.
 | **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, network information, and — only after you open *Live preview in mobile* — the preview links it sends (the link to each result on fal.ai's servers, its media type, the model's name and category and the time sent, kept at most 7 days after the last send) | Cloudflare DPA (standard) |
 | **LemonSqueezy** (Lemon Squeezy Inc.) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
 | **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
-| **Google** (via fal.ai) | The model that runs Enhance — `google/gemini-2.5-flash-lite`, reached through `fal-ai/any-llm` | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached as part of fal.ai's `any-llm` endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
+| **Google** (via fal.ai) | The model that runs Enhance — a Google Gemini model, reached through fal.ai's language-model endpoint | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached through fal.ai's language-model endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
 | **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **paths as follows**: media paths and the project file's own path are replaced by session handles at a single choke point, while a path you type into the chat yourself, anything inside raw XMP and the candidate paths of a disk search for an offline file travel as written (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
 | **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata, and public facts about a model's creator — no user content | No user PII processed |
 | **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating. A rating carries a random installation identifier and is not linked to a licence or account (§3) | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
@@ -266,23 +266,19 @@ differ:
 | When you press Enhance | Who reads the prompt and any frames |
 |---|---|
 | Media attached **and** an Anthropic key is present | Anthropic, on your own Anthropic key. Google is not involved — unless Anthropic returns nothing or errors, in which case the request falls through to the row below rather than failing |
-| Media attached, **no** Anthropic key (the ordinary case — that key is only needed for Agent Mode) | `fal-ai/any-llm/vision` on your own fal.ai key, running **Google's `gemini-2.5-flash-lite`** |
-| **No media attached** — a text-only rewrite | `fal-ai/any-llm` on your own fal.ai key, running the same Google model |
+| Media attached, **no** Anthropic key (the ordinary case — that key is only needed for Agent Mode) | fal.ai's vision language-model endpoint on your own fal.ai key, running **a Google Gemini model** |
+| **No media attached** — a text-only rewrite | fal.ai's language-model endpoint on your own fal.ai key, running the same Google model |
 
 What travels: the prompt text as typed; the model's display name and category; the
 configured duration, aspect ratio, resolution or image size; and, when media is attached,
-at most four images from at most three media slots — up to two sampled frames per video,
-long edge 1092 px; a still image as it is when the file is 5 MB or smaller, and otherwise
-scaled down to a long edge of 1568 px (a HEIC still is always converted to JPEG at no
-more than that size). All are sent inline in the request body rather
-than as links. Each image is
-labelled by its slot role and field name, for example `[start (image_url)]`. **No
+at most four images — a few sampled frames per video, and stills, each downscaled to a
+bounded size before sending. All are sent inline in the request body rather than as
+links. Each image is labelled by its role in the form (for example, the start frame). **No
 filenames, no file paths and no project data are included.** NDA mode strips the frames and
 forces the text-only rewrite. The request needs an active subscription and a fal.ai key,
 spends your own fal.ai credit (or, on the Anthropic branch, your Anthropic credit, on
-Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21: this paragraph
-gave the frame size as 1568 px; frames are sent at 1092 px. Corrected 2026-11-16: 1092 px
-applies to video frames only; the size of a still image is now stated separately.)*
+Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21 and 2026-11-16: the
+frame sizes this paragraph stated were wrong; the sizes are bounded as described.)*
 
 Some provider-specific processing disclosures are not yet surfaced at every in-product
 decision point. Improving that transparency is tracked product work.
@@ -293,28 +289,19 @@ decision point. Improving that transparency is tracked product work.
 
 ### Event Taxonomy (editorial events)
 
-| Event | Trigger | Metadata |
-|---|---|---|
-| `gen_start` | User clicks Generate | Model ID |
-| `gen_done` | Generation completes | Model ID, cost (USD), duration |
-| `gen_accept` | Result imported from preview | Model ID, count |
-| `gen_fail` | Generation fails | Model ID, failure source |
-| `gen_abandon` | User dismisses a result | Model ID, source |
-| `model_sel` | User selects a model | Model ID |
-| `dual_use` | User activates Dual Mode | Primary + secondary model IDs |
-| `dual_gen` | Dual Mode generation starts | Primary + secondary model IDs |
-| `search` | Category search performed | Category filter (no search text) |
-| `cat_browse` | Catalog browsed | Category |
-| `cost_view` | Costs tab opened | — |
-| `settings_change` | Settings changed | Setting key **and its new value** — so a privacy toggle reports its own position, including the one that enables this stream |
+Only while optional usage measurement is enabled, the panel sends a fixed set of
+editorial events. What they can carry, in full:
 
-Corrected 2026-09-24 in both directions: `gen_start` carries no category and `model_sel`
-no source, which this table claimed; `gen_done` also carries a duration, `gen_abandon` a
-source, `cat_browse` a category, and `settings_change` a value, which it did not. Three of
-the twelve — `dual_gen`, `cost_view` and `settings_change` — are emitted by the plugin and
-**dropped by the Worker's own switch**, so they are sent and not stored. (A fourth,
-`cat_browse`, was dropped the same way until the Worker began storing it; re-checked
-2026-10-21.)
+| Events about | Metadata |
+|---|---|
+| A generation — started, completed, failed, imported or dismissed | Model ID; on completion the cost (USD) and duration; on failure or dismissal, where it came from; on import, a count |
+| Choosing a model, and Dual Mode | Model ID, or the primary and secondary model IDs |
+| Browsing and searching the catalogue | The category filter — never the search text |
+| Opening Costs, and changing a setting | The setting's key **and its new value** — so a privacy toggle reports its own position, including the one that enables this stream |
+
+Corrected 2026-09-24 in both directions: the table had listed metadata some events do not
+carry and missed some they do. Some events the plugin emits are discarded by our service
+on receipt rather than stored (re-checked 2026-10-21).
 
 ### How measurements are aggregated
 
@@ -334,7 +321,7 @@ Agent Mode allows users to edit the Premiere Pro timeline via natural language c
 **What reaches Anthropic, as a rule rather than a list.** Two sentences govern every path, present and future:
 
 1. **The agent never sends images on its own initiative unless the user has allowed it.** One setting governs that — Settings → Privacy → "Timeline frames to the agent". With it off, no frame from your timeline or media goes to the agent by any path. It covers the frames that accompany a message while a clip is selected (3–12 depending on clip length, sent once per clip per conversation, and **asked before the first send** — nothing is sent until you answer) and the agent's ability to read the Generate tab's media card by itself, and, since 2026-10-21, a visual scan. NDA mode blocks it whatever you answered. With it off, the agent is told what is in the card — slot, role, filename, media type — and is not shown it, through the same coverage contract that stops it describing anything it did not see. One property worth knowing: the frames are sampled across the **whole source file**, not the part you trimmed into the timeline, so a three-second selection inside a long interview sends frames from across the whole interview.
-2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it — for an overview up to a hundred evenly spaced frames plus samples around detected scene changes, at most 300; for a search up to 600 — with a cost dialog above $0.08. It also needs the timeline-frames setting above: if you have not answered yet, the panel asks first, and with the setting off or NDA mode on, no scan runs; pressing Enhance on a prompt sends the media attached to that prompt, to Anthropic or to Google depending on the branch in §4.
+2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it — evenly spaced frames plus samples around detected scene changes, with a hard ceiling per scan — and a cost dialog before a larger scan runs. It also needs the timeline-frames setting above: if you have not answered yet, the panel asks first, and with the setting off or NDA mode on, no scan runs; pressing Enhance on a prompt sends the media attached to that prompt, to Anthropic or to Google depending on the branch in §4.
 
 *This is written as a rule because the previous version was an enumeration, and an enumeration of exceptions goes false the moment another tool learns to read the media card — which is exactly how it broke.*
 
@@ -342,7 +329,7 @@ Agent Mode allows users to edit the Premiere Pro timeline via natural language c
 
 **Paths: what is masked and what is not.** Until 2026-09-24 this section said source directories do not travel. That is true of the media path keys — `sourceFile`, `mediaPath` and `proxyPath` are swapped for an opaque session-scoped reference at a single choke point and resolved back locally. Since 2026-09-27 the project file's own path is handled the same way: it travels as a session handle, never as the absolute path, and the agent's exact-target checks compare handles. A path you type into the chat yourself travels as you wrote it, anything embedded in raw XMP text travels as written, and when you ask the agent to find an offline file on your disk, the candidate paths it finds (up to 20) travel as found. The narrow claim holds; the absolute one did not, so it has been replaced rather than qualified.
 
-**No conversation data collected — with one local exception.** modelBridge does not intercept, store, proxy, or log Agent Mode conversation content on any server of ours: no prompts, no Claude responses, no tool calls, no timeline edit commands. On your own disk there is one exception: when you ask the agent to watch a clip, the sampled frames, the absolute media path, the clip name, the prompt and the model's reply are written to `uploads/scan-logs/` in the plugin's data folder. Folders older than seven days are removed when the local backend next starts, so a log can outlive seven days on a machine where the backend keeps running. A generation triggered from Agent Mode emits the same anonymous generation events (`gen_start`, `gen_done`, `gen_fail`) as one started from the Generate button — subject to the same opt-in and NEVER_TRANSMIT rules. Agent Mode emits no events of its own to our servers; it does write to the local usage store, which is never transmitted.
+**No conversation data collected — with one local exception.** modelBridge does not intercept, store, proxy, or log Agent Mode conversation content on any server of ours: no prompts, no Claude responses, no tool calls, no timeline edit commands. On your own disk there is one exception: when you ask the agent to watch a clip, the sampled frames, the absolute media path, the clip name, the prompt and the model's reply are written to a scan-log folder in the plugin's data folder. Folders older than seven days are removed when the local backend next starts, so a log can outlive seven days on a machine where the backend keeps running. A generation triggered from Agent Mode emits the same anonymous generation events as one started from the Generate button — subject to the same opt-in, and the same fields that are never transmitted. Agent Mode emits no events of its own to our servers; it does write to the local usage store, which is never transmitted.
 
 **Customizable system instructions.** Users can configure custom system instructions for the Agent. These are stored locally only and included in requests sent directly to Anthropic's API. modelBridge infrastructure never sees them.
 

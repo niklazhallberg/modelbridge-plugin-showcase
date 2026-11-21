@@ -16,7 +16,7 @@ The cloud layer runs autonomously — detecting new models, verifying their sche
 
 ## Core Design Principles
 
-**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how 1,296 installable models (the panel's catalogue count, measured 2026-10-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
+**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how about 1,200 installable models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
@@ -32,46 +32,64 @@ The cloud layer runs autonomously — detecting new models, verifying their sche
 
 modelBridge continuously monitors the AI model ecosystem. When a provider launches a new model, the system detects it automatically — no one adds it by hand, and no plugin release is involved.
 
-**The cadence, stated rather than promised.** The cloud layer works through the catalogue in recurring passes — discover, validate, publish — several times a day. A scheduled check in CI reads every schema in the catalogue on top of that. A new model therefore has to be seen, then verified, then published, and what an editor sees adds a CDN hop and the panel's own catalogue cache. For a model whose schema verifies, that is same-day rather than same-hour, because the honest bound is the sum of those steps, not the interval of any one of them. A model whose schema is not published takes longer — see below.
+**The cadence, stated rather than promised.** The cloud layer works through the catalogue in recurring passes — discover, validate, publish — several times a day. A scheduled check in CI re-verifies the catalogue twice a day on top of that, re-reading any schema that is new or has changed. A new model therefore has to be seen, then verified, then published, and what an editor sees adds a CDN hop and the panel's own catalogue cache. For a model whose schema verifies, that is same-day rather than same-hour, because the honest bound is the sum of those steps, not the interval of any one of them. A model whose schema is not published takes longer — see below.
 
-**Two verifiers, one verdict.** Every model in the 11 supported categories is read by two independent verifiers: the cloud layer, and the scheduled CI check. Both fetch the model's OpenAPI schema and require a real input schema with concrete types. The CI check also reads the output schema and refuses a model whose output can never carry a file URL — a live stream, an id, a paragraph of text — because a supported category is not evidence about the output. When the two disagree, a model the cloud layer has verified stays available unless CI proves it cannot run; an inconclusive CI result never withdraws it. The verdict is one of four:
+**Independent verification, one verdict.** Every model in the 11 supported categories is verified more than once, by independent checks, before an editor is offered it. Verification requires a real input schema with concrete types, and refuses a model whose output can never carry a file — a live stream, an id, a paragraph of text — because a supported category is not evidence about the output. The checks are arranged so that an inconclusive result never withdraws a model that has already been verified; only proof that it cannot run does. The verdict is one of four:
 
 | Verdict | When | What the editor sees |
 |---|---|---|
 | **Verified** | the schema resolves with real inputs, and the output can carry media | listed in Browse with **Add**, announced in the news banner |
-| **Held back** | the model is listed on fal.ai but its schema cannot be read yet (not published, failed to expand, behind authentication) | not offered yet; re-checked automatically |
-| **Prompt interface** | still held back after repeated checks over about two days, still listed on fal.ai, and not behind authentication | listed with **Add**; installs as a prompt plus the media input its category implies (an image for image-to-video, none for text-to-image), and upgrades to the full form once the schema appears |
+| **Held back** | the model is listed on fal.ai but its schema cannot be read yet | not offered yet; re-checked automatically |
+| **Prompt interface** | still held back after repeated checks, and still live on fal.ai | listed with **Add**; installs as a prompt plus the media input its category implies (an image for image-to-video, none for text-to-image), and upgrades to the full form once the schema appears |
 | **Blocked** | proven incompatible: no inputs, an output that can never carry a file, or excluded by hand | never offered |
 
-A typed search can also reach a model neither verifier has seen yet. Its schema is then checked at the moment the editor presses Add, and the same refusals apply there: the panel itself re-reads the schema, so no verdict from the cloud is the last word.
+A typed search can also reach a model no scheduled check has seen yet. Its schema is then checked at the moment the editor presses Add, and the same refusals apply there: the panel itself re-reads the schema, so no verdict from the cloud is the last word.
 
-**What happens at Add.** If the model has a hand-tuned adapter, the adapter is used and no schema is fetched. Otherwise the schema is fetched live — fal.ai's queue API first, the platform API as a fallback, the last good copy if both are down — and every input is classified and rendered (see *The schema is the interface* below). A prompt-interface install happens only after the panel has itself confirmed that the schema is unavailable; a transient failure fails the add loudly rather than installing a degraded form.
+**What happens at Add.** If the model has a hand-tuned adapter, the adapter is used and no schema is fetched. Otherwise the schema is fetched live, with fallbacks so that a temporary API issue does not block the add, and every input is classified and rendered (see *The schema is the interface* below). A prompt-interface install happens only after the panel has itself confirmed that the schema is unavailable; a transient failure fails the add loudly rather than installing a degraded form.
 
 **What "no plugin update needed" covers.** Everything on the automatic path — new models, their parameters, the verdicts, the prompt interface and its upgrade — reaches an installed panel without a release. Hand-tuned adapters are panel code: a new one ships in a release, and an existing one can be switched off remotely.
 
 ```mermaid
+%%{init: {"theme": "base", "flowchart": {"curve": "basis", "padding": 20, "nodeSpacing": 36, "rankSpacing": 44, "htmlLabels": true, "wrappingWidth": 280}, "themeVariables": {"fontFamily": "Arial, Helvetica, sans-serif", "fontSize": "14px", "primaryColor": "#f6f8fa", "primaryTextColor": "#1f2328", "primaryBorderColor": "#d0d7de", "lineColor": "#8c959f", "clusterBkg": "transparent", "clusterBorder": "#8c959f", "titleColor": "#8c959f", "edgeLabelBackground": "transparent"}}}%%
 flowchart TD
-    A["fal.ai publishes a model"] --> B["Cloud layer detects it<br/>catalogue sync, every few hours"]
-    B --> C{"One of the 11<br/>supported categories?"}
-    C -->|No| X["Not listed"]
-    C -->|Yes| D["Two independent verifiers<br/>read its OpenAPI schema<br/>cloud layer + scheduled CI"]
-    D --> E{"Verdict"}
-    E -->|"Inputs resolve and the<br/>output can carry media"| F["Verified"]
-    E -->|"Schema not readable yet,<br/>model still live"| G["Held back and re-checked"]
-    E -->|"No inputs, or output<br/>can never carry media"| Y["Blocked, never offered"]
-    G -->|"Schema appears"| F
-    G -->|"Still unpublished<br/>after about two days"| P["Offered with a<br/>prompt interface"]
-    F --> H["Browse lists it with Add<br/>and the news banner announces it"]
-    P --> H
-    H --> I["Editor presses Add"]
-    I --> J{"Hand-tuned adapter<br/>for this model?"}
-    J -->|"Yes, a few models"| K["Adapter form<br/>ships with the plugin"]
-    J -->|No| L["Schema fetched live,<br/>every field classified,<br/>form generated at runtime"]
-    K --> M["Preflight checks the selected media<br/>against declared and learned limits"]
+    subgraph cloud["&nbsp;Cloud layer · runs on its own&nbsp;"]
+        direction TB
+        A["fal.ai publishes a model"] --> B["Catalogue sync picks it up<br/>several times a day"]
+        B --> C{{"In a supported category?"}}
+        C --> X["Outside scope<br/><i>not listed</i>"]
+        C --> D["Schema read and verified<br/>independently"]
+        D --> F["Verified<br/><i>inputs resolve, output can carry media</i>"]
+        D --> G["Held back<br/><i>schema not readable yet, re-checked</i>"]
+        D --> Y["Blocked<br/><i>proven unusable, never offered</i>"]
+        G -.-> F
+        G --> P["Prompt interface<br/><i>live but unpublished, upgrades itself later</i>"]
+    end
+    H["In the Premiere Pro panel<br/><i>listed in Browse with Add, announced in the news banner</i>"] --> I["Editor presses Add"]
+    I --> J{{"Hand-tuned adapter?"}}
+    J --> K["A few models<br/><i>tuned form ships with the plugin</i>"]
+    J --> L["Every other model<br/><i>form generated from the live schema</i>"]
+    K --> M["Preflight against declared<br/>and learned limits"]
     L --> M
-    M --> N["Generate, watch, download,<br/>import to the timeline"]
-    N --> O["A rejection teaches a limit,<br/>metered runs refine the estimate"]
+    M --> N["Generate, preview,<br/>import to the timeline"]
+    N --> O["Each run teaches<br/><i>limits, cost and timing</i>"]
     O -.-> M
+    F --> H
+    P --> H
+
+    classDef step fill:#f6f8fa,stroke:#d0d7de,stroke-width:1px,color:#1f2328
+    classDef ask fill:#ffffff,stroke:#8c959f,stroke-width:1px,color:#1f2328
+    classDef ok fill:#dafbe1,stroke:#4ac26b,stroke-width:1px,color:#116329
+    classDef wait fill:#fff8c5,stroke:#d4a72c,stroke-width:1px,color:#7d4e00
+    classDef alt fill:#ddf4ff,stroke:#54aeff,stroke-width:1px,color:#0550ae
+    classDef stop fill:#ffebe9,stroke:#ff8182,stroke-width:1px,color:#a40e26
+    classDef quiet fill:#f6f8fa,stroke:#d0d7de,stroke-width:1px,stroke-dasharray:4 3,color:#59636e
+    class A,B,D,H,I,M,N,O,K,L step
+    class C,J ask
+    class F ok
+    class G wait
+    class P alt
+    class Y stop
+    class X quiet
 ```
 
 ---
@@ -80,7 +98,7 @@ flowchart TD
 
 | | |
 |---|---|
-| Supported AI models | 1,296 installable models (measured 2026-10-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
+| Supported AI models | About 1,200 installable models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
 | Panel codebase | About 229,000 lines of JavaScript and CSS (counted 2026-10-23), plus the ExtendScript host layer and the local backend |
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | About 90 pages across guides, reference, Academy, and legal (counted 2026-10-21), plus a parameter index generated from the live catalogue |
@@ -113,9 +131,9 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Pricing.** Cost estimates draw on three sources only: fal.ai's official pricing API, a curated pricing table that ships with the plugin, and the editor's own metered history. Nothing is scraped, and no endpoint outside fal.ai's official API is asked about prices.
 
-**Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors (Format A) and infrastructure errors (Format B) — including `ctx` structured constraint data, error documentation URLs and the `X-Fal-Retryable` header. The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. Five semantic categories (INPUT_QUALITY, CREDITS_BILLING, NETWORK_RETRY, CONTENT_POLICY, DEVELOPER_BUG) drive consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
+**Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors and infrastructure errors — including `ctx` structured constraint data, error documentation URLs and the `X-Fal-Retryable` header. The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. A small set of semantic categories — input quality, credits and billing, network, content policy, and integration faults — drives consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
 
-**Resilience to API changes.** The schema-driven architecture absorbs changes in fal.ai's catalogue without code changes: a new model, and every parameter it declares, needs no release. Schema fetching falls back from the queue API to the platform API to the last good copy, so a temporary API issue never blocks the user. A renamed endpoint is migrated to its new id, and a retired one is confirmed absent from the catalogue before anything is removed.
+**Resilience to API changes.** The schema-driven architecture absorbs changes in fal.ai's catalogue without code changes: a new model, and every parameter it declares, needs no release. Schema fetching has layered fallbacks, so a temporary API issue never blocks the user. A renamed endpoint is migrated to its new id, and a retired one is confirmed absent from the catalogue before anything is removed.
 
 ### Consuming the fal.ai API in production
 
@@ -135,7 +153,7 @@ Most of a form derives cleanly — types, enums, numeric ranges, defaults, requi
 - **Composite inputs render as what they are.** Start and end frames, masks and reference sets are recognised and laid out as such; an `ImageSize | preset` union becomes a preset-or-custom size picker; a field is required only when its declared condition holds; and a media field nested inside a sub-form never counts as the model's main input.
 - **Nothing unusable is installed, and declared limits are honoured.** A model whose output schema can never carry a file URL is refused before the editor can install it. Media limits come from what the schema declares and from what a rejection has taught, and a learned limit never overrides a machine-readable one.
 
-Some things do not derive at all. 18 of the 1,497 schemas declare no inputs. Some constraints exist only as prose in field descriptions; the preflight reads the common phrasings of dimensions, aspect-ratio ranges and durations out of that prose, and what it cannot read is learned from the first rejection (see media constraints below). The hand-tuned adapters and the streamlined prompt-only interface described earlier exist for exactly the models where the automatic path cannot deliver the whole form.
+Some things do not derive at all. 18 of the 1,497 schemas declare no inputs. Some constraints exist only as prose in field descriptions; the preflight enforces what it can recognise there, and what it cannot is learned from the first rejection (see media constraints below). The hand-tuned adapters and the streamlined prompt-only interface described earlier exist for exactly the models where the automatic path cannot deliver the whole form.
 
 **A status word is not the whole status.** The queue API reports IN_QUEUE, IN_PROGRESS, COMPLETED, FAILED. The edge, measured live on 2026-08-15 from two real requests: a terminal failure can be reported on a status other than FAILED. One request was still reported as IN_PROGRESS two days after submission, with `inference_time: 0.0` and a runner-acquisition failure sitting in its `error` field the entire time; the other reported COMPLETED with `error_type: "runner_disconnected"` and no result URL. A consumer that reads "not terminal" as "still running" renders "Generating…" forever on the first and retries a result fetch forever on the second — which is what this plugin did before the measurement, and is the incident the following machinery comes from.
 
@@ -143,7 +161,7 @@ Some things do not derive at all. 18 of the 1,497 schemas declare no inputs. Som
 - **An unknown status renders as unknown, never as progress.** Status words map to progress stations through one fixed vocabulary, and a value outside it is shown as unknown rather than painted as motion (shipped 2026-08-16).
 - **"Generating" carries a freshness requirement.** A running generation that has gone too long without an understood response flips to an explicit checking state showing when contact was last confirmed. Progress is a claim backed by a recent, understood answer, not by the absence of a terminal one.
 - **No clock ends the wait.** A run is watched for as long as it is running on fal.ai — there is no fixed deadline, because a long video run can legitimately outlast any deadline we would pick. A watch ends when the run finishes, when the editor cancels, or after a sustained, unbroken loss of contact; the last two point at the fal.ai dashboard, because the charge may be real even when delivery is not, so the terminal state names where the authoritative record lives. A run interrupted by a Premiere restart resumes watching on the next panel open, as long as the run is still recent. *(Corrected 2026-10-21: this bullet described a 30-minute wall. No such deadline exists in the shipping code; 30 minutes is only the scale of the progress display.)*
-- **"Not sent" and "unconfirmed" are different answers.** A run that ended before anything reached fal.ai — a refused upload, a failed extraction, a declined warning — is shown as "Not sent" and never counts as spend. A submission that fal.ai never confirmed with a request id is booked as *unconfirmed*; Billing shows the outcome (Failed, Cancelled or No result) and says on hover that fal.ai may still have charged, because the request may have been accepted. Storage uploads are bounded by stall rather than by a clock: an upload is abandoned only after a short while with no bytes moving, and the panel's wait follows the backend's progress heartbeat, so a large file on a slow line is not cut off mid-transfer — and an upload the panel loses track of is booked as unconfirmed, never as "Not sent".
+- **"Not sent" and "unconfirmed" are different answers.** A run that ended before anything reached fal.ai — a refused upload, a failed extraction, a declined warning — is shown as "Not sent" and never counts as spend. A submission that fal.ai never confirmed with a request id is booked as *unconfirmed*; Billing shows the outcome (Failed, Cancelled or No result) and says on hover that fal.ai may still have charged, because the request may have been accepted. Storage uploads are bounded by progress rather than by a clock, so a large file on a slow line is not cut off mid-transfer — and an upload the panel loses track of is booked as unconfirmed, never as "Not sent".
 - **Cost settles after the fact.** A cancelled run, a failed run without a usage count, or a success that arrived without one is re-read from fal.ai at start-up and when Billing opens, for several days, and is priced from the count fal.ai then reports.
 - **`X-Fal-Retryable` is read and carried, not yet obeyed.** The header is parsed onto every normalized error, but the retry decision still comes from the error type's own classification. Making the provider's verdict the deciding input is open work.
 
@@ -213,15 +231,15 @@ The cloud operations layer is deployed on an edge runtime and runs continuously,
 
 **Monitoring.** The cloud layer sends instant operator alerts for urgent licensing and catalogue events, and a daily summary of customers, usage and health. A separate scheduled CI job sends the daily catalogue digest: new, verified, held-back and removed models.
 
-**Local backend recovery.** The Node.js backend on localhost includes health monitoring, automatic restart on crash (up to three attempts), keep-alive pings, and port conflict detection. If the backend is unreachable after all recovery attempts, the panel surfaces a clear status message with a manual restart option.
+**Local backend recovery.** The Node.js backend on localhost includes health monitoring, automatic restart on crash, keep-alive pings, and port conflict detection. If the backend is unreachable after all recovery attempts, the panel surfaces a clear status message with a manual restart option.
 
 ### Self-running systems inventory
 
 The following systems operate autonomously — reducing manual maintenance and keeping the plugin current between releases.
 
-**Catalog pipeline.** The cloud layer watches the full fal.ai catalog around the clock. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted at the next check after it becomes usable. Verification runs from two places — the cloud layer itself, and a scheduled catalogue check in CI — and when they disagree, a model the cloud layer has verified stays available unless the CI check proves it cannot run or finds its specification behind an authentication wall; an inconclusive CI result does not withdraw it. Models that disappear from fal.ai are confirmed over several complete checks before being marked gone, a pass in which an implausibly large part of the catalogue vanishes is treated as an API fault rather than a mass removal, and a model that returns is listed again automatically.
+**Catalog pipeline.** The cloud layer watches the full fal.ai catalog around the clock. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted at the next check after it becomes usable. Verification runs independently from more than one place, and an inconclusive result never withdraws a model that has been verified — only proof that it cannot run does. Models that disappear from fal.ai are confirmed over several complete checks before being marked gone, a pass in which an implausibly large part of the catalogue vanishes is treated as an API fault rather than a mass removal, and a model that returns is listed again automatically.
 
-**Plugin-side health checks.** Installed models are re-checked quietly in the background — at start-up and then daily, two at a time, pausing while the editor is choosing a model — without ever blocking. Renamed endpoints are migrated silently and their form rebuilt from the new schema. A model is treated as removed only when it is absent from a *complete* catalogue on consecutive checks; it is then surfaced with a one-click cleanup, and removed automatically after a grace period if it stays gone. A partial catalogue never convicts anything.
+**Plugin-side health checks.** Installed models are re-checked quietly in the background, paced so the check never competes with the editor and never blocks. Renamed endpoints are migrated silently and their form rebuilt from the new schema. A model is treated as removed only when it is absent from a *complete* catalogue on consecutive checks; it is then surfaced with a one-click cleanup, and removed automatically after a grace period if it stays gone. A partial catalogue never convicts anything.
 
 **News feed.** New models in the supported categories are announced automatically — once they can actually be added, not when they are first seen. The plugin displays these as compact banners with a "Today" badge and one-click install. The feed also carries manual entries (feature updates, maintenance notices, tips) published by the operator.
 
@@ -287,7 +305,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **Panel and backend.** Run locally per user. Scaling is linear — each new user is an independent instance with no shared state.
 
-**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (1,296 installable models on 2026-10-21), not by the number of modelBridge users.
+**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (about 1,200 installable models in November 2026), not by the number of modelBridge users.
 
 **OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
 

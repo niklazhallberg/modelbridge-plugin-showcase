@@ -43,7 +43,7 @@ Nothing of this is built. The design constraint is fixed before the design is: b
 
 ### Predictive QC
 
-Partly shipped, and this section overstated how much of it was still ahead. A proactive layer already runs: while the Agent tab is open the panel diffs the project state every few seconds — backing off on heavy timelines — evaluates local heuristics, and surfaces coaching notices the editor can dismiss or snooze — no model calls, so it costs nothing per check.
+Partly shipped, and this section overstated how much of it was still ahead. A proactive layer already runs: while the Agent tab is open the panel watches the project locally — easing off on heavy timelines — and surfaces coaching notices the editor can dismiss or snooze — no model calls, so it costs nothing per check.
 
 What remains is the half that needs judgement rather than a heuristic: a clip that doesn't match the sequence's codec profile, a sudden change in edit rhythm, and the decision about which findings deserve an interruption as they happen versus a quiet note at the next QC scan.
 

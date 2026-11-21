@@ -88,8 +88,8 @@ agree to within 4 ms. The attribution is not.
 
 ### 1.3 The interactions an editor actually performs
 
-**Model switch.** Measured with `performance.mark`/`measure` markers that already
-exist in the shipping build (`mb:switch`), across three real switches:
+**Model switch.** Measured with performance markers that already exist in the
+shipping build, across three real switches:
 
 | Model | Controls rendered | Switch |
 |---|---|---|
@@ -423,7 +423,7 @@ real editor's project, not a synthetic one.
 | Figure | How |
 |---|---|
 | Cold start | Reload, then read Navigation and Resource Timing. Raise the resource buffer first — the 250-entry default fills during boot |
-| Model switch | Read the `mb:switch` performance measure the build already emits |
+| Model switch | Read the model-switch performance measure the build already emits |
 | Host call rate | Wrap the host bridge, count by function name over a fixed window. Verify the wrapper intercepts before trusting a zero |
 | Storage read cost | Benchmark a read of a large key **and** of a key that does not exist. The comparison is the finding |
 | Agent tokens | From the product's own generation log |
