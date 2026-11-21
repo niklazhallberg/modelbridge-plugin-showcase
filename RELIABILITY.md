@@ -28,8 +28,7 @@ nothing here is a figure we cannot reproduce from a run.
 
 Two systems check the catalog independently, so neither one's outage hides the other's.
 
-**The Worker** runs on a schedule and rotates through discover, validate and
-catalog phases, so each phase lands several times a day and a new model is picked
+**The Worker** runs on a schedule, several times a day, so a new model is picked
 up the same day. A new model is schema-validated before it is announced in the
 panel. A model is treated as removed only after its absence has been confirmed
 over several complete passes, and removal processing is skipped entirely if a
@@ -37,54 +36,56 @@ large part of the catalog vanishes at once, which is a fal.ai API problem rather
 than real removals.
 
 **CI** runs a catalog verification twice a day. It lists the active fal.ai
-catalog, fetches each model's OpenAPI schema, and classifies each model with the
-same predicate the panel runs when a user adds a model, so the catalog verdict and
-the install verdict cannot drift apart.
+catalog, reads each new or changed model's OpenAPI schema (an unchanged, already
+verified model is re-read on a slower rotation), and classifies each model with
+the same predicate the panel runs when a user adds a model, so the catalog verdict
+and the install verdict cannot drift apart. Its requests to fal.ai are paced and
+back off when fal.ai asks it to.
 
-| Status | Meaning | Snapshot 2026-10-21 11:23 UTC |
-|---|---|---|
-| verified | the schema resolved and parsed | 1,225 |
-| fallback_verified | live on fal.ai with a supported category, but its schema is unavailable (66 return 404, 3 fail to expand). Offered with a prompt interface and rechecked every two days | 69 |
-| blocked | proven incompatible: the schema resolved and no output can ever carry a media URL | 8 |
-| pending | a transient failure, retried | 1 |
+| Verdict | Meaning | 2026-10-21 | 2026-11-21 |
+|---|---|---|---|
+| Verified | the schema resolved and parsed | 1,225 | 1,172 |
+| Prompt interface | live on fal.ai with a supported category, but its schema is unavailable. Offered with a prompt interface and re-checked regularly | 69 | 16 |
+| Blocked | proven incompatible: the schema resolved and no output can ever carry a media URL | 8 | 12 |
+| Pending | a transient failure, retried | 1 | 0 |
 
 The rules that keep this honest:
 
 - **Blocked means proven.** Timeouts, 5xx, 404s and schema-expansion failures are
   never grounds to block. An access refusal (401/403) is never escalated to
-  fallback: a schema the verifier may not read says nothing about whether a
+  a prompt interface: a schema the verifier may not read says nothing about whether a
   customer's key can run the model.
 - **The stronger verdict wins.** When the Worker has validated a model itself, a
   later CI "pending" for the same model does not delete that approval. A CI
   "blocked" still does.
-- **Ask fal.ai with the id fal.ai published.** Third-party-owned endpoints are
-  queried with their catalog id, never a synthesised `fal-ai/` form, so a 404 is a
-  statement about the schema and not about a string we invented.
+- **Ask fal.ai with the id fal.ai published.** An endpoint is always queried by
+  the id the catalog gives it, so a missing schema is a statement about the schema
+  and not about a string we invented.
 
-The panel's own count, 1,296 installable models on 2026-10-21, comes from a separate
-catalog fetch and differs slightly from the CI total by design.
+The panel's own count comes from a separate catalog fetch and differs slightly
+from the CI total by design. The second snapshot was taken 2026-11-21 14:25 UTC;
+the other figures on this page are from 2026-10-21.
 
 ## 2. Every field of every model, through every layer
 
-A value the user picks passes through several layers before fal.ai sees it: the
-panel's schema parser, the form that collects it, the readiness gate, the
-parameter transformer, the Dual Mode planner and the local backend. Each answers
+A value the user picks passes through several layers before fal.ai sees it, from
+the form that collects it to the local backend that sends it, with Dual Mode in
+between when two models run side by side. Each answers
 "what is this value, and is it allowed?". When two of them answer differently, the
 user sees a form that says yes and a run that fails, or a form that refuses a
 valid value.
 
-The interpretation sweep loads each of those layers from the shipped
-file, not from a copy, plus a small JSON-Schema evaluator as the reference for
-what the schema itself accepts. For every non-media field it derives candidate
-values from the schema (enum members, bounds, defaults, decimals in integer
-fields, off-grid steps, nulls) and records every layer's answer.
+The interpretation sweep runs each of those layers as shipped, not a copy, against
+an independent reference for what the schema itself accepts. For every non-media
+field it derives candidate values from the schema, weighted toward the edge cases
+a form is most likely to get wrong, and records every layer's answer.
 
 Run on 2026-10-21: **1,289 of 1,294 installable models, 11,919 fields, 90,738 candidate
 values, in about 70 seconds.** The five schemas it could not load are three with no
 schema components and two WebSocket endpoints with no input schema.
 
 Since 2026-10-21 the verify job runs it after every catalog verification, against
-a committed baseline. It raises an alert on any new row in three classes:
+a committed baseline. It raises one alert per new finding, in three classes:
 
 | Class | Disagreement |
 |---|---|
@@ -174,10 +175,8 @@ generated from the union and rebuilt after each verification. The live page carr
 1,113 field anchors on 2026-10-21, one per field, so a field fal.ai added this morning has a
 working help link before anyone has written a word about it.
 
-**Drafted by AI, shipped by a person.** Once a day Claude drafts help for a small
-batch of the most-used uncovered fields: route the field to an existing docs
-section, write a new section, or mark it self-explanatory. Any draft that fails
-two gates is discarded:
+**Drafted by AI, shipped by a person.** Claude drafts help for the most-used
+uncovered fields on a schedule. Any draft that fails two gates is discarded:
 
 - **Citation.** A route must quote, word for word, a sentence from the target
   section showing that the section covers this field.
@@ -185,10 +184,9 @@ two gates is discarded:
   description, range, default or options for that field, or from the target
   section's text. A number from anywhere else discards the draft.
 
-Surviving drafts open as two pull requests, docs first and panel second. The panel
-pull request's anchor check stays red
-until the docs pull request is merged. The owner reviews and merges both; the panel
-entry ships with the next release.
+Surviving drafts are proposed for review, never merged automatically, and the panel
+cannot link to help that the docs site does not carry yet. A person reviews and
+merges; the panel entry ships with the next release.
 
 ## 5. Guards before a commit, a push and a release
 
@@ -212,11 +210,10 @@ pass, against the real guard on the real tree. A guard that has never been seen 
 fail is treated as a step, not a check.
 
 **Before a customer build.** The gate in front of a customer build exists today: a
-release build is refused unless the branch is `main`, the working tree is clean
-including untracked files, `main` equals `origin/main` after a fresh fetch, and
-the version's tag does not exist yet. It also refuses to start without a bundled
-ffmpeg that carries every filter the backend uses, and a bundle id that matches
-the extension manifest. The signing and notarisation steps behind the gate are not
+release build is refused unless it is built from a clean, published, untagged
+state of the main branch, with a bundled ffmpeg that carries everything the
+backend uses and an identity that matches the extension manifest. Version 1.0.0
+was set on 2026-11-21. The signing and notarisation steps behind the gate are not
 built yet, so no customer installer has been produced.
 
 ## 6. What is running is recorded, not assumed
