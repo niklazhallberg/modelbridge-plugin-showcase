@@ -377,7 +377,7 @@ This repository is written for engineers evaluating the integration, not for edi
 |---|---|
 | What it does, and why anyone would run it | The sections above |
 | How it is built, how it degrades, and what it depends on | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| Whether it holds up over years — what a session leaves in memory, what bounds every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [ENGINEERING_LONGEVITY.md](ENGINEERING_LONGEVITY.md) |
+| What it asks of each service and how often, how fast it starts and responds, and whether it holds up over years — memory, the bound on every persistent surface, which timers pause when the panel is hidden, and what is deliberately left uncapped | [PERFORMANCE_AND_LOAD.md](PERFORMANCE_AND_LOAD.md) |
 | What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
 | **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, the things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
 | How a growing catalog is kept from breaking the panel — scheduled catalog verification, the full-catalog interpretation sweep, shared resolvers, parameter-help coverage, guards, deploy provenance, and the licence-state simulator, with today's figures | [RELIABILITY.md](RELIABILITY.md) |
