@@ -14,7 +14,7 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 [Documentation ↗](https://docs.modelbridge.app) · [Live catalog ↗](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing) · [For engineers](#about-this-repository)
 
 Product documentation for editors lives at [docs.modelbridge.app ↗](https://docs.modelbridge.app): 91 pages (2026-11-24) covering installation, every feature, the live model catalog, pricing and legal.
-Reading this for fal.ai? Start with [What this means for fal.ai](#what-this-means-for-falai), then the [reviewers' reading order](#for-falai-reviewers).
+Evaluating the integration? Start with [What it adds to the platforms it connects](#what-it-adds-to-the-platforms-it-connects), then the [reading order](#a-reading-order-for-the-integration).
 
 <p align="center">
   <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge inside Adobe Premiere Pro: the Generate tab docked beside the Program monitor, listing new fal.ai models with one-click Add above the installed model and its prompt field" width="100%">
@@ -77,7 +77,7 @@ modelBridge is the link between them, and it is deliberately independent of eith
 
 ---
 
-## What this means for fal.ai
+## What it adds to the platforms it connects
 
 - **New fal.ai models reach editors usually within hours, with working controls.** The catalog is synced several times a day, and each model's sliders, dropdowns and media inputs are built from its own OpenAPI schema, so a launch needs no plugin release.
 - **Usage goes straight onto the editor's own fal.ai account.** Editors bring their own key and pay fal.ai's published rates. modelBridge adds no markup, no credits and no revenue share, and never holds the key on its servers.
@@ -383,7 +383,7 @@ This repository is written for engineers evaluating the integration, not for edi
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
 | What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
 
-### For fal.ai reviewers
+### A reading order for the integration
 
 In order, about twenty-five minutes:
 
@@ -394,7 +394,7 @@ In order, about twenty-five minutes:
 5. [UXP_MIGRATION.md](UXP_MIGRATION.md) §8 claim register and §4 — what we got wrong.
 6. [SECURITY.md](SECURITY.md) → *What is accepted, and why*.
 
-**For Adobe readers**, start with [UXP_MIGRATION.md](UXP_MIGRATION.md): the CEP → UXP transition measured with denominators, what cannot be adapted, and seven open questions to Adobe.
+**On the Premiere Pro platform side**, [UXP_MIGRATION.md](UXP_MIGRATION.md) is the place to start: the CEP → UXP transition measured with denominators, what cannot be adapted, and seven open questions to Adobe.
 
 ---
 

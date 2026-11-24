@@ -80,7 +80,7 @@ Across all editors who share usage analytics, that could answer:
 - Which of those are still in the cut at export, and which are imported and later removed
 - How this differs by category and task, for example image-to-video against text-to-video, or extending a shot against generating a new one
 
-For editors, this would be a ranking based on what professionals ship, a complement to the LM Arena rankings the panel already shows, which measure preference in blind comparisons rather than use in production. For model providers and fal.ai, it would be an aggregate signal of which models hold up in real editing work.
+For editors, this would be a ranking based on what professionals ship, a complement to the LM Arena rankings the panel already shows, which measure preference in blind comparisons rather than use in production. For the platforms and model makers behind these models, it would be an aggregate signal of which models hold up in real editing work.
 
 What would have to hold:
 
