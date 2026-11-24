@@ -431,4 +431,8 @@ Actively preparing for Adobe's UXP: platform-specific code is moving behind adap
 
 Built by Niklaz Hallberg, Creative Technologist & AI Lead at Valtech RADON. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
 
-2025–2026.
+---
+
+modelBridge is a product of Niklaz Hallberg, a sole proprietorship (*enskild firma*) registered in Sweden and based in Stockholm. Purchases are processed by Lemon Squeezy as Merchant of Record. Contact: [info@modelbridge.app](mailto:info@modelbridge.app).
+
+© 2025–2026 Niklaz Hallberg. All rights reserved.
