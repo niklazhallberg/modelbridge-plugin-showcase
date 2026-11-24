@@ -4,10 +4,7 @@ A log of optimizations considered for the fal.ai API path and deliberately not
 built. Format follows lightweight ADR (Architecture Decision Record)
 convention: each entry records the context, what was verified in the actual
 codebase as of the entry's date, the decision, and the concrete condition that
-would reopen it.
-
-The bar for every entry: the candidate is evaluated against the code as it is,
-not against generic best-practice articles.
+would reopen it. The last section lists what is built.
 
 ## Template for new entries
 
@@ -28,10 +25,9 @@ submit, and the receiving fal app — if it implements `provide_hints()` — can
 steer the request to a runner that already holds the right weights in memory.
 Investigated as a cold-start optimization.
 
-**Verified in code.** Every generation submit lives in the local backend — the
-panel never submits to fal directly. Three submit paths existed on that date: one
-through the official client, taken for curated-adapter endpoints, and two raw
-queue submits.
+**Verified in code.** Every generation submit is made by the local backend
+through fal.ai's queue API; the panel never submits to fal directly. The official
+client is used only for storage uploads and as a fallback for fetching a result.
 Every endpoint string is either a user-installed model from fal's public catalog
 or a fal-owned public model. A sweep of the codebase and every planning document
 found no own fal deployment, existing or planned, and zero references to
@@ -47,12 +43,10 @@ server half.
 account. The hint would then be set at the submit sites (a header on the raw queue
 calls), and `provide_hints()` would report the loaded model/LoRA.
 
-**Re-checked 2026-10-21.** The decision stands; one fact under it moved. The
-client-library submit path was retired after a 2026-09-25 measurement showed the
-raw queue reaching every endpoint, curated ones included, so both remaining submit
-paths are raw queue submits. The official client is still used, but only for storage
-uploads and as a fallback for fetching a result. Still no own fal deployment, and
-still no reference to `provide_hints` or runner hints anywhere in the code.
+**Re-checked 2026-10-21 and against the 1.0.0 source.** Still no own fal
+deployment and no reference to `provide_hints` or runner hints. (On 2026-09-01
+one submit path went through the client library. It was retired after a
+2026-09-25 measurement showed the queue API reaching every endpoint.)
 
 ### 2026-09-01: Cloudflare AI Gateway in front of fal.ai calls — not implemented
 
@@ -78,11 +72,11 @@ behind it. Investigated as an observability and resilience layer.
 3. **"Swap the base URL" is really a rebuild of the submit→poll→cancel
    chain.** Poll URLs follow what fal returns, which point at fal's queue host
    directly, and the cancel path deliberately rejects any other host.
-4. **Cache value is zero, confirmed from payload construction.** Every submit
-   carries the user's prompt plus per-run-unique storage URLs (each
-   generation uploads its media fresh). Two identical requests effectively
-   never occur — and caching a queue submit POST would be actively harmful,
-   binding two UI jobs to one returned `request_id`.
+4. **Cache value is zero, confirmed from payload construction.** A submit
+   with media carries storage URLs that are new for each run, so those
+   requests never repeat. A text-only submit can repeat exactly, but a repeat
+   is a request for a new generation, and a cached queue response would bind
+   two jobs in the panel to one `request_id`.
 
 **Decision.** Not implemented. Beyond the mechanics: modelBridge's data flow
 is deliberately decentralized — every customer's machine talks to fal
@@ -92,21 +86,54 @@ account would invert that: customer credentials and content through our
 account, a new subprocessor in the privacy documentation, and an operated
 single point of failure in a product whose resilience rule is that no dead
 remote service may ever blank the plugin. The observability gain is small
-(per-generation duration and cost are already reported), and the cache gain
-is zero.
+(per-generation duration and usage-based cost are already recorded locally),
+and a cache would return the wrong thing (finding 4).
 
 **Reconsider when.** Generation traffic ever originates from infrastructure
 we operate with our own fal credentials — the privacy and resilience calculus
 inverts at that point.
 
-**Re-checked 2026-10-21.** The decision stands, and so do findings 2–4. One
-detail of the storage path changed on this date: a storage upload is no longer
-cut off by a fixed clock. The backend now hands the client library a fetch that
-watches the upload's progress and gives up only when nothing has moved for a short
-while, and the panel follows that progress instead of timing the request
-itself. So a slow upload of a large clip completes as long as it keeps moving.
-The bytes still go straight to fal's storage, outside any gateway's base URL.
-Nothing in this changes the gateway arithmetic above.
+**Re-checked 2026-10-21 and against the 1.0.0 source.** Findings 2–4 stand.
+Storage uploads are now bounded by progress, not by a fixed time limit, so a slow
+upload of a large clip completes as long as bytes keep moving. The bytes still go
+straight to fal's storage, outside any gateway's base URL.
+
+## What is built
+
+The other side of the log: request economy that is in the shipping build. Read
+from the 1.0.0 source; the measured effect, where there is one, is in
+[Performance and load](PERFORMANCE_AND_LOAD.md).
+
+**Toward fal.ai**
+
+- Status polling slows down as a run gets longer, and follows the status URL
+  fal.ai returns.
+- A model's rate is read when the editor selects the model and the stored rate
+  has aged out, not on a timer per catalogue entry.
+- A pricing lookup is cached briefly, and a failed or rate-limited answer is never
+  cached as if it were a rate.
+- The fal.ai key is attached only to requests for fal.ai's own hosts.
+- Recomputing the estimate while the editor types is debounced and local. It makes
+  no request.
+
+**Toward static files and our own service**
+
+- Recurring fetches revalidate with the validators the server sent, concurrent
+  requests for one document share one call, and any failure falls back to a plain
+  fetch.
+
+**Toward Anthropic, in Agent Mode**
+
+- The prompt is cached in four segments: tool definitions, the static
+  instructions, the per-turn context and the conversation so far. The cache
+  lifetime is one hour, chosen because an editor's pause between messages is often
+  longer than five minutes.
+- Only a core set of tools and those of the workflow in progress are sent in full.
+  The rest are deferred and found through tool search when a turn needs them.
+- Context size is measured with the provider's token-counting endpoint, not
+  guessed from character counts.
+- The agent's own cost figure prices cache writes at the one-hour rate, and a test
+  pins that.
 
 ## How this file is used
 
