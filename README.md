@@ -241,13 +241,13 @@ Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [
 Every model's interface is built from its own schema, and fal.ai adds models every
 week, so a per-model fix does not scale. These are the practices that keep a new
 model or a code change from reaching an editor as a broken form or a refused run.
-Figures measured 2026-10-21; the full write-up, with the script or workflow behind
+Figures measured 2026-10-21 unless dated otherwise; the full write-up, with the script or workflow behind
 each claim, is in [RELIABILITY.md](RELIABILITY.md).
 
 - **The catalog is verified on a schedule.** A CI job twice a day checks every
-  model in the catalog with the same check the panel runs on install:
-  1,225 verified, 69 offered through a prompt interface while their schema is
-  unavailable, 8 blocked because their output can never reach Premiere.
+  model in the catalog with the same check the panel runs on install. On 2026-11-21:
+  1,172 verified, 16 offered through a prompt interface while their schema is
+  unavailable, 12 blocked because their output can never reach Premiere.
 - **Every field of every model is run through every layer.** A sweep sends 90,738
   candidate values for 11,919 fields of 1,289 models through each layer of the
   product, and any new disagreement between the panel and the backend raises an alert.
@@ -294,7 +294,7 @@ modelBridge will install from a signed, notarised macOS `.pkg`. The installer is
 
 A public engineering record for modelBridge. The plugin source is private, and customer documentation lives at [docs.modelbridge.app ↗](https://docs.modelbridge.app).
 
-**Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. The panel counted 1,296 installable models in them on 2026-10-21; the [live catalog ↗](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
+**Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. Three model counts appear in this repository, and they measure different things: the **live catalog** on docs.modelbridge.app (1,190 models on 2026-11-21, 1,191 on 2026-11-24), the **scheduled CI verification** (on 2026-11-21: 1,172 verified, 16 offered through a prompt interface, 12 blocked), and the **panel's own count of installable models** (1,296 on 2026-10-21, the date of the reliability measurements). None of them is a count of models tested through a paid generation. The [live catalog ↗](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
 
 **How to read the claims.**
 
@@ -344,7 +344,7 @@ This repository is written for engineers evaluating the integration, not for edi
 
 ## Links
 
-- **[Documentation ↗](https://docs.modelbridge.app/what-is-modelbridge/)** — 90+ pages: guides, features, Academy, troubleshooting, legal
+- **[Documentation ↗](https://docs.modelbridge.app/what-is-modelbridge/)** — 91 pages (2026-11-24): guides, features, Academy, troubleshooting, legal
 - **[Live catalog ↗](https://docs.modelbridge.app/models/available-models/)** — about 1,200 models, refreshed several times a day
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[Built for reliability](RELIABILITY.md)** — catalog verification, the interpretation sweep, guards and deploy provenance, with measured figures
