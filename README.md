@@ -68,6 +68,15 @@ modelBridge is the link between them, and it is deliberately independent of eith
 
 ---
 
+## What changes for the editor
+
+- **Time back.** No browser tab, no download folder, no re-import. A generated clip replaces its source on the same track and timecode, fitted to the frame.
+- **One clear next step.** New models arrive with one-click Add, task filters narrow about 1,200 models to the ones that fit the job, and the agent explains any model in plain language.
+- **Ahead without chasing the news.** A model released on fal.ai is usually in the panel within hours, with its controls already built. modelBridge follows the launches so you don't have to.
+- **Cost estimates that learn from your own runs.** No one can quote the exact price of a generation before it runs, so modelBridge shows an estimate and says how sure it is. After each run it records what fal.ai reported for those exact settings. After a few runs at the same configuration, the estimate comes from your own history instead of a published rate, so the more you use a model, the closer the figure gets to what you typically pay for it. Mistakes are learned the same way: a limit fal.ai has explained once is remembered and caught before it can cost you again. [How estimates work ↗](https://docs.modelbridge.app/models/costs/)
+
+---
+
 ## What this means for fal.ai
 
 - **New fal.ai models reach editors usually within hours, with working controls.** The catalog is synced several times a day, and each model's sliders, dropdowns and media inputs are built from its own OpenAPI schema, so a launch needs no plugin release.
