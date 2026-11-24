@@ -1,692 +1,444 @@
-# CEP → UXP: where this migration actually stands
+# CEP → UXP: where this migration stands
 
-Adobe is moving Premiere Pro extensions from CEP to UXP. modelBridge runs on CEP
-today. This document reports what we have measured about that transition — what
-is already isolated, what cannot be adapted and has to be rebuilt, where our own
-early decisions were wrong, and what we need from the platform to finish.
+Adobe has announced that CEP is retired at the end of 2029. For Premiere Pro, new
+CEP submissions end in December 2027 and CEP is disabled by default from December
+2028 ([Adobe's September 2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications)).
+modelBridge 1.0.0 is a CEP panel and keeps working on Premiere versions that run
+CEP. This document says what has to change before those dates, what is already
+separated from CEP, where our own early decisions were wrong, and what we do not
+yet know.
 
-It is written for engineers who know this ground better than we do. So it leads
-with numbers rather than adjectives, and every figure is dated: these are
-measurements of a moving codebase, not properties of it. Anything we have not
-measured is marked as unmeasured rather than estimated.
-
-**Figures measured 2026-08-19, re-measured 2026-08-30, with a live host check on
-2026-09-01. Classified, and partially re-checked, 2026-09-09. Our own source
-re-measured again on 2026-10-21**, with the search patterns of the first reading
-(section 7 says what that pass did and did not cover). Where two readings differ,
-both are shown. Anything carried forward without re-measuring says so.
+It leads with numbers, and every figure is dated: these are measurements of a
+moving codebase, not properties of it. Counts are from the source the 1.0.0
+installer was built from (2026-11-24) unless a date is given. Anything we have not
+measured is marked as unmeasured, not estimated.
 
 ## How to read this document: five classes of claim
 
-A migration document mixes things that are true in completely different ways, and
-a reader who cannot tell them apart has to take all of them on the same trust.
-Section 8 assigns a class to the twenty-one rows that carry a conclusion — the
-ones where being wrong would change what we build. The remaining figures, in
-sections 1 and 4, are all class [SOURCE] and carry their reading's date in place.
+A migration document mixes things that are true in different ways. Section 8
+assigns a class to the rows that carry a conclusion, the ones where being wrong
+would change what we build. The remaining figures, in sections 1 to 4, are class
+[SOURCE] and carry their date in place.
 
 | Class | What it means | How it can be wrong |
 |---|---|---|
-| **[SOURCE]** | A fact about our own code, produced by search over the tree on a stated date | It rots. Our codebase changes weekly, so a figure is a reading, not a property |
-| **[PLATFORM]** | A statement Adobe publishes about UXP today, quoted from Adobe's own material | It can be superseded, and we can have read it wrong or read a stale page |
+| **[SOURCE]** | A fact about our own code, produced by search over the tree on a stated date | It rots. The codebase changes weekly, so a figure is a reading, not a property |
+| **[PLATFORM]** | A statement Adobe publishes about UXP, quoted from Adobe's own material | It can be superseded, and we can have read it wrong or read a stale page |
 | **[ASSUMPTION]** | Something about the UXP runtime we have *not* verified, inferred from documentation, from third parties, or from the CEP behaviour we know | It can simply be false. We have not run it |
-| **[PROTOTYPE]** | Work that would settle an assumption, which we have not done yet | Nothing is wrong with it; it does not exist yet, and no conclusion may rest on its expected result |
-| **[DEPRECATED]** | A claim we or our own earlier plan published and that measurement has since falsified | It is here to be retired, not believed. Section 7.1 lists them |
+| **[PROTOTYPE]** | Work that would settle an assumption, which we have not done yet | It does not exist yet, and no conclusion may rest on its expected result |
+| **[DEPRECATED]** | A claim we published that measurement or a later reading has falsified | It is here to be retired, not believed. Section 7.1 lists them |
 
-**Nothing in this document is class [PROTOTYPE] pretending to be class [PLATFORM].**
-That is the substitution we are most concerned to avoid, because it is the one
-that reads as confidence. Where we have not run something, the row says so and no
-argument downstream leans on it.
-
-**One boundary worth stating plainly: no new platform check was run for the
-2026-09-09 pass, and the 2026-10-21 pass re-read only one Adobe statement** (the
-support window, section 7). Both passes re-measured our own source. Every
-[PLATFORM] row still carries the date of the check that established it, and the
-oldest of those was seven weeks old on 2026-10-21. A [PLATFORM]
-row is a statement about what Adobe said on a date, never about what is true now.
-
-Three [PLATFORM] rows were corrected on 2026-11-16 against Adobe's September 2026
-announcement and its reference pages: the support window, `localStorage` and
-bundling. Section 4.4 says what we had published and what Adobe states. No other
-platform row was re-read for that correction.
+A [PLATFORM] row is a statement about what Adobe said on a date, never about what
+is true now. No UXP API has been exercised for this document.
 
 ---
 
 ## 1. What is isolated today  — [SOURCE]
 
 The strategy has been to put platform-specific calls behind adapters inside the
-CEP codebase, so the migration becomes a swap of implementations rather than a
-rewrite of everything that touches them. Progress, as quotas with denominators:
+CEP codebase, so the migration becomes a swap of implementations instead of a
+rewrite of everything that touches them. Progress at 1.0.0, as quotas with
+denominators:
 
-Re-measured 2026-10-21 with the same search patterns as the first reading. The
-right-hand column is the same search run against the 30 August commit, so the
-two columns compare like with like; the movement is the more useful number:
+| Platform surface | Routed | Direct left | Adoption |
+|---|---|---|---|
+| Path construction | 81 | **0** | **100 %** |
+| Opening external URLs | 25 | **0** | **100 %** |
+| Provider API key storage | 17 | **0** | **100 %** |
+| Premiere host calls, in the panel's script modules | 172 | 32 | **84 %** |
+| Premiere host calls, in the panel's HTML page | 0 | 18 | **0 %** |
+| File system, by acquisition site | 57 | 45 | **56 %** |
+| Process launches from the panel | 0 | 8 | **0 %** |
+| **Browser storage (`localStorage`)** | 0 | **about 400** | **0 %** |
 
-| Platform surface | Routed | Direct left | Adoption | 30 Aug, same search |
-|---|---|---|---|---|
-| Path construction | 76 | **0** | **100 %** | 71 / 0 — 100 % |
-| Opening external URLs | 26 | **0** | **100 %** | 20 / 0 — 100 % |
-| Provider API key storage | 16 | **0** | **100 %** | 16 / 0 — 100 % |
-| Premiere host calls, in the panel's script modules | 163 | 35 | **82 %** | 134 / 44 — 75 % |
-| Premiere host calls, in the panel's HTML page | 0 | 18 | **0 %** | not searched |
-| File system, by acquisition site | 57 | 45 | **56 %** | 42 / 46 — 48 % |
-| File system, by API invocation | 57 | 99 | **37 %** | 42 / 91 — 32 % |
-| Process launches from the panel | 0 | 8 | **0 %** | not searched |
-| **Browser storage (`localStorage`)** | 0 | **400** | **0 %** | 0 / 384 — 0 % |
+Method: adapter call sites against direct calls outside the adapter, comment lines
+excluded. The same searches reproduce the figures published for 2026-10-21 exactly
+or within nine per cell, so the two readings compare like with like. Counted by
+API invocation instead of by acquisition site, the file-system row was 57 routed
+against 99 direct on 2026-10-21; that count was not re-taken for 1.0.0.
 
-The figures we published on 30 August came from a working tree rather than a
-commit, and differ from the right-hand column by at most nine in any cell. Two
-`require('path')` calls now sit inside the storage adapter; they are counted as
-routed, because they will be rewritten with that adapter rather than on their
-own.
+Three surfaces are finished: zero remaining direct calls, verified by search across
+the panel source. With the HTML page counted, host-call adoption is 172 of 222,
+about 77 %. File I/O is the laggard. Process launches sit in eight places in five
+files, with no adapter.
 
-Two of the rows were added on 2026-11-16, both counted on the 21 October commit.
-The host-call search covered the panel's script modules and not its HTML page,
-which makes 18 direct host calls of its own; with them counted, host-call
-adoption on that commit is about 75 %, not 82 %. And the panel launches
-processes from eight places in five files, with no adapter and, until that date,
-no row. Both are the kind of omission section 4.2 is about, found in the table
-that section 4.2 corrected.
-
-**The last row is the reason to re-read the rest.** Until 2026-09-01 this
-table had six rows, and the panel's largest platform dependency was not one of
-them. `localStorage` is 400 call sites across 55 files on 2026-10-21 (384 across
-50 on 1 September) — still more than the direct file-system invocations, all the
-host calls and our hardcoded backend addresses combined (99 + 216 + 82).
-
-Until 2026-11-16 this paragraph went on to say that UXP does not provide
-`localStorage`, and that its replacement is asynchronous and therefore the same
-signature change as the file-system row at about two and a half times the size.
-That was wrong. Adobe's reference pages document a synchronous `localStorage`
-in UXP. What they do not establish is access to the data our CEP panel has
-already stored, so the migration is about moving data — deciding what owns each
-stored value, and exporting and importing it — not about changing every call.
-The size of the row is unchanged; what it costs is not what we said.
-
-We are not building the adapter, deliberately, and section 4 says why. What we
-are doing is refusing to publish an adoption percentage over a denominator that
-silently excluded its biggest term. Every figure we published before this date
-was computed that way.
-
-Three surfaces are finished: not "mostly", but zero remaining direct calls,
-verified by search across the panel source. (The first version of this table said
-"two", while listing three — an editing error rather than a measurement one, but
-it is exactly the kind of slip that makes a reader stop trusting the table, so we
-would rather correct it than quietly fix it.) Host calls are about three-quarters
-converted once the HTML page is counted. File I/O is the laggard, and the two file-system rows are given
-separately on purpose — counting acquisition sites flatters the number, because
-most files acquire the module once and then call it many times.
+`localStorage` is the largest row: about 400 call sites in nearly 60 files, more
+than the direct file-system and host calls combined. UXP documents a synchronous
+`localStorage`, so those calls may not need to change shape. What UXP does not
+give is access to the data the CEP panel has already stored, so this row is a data
+move (section 4.2). The existing wrapper over `localStorage` manages quota inside
+the platform API and is not an adapter, so the 0 % is real.
 
 ### A surface holds where something holds it
 
-Every quota held or improved between 19 and 30 August, and again between
-30 August and 21 October. What the totals hide is where the new work went.
-Counting only lines **added** to the panel in the August window:
-
-| Direct platform call added, 19–30 Aug | Count |
-|---|---|
-| File system (`fs`) | **17** |
-| Everything else — path, shell, credentials, host calls | **0** |
-
-We first wrote this up as drift, and it is mostly the opposite. Thirteen of the
-seventeen are in one adapter file, and a pre-commit guard
-puts them there on purpose: every other file in that subsystem is mechanically
-forbidden from touching the file system, `CSInterface`, or the ExtendScript
-bridge, so the layer has **one file to rewrite for UXP instead of five**, and a
-test suite that still runs without a host. It is the newest code in the tree and
-the best-prepared part of it.
-
-The genuine unguarded drift is **four calls**, in two older files that no guard
-covers.
-
-We are reporting the correction rather than the tidy version because the tidy
-version was more flattering to our thesis and less true. The real lesson is
-narrower and more useful than "unfinished surfaces drift": a surface holds where
-something holds it. Three surfaces are at 100 % because they are finished. One
-subsystem is clean because a guard keeps it clean. Everywhere else, the file
-system absorbs new work at whatever rate new work is written.
+Three surfaces are at 100 % because they are finished, and they have stayed there
+through every reading since August. One newer subsystem, the usage layer, is clean
+because a pre-commit guard keeps it clean: every file in it except one adapter is
+mechanically forbidden from touching the file system, `CSInterface` or the
+ExtendScript bridge, so that layer has one file to rewrite for UXP instead of
+five, and a test suite that runs without a host. Everywhere else, the file system
+absorbs new work at whatever rate new work is written.
 
 ### The distribution matters more than the average
 
-Host-call adoption is not uniform. It is split by subsystem, and that is a
-deliberate ordering rather than an accident (figures of 2026-10-21):
+Host-call adoption is split by subsystem, and that is a deliberate ordering:
 
-- **The agent layer is essentially fully bridged** — 153 of its 154 host calls
-  go through the adapter.
-- **The generation pipeline is essentially unbridged** — 31 direct calls across
-  the four modules that carry media extraction, validation, preview and
-  dual-model runs (40 on 30 August). None of the four calls the adapter yet, so
-  the drop is code that was removed, not code that was converted.
+- **The agent layer is essentially fully bridged.** 160 of its 161 host calls go
+  through the adapter.
+- **The generation pipeline is unbridged.** 28 direct calls sit in the four
+  modules that carry media extraction, validation, preview and dual-model runs.
+  None of the four calls the adapter yet.
 
 The generation pipeline is the launch-critical path, and the adapter wraps calls
-in promises with deadline semantics. Converting it changes timeout and error
-behaviour in the code where a failure costs a customer money. We chose to convert
-it after launch rather than report a rounder number before it. Version 1.0.0 was
-built on 2026-11-24 with that conversion still ahead of us.
+in promises with deadlines. Converting it changes timeout and error behaviour in
+the code where a failure costs a customer money. We chose to convert it after
+launch instead of reporting a rounder number before it. Version 1.0.0 was built
+with that conversion still ahead of us.
 
 ---
 
-## 2. What cannot be adapted  — mixed; each subsection is tagged
+## 2. What changes substance  — mixed; each subsection is tagged
 
-The things in this section do not change shape. They change substance, and no
-adapter layer helps with any of them. The exception is 2.2, which stood among
-them until 2026-11-16 and is now something to review, not something that cannot
-be adapted.
+No adapter layer settles the things in this section. 2.1 and 2.3 have to be
+rebuilt or replaced, 2.2 has to be reviewed, 2.4 is the size of the port, and 2.5
+ends in a provider swap.
 
-### 2.1 UXP cannot run FFmpeg — so the backend becomes a companion app  
-*[PLATFORM] on the launch limitation · [SOURCE] on everything it costs us*
+### 2.1 UXP cannot run FFmpeg for us, so the backend becomes a companion application
+*[PLATFORM] on the launch limitation · [ASSUMPTION] on the conclusion · [SOURCE] on what it costs*
 
-modelBridge's local backend runs as an Express server that shells out to FFmpeg
-and FFprobe for every media operation that touches real footage, and uses one
-native image-processing addon. UXP has no Node runtime in-panel, and while it
-*can* launch a process, the documented `launchProcess` permission "is not
-possible to pass any parameters, nor to capture the output of the command" —
-which is precisely and only what we need it for. That is not a gap we can adapt
-around; it means the backend has to become a separately installed sidecar that
-the panel talks to over HTTP.
+modelBridge's local backend is an Express server that shells out to FFmpeg and
+FFprobe for every media operation that touches real footage, and uses one native
+image-processing addon. UXP has no Node runtime in the panel. It *can* launch a
+process, but the documented `launchProcess` permission says "it's not possible to
+pass any parameters, nor to capture the output of the command", and every
+extraction we run is arguments plus captured output. So the backend has to become
+a separately installed companion application that the panel talks to over HTTP,
+unless frame export (question 1) or hybrid plugins (question 4) change that.
+Section 8 classes that conclusion as an assumption for that reason.
 
-(This heading read "UXP cannot spawn processes" until 30 August. That was too
-strong, and being too strong in our own favour is worse than being wrong in the
-abstract: it made the companion application sound forced on us by an absolute
-limit, when the real reason is a specific and narrower one. The conclusion is
-unchanged; the argument for it is now the correct argument, and section 7 records
-what the platform can do instead.)
+Measured against the backend:
 
-Measured against the current backend:
+- **77 routes** in the main server at 1.0.0 (74 on 2026-10-21), plus 13 registered
+  by the agent module.
+- On 2026-08-19, **25 routes were network-only**, 16 spawned a child process and
+  13 of those invoked FFmpeg or FFprobe. That breakdown was not re-taken; audio
+  analysis and loudness routes have been added since, so read 13 as a floor.
+  Result delivery, thumbnails, preflight validation and the agent's own media
+  inspection all sit on it, which makes this a product-wide dependency.
+- **1 native addon** (image processing), which must load from real disk and not
+  from a packed snapshot. It is still the only native addon in the backend's
+  dependencies.
 
-- **74 routes** in the main server on 2026-10-21 (61 on 30 Aug, 58 on 19 Aug),
-  plus 11 more registered by the agent module, which no reading has counted.
-  **25 are network-only** and could move to direct `fetch()` from the panel or to
-  our existing edge worker.
-- **16 routes spawn a child process. 13 of those invoke FFmpeg or FFprobe.**
-- **1 native addon** (image processing), used by 3 routes, which must load from
-  real disk rather than from a packed snapshot. Still the only native addon in
-  the backend's dependencies on 2026-10-21.
+**Much of the companion application already exists.** [SOURCE]
 
-Only the route total was re-measured, on 30 Aug and again on 21 Oct; the
-breakdowns are the 19 Aug reading, carried forward unverified. A rougher search
-over the 21 Oct tree finds eight more routes touching media tooling than the
-same search found on 30 Aug, new audio-analysis and loudness routes among them,
-so read 13 as a floor. We are saying so rather than letting a re-dated header
-imply all four moved together.
+- The backend already ships as a standalone executable, built for macOS arm64,
+  macOS x64 and Windows x64, and the panel prefers it over a system Node.
+- The product is already delivered through a signed and notarised macOS installer,
+  which is the kind of installer a companion application needs.
+- The backend's lifecycle is already supervised. It listens on the loopback
+  interface only and refuses callers it cannot verify. It shuts itself down when
+  the panel that started it is gone, and the panel accepts a running backend only
+  if its identity matches.
+- Durable user data already lives outside the extension folder, in the per-user
+  application-data folder, as files and not only in browser storage. A commit
+  guard forbids writes inside the installed extension.
 
-An earlier internal plan put the FFmpeg dependency at 5 endpoints and described
-it as "the extraction pipeline". Re-measuring found 13, and the eight it had
-missed are what make this a product-wide dependency rather than a feature-level
-one: result delivery, thumbnail generation, preflight validation, and the
-agent's own media inspection all sit on it.
+**What is left on this side.**
 
-**The part that is easy to underestimate is not the process spawning — it is the
-layout.** The backend resolves its own root at runtime to find its
-configuration, its staging directory, its native addon and its prompt files;
-those resolutions have **29 call sites across four modules**. (We published 56
-across two. Re-measured 30 Aug it is 29 across four — our own figure was roughly
-double the real one, in the direction that overstates our difficulty, which is
-the direction a reader should be most suspicious of.) A sidecar that does
-not preserve the same relative layout does not fail loudly. It starts, serves
-most routes, and breaks three unrelated things quietly, one feature at a time.
-That is the class of failure we are designing the sidecar packaging around, and
-it is why "just ship the server separately" is a larger piece of work than it
-sounds.
+- *The layout.* The backend resolves its own root at runtime to find its
+  configuration, staging directory, native addon and prompt files, in four
+  modules (29 call sites on 2026-08-30, not re-counted). A companion application
+  that does not preserve the same relative layout does not fail loudly. It starts,
+  serves most routes, and breaks unrelated things quietly. The packaging is
+  designed around that failure.
+- *The address.* The backend's address is written out on 91 lines in 42 panel
+  files instead of being resolved in one place. Consolidating it is a string
+  change with no behaviour attached. It was meant to happen before launch, and
+  1.0.0 was built without it.
+- *The supervisor.* The panel module that spawns and supervises the backend was
+  called 39 times from 13 files on 2026-10-21. Most call sites change meaning but
+  not shape: launch-and-health-check replaces spawn-and-health-check.
+- *The caller check.* The backend recognises the panel by the CEP panel's own
+  origin. A UXP panel will present a different one, so the check needs a UXP
+  equivalent.
+- *The launcher.* The panel will launch the companion application through a URL
+  scheme that application registers, which UXP supports. The scheme arrives with
+  the installer that first carries the companion application.
 
-**What the panel side actually costs, measured 2026-08-30.** The scary-sounding
-half turns out to be the cheap one. The module that spawns and supervises the
-backend — whose whole reason for existing disappears — is called **39 times from
-13 files** (the same search gives the same count on 2026-10-21), and the distribution decides the work: a handful of call sites
-survive untouched, most change meaning but not shape ("the backend is up when
-this resolves" stays the contract; launch-and-health-check replaces
-spawn-and-health-check), and a few disappear together with the system Node they
-looked for. That is a body change on the panel side, not a signature change —
-**provided** the backend's address is resolved in one place rather than written
-down at each call site. It is not: on 2026-10-21 the address is written out 82
-times across 40 panel files. Consolidating it is on our own list, because it is a
-string constant with no behaviour attached and it converts the largest remaining
-unknown in this section into a one-function edit. It was meant to happen before
-launch, and version 1.0.0 was built without it.
+For us, the UXP migration and building, signing, distributing and launching a
+companion desktop application are the same project.
 
-**The launcher arrives with the companion application.** The panel will launch
-the sidecar through a URL scheme the companion application registers, which is
-the reason we went looking for `launchProcess` in the first place. The scheme is
-installed by the installer that first carries the companion application.
-
-We are not asking Adobe to solve this. We are stating it so that the scope is
-visible: for us, UXP migration and building, signing, distributing and
-auto-launching a companion desktop application are the same project.
-
-### 2.2 The panel loads as 146 script tags, and whether to bundle them is our choice  
+### 2.2 The panel loads as 149 script tags, and whether to bundle them is our choice
 *[SOURCE] on the count · [PLATFORM] on the script entry point*
 
-On 2026-10-21 the panel is 146 script tags — 139 of them panel modules, all
-deferred, sharing state through 896 `window` globals by the load-order guard's
-count. (114 / 107 / 802 on 30 Aug; 106 / 99 / 753 on 19 Aug. The surface grew by
-32 modules and 94 globals in seven weeks, which is worth knowing when reading any
-of the numbers in this document as a fixed property.)
+At 1.0.0 the panel page has 149 script tags: 142 deferred panel modules, one
+platform library and six inline blocks. The modules share state through 949
+`window` globals by the load-order guard's count. The page also has 24 inline
+handler attributes. (114 tags on 2026-08-30 and 146 on 2026-10-21: the surface
+grows while we measure it.)
 
-Until 2026-11-16 this subsection said that UXP requires a bundled entry point
-and does not support script tags. That was wrong. Bundling is optional under
-UXP: Adobe's TypeScript guide supports ordinary scripts with a script entry. Our
-globals, load order, DOM assumptions and inline handlers still need review
-either way, and no adapter layer helps with that. So this subsection has moved
-from "cannot be adapted" to "has to be reviewed", and we have left it where it
-stood rather than renumber the document around our own mistake. Section 3
-describes the one thing we did that makes the review tractable.
+Bundling is optional under UXP: Adobe's TypeScript guide supports ordinary scripts
+with a script entry. Globals, load order, DOM assumptions and inline handlers
+still need review either way. Section 3 describes the one thing that makes the
+review tractable.
 
-### 2.3 Twenty-two user-facing operations depend on the QE DOM  
+### 2.3 A set of agent operations depends on the QE DOM
 *[SOURCE] throughout — what replaces them is an open question, not a claim*
 
-This is the finding we most want a platform answer on.
-
 Premiere's QE DOM is undocumented and unsupported, and a set of timeline
-operations have no equivalent in the supported ExtendScript DOM. In modelBridge,
-**22 user-facing operations have QE as their only implementation** — all of them
-in the agent layer, all of them timeline editing: precision trim variants,
-razor/split, effect and transition application, track manipulation, clip speed,
-and the related family. When QE is unavailable, these fail hard. There is no
-degraded path, because there is nothing to degrade to.
+operations has no equivalent in the supported ExtendScript DOM. On 2026-08-19,
+**22 user-facing operations had QE as their only implementation**, all in the
+agent layer and all timeline editing: precision trim variants, razor and split,
+effect and transition application, track manipulation, clip speed and the related
+family. When QE is unavailable these fail hard, because there is nothing to
+degrade to. That count was not re-taken; at 1.0.0 QE is switched on at 23 places
+and 31 functions touch it directly, so read 22 as a floor.
 
-Two things sharpen the picture:
-
-- **The direct reference count understates the exposure by roughly five times.**
-  Counting the entry points gives 48 references; counting what those entry
-  points then manipulate gives 234. Sizing this migration from the entry points
-  alone would underestimate it by a factor of five, and we suspect we are not
-  the only extension that has made that arithmetic error.
-- **Our core generation path does not depend on QE.** Media import uses the
+- **The direct reference count understates the exposure about five times.**
+  Counting the entry points gave 48 references on 2026-08-19; counting what those
+  entry points then manipulate gave 234.
+- **The core generation path does not depend on QE.** Media import uses the
   supported DOM and reaches for QE only as a recoverable fallback when track
-  creation fails, then reports an honest error if both routes fail. So the
-  product survives QE loss; the agent layer, which is our differentiator, does
-  not.
+  creation fails, then reports an error if both routes fail. The product survives
+  QE loss. The agent's timeline editing does not.
 
-These are the 19 August figures and were not re-measured on 21 October. A rough
-search shows more QE entry points in the tree than on 30 August, so read them as
-floors.
+Adobe states that ExtendScript is not affected by the CEP transition. That is a
+statement about the scripting language, and we have not established what it means
+for a UXP panel calling these operations. Question 2 is about this.
 
-We are not claiming this is Adobe's problem to fix on our schedule. We are
-saying that our most differentiated functionality currently rests on an
-unsupported API, we know exactly how much of it does, and we would rather ask
-now than discover the answer during a beta.
+### 2.4 The ExtendScript surface is the size of the port
+*[SOURCE]*
 
-### 2.4 The ExtendScript surface is larger than our own mapping  
-*[SOURCE] on both numbers · [DEPRECATED] on the parity table read as coverage*
+The host layer defines 402 top-level ExtendScript functions at 1.0.0 (about 380
+on 2026-10-21, 261 on 2026-08-19), the functions behind the agent tools imported from an
+open-source project among them. This is the surface a UXP build has to reach, one way or
+another.
 
-Our host layer defines **about 380 global ExtendScript functions** on 2026-10-21
-(276 published on 30 Aug, 261 on 19 Aug — the surface we have to port is growing
-while we measure it). The search behind the new figure reads 257 at the commit
-the 19 Aug figure came from and 262 at the 30 Aug commit, whose published 276
-came from a working tree; so it may undercount slightly, and the growth is real
-either way. Our own CEP→UXP parity table still covers **23 of them with a live
-mapping — about 6 %**. The unmapped remainder is not evenly distributed: it is
-concentrated in the agent tool layer and the QE-dependent operations above.
+No operation-by-operation mapping to UXP exists yet. An earlier list of 25
+candidate names was withdrawn, because a name match is not evidence of parity.
 
-We are reporting this number because the alternative — quoting the parity table
-as though it described the whole surface — is how a migration plan becomes
-comforting instead of useful. The table's own summary reads "0 confirmed
-impossible", and that holds only over the small share it examined — about 6 % of
-the 2026-10-21 surface.
-
-### 2.5 Machine identity, and what an account-bound identity would do to a seat  
+### 2.5 Machine identity, and what an account-bound identity would do to a seat
 *[PLATFORM] on the identifier UXP offers · [ASSUMPTION] on what it would do to a seat model · [SOURCE] on our own identity provider*
 
-Our licence binding rests on an install identity derived from the machine. It
-is the local half of a "two registered computers, one generating at a time" seat
-model.
+Licence binding rests on an install identity derived from the machine. It is the
+local half of a "two registered computers, one generating at a time" seat model.
 
-UXP offers `userInfo.userId()` — a GUID that is **bound to the Adobe account,
-not the machine**, and that Adobe's own developer forum reports is a *different*
-identifier from the one CEP exposes, with no published mapping between them.
+UXP offers `userInfo.userId()`, a GUID that is **bound to the Adobe account, not
+the machine**. Adobe's developer forum reports that it is a different identifier
+from the one CEP exposes, with no published mapping between them.
 
-Swapping one for the other is not a like-for-like substitution, and the
-consequence is specific rather than theoretical. Under an account-bound
-identity, one person on two machines presents the **same** identifier, so a seat
-model sees one device where the customer has two and the second activation is
-indistinguishable from the first. Two people sharing one machine present two
-identifiers where the licence should see one. Neither is detectable locally, and
-both are the kind of error that shows up as a support conversation about
-something the customer did not do.
+Swapping one for the other is not like for like. Under an account-bound identity,
+one person on two machines presents the **same** identifier, so a seat model sees
+one device where the customer has two. Two people sharing one machine present two
+identifiers where the licence should see one. Neither is detectable locally.
 
-The position we have landed on, measured 2026-08-30: our install identity is
-produced in one place, and that place is the local backend — the
-process that becomes the companion application and keeps a full runtime. So the
-machine-derived identity does not have to enter the UXP sandbox at all, and the
-account-bound GUID is not a dependency we need to take. We are reporting this
-because our own earlier planning assumed the opposite, and treated the licence
-chain as something the migration would have to rewrite.
+Our position: the install identity is produced in one place, and that place is
+the local backend, the process that becomes the companion application and keeps a
+full runtime. So the machine-derived identity does not have to enter the UXP
+sandbox, and the account-bound GUID is not a dependency we need to take. That
+makes the UXP answer a provider swap. (A second producer existed in the panel
+until 2026-09-01. It did not affect licence binding. There is one producer now,
+pinned by a test.)
 
-**Measuring that turned up a live defect in our own code, worth reporting at its
-real size rather than the size it first sounded.** The panel had a *second*
-producer of the same id, and on some installs the two disagreed. What that did
-**not** affect is the licence binding, which is where we first expected the
-damage. What it did affect is our ability to tell which install we are looking
-at when a customer writes in. Fixed 2026-09-01: there is one producer. Pinned by
-a test that fails against the previous build.
-
-The general shape is one we keep finding in our own code and have a written rule
-for: the same truth produced independently in two places, agreeing until it
-doesn't. It is also the reason the UXP answer here is a provider swap — one
-producer is portable, two are a merge.
-
-What we would still like to know is in question 6 below.
+What we would still like to know is in question 6.
 
 ---
 
 ## 3. What we got right  — [SOURCE]
 
-These were decisions made for other reasons — mostly to stop recurring bug
-classes — that turned out to be migration groundwork.
+These were decisions made for other reasons, mostly to stop recurring bug classes,
+that turned out to be migration groundwork.
 
 **One machine-checked dependency graph.** A pre-commit guard parses the panel's
-script order and every global provider, and fails the commit when a module reads
-a global whose provider loads later. On 2026-10-21 it maps 896 providers across
-138 of the panel's 139 scripts and reports zero violations. (The one it did not
-read was a script tag whose path was written differently from the other 138, so
-the guard's parser did not match it. We first published the cause as the order
-of the tag's attributes, which was wrong. We found the gap while re-measuring
-for this document, and it was closed on 2026-10-24.) It was built because that failure mode had
-shipped twice, in two different disguises. Its side effect is that the
-inter-file half of the import graph a bundler needs already exists as a
-machine-checked artifact rather than as folklore — which is exactly the thing
-that is normally lost when a codebase of this shape is bundled.
+script order and every global provider, and fails the commit when a module reads a
+global whose provider loads later. At 1.0.0 it maps 949 providers across all 142
+panel scripts and reports zero violations. It was built because that failure had
+shipped twice. Its side effect is that the inter-file half of the import graph a
+bundler needs already exists as a checked artifact.
 
-**One resolver per question.** Fifteen questions that used to be answered
-independently in several places — is this model installed, does this endpoint
-resolve, does this generation count as spend, is this licence state indeterminate
-— now have exactly one implementation each. A port re-verifies each once instead
-of finding the fourth copy in production.
+**One resolver per question.** Questions that used to be answered independently in
+several places — is this model installed, does this endpoint resolve, does this
+generation count as spend, is this licence state indeterminate — have one
+implementation each. A port re-verifies each once.
 
-**One error pipeline.** Every user-facing error in the product, from 128
-producer sites (the 30 August count, not re-taken), passes through one translator and one renderer. UXP will change
-how surfaces behave; concentrating that in one renderer means the migration
-touches one component rather than 128.
+**One error pipeline.** Every user-facing error passes through one translator and
+one renderer. UXP will change how surfaces behave, and that change lands in one
+component.
 
-**A migration wrapper — and a version-stamp claim we have had to narrow.** Migrations of the installed-model store run behind a
-wrapper that takes a backup first, dry-runs against a clone second, and aborts
-rather than proceeding when either step fails. That wrapper exists because a
-migration once destroyed user data, and it is the reason we are not writing one
-under time pressure during the port.
+**Backup before migration.** Every migration of the installed-model list first
+writes a timestamped backup of the whole list and does not proceed if that write
+fails. This backup-first behaviour is covered by tests for the store-adoption path
+and the endpoint-id migration. A stricter wrapper that also rehearses the change on
+a copy exists in the source, but at 1.0.0 no migration uses it and no test
+exercises it. Nothing forces a new migration through either, so a data migration
+written during the port could still bypass both. Neither is a gate.
 
-This paragraph has been wrong before, which is why it is the longest one in this
-section.
+**Schema versions, where the data cannot be regenerated.** Four durable stores
+carry a schema version: installed models, generation logs, external costs and
+settings. Three do not: two learned-value stores and the licence store. The two
+learned-value stores version each record and discard stale ones. Our own policy
+requires the stamp, so the three are a gap.
 
-*The first error was too strong.* We described the wrapper as "tested" and on
-2026-08-30 had to correct that: its guarantees were read from the source and
-proven by nothing.
+**A newer file is never overwritten.** A stamped store written by a newer build is
+refused and locked, not overwritten. That is the behaviour needed while a CEP and
+a UXP build read the same data.
 
-*And the sentence beside it was too broad all along.* We wrote "persisted data
-carries a schema version". Measured 2026-09-09 across our durable documents:
-**three carried one and four did not** — installed models, generation logs and
-external costs were stamped; settings, two learned-value stores and the licence
-store were not. Re-checked 2026-10-21: settings have been stamped since
-2026-09-27, so **four carry one and three do not** — the two learned-value stores
-and the licence store. Our own policy requires the stamp. This is a gap in the product,
-it was covered by a sentence in this document that was true of the files we
-happened to think of, and it is the kind of thing a port discovers at the worst
-moment.
-
-Two further limits: it covers **this
-wrapper only**, not the six other migration paths beside it; and nothing
-structurally forces a migration through the wrapper, so a data migration written
-during the port could still bypass it entirely. Neither is a gate.
+**Host behaviour is recorded from a live host.** A snapshot generated on Premiere
+Pro lists what the host has and lacks, and a commit guard refuses calls to methods
+the snapshot does not know. Every guard named here, the load-order and usage-layer
+guards included, is also run against a planted violation, so a guard that has
+stopped refusing fails the commit.
 
 ---
 
 ## 4. What we got wrong  — [SOURCE], and [DEPRECATED] for what they retire
 
-Two substantive errors, both still live on 2026-10-21, one smaller one we
-have closed, and — added 2026-11-16 — three statements about the platform that
-we published wrong. Neither of the first two is fixed by this update — reporting them
-is not the same as having dealt with them, and we would rather the distinction be
-visible than flattering.
-
-### 4.1 Our storage adapter is synchronous, and that was our own rule violation
+### 4.1 Our storage adapter is synchronous, against our own rule
 
 Our development policy says new storage and host APIs must return promises, so
-that CEP's synchronous behaviour does not leak into call sites that will have to
-be asynchronous under UXP. The host-call adapter and the credential adapter
-follow it. The storage adapter does not: on 2026-10-21 it has seventeen methods
-(ten on 30 August), and every one of them returns values directly.
+that CEP's synchronous behaviour does not leak into call sites that will be
+asynchronous under UXP. The host-call adapter follows it. The storage adapter does
+not: at 1.0.0 it has twenty methods, and nineteen return values directly. One,
+added later for binary reads, returns a promise. The credential adapter offers a
+promise API, but 13 of its 16 call sites still use its synchronous mirror, so
+those calls change too.
 
-The consequence is precise. UXP's file system API is asynchronous, so replacing
-the adapter's implementation is not a body swap — it is a signature change at
-every one of its 57 call sites (44 on 30 Aug, 34 on 19 Aug), plus the 99
-file-system invocations not yet converted, plus the **19 module-load-time reads**
-counted on 30 Aug (9 on 19 Aug; not re-counted since) that will have to be
-restructured because they run before anything can await. Every half of this
-mistake has grown at every reading. We built the largest of our adapters in the shape that makes
-its own replacement hardest, in the one place our policy explicitly warned
-against it.
+UXP's file system API is asynchronous, so replacing the storage adapter's
+implementation is not a body swap. It is a signature change at each of its 57
+call sites, plus the direct file-system calls not yet converted, plus the
+module-load-time reads (19 on 2026-08-30, not re-counted) that run before anything
+can await. We built the largest adapter in the shape that makes its own
+replacement hardest.
 
-### 4.2 The largest platform dependency in the panel had no quota row until 2026-09-01
+### 4.2 The largest platform dependency had no quota row until 2026-09-01
 
-The panel makes **400 `localStorage` calls across 55 files** on 2026-10-21 (384
-across 50 on 1 September). This paragraph used to continue: UXP provides no
-`localStorage`, so this is the same asynchronous signature change as the
-file-system one, at about two and a half times its size. Section 4.4 retracts
-that. UXP has a synchronous `localStorage`; what it does not give us is the data
-our CEP panel has already stored, so what remains is a data migration.
+The panel's `localStorage` use had no adapter, no row in section 1 and no place in
+the migration plan beyond a footnote. Until that date every adoption percentage we
+published was computed over a denominator that excluded its largest term. The row
+is in section 1 now.
 
-It had no adapter, no row in the table in section 1, and no mention in our
-migration plan except as a data-migration footnote — which turns out to have
-been nearer the truth than our correction of it. So the error is not that the
-work is undone — it is that **we were publishing an adoption percentage over a
-denominator that excluded its largest term, and describing the result as
-readiness.** Six surfaces were measured and reported; the seventh was bigger than
-several of them combined. A reader could have checked the six we listed and found
-every one of them accurate, which is what makes this the more serious of the two:
-the numbers were right and the frame was wrong.
-
-The row is in section 1 as of 2026-09-01. The adapter is still not built, and
-the reason has changed. We held off because 400 sites looked like the largest
-mechanical change in the codebase, and building it against a storage API we had
-not yet used is how you commit to the wrong shape at the worst possible scale.
-With a synchronous `localStorage` in UXP, those calls may not need to change
-shape at all, and the thing to design is the data move. We have not run any of
-this in UXP, so the row stays at a visible 0 % rather than an invisible one.
+The adapter is still not built, deliberately. UXP has a synchronous
+`localStorage`, so the calls may not need to change shape at all, and the thing to
+design is the data move: deciding what owns each stored value, and exporting and
+importing it. The installed-model list, the ledger and settings already have a
+copy on disk outside the extension, which narrows that move. We have not run any
+of this in UXP, so the row stays at a visible 0 %.
 
 ### 4.3 Closed: two adapters we planned and did not need
 
-An earlier internal plan specified adapters for platform event handling and file
-dialogs. Measuring the surfaces they were meant to cover found two event
-listeners and zero dialog calls. We did not build them. Speculative abstraction
-ahead of a measurement is how a migration plan grows work that protects nothing —
-and this is the one item in this section that measurement resolved in our favour,
-which is why it is here rather than in section 3.
+An earlier plan specified adapters for platform event handling and file dialogs.
+Measuring the surfaces found three host event listeners and zero dialog calls at
+1.0.0. We did not build them.
 
-### 4.4 Corrected 2026-11-16: three platform statements we published wrong
+### 4.4 Corrections
 
-All three were class [PLATFORM] in section 8, which is the class a reader is
-most entitled to trust. All three are corrected against what Adobe's September
-2026 announcement and reference pages state, not against anything we ran.
-
-- **The support window.** We read a "calendar year" sentence in a sample ReadMe
-  as CEP removal around November 2026, and planned against it. [Adobe's September
-  2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP
-  submissions ending in December 2027 and CEP disabled by default in December
-  2028. Our re-read on 2026-10-21 confirmed that the old sentence was unchanged
-  and did not look for a newer statement, so it re-confirmed a page instead of
-  the fact.
-- **`localStorage`.** We wrote that UXP does not provide it and that its
-  replacement is asynchronous. UXP provides a synchronous `localStorage`, but
-  not access to the data our CEP panel has stored, so the migration is about
-  moving data, not about changing every call. The arithmetic we built on the old
-  claim — "two and a half times the file-system surface" as a signature change —
-  is withdrawn with it.
-- **Bundling.** We wrote that UXP requires a bundled entry point. Bundling is
-  optional under UXP; our globals, load order and inline handlers still need
-  review.
-
-All three were wrong in the direction that made our migration sound harder or
-more urgent than it is.
+Three [PLATFORM] statements we published were wrong and were corrected on
+2026-11-16 against Adobe's announcement and reference pages: the support window
+(we had read it as CEP removal around November 2026), `localStorage` (we had
+written that UXP has none), and bundling (we had written that it is required).
+All three had made the migration sound harder or more urgent than it is.
 
 ---
 
-We report this section rather than the three 100 % rows alone because a migration
-readiness claim that contains no mistakes is not a measurement of a migration. It
-is a measurement of how hard someone looked.
+## 5. Open platform questions  — what we do not know, and what each answer decides
 
----
+1. **Frame and clip export.** Is there, or will there be, a UXP API for extracting
+   a frame or a media range from a timeline clip? The answer decides whether the
+   companion application is a permanent part of the architecture or a transitional
+   one. It is the highest-leverage unknown we have. Section 7.2 states what would
+   count as an answer.
 
-## 5. Open questions to the platform owner  — the boundary of [PLATFORM]
-
-Asked as engineers who have already measured the answer's cost to us.
-
-1. **Frame and clip export.** Is there, or will there be, a UXP API for
-   extracting a frame or a media range from a timeline clip? This single
-   question determines whether our companion application is a permanent part of
-   the architecture or a transitional one. It is the highest-leverage unknown we
-   have, and we re-check it monthly.
-
-2. **Supported equivalents for the QE-dependent operations.** For the 22
-   operations in section 2.3 — the timeline editing family with no supported DOM
-   equivalent — what is the intended UXP path? We are not asking for QE to be
-   preserved. We are asking which of these operations are expected to have
-   supported equivalents, so we can tell the difference between "not yet" and
-   "not planned" before we commit a beta to it.
+2. **Supported equivalents for the QE-dependent operations.** For the operations
+   in section 2.3, the timeline editing family with no supported DOM equivalent,
+   what is the intended supported path? The answer separates "not yet" from "not
+   planned" before a beta is committed to it. Adobe's local MCP integrations for
+   Premiere, announced 2026-11-10 with a private beta in early 2027, may offer a
+   supported route for some of them; see [ROADMAP.md](ROADMAP.md).
 
 3. **Source Monitor.** Is the Source Monitor scriptable from UXP, and to what
    depth? Opening a result for full-resolution evaluation and reading its In/Out
-   points is a workflow our users rely on daily.
+   points is a workflow editors use daily.
 
 4. **Hybrid plugins and the sandbox boundary.** Hybrid plugins (announced April
    2026, Premiere 26.2) load dynamically linked C++ libraries at runtime, and the
-   announced use cases include performance-intensive audio/video processing. That
-   raises a question we cannot answer from the documentation: **could a hybrid
-   plugin link a media library directly — `libavcodec` and friends — instead of
-   shelling out to a binary?** If it could, the companion application in section
-   2.1 is transitional rather than permanent, and this is the only development we
-   have seen that would change that conclusion.
+   announced use cases include performance-intensive audio and video processing.
+   Could a hybrid plugin link a media library directly, `libavcodec` and the
+   libraries beside it, instead of shelling out to a binary? If it could, the
+   companion application in section 2.1 is transitional.
 
-   What we cannot find, and what we would need before designing against it:
-   Adobe's own statement of the sandbox boundary for native modules. Whether a
-   hybrid plugin may read and write arbitrary user file paths rather than
-   plugin-scoped storage; what it may and may not do with processes and sockets;
-   and whether any of that is contractual or incidental. Third-party write-ups
-   describe the restrictions as "relaxed"; the hybrid-plugin pages we can find on
-   developer.adobe.com say nothing about it either way.
+   What we cannot find is Adobe's own statement of the sandbox boundary for native
+   modules: whether a hybrid plugin may read and write arbitrary user file paths
+   and not only plugin-scoped storage, what it may do with processes and sockets,
+   and whether any of that is contractual. Linking a GPL or LGPL media library is
+   also a different licensing obligation from invoking a separate binary, and we
+   have not settled that on our side.
 
-   We are also aware this is not purely a technical question for us: linking a
-   GPL/LGPL media library is a materially different licensing obligation from
-   invoking a separate binary, and we have not yet asked our own version of that
-   question. We mention it so the ask is honest — we are not requesting a
-   capability we have already cleared for our own use.
+5. **Secure storage, when the data is a seat and not a session.** The
+   documentation says secure storage "should be regarded as a cache rather than a
+   persistent storage", and that stored data "should be able to be regenerated
+   from plugins after the time of loss". The open question is the supported
+   pattern when regeneration is not free.
 
-5. **Secure storage, when the data is a seat rather than a session.** We asked
-   this before as a durability question. The documentation has since answered
-   that part plainly — secure storage "should be regarded as a cache rather than
-   a persistent storage", and stored data "should be able to be regenerated from
-   plugins after the time of loss" — so the open question is not how durable it
-   is, but what the supported pattern is when regeneration is not free.
+   The concrete case: a licence activation consumes one of a small number of
+   device slots. If local state is lost, the plugin cannot regenerate it locally.
+   It has to re-activate, and a re-activation against a server that still holds
+   the previous activation either consumes a second slot or has to be reconciled
+   by a release call that depends on the identifier that was lost. The customer
+   with two devices discovers they have one.
 
-   The concrete case, which we have now built and can therefore cost: a licence
-   activation consumes one of a small number of device slots. If local state is
-   lost, the plugin cannot regenerate it locally — it has to re-activate, and a
-   re-activation against a server that still holds the previous activation
-   either consumes a second slot or has to be reconciled by a release call that
-   depends on the very identifier that was lost. The failure is not a customer
-   signing in again; it is a customer with two devices discovering they have
-   one, after a loss that Adobe documents as expected and that the plugin has no
-   event for.
-
-   So: what is the recommended pattern for a value that must survive, when the
-   platform states it may not? Specifically — is there a supported signal that
-   secure storage was cleared (as distinct from never written), so a plugin can
-   tell a first run from a loss? That single distinction is the difference
-   between a silent double-consumption and a recoverable one.
+   So: is there a supported signal that secure storage was cleared, as distinct
+   from never written, so a plugin can tell a first run from a loss?
 
 6. **Machine-scoped identity.** Following section 2.5: is there a supported way
-   for a UXP plugin to obtain an identifier scoped to the **machine** rather
-   than to the Adobe account? We are not asking for hardware serials — a stable,
-   opaque, per-installation value that survives a plugin reinstall is enough. If
-   the answer is no, we would like to know that it is deliberate, because it
-   decides whether a device-based licence model is something Adobe intends
-   plugins to be able to implement at all.
+   for a UXP plugin to obtain an identifier scoped to the **machine** and not to
+   the Adobe account? A stable, opaque, per-installation value that survives a
+   plugin reinstall is enough. The answer decides whether a device-based licence
+   model is something a UXP plugin can implement at all.
 
 7. **Companion applications and marketplace policy.** If frame export does not
-   arrive, our architecture requires a separately installed helper application.
-   What is the current guidance for extensions that depend on one — for
-   distribution, for review, and for the permissions the panel needs to talk to
-   it?
+   arrive, the architecture requires a separately installed helper application.
+   What is the guidance for extensions that depend on one: for distribution, for
+   review, and for the permissions the panel needs to talk to it?
 
 ---
 
 ## 6. No-Go criteria for our UXP beta  — refusals, not claims
 
 We will not ship a UXP beta while any of these is true. They are written as
-refusals rather than goals so that a slipping date cannot quietly become a
-lowered bar.
+refusals so that a slipping date cannot quietly become a lowered bar.
 
 1. The core path — select a clip, generate, import, place on the timeline — does
    not work end to end on both macOS and Windows.
 2. The companion application fails to launch or loses its connection without a
    recovery path a non-technical user can follow.
 3. Data migration loses any irreplaceable customer data: installed models,
-   credentials, licence state, or cost history.
-4. Licence migration consumes an additional device slot without explicit
-   consent.
-5. More than three of the host operations we have marked "needs prototype" have
-   no working UXP equivalent.
-6. Any operation exceeds its performance budget by more than 50 %.
-7. The Windows path is unverified on real hardware — including installation,
-   media extraction, import, and behaviour after an application restart.
+   credentials, licence state or cost history.
+4. Licence migration consumes an additional device slot without explicit consent.
+5. Any operation the product advertises has no working UXP path, including its
+   error, timeout and Stop behaviour.
+6. Startup, responsiveness, memory or media-processing time is worse than the
+   budgets set from the CEP baseline before the beta. Those budgets are not set
+   yet.
+7. The Windows path is unverified on real hardware, including installation, media
+   extraction, import and behaviour after an application restart.
 
 ---
 
-## 7. What we re-verify, and why this document has a date on it
+## 7. What we re-verify, and what the platform has said
 
-Every figure here describes a codebase that changes weekly. We re-measure rather
-than re-quote, because we have watched our own numbers rot: an internal plan
-from April 2026 carried figures that were wrong in both directions by the time we
-checked them in August — one dependency understated by more than half, another
-subsystem it treated as migration work turned out to be dead code we then
-deleted. Four of our own documents at one point stated four different values for
-the same count.
+Every figure here describes a codebase that changes weekly, so we re-measure
+instead of re-quoting. The platform items below are meant to be re-read monthly.
+We have not kept that cadence: the platform readings are from 2026-08-30,
+2026-10-21 and 2026-11-16.
 
-Meant to be re-checked monthly: Adobe's CEP timeline; whether frame export has
-arrived in UXP; **whether hybrid plugins can do what our companion application
-does** (see below); the Source Monitor and secure storage answers above;
-marketplace guidance for companion applications; and our own adoption quotas,
-which are produced by search over the source rather than by hand. We have not
-kept that cadence: after the 30 August – 1 September check, the next platform
-reading was a single statement re-read on 21 October, and the three corrections
-of 2026-11-16 (section 4.4) came from outside the cadence altogether.
+**The support window.** [PLATFORM] Adobe's September 2026 announcement places CEP
+retirement at the end of 2029, with new CEP submissions for Premiere ending in
+December 2027 and CEP disabled by default in December 2028. The announcement also
+says ExtendScript is not affected by this transition. The schedule we plan
+against is that one.
 
-**The two checks that could retire an architecture, and what would have to be
-true.** Both are written as falsifiable conditions rather than as things to keep
-an eye on, because "keep an eye on it" is how a monthly check becomes an annual
-one.
-
-| Check | What would have to be true to change the decision | What we do if it is |
-|---|---|---|
-| **Frame export** | **Not the existence of an API — a completed spike.** Documented candidate paths may already exist, and a documented API is not parity: our contract is the seven obligations in 7.2, not "export a frame". This is falsified only by a focused spike, against a named Premiere version, demonstrating the whole of the contract that applies to a given workflow: (1) source-clip rather than sequence-render fidelity; (2) selected media-range output where the workflow needs a range; (3) per-model schema conformance; (4) measurement taken from the produced artifact; (5) the applicable audio and multi-asset behaviour; (6) a writable destination that persists adjacent to the project; (7) unified failure, timeout and recovery semantics. A candidate that carries some of them is a partial answer and is recorded as one | Only then does the companion application lose its main reason to exist, and most of the 13 FFmpeg routes become unnecessary rather than relocated. Until then the sidecar stands, whatever the documentation says |
-| **Hybrid plugins** | All four, and the fourth is the one that decides it: (1) a hybrid plugin may link a media library such as `libavcodec` rather than shell to a binary — plausible, since Adobe names "performance-intensive audio/video processing" as a use case; (2) it may read and write arbitrary user file paths, not only plugin-scoped storage; (3) the licensing of what we would link is compatible with a commercial plugin; (4) **Adobe documents the sandbox boundary**, rather than us inferring it from third-party write-ups and shipping a customer-facing dependency on an inference | The sidecar becomes transitional. We would still ship it first — a hybrid rewrite of the media layer is not a launch-window project — but we would stop designing its installer as a permanent part of the product |
-
-As of this writing, hybrid plugins clear (1) as far as Adobe's stated use cases
-go, and we cannot evaluate (2) or (4) at all: Adobe's own hybrid-plugin pages say
-nothing about the sandbox, file system, process control or networking. That
-silence is the finding. We are not going to design around a capability whose
-boundary is only described by people who are not Adobe.
-
-### What the 30 August / 1 September re-check found
-
-Four things moved, three on the platform side and one under our own hands, and we
-would rather record them here than have this document read as though nothing had.
-
-**The support window: what we read then, and what Adobe has announced since.**
-Adobe's own PProPanel sample ReadMe (updated November 2025) says CEP extensions
-"have been superseded by UXP Extensibility" as of Premiere 25.6, and that "the
-plan is to support both CEP and UXP for a calendar year, after which we will
-remove support for CEP extensibilty." On 30 August we read that as removal around
-November 2026 and planned against it, and on 2026-10-21 we re-read the sentence
-and found it unchanged. That reading is retired. [Adobe's September 2026
-announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP submissions
-ending in December 2027 and CEP disabled by default in December 2028. The
-announcement also says ExtendScript is not affected by this transition.
-Corrected here on 2026-11-16; section 4.4 says how we missed it.
-
-**CEP still works in Premiere Pro 26.3.2. We measured it rather than inferred
-it.** There is a widely-linked bug report against another extension titled "CEP
-extension not loading due to UXP migration", asserting that the platform no
-longer recognises CEP extensions in Premiere 2026. If that were true it would
-change our timeline from months to zero, so we ran the full chain on 2026-09-01
-against **Premiere Pro 26.3.2**:
+**CEP works today, measured.** [SOURCE] On 2026-09-01, against **Premiere Pro
+26.3.2**:
 
 | Step | Result |
 |---|---|
@@ -695,292 +447,121 @@ against **Premiere Pro 26.3.2**:
 | A generation runs end to end | works |
 | Result imports to the timeline through the ExtendScript bridge | works |
 
-So the report describes an installation-path problem, not a platform removal —
-consistent with its own detail, which is about where an installer placed files
-rather than about the extension being refused. We are stating this because the
-claim is circulating and is load-bearing for anyone else's planning, and because
-an unverified "CEP is dead in 2026" is exactly the sort of thing that makes a
-team abandon a working shipping path.
+On 2026-10-21 the panel was loaded and running in **Premiere Pro 26.5.1** (CEP
+12.0.1) and its backend answered its health check; no generation was run for that
+check. This is one version on one platform on one machine. It says nothing about
+Adobe's intent and does not buy time.
 
-**What that measurement does not establish**, since it would be easy to read it
-as more reassuring than it is:
+**The two checks that could retire an architecture.** Both are written as
+falsifiable conditions.
 
-- It is one version on one platform on one machine. Support can be withdrawn in
-  a point release, and nothing about 26.3.2 working says 26.4 will.
-- It says nothing about Adobe's intent. When we ran it, the "calendar year"
-  sentence was the only statement we knew of. Adobe's intent is in its September
-  2026 announcement, and a version that still loads CEP adds nothing to it.
-- The schedule we plan against is Adobe's announced one, not this check. The
-  measurement removes a false alarm; it does not buy time.
-
-Re-checked 2026-10-21, more narrowly: the panel was loaded and running in
-**Premiere Pro 26.5.1** (CEP 12.0.1), and its local backend answered its health
-check. No generation was run for that check, so the end-to-end chain above stands
-as verified on 26.3.2 only.
-
-**UXP can launch a process, but not the one we need.** There is a documented
-`launchProcess` manifest permission and a `shell` module with `openPath()` and
-`openExternal()`. The documented limitation settles our case: "it's not possible
-to pass any parameters, nor to capture the output of the command." Every
-extraction we run is arguments plus captured output, so section 2.1 stands — the
-companion application is still mandatory. What changes is that the panel can
-*launch* that application through a registered URL scheme, which is a better
-mechanism than the login items we had budgeted for, and a supported one.
-
-**Hybrid plugins now exist, and they are the first real threat to our own
-conclusion.** Adobe announced UXP Hybrid Plugins for Premiere in April 2026:
-a plugin can "load dynamically linked C++ libraries at runtime, letting you call
-native functions directly from JavaScript", on macOS and Windows, requiring
-Premiere 26.2. Adobe's own hybrid-plugin pages say nothing about the sandbox,
-file system, or process control, so we cannot yet tell whether a hybrid plugin
-could link the media libraries directly instead of shelling out to a binary. If
-it can, our companion application is transitional rather than permanent. This is
-now the second question on our monthly re-check, behind frame export, and it did
-not exist as a question when this document was first written.
-
-Also worth stating plainly: **secure storage question 5 was partly already
-answered in public and we had not read it.** The documentation says secure
-storage "should be regarded as a cache rather than a persistent storage". We have
-rewritten the question to ask what is actually still open.
-
-### What the 9 September pass did and did not do
-
-It re-measured our own source, classified every load-bearing claim by the five
-classes at the top, and retired the ones measurement has falsified.
-
-**It ran no new platform check.** No Adobe page was re-read, no UXP API was
-exercised, no host was launched. So every [PLATFORM] row still stands on the
-check that established it — the oldest of them from 30 August — and every
-[ASSUMPTION] row is exactly as unverified as it was. A reader who wants the
-current platform position should treat section 5 as the list of what to ask, not
-as a list of what has been answered.
-
-What it did re-check, with the same instrument as before, so the comparison
-means something:
-
-| Row | 30 Aug | 9 Sep | Verdict |
-|---|---|---|---|
-| Provider API key storage — direct calls left | 0 | **0** | holds |
-| Opening external URLs — direct calls left | 0 | **0** | holds |
-| Path construction — direct calls left | 0 | **0** | holds |
-| Browser storage — adapter exists? | no | **still no** | the 0 % stands, and it is by construction |
-
-The three finished surfaces are still finished, nine days on, which is the useful
-part: a surface at 100 % has stayed there through another week of ordinary work,
-and that is the claim section 1 makes about why they hold.
-
-On browser storage, one clarification a reader is entitled to, because the answer
-looks like a technicality and is not: we do have a wrapper over `localStorage`,
-and it is not an adapter. It manages the quota *within* the platform API rather
-than abstracting the platform, so it does nothing for a runtime that has no
-`localStorage` at all. The 0 % is real. (That sentence was written when we
-believed UXP was such a runtime. It is not — section 4.4. The wrapper is still
-not an adapter, and the 0 % still describes it.)
-
-The remaining rows in section 1 — host calls, both file-system rows, the script
-and global counts, the ExtendScript surface — were **not** re-measured with the
-original instrument, and we are not restating them from a different one. A number
-produced by a different search is a different measurement, not a correction, and
-publishing it as an update to the table would be the same error in a new
-direction. They carry their 30 August reading.
-
-### What the 21 October pass re-measured
-
-It re-ran the section 1 quotas, the script and global counts, the route total,
-the ExtendScript function count and the storage adapter's shape against the
-commit that was current on 2026-10-21, using the search patterns the first
-reading wrote down: adapter call sites against direct calls outside the adapter,
-comment lines excluded. Before trusting a pattern, we ran it against the
-30 August commit and compared it with what was published that day. Three rows
-reproduced exactly (URLs, key storage, `localStorage`), and so did
-the load-order guard's script and global counts. The rest landed within nine,
-because the 30 August figures came from a working tree rather than a commit. That
-is why the section 1 table compares against the same search on the 30 August
-commit, not against the published numbers.
-
-Not re-measured, and still carrying their earlier dates: the backend's route
-breakdown, the root-resolution call sites, the QE figures, the error producer
-sites, the module-load-time reads and the identity provider's single writer.
-
-One thing moved in our favour: settings now carry a schema version.
-
-### 7.1 Deprecated — claims measurement has retired
-
-These were published, by us or by our own earlier internal plan (April 2026).
-They are listed so a reader who has seen them elsewhere knows they are dead.
-
-| Retired claim | What measurement found | Retired |
+| Check | What would have to be true to change the decision | What we do if it is |
 |---|---|---|
-| "Adobe will remove CEP support around November 2026" — published here as [PLATFORM] | [Adobe's September 2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | 2026-11-16 |
-| "UXP provides no `localStorage`; its replacement is asynchronous" — published here as [PLATFORM] | Adobe's reference pages document a synchronous `localStorage` in UXP. It does not give access to the data our CEP panel has stored, so the work is a data migration | 2026-11-16 |
-| "UXP requires a bundled entry point" — published here as [PLATFORM] | Bundling is optional under UXP. Our globals, load order and inline handlers still need review | 2026-11-16 |
-| "Host calls are 82 % routed" | True of the panel's script modules only. The panel's HTML page makes 18 more direct calls, which puts the 21 Oct commit at about 75 % | 2026-11-16 |
-| "Persisted data carries a schema version" | Three of our durable documents carried one on 9 Sep and four do on 21 Oct; three still do not | 2026-09-09 |
-| "Frame export has no UXP API today" — published in this document's own register as [PLATFORM] | An absence Adobe does not state, so nothing could be quoted for it. What we can support is narrower: no *proven parity* for our contract. See 7.2 | 2026-09-09 |
-| "UXP cannot spawn processes" | It can. The limitation is narrower and more specific: no arguments, no captured output | 2026-08-30 |
-| "The FFmpeg dependency is 5 endpoints — the extraction pipeline" | 13 endpoints, spread across result delivery, thumbnails, preflight and the agent's own media inspection: product-wide, not feature-level | 2026-08-30 |
-| "The backend resolves its layout at 56 call sites across two modules" | 29 across four — our own figure was roughly double, in the direction that overstated our difficulty | 2026-08-30 |
-| "The parity table shows 0 confirmed impossible" | True only over the 9 % of the ExtendScript surface it examined; quoting it as coverage is what made it comforting | 2026-08-30 |
-| "Two of four platform surfaces are at 100 %" | Three were, in the same table that said two — an editing error, corrected rather than quietly fixed | 2026-08-30 |
-| Adoption percentages published before 2026-09-01 | Computed over a denominator that excluded the panel's largest platform dependency | 2026-09-01 |
-| Plan: "81 script tags" | 114 on 30 Aug; 146 on 21 Oct | 2026-08-30 |
-| Plan: "58 direct path calls across 25 files" | 0 — fully routed through an adapter | 2026-08-19 |
-| Plan: "73 direct file-system acquisitions across 27 files" | 57 routed / 45 direct on 21 Oct | 2026-08-30 |
-| Plan: "the host-call adapter has not been built" | It exists under a different name and was already three-quarters adopted; the plan never mentions that name | 2026-08-19 |
-| Plan: adapters needed for platform events and file dialogs | The surfaces they would cover measured two listeners and zero dialog calls. Not built — see section 4.3 | 2026-08-19 |
-| Plan: a named file is "the CEP bootstrap" | It is loaded by nothing. Dead code, since deleted | 2026-08-19 |
+| **Frame export** | Not the existence of an API: a completed spike, against a named Premiere version, demonstrating the part of the contract in 7.2 that applies to a given workflow. A candidate that carries some of the obligations is a partial answer and is recorded as one | Only then does the companion application lose its main reason to exist, and most of the FFmpeg routes become unnecessary instead of relocated |
+| **Hybrid plugins** | All four: (1) a hybrid plugin may link a media library and not only shell to a binary; (2) it may read and write arbitrary user file paths; (3) the licensing of what we would link is compatible with a commercial plugin; (4) Adobe documents the sandbox boundary, so that we are not shipping a customer-facing dependency on an inference | The companion application becomes transitional. We would still ship it first, and stop designing its installer as a permanent part of the product |
 
-The pattern across the bottom half of that table is worth naming, because it is
-the argument for this whole document having a date on it: **our own plan was
-wrong in both directions.** It overstated some dependencies and understated
-others, and at one point four of our documents carried four different values for
-the same count. A migration plan that is not re-measured does not decay evenly
-toward pessimism — it decays toward whatever was convenient to write.
+On hybrid plugins, (1) is plausible from Adobe's stated use cases, and we cannot
+evaluate (2) or (4): Adobe's hybrid-plugin pages say nothing about the sandbox,
+file system, process control or networking.
 
----
+### 7.1 Deprecated — public statements that are superseded
 
-### 7.2 The one negative claim we had no standing to make
+A reader may have seen these in earlier versions of this repository. They are
+retired.
 
-Section 7.1's second row is the only retirement in this document that was caused
-by *this* document. It is worth its own heading because it is the failure the
-classification pass at the top exists to prevent, committed in the pass itself.
+- "Adobe will remove CEP support around November 2026." Adobe's schedule is the
+  one above.
+- "UXP provides no `localStorage`." It documents a synchronous one; what is not
+  established is access to the CEP panel's stored data.
+- "UXP requires a bundled entry point." Bundling is optional.
+- "UXP cannot spawn processes." It can launch one, without arguments and without
+  captured output.
+- "Host calls are 82 % routed." That counted the script modules only, on
+  2026-10-21. The 1.0.0 figures are 84 % there and 77 % with the HTML page.
+- "Frame export has no UXP API today." Adobe publishes no statement of absence,
+  so this could not be quoted. See 7.2.
 
-The register published **"frame export has no UXP API today"** as class
-`[PLATFORM]` — the class defined at the top as *a statement Adobe publishes about
-UXP, quoted from Adobe's own material*. **Adobe publishes no statement of
-absence.** There was nothing to quote, so the row could not have been that class
-whatever the underlying facts turn out to be. It was an absence of evidence
-rendered as evidence of absence, and it was dated 30 August, which was the date
-of the last time we asked the question rather than the date anything was
-established.
+### 7.2 Frame export: what would count as an answer
 
-The material that was already here had it right and we made it worse. Question 1
-in section 5 asks *"Is there, or will there be, a UXP API for extracting a frame
-or a media range from a timeline clip?"*, and section 7's table states the
-condition that would settle it. A question became a conclusion in the summary of
-itself.
-
-**What we can support, and what replaces it.** Documented candidate APIs may
-exist — a sequence-frame export path and a sequence-export path are the two we
-know to go and look at. Neither has been shown to satisfy our contract, and our
-contract is not "export a frame". It is: *given a selected clip's **source** media
-and an in/out range, produce a real file at a writable path, conformed to the
-destination model's schema, and report the file's **measured** dimensions and
-duration.* Seven obligations sit inside that sentence, and a still-frame API is
-evidence about roughly one of them:
+Documented candidate APIs may exist: a sequence-frame export path and a
+sequence-export path are the two we know to look at. Neither has been shown to
+satisfy our contract, and the contract is not "export a frame". It is: *given a
+selected clip's **source** media and an in/out range, produce a real file at a
+writable path, conformed to the destination model's schema, and report the file's
+**measured** dimensions and duration.* Seven obligations sit inside that sentence:
 
 | # | Obligation | Why a sequence-frame API does not settle it |
 |---|---|---|
-| 1 | **Source fidelity** — the clip's source media, not a sequence render | A sequence-frame export renders the *sequence*: effects, transforms, scaling to sequence frame size, letterboxing. Different pixels. Whether that difference is acceptable is a product decision, not a porting detail |
+| 1 | **Source fidelity** — the clip's source media, not a sequence render | A sequence-frame export renders the *sequence*: effects, transforms, scaling to sequence frame size, letterboxing. Whether that difference is acceptable is a product decision |
 | 2 | **Media-range export** — an encoded sub-range, not a still | Video-to-video and image-to-video need a container and a codec |
-| 3 | **Schema conformance** — per model, at call time | Min/max dimensions, aspect bounds, file-size caps, format allowlist, resolved from the destination model rather than from a fixed preset |
+| 3 | **Schema conformance** — per model, at call time | Dimension limits, aspect bounds, file-size caps and a format allowlist, resolved from the destination model and not from a fixed preset |
 | 4 | **Artifact measurement** | Dimensions and duration read back from the produced file, never assumed from the request |
 | 5 | **Audio and multi-asset handling** | Separate shapes with their own obligations |
-| 6 | **A writable destination** outside plugin-scoped storage | Feeds upload, then persistence adjacent to the customer's project |
+| 6 | **A writable destination** outside plugin-scoped storage | Feeds upload, then persistence beside the customer's project |
 | 7 | **Unified error and recovery behaviour** | One error pipeline, one identity per failure, no dependency on a second application being installed and responsive |
 
-A sequence-export path plausibly reaches obligation 2 and is where we expect the
-**condition-dependent** answers to sit: asynchronous, dependent on a second
-application, preset-driven where we need schema-driven. That is a different
-verdict from "unavailable", and the difference decides whether it is a
-fallback or a non-starter.
+A sequence-export path plausibly reaches obligation 2, and is where we expect
+condition-dependent answers: asynchronous, dependent on a second application,
+preset-driven where we need schema-driven. That is a different verdict from
+"unavailable".
 
-**So the unresolved work is a spike, not a re-read.** Seven rows, each answered
-by making the call and measuring the artifact rather than by reading a page —
-which is the discipline our own CEP measurements already forced on us, where the
-obvious frame-grab member on the supported object is `undefined` at runtime and
-throws, and only a second route works. A documented API is not a working one
-until someone has called it.
-
-Until that spike runs, this row stays `[ASSUMPTION]`. It is not evidence that the
-companion application is permanent, and no row in section 6 or section 7 may lean
-on it as if it were.
+The unresolved work is a spike, not a re-read: seven rows, each answered by making
+the call and measuring the artifact. Our own CEP measurements forced the same
+discipline: the obvious frame-grab member on the supported object is `undefined`
+at runtime and only a second route works. Until the spike runs, row 19 in section
+8 stays [ASSUMPTION]. It is not evidence that the companion application is
+permanent.
 
 ---
 
 ## 8. Claim register
 
-The twenty-one rows a conclusion in this document rests on, by class. Not every
-figure — the adoption quotas in section 1 and the two mistakes in section 4 are
-class [SOURCE] throughout, and are dated where they stand. These are the ones
-where being wrong changes what we build.
-
-The last column is what would have to happen for the row to change, written as a
-falsifiable condition: a claim with no stated falsifier cannot be re-checked,
-only re-asserted.
+The rows a conclusion in this document rests on, by class. The last column is what
+would have to happen for the row to change: a claim with no stated falsifier
+cannot be re-checked, only re-asserted.
 
 | # | Claim | Class | Established | Falsified by |
 |---|---|---|---|---|
-| 1 | Three platform surfaces have zero direct calls left | [SOURCE] | 30 Aug, re-checked 9 Sep and 21 Oct | A direct call appearing outside the adapter |
-| 2 | Host calls are ~82 % routed in the panel's script modules, and ~75 % once the 18 direct calls in its HTML page are counted; the generation pipeline is the unbridged subsystem | [SOURCE] | 21 Oct (75 % in the script modules on 30 Aug by the same search); HTML page counted on the 21 Oct commit and added 2026-11-16 | Re-running the same search, over both |
-| 3 | The panel makes ~400 `localStorage` calls and has no adapter for them | [SOURCE] | 1 Sep, re-measured 21 Oct | An adapter landing, or the sites being removed |
-| 4 | UXP provides a synchronous `localStorage` | [PLATFORM] | Adobe's reference pages; corrected 2026-11-16. On 1 Sep we published the opposite | Adobe removing it. Whether it reaches the data our CEP panel has stored is a separate matter and is not established — section 4.2 |
-| 5 | UXP can launch a process but cannot pass arguments or capture output | [PLATFORM] | 30 Aug | Adobe changing the documented limitation |
-| 6 | Therefore the backend must become a companion application | [ASSUMPTION] | 30 Aug | Row 5 changing, or row 10 resolving in our favour |
-| 7 | 13 backend endpoints invoke external media tooling | [SOURCE] | 19 Aug, carried forward; a rougher 21 Oct search suggests more | Re-measuring |
-| 8 | Bundling is optional under UXP; a script entry is supported | [PLATFORM] | Adobe's TypeScript guide; corrected 2026-11-16. On 19 Aug we published that a bundle was required | Adobe requiring a bundle |
-| 9 | 22 user-facing operations have an unsupported host API as their only implementation | [SOURCE] | 19 Aug | Supported equivalents arriving — question 2 |
-| 10 | A hybrid plugin might link a media library directly instead of shelling out | [ASSUMPTION] | 30 Aug | Adobe documenting the sandbox boundary — question 4 |
+| 1 | Three platform surfaces have zero direct calls left | [SOURCE] | 2026-08-30; holds at 1.0.0 | A direct call appearing outside the adapter |
+| 2 | Host calls are 84 % routed in the panel's script modules and 77 % with its HTML page counted; the generation pipeline is the unbridged subsystem | [SOURCE] | 1.0.0 | Re-running the same search, over both |
+| 3 | The panel makes about 400 `localStorage` calls and has no adapter for them | [SOURCE] | 2026-09-01; holds at 1.0.0 | An adapter landing, or the sites being removed |
+| 4 | UXP provides a synchronous `localStorage` | [PLATFORM] | Adobe's reference pages, read 2026-11-16 | Adobe removing it. Whether it reaches the data the CEP panel has stored is not established |
+| 5 | UXP can launch a process but cannot pass arguments or capture output | [PLATFORM] | 2026-08-30 | Adobe changing the documented limitation |
+| 6 | Therefore the backend must become a companion application | [ASSUMPTION] | 2026-08-30 | Row 5 changing, or row 10 or 19 resolving the other way |
+| 7 | At least 13 backend endpoints invoke external media tooling | [SOURCE] | 2026-08-19; a floor | Re-measuring |
+| 8 | Bundling is optional under UXP; a script entry is supported | [PLATFORM] | Adobe's TypeScript guide, read 2026-11-16 | Adobe requiring a bundle |
+| 9 | At least 22 user-facing operations have an unsupported host API as their only implementation | [SOURCE] | 2026-08-19; a floor | Supported equivalents arriving — question 2 |
+| 10 | A hybrid plugin might link a media library directly instead of shelling out | [ASSUMPTION] | 2026-08-30 | Adobe documenting the sandbox boundary — question 4 |
 | 11 | We could evaluate row 10 by building one | [PROTOTYPE] | not started | Building it. **No conclusion in this document rests on it** |
-| 12 | UXP's user identifier is account-bound, not machine-bound | [PLATFORM] | 30 Aug | A machine-scoped identifier appearing — question 6 |
-| 13 | An account-bound identity would make a two-device seat model unenforceable | [ASSUMPTION] | 30 Aug | Building it and finding otherwise |
-| 14 | Our install identity is produced in one place, inside the process that becomes the companion app, so the sandbox never needs it | [SOURCE] | 30 Aug, still single-writer 9 Sep | A second producer appearing — it has happened once |
-| 15 | Secure storage is documented as a cache, not persistent storage | [PLATFORM] | 30 Aug | Adobe restating it |
-| 16 | A lost seat record cannot be regenerated without consuming a second slot | [ASSUMPTION] | 30 Aug | A supported cleared-vs-never-written signal — question 5 |
-| 17 | CEP still works end to end in Premiere Pro 26.3.2 | [SOURCE] — a live host measurement | 1 Sep; the panel also loaded and its backend answered in 26.5.1 on 21 Oct, with no generation run | Any later version. **One version, one platform, one machine** |
-| 18 | Adobe places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | [PLATFORM] | [Adobe's September 2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications); corrected 2026-11-16. On 30 Aug we published "roughly a calendar year from 25.6" | Adobe revising the schedule |
-| 19 | Our extraction contract has no *proven* UXP parity. Documented candidate APIs may exist — a sequence-frame path and a sequence-export path are the two we know to look at — but none has been shown to satisfy the whole contract | [ASSUMPTION] — see 19a | 9 Sep | A spike, not a document. Question 1, and 7.2 below |
-| 19a | *Retired 2026-09-09:* "frame export has no UXP API today", published here as [PLATFORM] | [DEPRECATED] | — | Adobe publishes no statement of absence, so nothing could have been quoted. See 7.2 |
-| 20 | Four of our durable documents carry a schema version and three do not | [SOURCE] | 21 Oct (three and four on 9 Sep) | Stamping the three |
+| 12 | UXP's user identifier is account-bound, not machine-bound | [PLATFORM] | 2026-08-30 | A machine-scoped identifier appearing — question 6 |
+| 13 | An account-bound identity would make a two-device seat model unenforceable | [ASSUMPTION] | 2026-08-30 | Building it and finding otherwise |
+| 14 | Our install identity is produced in one place, inside the process that becomes the companion application, so the sandbox never needs it | [SOURCE] | 2026-09-01; holds at 1.0.0 | A second producer appearing. It has happened once |
+| 15 | Secure storage is documented as a cache, not persistent storage | [PLATFORM] | 2026-08-30 | Adobe restating it |
+| 16 | A lost seat record cannot be regenerated without consuming a second slot | [ASSUMPTION] | 2026-08-30 | A supported cleared-or-never-written signal — question 5 |
+| 17 | CEP works end to end in Premiere Pro 26.3.2 | [SOURCE] — a live host measurement | 2026-09-01; panel and backend also ran in 26.5.1 on 2026-10-21, with no generation run | Any later version. **One version, one platform, one machine** |
+| 18 | Adobe places CEP retirement at the end of 2029, with new CEP submissions for Premiere ending in December 2027 and CEP disabled by default in December 2028 | [PLATFORM] | Adobe's September 2026 announcement, read 2026-11-16 | Adobe revising the schedule |
+| 19 | Our extraction contract has no *proven* UXP parity. Documented candidate APIs may exist, but none has been shown to satisfy the whole contract | [ASSUMPTION] | 2026-09-09 | A spike, not a document. Question 1, and 7.2 |
+| 20 | Four of our durable stores carry a schema version and three do not | [SOURCE] | 2026-10-21; holds at 1.0.0 | Stamping the three |
 
 **Rows 6, 13, 16 and 19 are the load-bearing assumptions**, and all four concern
-things we have not run. Each one is also the subject of an open question in
-section 5, which is not a coincidence: an assumption we could settle ourselves
-would not be a question for the platform owner. If any of the four is wrong, the
-architecture that follows from it is wrong, and we would rather that be legible
-in a table than buried in a paragraph that reads like a conclusion.
-
----
+things we have not run. Each is also the subject of an open question in section 5.
+If any of the four is wrong, the architecture that follows from it is wrong.
 
 ---
 
 ## In summary
 
-If you are reading this to evaluate whether we understand what we are taking on:
-the adapter work is further along than our own plan believed, the storage adapter
-is a real self-inflicted setback, `localStorage` is a larger surface we were not
-counting and then described wrongly, and the things that decide our timeline — frame export, the
-QE-dependent operations, and now whether hybrid plugins relax the sandbox — are
-not ours to decide.
+The adapter work is further along than our first plan believed, and much of the
+companion application already exists: a standalone backend, a signed installer, a
+supervised lifecycle and data kept outside the extension. The synchronous storage
+adapter is a self-inflicted setback, and `localStorage` is a large surface whose
+cost is a data move. The things that decide the timeline — frame export, the
+QE-dependent operations, and what hybrid plugins are allowed to do — are not ours
+to decide. Adobe's schedule gives until December 2027 for new CEP submissions and
+December 2028 before CEP is off by default.
 
-What the classification pass adds to that summary is a boundary rather than a
-new fact. Of the twenty-one rows in section 8, **eight are measurements of our own
-code, six are quotations of what Adobe publishes, five are assumptions we have not
-run, one is work we have not started, and one is a claim of our own that we have
-had to retire.** Four of the five assumptions — rows 6, 13, 16 and 19 — are ones
-the architecture rests on; the fifth, row 10, is the one that would retire part of
-it. We would rather a reader could see that split in a table than have to infer it
-from the confidence of the prose.
-
-That split moved on 9 September, and not in the flattering direction: one row left
-`[PLATFORM]` for `[ASSUMPTION]` because we had asserted an absence nobody
-published. Section 7.2 is that correction. A register whose distribution never
-worsens is not being re-read.
-
-On 2026-11-16 the distribution did not move and the content did: rows 4, 8 and 18
-kept their class and now say something different, because what we had quoted was
-misread or out of date. Section 4.4 is that correction.
-
-*Measured and written 2026-08-19. Re-measured, corrected and extended 2026-08-30.
-Host chain verified live against Premiere Pro 26.3.2 and the `localStorage` row
-added 2026-09-01. Source re-checked in part, every claim classified, and the
-retired claims collected, 2026-09-09 — with no new platform check in that pass.
-Source re-measured with the first reading's search patterns, three claims
-corrected against us and one platform statement re-read, 2026-10-21. Three
-platform statements corrected against Adobe's September 2026 announcement and
-reference pages, two uncounted surfaces added to section 1 and the register
-recounted, 2026-11-16 — with no other re-measurement in that pass. Every figure
-carries the reading it came from.*
+*Last measured against the 1.0.0 source, 2026-11-24. Platform statements last read
+2026-11-16. Earlier readings are dated where they appear.*
 
 ---
 
