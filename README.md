@@ -64,7 +64,7 @@ It does that by connecting two things that are each very good at their own job:
 - **fal.ai** runs a large, fast-moving catalogue of image, video and audio models and adds new ones soon after they are released.
 - **Adobe Premiere Pro** is where many professional editors already do their work.
 
-modelBridge is the link between them, and it is deliberately independent of either company's own roadmap. Editors can use a new model soon after it appears, without waiting for it to reach any one vendor's product, and alongside Adobe's own generative tools rather than instead of them. For fal.ai, its models become available where editors and AI practitioners actually produce their work. For Premiere Pro editors, the wider model landscape is one panel away.
+modelBridge is the link between them, and it is deliberately independent of either company's own roadmap. Editors can use a new model soon after it appears, without waiting for it to reach any one vendor's product, and alongside Adobe's own generative tools rather than instead of them. fal.ai's models become available where editors and AI practitioners actually produce their work, and for Premiere Pro editors the wider model landscape is one panel away.
 
 ---
 
