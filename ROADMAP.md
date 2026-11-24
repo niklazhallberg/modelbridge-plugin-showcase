@@ -35,6 +35,19 @@ Users bring their own Anthropic API key; the calls go from the editor's machine 
 
 **Planned enhancements:**
 
+### Adobe's local MCP integrations for Premiere
+
+Planned, and dependent on access. At Adobe MAX on 2026-11-10, Adobe previewed local MCP integrations for Creative Cloud tools. They will let an editor's own third-party agent work locally in Premiere, Photoshop, Illustrator and After Effects, making changes directly in native project files while bins and sequences stay editable. Adobe says they will be available in private beta in early 2027 ([press release ↗](https://news.adobe.com/news/2026/11/adobe-transforms-creative-cloud-tools), [Adobe blog ↗](https://blog.adobe.com/en/publish/2026/11/10/explore-new-ways-create-across-creative-cloud-adobe-firefly-while-advancing-craft-precision-choice-control)).
+
+Agent Mode is that kind of agent: it already runs on the editor's machine, beside Premiere. The plan is to connect it to Adobe's Premiere integration as soon as we can get access, so that Agent Mode can call the tools Adobe provides alongside its own.
+
+- **Officially supported timeline access.** Today 74 of Agent Mode's 135 tools come from an open-source Premiere Pro MCP project, and a set of timeline operations depends on Premiere's unsupported QE DOM ([UXP_MIGRATION.md](UXP_MIGRATION.md)). Tools that Adobe maintains would give those operations a supported path wherever Adobe's integration covers them.
+- **More of Premiere within reach.** We expect Adobe's integration to cover operations Agent Mode cannot perform today. Which ones, and how many, depends on what Adobe ships.
+- **The same safeguards.** Tools reached through Adobe's integration would sit behind the same gates as Agent Mode's own: what Premiere cannot undo waits for the editor's confirmation, and nothing that costs money runs without a click.
+- **Generation is unaffected.** fal.ai generation, cost estimates and timeline import do not depend on this and keep working as they do today.
+
+Not known yet: which Premiere operations Adobe will expose, how private-beta access is granted, and the terms for third-party products. This section will be updated when that is public. Nothing here is a release date.
+
 ### Conversation Intelligence
 
 Under consideration: learning which editing tasks editors ask the agent for most often, so that a workflow many editors repeat can become a single command.
@@ -68,7 +81,7 @@ Partly shipped: the agent can already set the text of a Motion Graphics Template
 
 modelBridge currently runs on CEP (Chromium Extensibility Platform), Adobe's established extension framework for Premiere Pro. Adobe is transitioning to UXP (Unified Extensibility Platform) as the modern replacement.
 
-Platform-specific code is being isolated behind adapter layers, and some surfaces are already at zero remaining direct calls — [UXP_MIGRATION.md](UXP_MIGRATION.md) §1 has the counts. The rest is not incremental: UXP can launch a process but cannot pass it arguments or read its output, so the local backend becomes a separately installed companion application; the panel's script loading — its globals, load order and inline handlers — has to be reviewed; and a set of timeline operations in the agent layer depend on Premiere's unsupported QE DOM, for which no supported equivalent exists today.
+Platform-specific code is being isolated behind adapter layers, and some surfaces are already at zero remaining direct calls — [UXP_MIGRATION.md](UXP_MIGRATION.md) §1 has the counts. The rest is not incremental: UXP can launch a process but cannot pass it arguments or read its output, so the local backend becomes a separately installed companion application; the panel's script loading — its globals, load order and inline handlers — has to be reviewed; and a set of timeline operations in the agent layer depend on Premiere's unsupported QE DOM, for which no supported equivalent exists today. Adobe's local MCP integrations, previewed in November 2026, may offer a supported route for some of them; see *Adobe's local MCP integrations for Premiere* above.
 
 [UXP_MIGRATION.md](UXP_MIGRATION.md) carries the measurements, the open questions to Adobe, the No-Go criteria for our beta, and the places our own early decisions turned out to be wrong.
 
