@@ -6,7 +6,7 @@ scale to that. What follows is the machinery that keeps a new model, a new schem
 shape or a new code change from reaching an editor as a broken form, a refused
 run or a wrong number.
 
-Every figure on this page was measured on **2026-10-21**, against the panel build
+Unless dated otherwise, every figure on this page was measured on **2026-10-21**, against the panel build
 on `main` at `e721aa52` and the production Worker at `d013979`. The plugin source
 is private; the files behind each claim can be shown to a reviewer on request, and
 nothing here is a figure we cannot reproduce from a run.
@@ -213,8 +213,10 @@ fail is treated as a step, not a check.
 release build is refused unless it is built from a clean, published, untagged
 state of the main branch, with a bundled ffmpeg that carries everything the
 backend uses and an identity that matches the extension manifest. Version 1.0.0
-was set on 2026-11-21. The signing and notarisation steps behind the gate are not
-built yet, so no customer installer has been produced.
+was set on 2026-11-21. Signing and notarisation followed: the 1.0.0
+installer, built 2026-11-24 from plugin commit `5b583e78`, is signed with a Developer ID
+Installer certificate, notarised by Apple and stapled (checked 2026-11-24 with
+`pkgutil --check-signature`, `spctl -a -vv -t install` and `xcrun stapler validate`).
 
 ## 6. What is running is recorded, not assumed
 

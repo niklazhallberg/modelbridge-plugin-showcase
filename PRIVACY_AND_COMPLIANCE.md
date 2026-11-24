@@ -98,8 +98,8 @@ user-rights information.
 | **Provider API keys** | Your device | Manage locally in the product settings |
 | **Generation history, cost history, installed models, and product settings** | Your device | Manage, reset, or remove locally in the product |
 | **Optional local analysis data** | Your device | Manage or remove locally |
-| **Optional error reports** | ModelBridge services, when enabled | Disabled by default; manage in Privacy settings |
-| **Optional usage measurements** | ModelBridge services, when enabled | Disabled by default; manage in Privacy settings |
+| **Optional error reports** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
+| **Optional usage measurements** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
 | **Device and installation information** | Your device and ModelBridge services where needed for licensing and device management | Contact us through the customer privacy process |
 | **Licence and subscription information** | ModelBridge services and the payment provider | Manage product access locally; contact us through the customer privacy process |
 | **Feedback and satisfaction ratings** | ModelBridge services, when you choose to submit them | Do not submit feedback; contact us through the customer privacy process |
@@ -171,7 +171,8 @@ and user-rights information.*
 
 ### Optional error reporting
 
-Disabled by default. When you enable it, it carries technical error context so that a
+Shown switched on in the setup guide since version 1.0.0. Nothing is sent before you press
+Continue, and it can be switched off there or in Settings → Privacy. While on, it carries technical error context so that a
 failure the product does not yet explain properly can be recognised and given a proper
 message. It carries the error's type and source from a fixed list, the HTTP status,
 whether it was retryable, the plugin and Premiere versions and the platform — no message
@@ -220,8 +221,8 @@ request procedures, and user-rights information.
 
 ### Two separate optional streams
 
-Optional error reporting and optional usage measurement are independent, and each stays
-disabled until you enable it. Neither is designed to carry creative content, and
+Optional error reporting and optional usage measurement are independent, and each can be
+switched off on its own, in the setup guide or later in Settings → Privacy. Neither is designed to carry creative content, and
 content-bearing fields are excluded before anything is sent and again on receipt.
 
 ### No Third-Party Behavioral Data
@@ -244,14 +245,14 @@ customer-facing privacy policy is the governing description.
 | Processor | Role | Data Received | DPA Status |
 |---|---|---|---|
 | **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, network information, and — only after you open *Live preview in mobile* — the preview links it sends (the link to each result on fal.ai's servers, its media type, the model's name and category and the time sent, kept at most 7 days after the last send) | Cloudflare DPA (standard) |
-| **LemonSqueezy** (Lemon Squeezy Inc.) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
-| **fal.ai** (fal Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
-| **Google** (via fal.ai) | The model that runs Enhance — a Google Gemini model, reached through fal.ai's language-model endpoint | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached through fal.ai's language-model endpoint on the user's own fal.ai key; the user's relationship is with fal.ai, which selects Google as the upstream model provider |
+| **Lemon Squeezy** (Link, LLC, formerly Lemon Squeezy LLC, a Stripe company) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
+| **fal.ai** (Features & Labels, Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
+| **Google** (via fal.ai) | The model that runs Enhance — a Google Gemini model, reached through fal.ai's language-model endpoint | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached through fal.ai's language-model endpoint on the user's own fal.ai key; modelBridge chooses the Google model on that endpoint, and the user's relationship is with fal.ai |
 | **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **paths as follows**: media paths and the project file's own path are replaced by session handles at a single choke point, while a path you type into the chat yourself, anything inside raw XMP and the candidate paths of a disk search for an offline file travel as written (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
 | **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata, and public facts about a model's creator — no user content | No user PII processed |
-| **Pushover** (Superblock LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating. A rating carries a random installation identifier and is not linked to a licence or account (§3) | Pseudonymous identifiers only; the rating comment is unlinked user-written text |
+| **Pushover** (Pushover, LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating. A rating carries a random installation identifier and is not linked to a licence or account (§3) | Pseudonymous identifiers only; the rating comment is unlinked user-written text. Pushover publishes no data processing agreement and is not certified under the EU–US Data Privacy Framework; the privacy policy says so |
 | **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
-| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and the payment provider's activation ID, the model, product-state and media-property context, the three recent error messages and the filtered error-log lines, and attached screenshots with their original filenames. This flow does not attach the prompt field, and does not send generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor — characterisation and DPA status pending legal review |
+| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and the payment provider's activation ID, the model, product-state and media-property context, the three recent error messages and the filtered error-log lines, and attached screenshots with their original filenames. This flow does not attach the prompt field, and does not send generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor. Transfer safeguard: EU–US Data Privacy Framework certification and Standard Contractual Clauses in its data processing terms, as the [privacy policy](https://docs.modelbridge.app/legal/privacy-policy/) states |
 
 ### fal.ai Data Flow Note
 
@@ -260,14 +261,14 @@ modelBridge does not act as a data processor for fal.ai generation traffic. The 
 ### Enhance — the one path where a model we did not name until now reads your prompt
 
 Pressing ✨ Enhance rewrites the prompt in the field. Which model does the rewriting
-depends on one thing, your Anthropic key, and the branch matters because the recipients
-differ:
+depends on two things, your Anthropic key and NDA mode, and the branch matters because the
+recipients differ:
 
 | When you press Enhance | Who reads the prompt and any frames |
 |---|---|
-| Media attached **and** an Anthropic key is present | Anthropic, on your own Anthropic key. Google is not involved — unless Anthropic returns nothing or errors, in which case the request falls through to the row below rather than failing |
-| Media attached, **no** Anthropic key (the ordinary case — that key is only needed for Agent Mode) | fal.ai's vision language-model endpoint on your own fal.ai key, running **a Google Gemini model** |
-| **No media attached** — a text-only rewrite | fal.ai's language-model endpoint on your own fal.ai key, running the same Google model |
+| An Anthropic key is present and NDA mode is off, with or without media | Anthropic, on your own Anthropic key. Google is not involved — unless Anthropic returns nothing or errors, in which case the request falls through to fal.ai below rather than failing |
+| **No** Anthropic key, media attached (the ordinary case — that key is only needed for Agent Mode) | fal.ai's vision language-model endpoint on your own fal.ai key, running **a Google Gemini model** (gemini-2.5-flash-lite, chosen by modelBridge) |
+| **No** Anthropic key and no media, **or** NDA mode on — a text-only rewrite | fal.ai's language-model endpoint on your own fal.ai key, running the same Google model |
 
 What travels: the prompt text as typed; the model's display name and category; the
 configured duration, aspect ratio, resolution or image size; and, when media is attached,
@@ -275,7 +276,8 @@ at most four images — a few sampled frames per video, and stills, each downsca
 bounded size before sending. All are sent inline in the request body rather than as
 links. Each image is labelled by its role in the form (for example, the start frame). **No
 filenames, no file paths and no project data are included.** NDA mode strips the frames and
-forces the text-only rewrite. The request needs an active subscription and a fal.ai key,
+forces the text-only rewrite at fal.ai, whatever key is present. *(Corrected 2026-11-24: since
+2026-11-19 an Anthropic key takes text-only rewrites too; this table had them always at fal.ai.)* The request needs an active subscription and a fal.ai key,
 spends your own fal.ai credit (or, on the Anthropic branch, your Anthropic credit, on
 Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21 and 2026-11-16: the
 frame sizes this paragraph stated were wrong; the sizes are bounded as described.)*

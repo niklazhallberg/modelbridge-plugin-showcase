@@ -16,13 +16,13 @@ The cloud layer runs autonomously — detecting new models, verifying their sche
 
 ## Core Design Principles
 
-**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how about 1,200 installable models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
+**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how about 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every migration of installed-model data. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
-**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; the update manifest is read at panel start and about hourly while the panel is open. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release, so a cost estimate cannot currently be changed remotely.
+**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; updates are checked at panel start, error explanations are re-checked about hourly while the panel is open and visible, and feature flags and configuration apply from the next start. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release, so a cost estimate cannot currently be changed remotely.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
 
@@ -98,7 +98,7 @@ flowchart TD
 
 | | |
 |---|---|
-| Supported AI models | About 1,200 installable models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
+| Supported AI models | About 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
 | Panel codebase | About 229,000 lines of JavaScript and CSS (counted 2026-10-23), plus the ExtendScript host layer and the local backend |
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | About 90 pages across guides, reference, Academy, and legal (counted 2026-10-21), plus a parameter index generated from the live catalogue |
@@ -115,7 +115,7 @@ flowchart TD
 
 **Conventions and rules.** Coding conventions, commit standards, and architectural rules are documented and enforced consistently. Every error must go through the translation layer — no raw API output reaches users. Every data migration must create a backup first. Every bug fix must check for the same class of problem elsewhere in the codebase.
 
-**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases are designed to ship as a signed, notarised macOS `.pkg`; that build step is not finished yet.
+**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases ship as a signed, notarised macOS `.pkg` (Developer ID Installer certificate, notarisation ticket stapled). The first, 1.0.0, is attached with its SHA-256 to this repository's [v1.0.0 release](https://github.com/niklazhallberg/modelbridge-plugin-showcase/releases/tag/v1.0.0). The OTA manifest that carries the payload hashes is not itself signed; whoever can publish to this repository controls both.
 
 ---
 
@@ -219,7 +219,7 @@ modelBridge is a deep Premiere Pro integration, not a standalone panel that happ
 
 **Media awareness.** The plugin reads clip properties from the timeline — dimensions, duration, file path, track index — and uses them for validation, media extraction, and context-aware import decisions (replace in-place vs. insert at playhead vs. route to audio track).
 
-**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 82 % of the host calls in the panel's scripts routed through it (2026-10-21; 75 % on 2026-08-30 by the same search; about three-quarters once the calls in the panel's HTML page are counted), with the agent layer fully converted and the generation pipeline deliberately left until after launch. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
+**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 82 % of the host calls in the panel's scripts routed through it (2026-10-21; 75 % on 2026-08-30 by the same search; about three-quarters once the calls in the panel's HTML page are counted), with the agent layer fully converted and the generation pipeline deliberately left until after the 1.0 release. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
 
 ---
 
@@ -267,7 +267,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Visibility-aware polling.** When the panel is hidden, non-critical background work pauses automatically. Generation polling, the backend keep-alive and a few bounded housekeeping tasks continue; everything else waits.
 
-**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Off by default — enabled only if you opt in from Settings.
+**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Shown switched on in the setup guide since version 1.0.0; nothing is sent before Continue is pressed, and it can be switched off there or at any time in Settings.
 
 **Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons. A field that has no curated explanation yet still gets a working ⓘ, linked to its entry in a parameter index on the docs site that is rebuilt from the live catalogue — so a new model's settings are explained from the day it arrives, and the curated text follows. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
 
@@ -279,7 +279,7 @@ All user data — saved models, settings, generation history, cost logs, and lea
 
 The cloud operations layer stores catalog state (model availability, schema verification status) and licensing state (subscription status, device identifiers). It does not store user-generated content, prompts, API keys, or personal information beyond what is provided during license activation — or in a bug report or rating you explicitly choose to send.
 
-API keys are stored locally and transmitted only to their own provider directly — the fal.ai key to fal.ai, the Anthropic key to Anthropic — never to modelBridge infrastructure. Anonymous error telemetry (error type, HTTP status, plugin and Premiere version) is off until the user turns it on, and can be turned off again at any time.
+API keys are stored locally and transmitted only to their own provider directly — the fal.ai key to fal.ai, the Anthropic key to Anthropic — never to modelBridge infrastructure. Anonymous error telemetry (error type, HTTP status, plugin and Premiere version) is shown switched on in the setup guide, sends nothing before the user presses Continue, and can be switched off there or at any time in Settings.
 
 Full data architecture, retention policies, and third-party data flows are documented in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
 
@@ -291,7 +291,7 @@ User API keys are stored locally and used exclusively for direct communication w
 
 A licence check carries the information needed to validate product access and support device management, including a device name made of the platform, the processor model and a random four-character tag (for example "macOS · Apple M2 Pro · 3f9a"). Since 2026-09-27 the device name no longer contains the computer's network name; a device activated by an earlier build keeps its old name, which did, until it is activated again. The service returns the subscription status and access information needed by the product. Licence checks are not used to transfer creative project content.
 
-The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting is off by default and carries technical error context, filtered and truncated before it is sent. Optional usage measurement is opt-in only.
+The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting and usage measurement are shown switched on in the setup guide and can be switched off before anything is sent, or later in Settings. Error reports carry technical error context, filtered and truncated before they are sent.
 
 For full data inventory, GDPR compliance measures, subprocessor list, and retention policies, see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md).
 
@@ -305,7 +305,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **Panel and backend.** Run locally per user. Scaling is linear — each new user is an independent instance with no shared state.
 
-**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (about 1,200 installable models in November 2026), not by the number of modelBridge users.
+**Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (about 1,200 models in the live catalogue in November 2026), not by the number of modelBridge users.
 
 **OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
 
@@ -317,7 +317,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 ### Proprietary code
 
-The modelBridge codebase — panel JavaScript, CSS design system, cloud operations worker, schema parsing engine, cost estimation system, error handling pipeline, and all documentation — is proprietary. A small set of Premiere Pro control tools used by Agent Mode is vendored from the open-source `leancoderkavy/premiere-pro-mcp` project (MIT); see [NOTICE.md](NOTICE.md) for attribution.
+The modelBridge codebase — panel JavaScript, CSS design system, cloud operations worker, schema parsing engine, cost estimation system, error handling pipeline, and all documentation — is proprietary. 74 of Agent Mode's 135 tools (counted 2026-11-24) are Premiere Pro control tools vendored from the open-source `leancoderkavy/premiere-pro-mcp` project (MIT); see [NOTICE.md](NOTICE.md) for attribution.
 
 ### External service dependencies
 
@@ -326,6 +326,10 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 | fal.ai API | AI model generation, schema, pricing, catalog | Commercial API — user authenticates with their own key |
 | LemonSqueezy | Subscription billing, license validation | Commercial SaaS — webhook integration |
 | GitHub raw content | OTA delivery — error docs, error copy, endpoint migrations and remote configuration, each verified against a pinned hash | Public CDN — read-only, no user data sent |
+| Anthropic API | Agent Mode, and Enhance when an Anthropic key is present | Commercial API — user authenticates with their own key |
+| Cloudflare Workers | modelBridge's own service: licence checks, catalog monitoring, news feed, support reports | Operated by modelBridge |
+
+The full list of services that receive data, with what each receives, is the subprocessor list in [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) §4.
 
 ### Local runtime dependencies
 

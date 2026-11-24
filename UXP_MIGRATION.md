@@ -160,8 +160,8 @@ deliberate ordering rather than an accident (figures of 2026-10-21):
 The generation pipeline is the launch-critical path, and the adapter wraps calls
 in promises with deadline semantics. Converting it changes timeout and error
 behaviour in the code where a failure costs a customer money. We chose to convert
-it after launch rather than report a rounder number before it. The product is in
-its final pre-launch review, and that conversion is still ahead of us.
+it after launch rather than report a rounder number before it. Version 1.0.0 was
+built on 2026-11-24 with that conversion still ahead of us.
 
 ---
 
@@ -241,7 +241,7 @@ down at each call site. It is not: on 2026-10-21 the address is written out 82
 times across 40 panel files. Consolidating it is on our own list, because it is a
 string constant with no behaviour attached and it converts the largest remaining
 unknown in this section into a one-function edit. It was meant to happen before
-launch and has not happened yet.
+launch, and version 1.0.0 was built without it.
 
 **The launcher arrives with the companion application.** The panel will launch
 the sidecar through a URL scheme the companion application registers, which is

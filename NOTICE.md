@@ -10,7 +10,7 @@ If you find an open-source component in modelBridge that is listed in neither, p
 
 ## MCP-imported Premiere Pro tools
 
-The Agent Mode tool inventory includes a substantial set of Premiere Pro control tools imported from the open-source Premiere Pro MCP project by leancoderkavy, distributed under the MIT License.
+The Agent Mode tool inventory includes Premiere Pro control tools imported from the open-source Premiere Pro MCP project by leancoderkavy, distributed under the MIT License: 74 of Agent Mode's 135 tools, counted 2026-11-24.
 
 - Upstream: <https://github.com/leancoderkavy/premiere-pro-mcp>
 - License: MIT
@@ -57,7 +57,7 @@ These carry reproduction requirements of their own, so they are named here rathe
 - **LAME (libmp3lame) 3.100** — LGPL-2.1-or-later. Linked into the macOS FFmpeg (and the Windows build being prepared) for MP3 encoding. Source: <https://lame.sourceforge.io/>. The exact source tarball's sha256 ships with the extension in `bin/ffmpeg-provenance.json`.
 - **TwoLAME (libtwolame)** — LGPL-2.1-or-later. Present in the Windows build only, which is not distributed yet.
 
-The macOS FFmpeg is built from source rather than downloaded. modelBridge is macOS only for now, so the macOS build is the only one in the distributed package; the Windows build being prepared uses the released `-win64-lgpl` asset from <https://github.com/BtbN/FFmpeg-Builds>, which links roughly forty further libraries under BSD, MIT and MPL terms. The exact, complete set for the binary actually shipped is the `configuration` string recorded per binary in `bin/ffmpeg-provenance.json` — that file, not this list, is what a licence reviewer should read, because it describes the build in hand rather than the build we last wrote about.
+The macOS FFmpeg is built from source rather than downloaded. modelBridge is macOS only for now, so the macOS build is the only one in the distributed package; the Windows build being prepared uses the released `-win64-lgpl` asset from <https://github.com/FFmpeg-Builds/FFmpeg-Builds>, which links roughly forty further libraries under BSD, MIT and MPL terms. The exact, complete set for the binary actually shipped is the `configuration` string recorded per binary in `bin/ffmpeg-provenance.json` — that file, not this list, is what a licence reviewer should read, because it describes the build in hand rather than the build we last wrote about.
 
 **The bundled macOS build cannot reach the network.** It is configured `--disable-everything` with an explicit allowlist and `--disable-network`, and only two protocols are compiled in: `file` and `pipe`. That binary has no network code in it.
 
@@ -66,6 +66,12 @@ The claim is about that binary specifically. The Windows binaries, when they shi
 Because the binaries are separate executables and never linked into modelBridge's own code, any of them can be replaced: build FFmpeg from the recorded configure string, or delete the bundled copies and let the backend pick up a system FFmpeg.
 
 An online copy of these attributions is also published at <https://docs.modelbridge.app/legal/attributions/>.
+
+---
+
+## Trademarks
+
+fal.ai, Adobe, Premiere Pro, Anthropic and Claude are trademarks of their respective owners. They are named here only to identify the services and the host application modelBridge works with. modelBridge is an independent product and is not affiliated with, endorsed by or sponsored by any of them.
 
 ---
 
