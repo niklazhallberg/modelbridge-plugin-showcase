@@ -77,6 +77,33 @@ Partly shipped: the agent can already set the text of a Motion Graphics Template
 
 ---
 
+## Which models make the final cut
+
+*Under consideration. Only the first of the two signals below is measured today.*
+
+A model page can say what a model is capable of. What nobody can say yet is which models produce results that professional editors keep. modelBridge sits where that question gets answered. A result is previewed and then either imported onto the timeline or discarded, and the sequence it lands in is either exported or not.
+
+Two signals, in order of strength:
+
+1. **Imported.** The editor placed the result on the timeline after preview. This is measured today. With usage analytics switched on, the panel reports an import event carrying the model ID and a count ([PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) §5).
+2. **Exported.** The imported clip is still in the sequence when that sequence is exported. It survived the edit and reached delivery, the strongest evidence a generation was useful. This is not measured today.
+
+Across all editors who share usage analytics, that could answer:
+
+- Which models' results are imported most often, relative to how often they are run
+- Which of those are still in the cut at export, and which are imported and later removed
+- How this differs by category and task, for example image-to-video against text-to-video, or extending a shot against generating a new one
+
+For editors, this would be a ranking based on what professionals ship, a complement to the LM Arena rankings the panel already shows, which measure preference in blind comparisons rather than use in production. For model providers and fal.ai, it would be an aggregate signal of which models hold up in real editing work.
+
+What would have to hold:
+
+- **Aggregate, and only with usage analytics on.** Counts per model, never media, prompts, file names, sequence names or project data. NDA mode would exclude it.
+- **The export check runs locally.** The panel would report only that clips from a model were in an exported sequence, never what that sequence contained.
+- **A reliable denominator first.** The count of generation starts is incomplete today, as the privacy policy says, so an import rate is not yet a trustworthy ratio. That has to be fixed before any figure is published.
+
+---
+
 ## UXP Migration Path
 
 modelBridge currently runs on CEP (Chromium Extensibility Platform), Adobe's established extension framework for Premiere Pro. Adobe is transitioning to UXP (Unified Extensibility Platform) as the modern replacement.
