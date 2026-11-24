@@ -99,6 +99,8 @@ flowchart TD
 | | |
 |---|---|
 | Supported AI models | About 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
+| Catalogue verification | Twice a day in CI, on top of the cloud layer's own passes. On 2026-11-21: 1,172 verified, 16 offered through a prompt interface, 12 blocked. Method and figures in [RELIABILITY.md](RELIABILITY.md) |
+| Agent Mode tools | 135 (counted 2026-11-24), each with its own schema |
 | Panel codebase | About 229,000 lines of JavaScript and CSS (counted 2026-10-23), plus the ExtendScript host layer and the local backend |
 | Design system | Token-driven — visual consistency across every surface |
 | Documentation site | 91 pages across guides, reference, Academy, and legal (counted 2026-11-24), plus a parameter index generated from the live catalogue |
@@ -130,6 +132,8 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 **Schema parsing.** Every model's OpenAPI specification is fetched, parsed, and used to generate the complete UI — input fields, validation rules, media requirements, and parameter constraints. The plugin supports both fal.ai's queue API and platform API endpoints, with automatic fallback between them.
 
 **Pricing.** Cost estimates draw on three sources only: fal.ai's official pricing API, a curated pricing table that ships with the plugin, and the editor's own metered history. Nothing is scraped, and no endpoint outside fal.ai's official API is asked about prices.
+
+**Storage and language models.** Media is uploaded to fal.ai's storage before a run is submitted, so the submission itself carries only URLs. When no Anthropic key is set, the prompt rewrite (Enhance) runs on fal.ai's language-model endpoint, on the editor's own fal.ai key.
 
 **Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors and infrastructure errors — including `ctx` structured constraint data, error documentation URLs and the retry headers (`X-Fal-Needs-Retry`, and the older `X-Fal-Retryable`). The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. A small set of semantic categories — input quality, credits and billing, network, content policy, and integration faults — drives consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
 
@@ -194,7 +198,7 @@ Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro inte
 
 Agent Mode runs on the editor's own Anthropic API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds a layer built to tailor the agent for Adobe's environment:
 
-- **Wired into the Premiere toolkit.** It reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
+- **Wired into the Premiere toolkit.** 135 tools (counted 2026-11-24) read timelines, edit clips, run quality checks and deliver, all from plain language.
 - **Knows where Premiere's scripting stops.** When an operation is outside what Premiere's scripting can do, the agent says so and gives the manual step, instead of improvising with a tool that only looks equivalent.
 - **Checks its own work.** Timeline-shape edits are re-read from the real timeline after they run, and when a change can't be confirmed the agent says so instead of reporting success.
 - **Honest by design.** It says plainly when something genuinely can't be done, and never guesses at a cause it can't see.
@@ -377,9 +381,11 @@ Adobe is transitioning Premiere Pro extensions from CEP to UXP. modelBridge is d
 
 **How much of that policy is actually enforced, measured 2026-08-30.** This paragraph previously said the rules were "enforced on every contribution". They are not, and the measurement is unambiguous: seventeen new direct file-system calls entered the panel in the eleven days after the last audit. About thirty commit guards run on every commit today (seventeen on 2026-08-30), and none of them is a general guard on direct platform calls. What exists is one *subsystem-scoped* guard — the newest layer in the tree is mechanically prevented from touching the file system or the host outside a single named adapter file, which is why that layer did not drift. So the honest statement is: the policy is written down, one subsystem enforces it mechanically and stays clean, and everywhere else it depends on the author remembering. Both our own errors here — the synchronous storage adapter, and a 384-call-site `localStorage` dependency we were not counting at all — are reported in [UXP_MIGRATION.md](UXP_MIGRATION.md) alongside what the policy did buy.
 
+**Adobe's local MCP integrations.** On 2026-11-10 Adobe previewed local MCP integrations that let a third-party agent work directly in Premiere and other Creative Cloud apps, with a private beta announced for early 2027. They may give some of the operations that depend on the QE DOM today a supported route. The plan to connect Agent Mode to them is in [ROADMAP.md](ROADMAP.md#adobes-local-mcp-integrations-for-premiere).
+
 **Planned modernization.** Introducing a module bundler (our choice, not a UXP requirement), running the panel's test suites in CI (today CI runs the catalogue verification, the ExtendScript ES3 guard, the dual-mode offline suites and the parameter-coverage and docs-link checks, not the whole harness), and incremental type annotations.
 
-For the product roadmap (Agent Mode expansion, Team Cost Intelligence, Enterprise features), see [ROADMAP.md](ROADMAP.md).
+For the product roadmap (Agent Mode expansion and Adobe's local MCP integrations, Team Cost Intelligence, Enterprise features), see [ROADMAP.md](ROADMAP.md).
 
 ---
 
@@ -400,5 +406,7 @@ The internal documentation follows a structured format that is consumable by bot
 - [Terms & Conditions](https://docs.modelbridge.app/legal/terms-and-conditions/) — IP, liability, AI Act positioning
 - [Compatibility](https://docs.modelbridge.app/reference/compatibility/) — supported platforms and requirements
 - [Known Limitations](https://docs.modelbridge.app/reference/limitations/) — honest list of current constraints
+- [Built for reliability](RELIABILITY.md) — catalogue verification, the interpretation sweep, guards and deploy provenance, with measured figures
+- [CEP → UXP migration](UXP_MIGRATION.md) — what is measured, what cannot be adapted, and the open questions to Adobe
 - [Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md) — data inventory, GDPR measures, subprocessor list
 - [Roadmap](ROADMAP.md) — Team Cost Intelligence, Agent Mode expansion, Enterprise features
