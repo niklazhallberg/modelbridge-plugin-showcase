@@ -389,12 +389,6 @@ For the product roadmap (Agent Mode expansion and Adobe's local MCP integrations
 
 ---
 
-## Working With the Codebase
-
-The internal documentation follows a structured format that is consumable by both human developers and AI coding agents, enabling a new developer to orient within the codebase using standard tooling. Opening the project in Claude Code, Cursor, or a similar tool gives the agent access to the full project documentation, behavioral rules, and architectural context automatically. Questions about any system, pipeline, or design decision can be answered by the agent directly from the project files.
-
----
-
 ## Further Reading
 
 - [What is modelBridge](https://docs.modelbridge.app/what-is-modelbridge/) — product overview and comparison
