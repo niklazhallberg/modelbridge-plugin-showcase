@@ -219,7 +219,9 @@ Three things keep that number from becoming a failure:
 
 ### 2.2 Migration when a persisted format changes
 
-Persisted formats carry a schema version. A migration that touches the
+Our policy is that persisted formats carry a schema version; on 2026-10-21 four durable
+stores did and three did not (two learned-value stores and the licence store — see
+[UXP_MIGRATION.md](UXP_MIGRATION.md)). A migration that touches the
 installed-model registry runs behind one wrapper, **read from source**: it
 writes a timestamped backup of the whole registry first and aborts if that
 write fails; it rehearses the change before applying it and aborts if the
