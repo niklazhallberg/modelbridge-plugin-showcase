@@ -203,7 +203,7 @@ Run the same prompt against two models in one click. Compare results side by sid
 
 ## Blog — fal.ai news, right next to your timeline
 
-fal.ai's official blog inside the panel. The Blog tab shows fal.ai/learn articles with links back to fal.ai. Model launches, deep-dives, platform updates — read them where you work.
+fal.ai's blog inside the panel. The Blog tab shows fal.ai/learn articles with links back to fal.ai. Model launches, deep-dives, platform updates — read them where you work.
 
 - **Read → Add → Generate.** modelBridge scans each article for model references and lists them with one-click **Add** buttons (**Try model** once installed). Article to timeline in three clicks
 - **NEW badges** on posts since your last visit
@@ -293,9 +293,32 @@ each claim, is in [RELIABILITY.md](RELIABILITY.md).
 
 ## Getting started
 
-modelBridge will install from a signed, notarised macOS `.pkg`. The installer is not published yet. Once it is: run the installer, restart Premiere, start your trial from inside the panel and add your fal.ai key (and your Anthropic key for Agent Mode) — the full sequence is on the [installation guide ↗](https://docs.modelbridge.app/getting-started/installation/).
+modelBridge 1.0.0 installs from a signed, notarised macOS installer: **[download it from the v1.0.0 release](https://github.com/niklazhallberg/modelbridge-plugin-showcase/releases/tag/v1.0.0)**. Quit Premiere Pro, run the installer, then open Premiere Pro and choose Window → Extensions → modelBridge. A setup guide asks for your licence key, or starts the 14-day trial, and your fal.ai key; an Anthropic key is optional and turns on Agent Mode. The full sequence is in the [installation guide ↗](https://docs.modelbridge.app/getting-started/installation/).
 
-**Requirements:** Adobe Premiere Pro 23.0 or newer (CEP 11). macOS only for now.
+The download is free; generating needs an active trial or subscription. Installing or using modelBridge means accepting its [Terms and Conditions ↗](https://docs.modelbridge.app/legal/terms-and-conditions/).
+
+**Check the download before you run it.** The installer is `modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg`, and its SHA-256 is:
+
+```
+bc4ca4a6284f131f7cb10644a36def2bc2e17adfe2f800ce86a3ca38abd0241d
+```
+
+The eight characters before `.pkg` in the filename are the first eight of that hash. With the `.pkg` and the `.sha256` file from the release in the same folder:
+
+```sh
+shasum -a 256 -c modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg.sha256
+# modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg: OK
+
+pkgutil --check-signature modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg
+# Status: signed by a developer certificate issued by Apple for distribution
+# Notarization: trusted by the Apple notary service
+```
+
+**Requirements:**
+
+- A Mac with macOS 12 (Monterey) or later, Apple Silicon or Intel. macOS only; there is no Windows installer yet
+- Adobe Premiere Pro 2023 (23.0) or later (CEP 11)
+- About 300 MB of free disk space, an internet connection, and your Mac's administrator password to install
 
 ---
 
@@ -358,6 +381,7 @@ In order, about twenty-five minutes:
 - **Terms, privacy, refund, subscription, commercial use** — [docs.modelbridge.app/legal ↗](https://docs.modelbridge.app/legal/terms-and-conditions/)
 - **Third-party attributions** — [NOTICE.md](NOTICE.md) (in this repo) and [docs.modelbridge.app/legal/attributions ↗](https://docs.modelbridge.app/legal/attributions/)
 - Core plugin code is proprietary; third-party open-source components are attributed in the notices linked above
+- fal.ai, Adobe, Premiere Pro, Anthropic and Claude are trademarks of their respective owners. modelBridge is an independent product and is not affiliated with, endorsed by or sponsored by any of them
 
 ---
 
