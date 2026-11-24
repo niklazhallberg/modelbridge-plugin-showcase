@@ -75,12 +75,12 @@ Retention for each server-side category is in the policy's [What we receive and 
 | **Provider API keys** | Your device | Settings |
 | **Generation history, cost history, installed models, settings** | Your device | Settings → Data management (§7) |
 | **Optional local analysis data** | Your device | Manage or remove locally |
-| **Optional error reports** and **usage measurements** | ModelBridge services, when on | Each has its own switch. The setup guide shows both on; nothing is sent before Continue; switch off there or in Settings → Privacy |
-| **Device and installation information** | Your device; ModelBridge services for licensing | Erasure request (§3) |
-| **Licence and subscription information** | ModelBridge services and the payment provider | Erasure request (§3) |
-| **Free-trial history** | ModelBridge services, by computer (a keyed hash of the device ID) | Kept after erasure by design; see the policy |
-| **Ratings, bug reports and attachments** | ModelBridge services; bug reports also in the support mailbox | You choose what to send; email request (§3) |
-| **Live preview in mobile** | ModelBridge services, after you open it (§1) | Off until opened; Mobile preview off in Settings → Privacy; NDA mode |
+| **Optional error reports** and **usage measurements** | modelBridge services, when on | Each has its own switch. The setup guide shows both on; nothing is sent before Continue; switch off there or in Settings → Privacy |
+| **Device and installation information** | Your device; modelBridge services for licensing | Erasure request (§3) |
+| **Licence and subscription information** | modelBridge services and the payment provider | Erasure request (§3) |
+| **Free-trial history** | modelBridge services, by computer (a keyed hash of the device ID) | Kept after erasure by design; see the policy |
+| **Ratings, bug reports and attachments** | modelBridge services; bug reports also in the support mailbox | You choose what to send; email request (§3) |
+| **Live preview in mobile** | modelBridge services, after you open it (§1) | Off until opened; Mobile preview off in Settings → Privacy; NDA mode |
 | **IP address** | Seen by Cloudflare on every request; held only as a short-lived abuse-limiting key, not logged | — |
 
 ### Device and analytics identifiers

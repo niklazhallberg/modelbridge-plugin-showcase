@@ -381,7 +381,7 @@ This repository is written for engineers evaluating the integration, not for edi
 | What we considered for the fal.ai API path, and why we said no | [API_OPTIMIZATION_DECISIONS.md](API_OPTIMIZATION_DECISIONS.md) |
 | **Whether we understand what we are taking on** — the CEP→UXP transition measured in quotas with denominators, the things that cannot be adapted at all, seven open questions to Adobe, the no-go criteria for our own beta, and a section on the decisions we got wrong | [UXP_MIGRATION.md](UXP_MIGRATION.md) |
 | How a growing catalog is kept from breaking the panel — scheduled catalog verification, the full-catalog interpretation sweep, shared resolvers, parameter-help coverage, guards, deploy provenance, and the licence-state simulator, with today's figures | [RELIABILITY.md](RELIABILITY.md) |
-| What data goes where, under which legal basis, with what retention | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
+| What data goes where, to which processor, and what never leaves the machine | [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) |
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
 | What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
 
@@ -416,7 +416,7 @@ In order, about twenty-five minutes:
 - **[Architecture overview](ARCHITECTURE.md)** — high-level system design
 - **[Built for reliability](RELIABILITY.md)** — catalog verification, the interpretation sweep, guards and deploy provenance, with measured figures
 - **[CEP → UXP migration](UXP_MIGRATION.md)** — what is measured, what cannot be adapted, and the open questions to Adobe
-- **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data inventory, GDPR measures
+- **[Privacy & Compliance](PRIVACY_AND_COMPLIANCE.md)** — data flows, subprocessors, what each feature sends
 - **[Third-party notices](NOTICE.md)** — open-source components and their licences
 - **[Roadmap](ROADMAP.md)** — Team Cost Intelligence, Agent Mode expansion
 - **[Subscribe ↗](https://docs.modelbridge.app/billing/subscription/)** — pricing, trial, and sign-up
