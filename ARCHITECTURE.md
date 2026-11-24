@@ -317,7 +317,7 @@ modelBridge is a client-side application — each installation runs its own pane
 
 ### Proprietary code
 
-The modelBridge codebase — panel JavaScript, CSS design system, cloud operations worker, schema parsing engine, cost estimation system, error handling pipeline, and all documentation — is proprietary. A small set of Premiere Pro control tools used by Agent Mode is vendored from the open-source `leancoderkavy/premiere-pro-mcp` project (MIT); see [NOTICE.md](NOTICE.md) for attribution.
+The modelBridge codebase — panel JavaScript, CSS design system, cloud operations worker, schema parsing engine, cost estimation system, error handling pipeline, and all documentation — is proprietary. 74 of Agent Mode's 135 tools (counted 2026-11-24) are Premiere Pro control tools vendored from the open-source `leancoderkavy/premiere-pro-mcp` project (MIT); see [NOTICE.md](NOTICE.md) for attribution.
 
 ### External service dependencies
 
@@ -326,6 +326,10 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 | fal.ai API | AI model generation, schema, pricing, catalog | Commercial API — user authenticates with their own key |
 | LemonSqueezy | Subscription billing, license validation | Commercial SaaS — webhook integration |
 | GitHub raw content | OTA delivery — error docs, error copy, endpoint migrations and remote configuration, each verified against a pinned hash | Public CDN — read-only, no user data sent |
+| Anthropic API | Agent Mode, and Enhance when an Anthropic key is present | Commercial API — user authenticates with their own key |
+| Cloudflare Workers | modelBridge's own service: licence checks, catalog monitoring, news feed, support reports | Operated by modelBridge |
+
+The full list of services that receive data, with what each receives, is the subprocessor list in [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md) §4.
 
 ### Local runtime dependencies
 
