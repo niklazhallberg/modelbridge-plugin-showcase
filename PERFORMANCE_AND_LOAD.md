@@ -322,15 +322,15 @@ with each other, not with live sizes, so it did not fire. The origin as a whole
 was at 55.9 % of quota that day, under the eviction threshold. The declared
 budget is unchanged in 1.0.0.
 
-**Migrations.** A migration of the installed-model registry runs behind one
-wrapper (read from source): it writes a timestamped backup of the whole registry
-and aborts if that fails; it rehearses the change and aborts if the rehearsal
-fails; and it is shaped so it cannot empty the registry. A parser change
+**Migrations.** Read from the 1.0.0 source: every migration of the
+installed-model registry first writes a timestamped backup of the whole registry
+and does not proceed if that write fails. A stricter wrapper that also rehearses
+the change on a copy exists in the source, but no migration uses it yet. A parser change
 rebuilds a model's fields from its stored schema without a network call. Our
 policy is that persisted formats carry a schema version. In 1.0.0 the registry,
 the ledger, settings, external costs, usage events and the recovery stores do;
 the regenerable caches and learned-data files do not. A store written by a newer
-build is refused, not overwritten. The wrapper's test coverage is recorded in
+build is refused, not overwritten. The test coverage of the backup step is recorded in
 [`UXP_MIGRATION.md`](UXP_MIGRATION.md) §3 and not restated here.
 
 ### 3.4 Growth between two readings
