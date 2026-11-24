@@ -13,6 +13,9 @@ Pick a model, see the result in Premiere's Source Monitor, press Import. It land
 
 [Documentation ↗](https://docs.modelbridge.app) · [Live catalog ↗](https://docs.modelbridge.app/models/available-models/) · [Getting started](#getting-started) · [Pricing](#pricing) · [For engineers](#about-this-repository)
 
+Product documentation for editors lives at [docs.modelbridge.app ↗](https://docs.modelbridge.app): 91 pages (2026-11-24) covering installation, every feature, the live model catalog, pricing and legal.
+Reading this for fal.ai? Start with [What this means for fal.ai](#what-this-means-for-falai), then the [reviewers' reading order](#for-falai-reviewers).
+
 <p align="center">
   <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge inside Adobe Premiere Pro: the Generate tab docked beside the Program monitor, listing new fal.ai models with one-click Add above the installed model and its prompt field" width="100%">
 </p>
@@ -45,6 +48,18 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 <p align="center">
   <img src="assets/modelbridge-gallery.webp" alt="A gallery of cinematic stills: a surfer on a snowy beach, a diver beside a whale, a figure in a suit facing a crowd, a man wading into the sea, a lizard resting on a face" width="100%">
 </p>
+
+---
+
+## What this means for fal.ai
+
+- **New fal.ai models reach editors usually within hours, with working controls.** The catalog is synced several times a day, and each model's sliders, dropdowns and media inputs are built from its own OpenAPI schema, so a launch needs no plugin release.
+- **Usage goes straight onto the editor's own fal.ai account.** Editors bring their own key and pay fal.ai's published rates. modelBridge adds no markup, no credits and no revenue share, and never holds the key on its servers.
+- **The cost is shown before every run.** Each figure carries a confidence label, and after the run it is priced from the units fal.ai reports where that is possible.
+- **Spend can be attributed per client and project.** Every generation is tagged at creation and exported as HTML or CSV, so an agency can bill fal.ai usage to the job it was for.
+- **Editors are pointed at fal.ai.** modelBridge presents itself as powered by fal.ai, the docs carry a [Why fal.ai ↗](https://docs.modelbridge.app/why-fal-ai/) page, and the in-panel Blog tab shows fal.ai/learn articles with an Add button for each model they mention.
+
+Partnerships and technical questions: [info@modelbridge.app](mailto:info@modelbridge.app).
 
 ---
 
@@ -323,7 +338,9 @@ This repository is written for engineers evaluating the integration, not for edi
 | Which open-source components ship, and under what terms | [NOTICE.md](NOTICE.md) |
 | What is planned, and roughly when | [ROADMAP.md](ROADMAP.md) |
 
-**For fal.ai reviewers.** In order, about twenty-five minutes:
+### For fal.ai reviewers
+
+In order, about twenty-five minutes:
 
 1. The workflow and cost sections above — the editorial problem, and how cost is shown before a run.
 2. [ARCHITECTURE.md](ARCHITECTURE.md) → *Consuming the fal.ai API in production* — the schema as the interface, why a status word is not the whole status, and why every cost label names whose arithmetic produced it.
@@ -331,6 +348,8 @@ This repository is written for engineers evaluating the integration, not for edi
 4. [PERFORMANCE_AND_LOAD.md](PERFORMANCE_AND_LOAD.md) — what we ask of each service, at what cadence, and the largest thing we have not measured.
 5. [UXP_MIGRATION.md](UXP_MIGRATION.md) §8 claim register and §4 — what we got wrong.
 6. [SECURITY.md](SECURITY.md) → *What is accepted, and why*.
+
+**For Adobe readers**, start with [UXP_MIGRATION.md](UXP_MIGRATION.md): the CEP → UXP transition measured with denominators, what cannot be adapted, and seven open questions to Adobe.
 
 ---
 
