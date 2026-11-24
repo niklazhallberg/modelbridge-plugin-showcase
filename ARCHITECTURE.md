@@ -22,7 +22,7 @@ The cloud layer runs autonomously — detecting new models, verifying their sche
 
 **Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every migration of installed-model data. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
 
-**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; the update manifest is read at panel start and about hourly while the panel is open. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release, so a cost estimate cannot currently be changed remotely.
+**Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; updates are checked at panel start, error explanations are re-checked about hourly while the panel is open and visible, and feature flags and configuration apply from the next start. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release, so a cost estimate cannot currently be changed remotely.
 
 **Defensive.** All external data is parsed defensively — invalid values are rejected before they reach business logic. Validation runs before every generation to prevent wasted API credits.
 
