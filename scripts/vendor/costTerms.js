@@ -52,7 +52,38 @@
     return null;
   }
 
-  var exports = { CHECKS: CHECKS, findForbidden: findForbidden };
+  // A provider's own field description is shown as help text beside the field
+  // (the hint under it and the (i) box, on a single card and for the second
+  // model of a pair). fal.ai writes "Billed per sample." there (Mirelo SFX
+  // num_samples, live test round seven, R70). The words are theirs, the panel
+  // showing them is ours, so the forbidden terms are reworded on the way to the
+  // screen, for every model. What cannot be reworded is not shown: a sentence
+  // that still carries a forbidden term after the rewording is dropped.
+  var PROVIDER_REWORDS = [
+    [/\bactually billed\b/gi, 'charged'],
+    [/\bbilling history\b/gi, 'usage history'],
+    [/\bbilled\b/gi, 'charged'],
+    [/\bbilling\b/gi, 'pricing'],
+    [/\b(actual|real) cost(?![-\w])/gi, 'cost']
+  ];
+  function _sameCase(from, to) {
+    if (from === from.toUpperCase() && from !== from.toLowerCase()) return to.toUpperCase();
+    if (from.charAt(0) === from.charAt(0).toUpperCase() && from.charAt(0) !== from.charAt(0).toLowerCase()) return to.charAt(0).toUpperCase() + to.slice(1);
+    return to;
+  }
+  function rewordProviderText(text) {
+    if (typeof text !== 'string' || !text) return text;
+    var out = text;
+    for (var i = 0; i < PROVIDER_REWORDS.length; i++) {
+      out = out.replace(PROVIDER_REWORDS[i][0], (function (to) { return function (m) { return _sameCase(m, to); }; })(PROVIDER_REWORDS[i][1]));
+    }
+    if (findForbidden(out)) {
+      out = out.split(/(?<=[.!?])\s+/).filter(function (sentence) { return !findForbidden(sentence); }).join(' ');
+    }
+    return out;
+  }
+
+  var exports = { CHECKS: CHECKS, findForbidden: findForbidden, rewordProviderText: rewordProviderText };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = exports;
   if (typeof window !== 'undefined') window.costTerms = exports;
