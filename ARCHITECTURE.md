@@ -115,7 +115,7 @@ flowchart TD
 
 **Conventions and rules.** Coding conventions, commit standards, and architectural rules are documented and enforced consistently. Every error must go through the translation layer — no raw API output reaches users. Every data migration must create a backup first. Every bug fix must check for the same class of problem elsewhere in the codebase.
 
-**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases are designed to ship as a signed, notarised macOS `.pkg`; that build step is not finished yet.
+**Release process.** Cloud updates follow a review workflow with integrity verification (SHA-256 checksums) before deployment. Plugin releases ship as a signed, notarised macOS `.pkg` (Developer ID Installer certificate, notarisation ticket stapled). The first, 1.0.0, is attached with its SHA-256 to this repository's [v1.0.0 release](https://github.com/niklazhallberg/modelbridge-plugin-showcase/releases/tag/v1.0.0). The OTA manifest that carries the payload hashes is not itself signed; whoever can publish to this repository controls both.
 
 ---
 
@@ -219,7 +219,7 @@ modelBridge is a deep Premiere Pro integration, not a standalone panel that happ
 
 **Media awareness.** The plugin reads clip properties from the timeline — dimensions, duration, file path, track index — and uses them for validation, media extraction, and context-aware import decisions (replace in-place vs. insert at playhead vs. route to audio track).
 
-**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 82 % of the host calls in the panel's scripts routed through it (2026-10-21; 75 % on 2026-08-30 by the same search; about three-quarters once the calls in the panel's HTML page are counted), with the agent layer fully converted and the generation pipeline deliberately left until after launch. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
+**ExtendScript bridge.** A host layer of a few hundred global ExtendScript functions handles communication between the panel and Premiere Pro's scripting engine — covering clip selection, sequence queries, project bin management, timeline manipulation, and fit-to-frame scaling. Host communication is being consolidated behind an adapter layer: 82 % of the host calls in the panel's scripts routed through it (2026-10-21; 75 % on 2026-08-30 by the same search; about three-quarters once the calls in the panel's HTML page are counted), with the agent layer fully converted and the generation pipeline deliberately left until after the 1.0 release. See [UXP_MIGRATION.md](UXP_MIGRATION.md) for the full measurements, including what the adapter layer does *not* cover.
 
 ---
 
