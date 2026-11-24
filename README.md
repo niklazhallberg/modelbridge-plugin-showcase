@@ -412,5 +412,5 @@ Built by [Niklaz Hallberg ↗](https://niklaz.works) — digital designer and cr
 2025–2026.
 
 <p align="center">
-  <img src="assets/modelbridge-hero.webp" alt="modelBridge: Bridging the gap. Designed for Adobe. Powered by fal.ai" width="100%">
+  <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge for Adobe Premiere Pro: the Generate tab docked beside the Program monitor" width="100%">
 </p>
