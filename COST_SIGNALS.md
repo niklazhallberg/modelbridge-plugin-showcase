@@ -6,9 +6,13 @@ rests on something fal.ai wrote rather than on a measurement, it says so. The
 account-specific evidence — request identifiers, amounts and ledger rows — is kept in an
 internal record rather than published here.
 
-modelBridge's cost labels (README) exist because of these findings: the product is built
-to know where it cannot count, and to say so in the same place it would otherwise show a
-number.
+These findings are why modelBridge labels every cost figure with where it came from, and
+shows "No price" where nothing can be counted before the run.
+
+No one can state the cost of a run before it runs. modelBridge shows an estimate, labels
+its source, and refines it from the editor's own completed runs: the usage fal.ai reports
+for a model and its settings feeds the next estimate for the same settings. The last
+section describes how.
 
 ## 1. The usage count arrives with the result, not with status
 
@@ -45,9 +49,9 @@ counted as spend if the result then reports usage.
 Observed once: a run submitted to one endpoint was accounted under a different one.
 
 Consequence: reconciliation should not assume the endpoint a run was submitted to is the
-endpoint it is accounted under. We have not published this as a characterisation of
-fal.ai's billing; it is recorded as an integration lesson and shared with fal.ai
-directly.
+endpoint it is accounted under. modelBridge records the endpoint named on the result and
+reconciles against that one. This is recorded as an integration lesson, not as a
+characterisation of fal.ai's billing.
 
 ## 5. The unit count is not always derivable from the request
 
@@ -57,7 +61,8 @@ run has finished.
 
 Consequence: for those models there is no honest number before the run. modelBridge shows
 "No price" beforehand, and afterwards prices the row only where the provider's own rate
-applies to the unit reported; otherwise it shows the count with no amount.
+applies to the unit reported; otherwise it shows the count with no amount. (A model that
+did have an estimate keeps it in that case, labelled Calculated.)
 
 ## 6. A count of zero is not a free run, and an accepted submission is not an accepted input
 
@@ -75,8 +80,9 @@ The per-request amount is not available to the key that submits runs. It is reac
 with a credential whose scope is considerably wider than generating.
 
 Position: a key of that scope is more than a plug-in should hold on a user's behalf, so
-modelBridge does not ask for one. Every amount the product shows is therefore a reported
-count multiplied by a known rate — never a copy of an invoice — and the labels say so.
+modelBridge does not ask for one. A Metered amount is therefore the count fal.ai reported
+multiplied by fal.ai's published rate for that unit. Every other amount is modelBridge's
+own calculation and is labelled as such. No amount is a copy of an invoice.
 
 ## 8. Published prices can change without notice
 
@@ -86,8 +92,33 @@ This is fal.ai's statement, not a measurement — no price change was observed o
 account.
 
 Consequence: a rate stored in an integration has a shelf life, which is why every curated
-rate carries the date it was last verified and stops being presented as a forecast once it
-is stale.
+rate carries the date it was last verified. Once that date is too old, the figure is still
+shown, but labelled as a starting price that is due for a re-check, not as an estimate.
+
+## How the estimate uses these signals
+
+Read from the shipping source, not measured.
+
+- **A fixed order of sources.** A curated rate checked against the provider's model page
+  comes first, then what the editor's own runs have taught, then the provider's published
+  unit rate shown as a "From" starting price. With no source there is no number.
+- **Learning is per model and per settings combination.** A learned figure is used only
+  after several completed runs at those settings, and it takes a middle value, so one
+  unusual run does not move it. Repeated deviation is flagged as a possible price change,
+  and a figure nobody has used for a long time is retired.
+- **One run can teach a quantity.** Where fal.ai counts a unit the form does not show,
+  the number of units fal.ai counted per second on a completed run is applied to other
+  lengths at the same settings. Until a second run agrees, the figure stays a starting
+  price and is labelled as one.
+- **The estimate demotes itself.** When a metered run lands well above what was quoted,
+  the next figure for that model is shown as a "From" price with both numbers beside it,
+  until a run lands near its quote again.
+- **A count becomes an amount only in its own unit.** If the rate is not denominated in
+  the unit fal.ai reported, the row shows the count without an amount instead of a wrong
+  one.
+- **Quote and outcome sit on the same row.** The inputs that set the price are pinned at
+  submit and the quote is stored with the run, so quoted and metered can be compared per
+  generation. A row settled late is priced, but does not teach the estimate.
 
 ## What this page deliberately does not claim
 
@@ -104,4 +135,5 @@ is stale.
 
 ← [README](README.md) · [Architecture](ARCHITECTURE.md) — how the API's shape sets the
 terms of the integration · [Performance and load](PERFORMANCE_AND_LOAD.md) — how often we
-ask of it
+ask of it · [API optimisation decisions](API_OPTIMIZATION_DECISIONS.md) — what we chose
+not to build
