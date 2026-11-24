@@ -100,4 +100,25 @@ As modelBridge adoption grows in agency and enterprise environments, several cap
 
 ---
 
+## Vision: modelBridge as a community platform
+
+*A vision, not a plan. Nothing in this section is decided, designed or scheduled.*
+
+Today modelBridge is a tool: one editor, one panel, one timeline. One direction we are considering is to grow it into a platform as well, a place inside the panel where people who use AI in Adobe Premiere Pro and other Creative Cloud apps can learn from each other. It would be a forum for AI experts and enthusiasts, next to the work itself.
+
+What it could include:
+
+- **Discussion channels** by topic, such as a model family, a workflow or a kind of production, next to the tools the conversation is about
+- **Shared setups**: a model, its settings and the prompt behind a result, which another editor can open and try in one click
+- **Live chat** for questions while editing, answered by people who have run the same model
+
+What would have to be true first:
+
+- **Accounts.** modelBridge has no user accounts of its own today. A community needs them, and they would change what the privacy material has to say.
+- **Moderation.** A shared space inside a professional tool needs clear rules and someone to apply them.
+- **Nothing shared without asking.** Sharing a setup would never include media, prompts or project data unless the editor chooses to, and NDA mode would block it entirely.
+- **Independence.** It would be a modelBridge community, not an Adobe one.
+
+---
+
 ← [README](README.md) · [Architecture](ARCHITECTURE.md) — how the shipped half is built · [CEP → UXP](UXP_MIGRATION.md) — the measured migration state
