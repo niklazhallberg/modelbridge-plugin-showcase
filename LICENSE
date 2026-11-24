@@ -11,4 +11,9 @@ separately licensed under the same terms. Third-party open-source components
 incorporated into the plugin are governed by their own licences and are listed
 in NOTICE.md.
 
+The modelBridge installer attached to this repository's Releases is provided
+for end users to download and install. Its use is governed by the modelBridge
+Terms and Conditions (https://docs.modelbridge.app/legal/terms-and-conditions/),
+not by this file, and it may not be redistributed.
+
 For licensing inquiries: info@modelbridge.app or visit niklaz.works
