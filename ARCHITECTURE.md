@@ -101,7 +101,7 @@ flowchart TD
 | Supported AI models | About 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories — see the Coverage note in [README.md](README.md) |
 | Panel codebase | About 229,000 lines of JavaScript and CSS (counted 2026-10-23), plus the ExtendScript host layer and the local backend |
 | Design system | Token-driven — visual consistency across every surface |
-| Documentation site | About 90 pages across guides, reference, Academy, and legal (counted 2026-10-21), plus a parameter index generated from the live catalogue |
+| Documentation site | 91 pages across guides, reference, Academy, and legal (counted 2026-11-24), plus a parameter index generated from the live catalogue |
 | Automated tests | A harness of offline suites and live-panel (CDP) suites, run by one command that writes the run as an artefact; a pre-commit guard refuses any published test count that does not come from that artefact, so no figure is copied by hand — which is also why none is printed here. Plus catalogue audits and end-to-end import tests against a live Premiere |
 | Built by | One developer — structured for team onboarding and handover (documented conventions, migration plan, and test suites) |
 
@@ -131,7 +131,7 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Pricing.** Cost estimates draw on three sources only: fal.ai's official pricing API, a curated pricing table that ships with the plugin, and the editor's own metered history. Nothing is scraped, and no endpoint outside fal.ai's official API is asked about prices.
 
-**Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors and infrastructure errors — including `ctx` structured constraint data, error documentation URLs and the `X-Fal-Retryable` header. The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. A small set of semantic categories — input quality, credits and billing, network, content policy, and integration faults — drives consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
+**Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors and infrastructure errors — including `ctx` structured constraint data, error documentation URLs and the retry headers (`X-Fal-Needs-Retry`, and the older `X-Fal-Retryable`). The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. A small set of semantic categories — input quality, credits and billing, network, content policy, and integration faults — drives consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
 
 **Resilience to API changes.** The schema-driven architecture absorbs changes in fal.ai's catalogue without code changes: a new model, and every parameter it declares, needs no release. Schema fetching has layered fallbacks, so a temporary API issue never blocks the user. A renamed endpoint is migrated to its new id, and a retired one is confirmed absent from the catalogue before anything is removed.
 
@@ -163,7 +163,7 @@ Some things do not derive at all. 18 of the 1,497 schemas declare no inputs. Som
 - **No clock ends the wait.** A run is watched for as long as it is running on fal.ai — there is no fixed deadline, because a long video run can legitimately outlast any deadline we would pick. A watch ends when the run finishes, when the editor cancels, or after a sustained, unbroken loss of contact; the last two point at the fal.ai dashboard, because the charge may be real even when delivery is not, so the terminal state names where the authoritative record lives. A run interrupted by a Premiere restart resumes watching on the next panel open, as long as the run is still recent. *(Corrected 2026-10-21: this bullet described a 30-minute wall. No such deadline exists in the shipping code; 30 minutes is only the scale of the progress display.)*
 - **"Not sent" and "unconfirmed" are different answers.** A run that ended before anything reached fal.ai — a refused upload, a failed extraction, a declined warning — is shown as "Not sent" and never counts as spend. A submission that fal.ai never confirmed with a request id is booked as *unconfirmed*; Billing shows the outcome (Failed, Cancelled or No result) and says on hover that fal.ai may still have charged, because the request may have been accepted. Storage uploads are bounded by progress rather than by a clock, so a large file on a slow line is not cut off mid-transfer — and an upload the panel loses track of is booked as unconfirmed, never as "Not sent".
 - **Cost settles after the fact.** A cancelled run, a failed run without a usage count, or a success that arrived without one is re-read from fal.ai at start-up and when Billing opens, for several days, and is priced from the count fal.ai then reports.
-- **`X-Fal-Retryable` is read and carried, not yet obeyed.** The header is parsed onto every normalized error, but the retry decision still comes from the error type's own classification. Making the provider's verdict the deciding input is open work.
+- **The provider's retry verdict decides.** When fal.ai sends `X-Fal-Needs-Retry` (or the older `X-Fal-Retryable`), that answer, true or false, overrides the error type's own classification of whether a retry should work. Nothing is resubmitted automatically: the verdict decides what the editor is told, and the editor decides whether to run again.
 
 **The dollar is a derivation, and every label says whose.** What the API emits about money is precise but partial. What a result carries is a usage quantity — never a dollar. What the pricing API publishes is a per-unit rate. The identity `cost = units × unit price` reproduced fal.ai's own arithmetic in all four metered runs, across three model classes, in which it was tested (2026-08-25), fractional quantities included. But the unit is the model author's own convention, with no cross-catalog rule to lean on — measured the same day: one video family normalizes resolution into the quantity (the same second of output bills a different unit count at 720p than at 1080p), another books usage in token blocks, and the same model reached through an endpoint alias is a separate pricing row in a third unit. Quantity follows the nominal request, not the delivered output (a 5-second request bills as 5 seconds even when the delivered clip runs a fraction longer). The function from parameters to units — the thing a pre-run estimate actually needs — is not machine-readable anywhere: the rate is published; the quantity rule is not.
 
@@ -192,7 +192,7 @@ This section is about what the API demands. How often we ask of it — poll volu
 
 Agent Mode is a natural-language layer on top of modelBridge's Premiere Pro integration. Editors describe what they want in plain language; the agent reads the timeline, plans the operation, executes edits, and reports back.
 
-Agent Mode runs on the user's own Claude API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds a layer built to tailor the agent for Adobe's environment:
+Agent Mode runs on the editor's own Anthropic API key, but it isn't a general chatbot bolted onto Premiere. modelBridge adds a layer built to tailor the agent for Adobe's environment:
 
 - **Wired into the Premiere toolkit.** It reads timelines, edits clips, runs quality checks, and delivers, all from plain language.
 - **Knows where Premiere's scripting stops.** When an operation is outside what Premiere's scripting can do, the agent says so and gives the manual step, instead of improvising with a tool that only looks equivalent.
@@ -225,11 +225,11 @@ modelBridge is a deep Premiere Pro integration, not a standalone panel that happ
 
 ## Operational Infrastructure
 
-The cloud operations layer is deployed on an edge runtime and runs continuously, around the clock. It is stateless by design; all persistent state lives in a plain key-value store.
+The cloud operations layer is deployed on an edge runtime and works on a schedule, several passes a day. It is stateless by design; all persistent state lives in a plain key-value store.
 
 **Failure recovery.** If the cloud layer is unavailable, the panel continues operating with cached data — the catalog, pricing, and model intelligence all use stale-while-revalidate strategies. When the cloud layer recovers, data refreshes silently in the background.
 
-**Monitoring.** The cloud layer sends instant operator alerts for urgent licensing and catalogue events, and a daily summary of customers, usage and health. A separate scheduled CI job sends the daily catalogue digest: new, verified, held-back and removed models.
+**Monitoring.** The operator receives instant alerts for urgent licensing and catalogue events, and one daily report covering customers, usage, health and catalogue movement. The scheduled CI verification keeps its own catalogue digest (new, verified, held-back and removed models) in its run log.
 
 **Local backend recovery.** The Node.js backend on localhost includes health monitoring, automatic restart on crash, keep-alive pings, and port conflict detection. If the backend is unreachable after all recovery attempts, the panel surfaces a clear status message with a manual restart option.
 
@@ -237,13 +237,13 @@ The cloud operations layer is deployed on an edge runtime and runs continuously,
 
 The following systems operate autonomously — reducing manual maintenance and keeping the plugin current between releases.
 
-**Catalog pipeline.** The cloud layer watches the full fal.ai catalog around the clock. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted at the next check after it becomes usable. Verification runs independently from more than one place, and an inconclusive result never withdraws a model that has been verified — only proof that it cannot run does. Models that disappear from fal.ai are confirmed over several complete checks before being marked gone, a pass in which an implausibly large part of the catalogue vanishes is treated as an API fault rather than a mass removal, and a model that returns is listed again automatically.
+**Catalog pipeline.** The cloud layer re-reads the full fal.ai catalog several times a day. New models are verified before they reach the panel — a model with a broken or unpublished spec is held back and re-checked automatically, and promoted at the next check after it becomes usable. Verification runs independently from more than one place, and an inconclusive result never withdraws a model that has been verified — only proof that it cannot run does. Models that disappear from fal.ai are confirmed over several complete checks before being marked gone, a pass in which an implausibly large part of the catalogue vanishes is treated as an API fault rather than a mass removal, and a model that returns is listed again automatically.
 
 **Plugin-side health checks.** Installed models are re-checked quietly in the background, paced so the check never competes with the editor and never blocks. Renamed endpoints are migrated silently and their form rebuilt from the new schema. A model is treated as removed only when it is absent from a *complete* catalogue on consecutive checks; it is then surfaced with a one-click cleanup, and removed automatically after a grace period if it stays gone. A partial catalogue never convicts anything.
 
 **News feed.** New models in the supported categories are announced automatically — once they can actually be added, not when they are first seen. The plugin displays these as compact banners with a "Today" badge and one-click install. The feed also carries manual entries (feature updates, maintenance notices, tips) published by the operator.
 
-**Operator notifications.** The operator gets daily digests of customer activity, catalog movement, and pipeline health, with instant alerts for anything urgent. Quiet days collapse to a single line — length itself is the signal.
+**Operator notifications.** The operator gets one daily report of customer activity, catalogue movement and pipeline health, with instant alerts for anything urgent. Quiet days collapse to a single line — length itself is the signal.
 
 **OTA updates.** Error documentation, error message templates and endpoint migrations are delivered over-the-air from a remote manifest. Every file the channel delivers, remote configuration included, is verified against a pinned hash before it is applied, and the channel fails closed: on a mismatch or an unreachable file, the last verified copy — or, on a fresh install, the one bundled in the extension — serves instead.
 
@@ -269,7 +269,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Shown switched on in the setup guide since version 1.0.0; nothing is sent before Continue is pressed, and it can be switched off there or at any time in Settings.
 
-**Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons. A field that has no curated explanation yet still gets a working ⓘ, linked to its entry in a parameter index on the docs site that is rebuilt from the live catalogue — so a new model's settings are explained from the day it arrives, and the curated text follows. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
+**Support infrastructure.** Over 700 curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons. A field that has no curated explanation yet still gets a working ⓘ, linked to its entry in a parameter index on the docs site that is rebuilt from the live catalogue — so a new model's settings are explained from the day it arrives, and the curated text follows. About fifty documented error types (53 in the published error documentation, 2026-11-14) link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
 
 ---
 
@@ -324,7 +324,7 @@ The modelBridge codebase — panel JavaScript, CSS design system, cloud operatio
 | Dependency | Role | License / Terms |
 |---|---|---|
 | fal.ai API | AI model generation, schema, pricing, catalog | Commercial API — user authenticates with their own key |
-| LemonSqueezy | Subscription billing, license validation | Commercial SaaS — webhook integration |
+| Lemon Squeezy | Merchant of Record: subscription billing, license validation | Commercial SaaS — webhook integration |
 | GitHub raw content | OTA delivery — error docs, error copy, endpoint migrations and remote configuration, each verified against a pinned hash | Public CDN — read-only, no user data sent |
 | Anthropic API | Agent Mode, and Enhance when an Anthropic key is present | Commercial API — user authenticates with their own key |
 | Cloudflare Workers | modelBridge's own service: licence checks, catalog monitoring, news feed, support reports | Operated by modelBridge |
