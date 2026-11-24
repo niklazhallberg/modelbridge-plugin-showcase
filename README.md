@@ -1,4 +1,4 @@
-# modelBridge.app
+# modelBridge
 
 ### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
 
