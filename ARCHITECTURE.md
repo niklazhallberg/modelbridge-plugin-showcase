@@ -16,11 +16,11 @@ The cloud layer runs autonomously — detecting new models, verifying their sche
 
 ## Core Design Principles
 
-**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how about 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated partner list, and it is the only claim here worth making.
+**Adaptive.** Almost every model gets its interface generated at runtime from its own OpenAPI schema — no per-model code. A model that is live on fal.ai but whose schema stays unpublished is still offered, with a prompt-only interface, and upgrades itself to the full form once the schema appears. A small number of models carry a hand-tuned interface that ships with the plugin (one model family today). All three paths end in the same place: a generation form the editor can use. This is how about 1,200 models (1,190 in the live catalogue on 2026-11-21) across 11 supported image, video, and audio generation or transformation categories are supported without plugin updates — and how a model that launched this morning is usually something an editor can run this afternoon, rather than something that waits for our next release. That is the difference between a live catalogue and a curated list.
 
 **Usage-calibrated.** The plugin learns from usage. When a model rejects media, the constraint is remembered and enforced automatically on future attempts. Cost estimates improve as your metered usage accumulates. Generation time estimates appear after a few uses and converge toward your actual experience the more you generate.
 
-**Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every migration of installed-model data. Silent recovery when primary storage is unavailable. No "start over from scratch" scenarios.
+**Resilient.** User data survives cache clears, application updates, and plugin reinstalls. Automatic backup before every migration of installed-model data. Silent recovery when primary storage is unavailable. If primary storage comes back empty, installed models are restored from the latest backup.
 
 **Remotely updatable.** Error handling, endpoint changes and feature flags are delivered over-the-air. When something changes in the AI ecosystem, the response ships without a plugin release and without user action; updates are checked at panel start, error explanations are re-checked about hourly while the panel is open and visible, and feature flags and configuration apply from the next start. Model intelligence arrives the same way from the plugin's own cloud service rather than the update channel, and curated pricing corrections travel neither today: they ship bundled in a plugin release, so a cost estimate cannot currently be changed remotely.
 
@@ -133,7 +133,7 @@ modelBridge integrates with fal.ai at multiple API levels — not just the gener
 
 **Error specification.** The plugin parses both of fal.ai's error response formats — structured validation errors and infrastructure errors — including `ctx` structured constraint data, error documentation URLs and the retry headers (`X-Fal-Needs-Retry`, and the older `X-Fal-Retryable`). The documented error types map to specific user-facing copy; an unrecognised type falls back to a generic message rather than raw output. A small set of semantic categories — input quality, credits and billing, network, content policy, and integration faults — drives consistent visual treatment across all error surfaces. When a billing error and an input error arrive together, both reach the banner — the second as a line under the first — so one does not hide the other.
 
-**Resilience to API changes.** The schema-driven architecture absorbs changes in fal.ai's catalogue without code changes: a new model, and every parameter it declares, needs no release. Schema fetching has layered fallbacks, so a temporary API issue never blocks the user. A renamed endpoint is migrated to its new id, and a retired one is confirmed absent from the catalogue before anything is removed.
+**Resilience to API changes.** The schema-driven architecture absorbs changes in fal.ai's catalogue without code changes: a new model, and every parameter it declares, needs no release. Schema fetching has layered fallbacks, so a temporary API issue does not stop an installed model from generating. A renamed endpoint is migrated to its new id, and a retired one is confirmed absent from the catalogue before anything is removed.
 
 ### Consuming the fal.ai API in production
 
@@ -307,9 +307,9 @@ modelBridge is a client-side application — each installation runs its own pane
 
 **Cloud operations layer.** Runs on an edge runtime with automatic geographic distribution. Catalog monitoring and schema verification are read-heavy workloads against fal.ai's public APIs, bounded by the size of the catalog (about 1,200 models in the live catalogue in November 2026), not by the number of modelBridge users.
 
-**OTA delivery.** Served from a global CDN. Static files, no compute per request. Scales to any number of users without infrastructure changes.
+**OTA delivery.** Served from a global CDN. Static files, with no modelBridge compute per request.
 
-**Known limits.** Background generations queue at the fal.ai API level, not locally. The primary scaling constraint is fal.ai's own API rate limits, which apply per user API key. Current scale and functional constraints are documented in [Known Limitations](https://docs.modelbridge.app/reference/limitations/).
+**Known limits.** Background generations queue at the fal.ai API level, not locally. Generation runs on each editor's own fal.ai account, so the limits that apply are that account's, not a shared modelBridge quota. Current scale and functional constraints are documented in [Known Limitations](https://docs.modelbridge.app/reference/limitations/).
 
 ---
 
@@ -340,7 +340,7 @@ The full list of services that receive data, with what each receives, is the sub
 | Sharp | Image processing (thumbnails, format conversion) | Apache-2.0 |
 | libvips | Image processing library used by Sharp | LGPL-3.0-or-later (dynamically linked, user-replaceable) |
 
-FFmpeg and FFprobe ship with the plugin as **LGPL-only builds** — compiled without the GPL and non-free components, verified from the build configuration of each binary — and are invoked as separate processes, never linked. libvips is dynamically linked and user-replaceable. Complete attributions, licence texts and build provenance ship with the plugin. All other runtime dependencies are permissively licensed.
+FFmpeg and FFprobe ship with the plugin as **LGPL-only builds** — compiled without the GPL and non-free components, verified from the build configuration of each binary — and are invoked as separate processes, never linked. libvips is dynamically linked and user-replaceable. Complete attributions, licence texts and build provenance ship with the plugin, including the full inventory of every other component and its licence.
 
 The macOS binaries are built from source rather than downloaded, and the build is a deliberately small one: `--disable-everything` with an explicit allowlist of demuxers, decoders, encoders, muxers and filters, `--disable-autodetect`, and **`--disable-network`** — leaving `file` and `pipe` as the only two protocols compiled in. That bundled macOS binary has no network code in it at all.
 
