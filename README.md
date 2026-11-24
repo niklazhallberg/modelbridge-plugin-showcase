@@ -287,10 +287,6 @@ each claim, is in [RELIABILITY.md](RELIABILITY.md).
 
 ---
 
-<p align="center">
-  <img src="assets/modelbridge-powered-by-fal.webp" alt="Bridging AI to Adobe. Powered by fal.ai" width="100%">
-</p>
-
 ## Getting started
 
 modelBridge 1.0.0 installs from a signed, notarised macOS installer: **[download it from the v1.0.0 release](https://github.com/niklazhallberg/modelbridge-plugin-showcase/releases/tag/v1.0.0)**. Quit Premiere Pro, run the installer, then open Premiere Pro and choose Window → Extensions → modelBridge. A setup guide asks for your licence key, or starts the 14-day trial, and your fal.ai key; an Anthropic key is optional and turns on Agent Mode. The full sequence is in the [installation guide ↗](https://docs.modelbridge.app/getting-started/installation/).
@@ -410,7 +406,3 @@ Actively preparing for Adobe's UXP: platform-specific code is moving behind adap
 Built by [Niklaz Hallberg ↗](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
 
 2025–2026.
-
-<p align="center">
-  <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge for Adobe Premiere Pro: the Generate tab docked beside the Program monitor" width="100%">
-</p>
