@@ -230,7 +230,7 @@ Two of those boundaries are enforced in the build rather than in policy, and bot
 
 For NDA work, see the [NDA editing guide ↗](https://docs.modelbridge.app/guides/editing-nda-footage/) for what each feature does and doesn't share.
 
-Your API keys, generation history, settings, and cost logs are stored locally. No usage database on modelBridge servers unless you opt in to anonymous analytics. Optional error reporting is off by default — you opt in from Settings — and carries technical error context, filtered and truncated before it is sent: no prompts, no media, no file paths and no identifier.
+Your API keys, generation history, settings, and cost logs are stored locally. Error reporting and usage analytics are two switches in the setup guide, shown switched on. Nothing is sent before you press Continue, and either can be switched off there or later in Settings → Privacy. With usage analytics off, there is no usage database about you on modelBridge servers. Error reports carry technical error context, filtered and truncated before they are sent: no prompts, no media, no file paths and no identifier.
 
 Full data inventory, GDPR / CCPA / LGPD coverage, and subprocessor list in the [Privacy Policy ↗](https://docs.modelbridge.app/legal/privacy-policy/).
 

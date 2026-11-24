@@ -267,7 +267,7 @@ The following systems operate autonomously — reducing manual maintenance and k
 
 **Visibility-aware polling.** When the panel is hidden, non-critical background work pauses automatically. Generation polling, the backend keep-alive and a few bounded housekeeping tasks continue; everything else waits.
 
-**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Off by default — enabled only if you opt in from Settings.
+**Anonymous error telemetry.** Unrecognized errors produce anonymous reports (error type and source from a fixed list, HTTP status, whether it was retryable, plugin and Premiere version, platform — no message text, model, prompt, path, URL, key, timestamp or personal data). This is how new error types are discovered for documentation. Shown switched on in the setup guide since version 1.0.0; nothing is sent before Continue is pressed, and it can be switched off there or at any time in Settings.
 
 **Support infrastructure.** Hundreds of curated parameter explanations (hand-written, not auto-generated) provide contextual help via ⓘ icons. A field that has no curated explanation yet still gets a working ⓘ, linked to its entry in a parameter index on the docs site that is rebuilt from the live catalogue — so a new model's settings are explained from the day it arrives, and the curated text follows. Dozens of documented error codes link to structured troubleshooting pages. Context-aware validation templates interpolate exact constraint values into error messages. Academy articles appear as contextual links on model cards — only when relevant to the selected model.
 
@@ -279,7 +279,7 @@ All user data — saved models, settings, generation history, cost logs, and lea
 
 The cloud operations layer stores catalog state (model availability, schema verification status) and licensing state (subscription status, device identifiers). It does not store user-generated content, prompts, API keys, or personal information beyond what is provided during license activation — or in a bug report or rating you explicitly choose to send.
 
-API keys are stored locally and transmitted only to their own provider directly — the fal.ai key to fal.ai, the Anthropic key to Anthropic — never to modelBridge infrastructure. Anonymous error telemetry (error type, HTTP status, plugin and Premiere version) is off until the user turns it on, and can be turned off again at any time.
+API keys are stored locally and transmitted only to their own provider directly — the fal.ai key to fal.ai, the Anthropic key to Anthropic — never to modelBridge infrastructure. Anonymous error telemetry (error type, HTTP status, plugin and Premiere version) is shown switched on in the setup guide, sends nothing before the user presses Continue, and can be switched off there or at any time in Settings.
 
 Full data architecture, retention policies, and third-party data flows are documented in the [Privacy Policy](https://docs.modelbridge.app/legal/privacy-policy/).
 
@@ -291,7 +291,7 @@ User API keys are stored locally and used exclusively for direct communication w
 
 A licence check carries the information needed to validate product access and support device management, including a device name made of the platform, the processor model and a random four-character tag (for example "macOS · Apple M2 Pro · 3f9a"). Since 2026-09-27 the device name no longer contains the computer's network name; a device activated by an earlier build keeps its old name, which did, until it is activated again. The service returns the subscription status and access information needed by the product. Licence checks are not used to transfer creative project content.
 
-The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting is off by default and carries technical error context, filtered and truncated before it is sent. Optional usage measurement is opt-in only.
+The local backend binds the loopback interface only and is not exposed to the network. Optional error reporting and usage measurement are shown switched on in the setup guide and can be switched off before anything is sent, or later in Settings. Error reports carry technical error context, filtered and truncated before they are sent.
 
 For full data inventory, GDPR compliance measures, subprocessor list, and retention policies, see [PRIVACY_AND_COMPLIANCE.md](PRIVACY_AND_COMPLIANCE.md).
 

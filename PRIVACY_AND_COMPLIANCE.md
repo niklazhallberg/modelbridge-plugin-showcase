@@ -98,8 +98,8 @@ user-rights information.
 | **Provider API keys** | Your device | Manage locally in the product settings |
 | **Generation history, cost history, installed models, and product settings** | Your device | Manage, reset, or remove locally in the product |
 | **Optional local analysis data** | Your device | Manage or remove locally |
-| **Optional error reports** | ModelBridge services, when enabled | Disabled by default; manage in Privacy settings |
-| **Optional usage measurements** | ModelBridge services, when enabled | Disabled by default; manage in Privacy settings |
+| **Optional error reports** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
+| **Optional usage measurements** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
 | **Device and installation information** | Your device and ModelBridge services where needed for licensing and device management | Contact us through the customer privacy process |
 | **Licence and subscription information** | ModelBridge services and the payment provider | Manage product access locally; contact us through the customer privacy process |
 | **Feedback and satisfaction ratings** | ModelBridge services, when you choose to submit them | Do not submit feedback; contact us through the customer privacy process |
@@ -171,7 +171,8 @@ and user-rights information.*
 
 ### Optional error reporting
 
-Disabled by default. When you enable it, it carries technical error context so that a
+Shown switched on in the setup guide since version 1.0.0. Nothing is sent before you press
+Continue, and it can be switched off there or in Settings → Privacy. While on, it carries technical error context so that a
 failure the product does not yet explain properly can be recognised and given a proper
 message. It carries the error's type and source from a fixed list, the HTTP status,
 whether it was retryable, the plugin and Premiere versions and the platform — no message
@@ -220,8 +221,8 @@ request procedures, and user-rights information.
 
 ### Two separate optional streams
 
-Optional error reporting and optional usage measurement are independent, and each stays
-disabled until you enable it. Neither is designed to carry creative content, and
+Optional error reporting and optional usage measurement are independent, and each can be
+switched off on its own, in the setup guide or later in Settings → Privacy. Neither is designed to carry creative content, and
 content-bearing fields are excluded before anything is sent and again on receipt.
 
 ### No Third-Party Behavioral Data
