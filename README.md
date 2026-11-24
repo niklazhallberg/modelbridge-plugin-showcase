@@ -51,6 +51,21 @@ That's how one plugin keeps up with the whole fal.ai catalogue in these categori
 
 ---
 
+## Why modelBridge exists
+
+AI generation and professional editing grew up in different places. New models appear on generative platforms first, while the work they are meant for gets finished on an editing timeline. In between sits friction: browser tabs, downloads, re-imports, a separate interface for every model, and guesswork about where a clip belongs.
+
+modelBridge started from one idea: remove that friction. Generation should happen in the same window as the edit, side by side with the editor's workspace and timeline, and the result should land where it belongs without a detour.
+
+It does that by connecting two things that are each very good at their own job:
+
+- **fal.ai** runs a large, fast-moving catalogue of image, video and audio models and adds new ones soon after they are released.
+- **Adobe Premiere Pro** is where many professional editors already do their work.
+
+modelBridge is the link between them, and it is deliberately independent of either company's own roadmap. Editors can use a new model soon after it appears, without waiting for it to reach any one vendor's product, and alongside Adobe's own generative tools rather than instead of them. For fal.ai, its models become available where editors and AI practitioners actually produce their work. For Premiere Pro editors, the wider model landscape is one panel away.
+
+---
+
 ## What this means for fal.ai
 
 - **New fal.ai models reach editors usually within hours, with working controls.** The catalog is synced several times a day, and each model's sliders, dropdowns and media inputs are built from its own OpenAPI schema, so a launch needs no plugin release.
