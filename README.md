@@ -439,10 +439,8 @@ modelBridge is built for professional editors — freelancers, agency teams, and
 
 Actively preparing for Adobe's UXP: platform-specific code is moving behind adapters, and the parts that cannot be adapted — process spawning, and timeline operations that depend on Premiere's unsupported QE DOM — are measured and documented rather than assumed away. See [UXP_MIGRATION.md](UXP_MIGRATION.md).
 
-Built by Niklaz Hallberg, Creative Technologist & AI Lead. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
-
 ---
 
-modelBridge is a product of Niklaz Hallberg, a sole proprietorship registered in Sweden and based in Stockholm. Purchases are processed by Lemon Squeezy as Merchant of Record. Contact: [info@modelbridge.app](mailto:info@modelbridge.app).
+modelBridge is built and run by Niklaz Hallberg, Creative Technologist & AI Lead, as a sole proprietorship registered in Sweden and based in Stockholm. Purchases are processed by Lemon Squeezy as Merchant of Record. Contact: [info@modelbridge.app](mailto:info@modelbridge.app).
 
 © 2025–2026 Niklaz Hallberg. All rights reserved.
