@@ -1,40 +1,16 @@
 # Privacy & Compliance
 
-Privacy posture for modelBridge.app — data categories, recipients, and user controls.
+*An engineering overview of modelBridge.app's data flows, and our own self-assessment: not a legal opinion, a certification or a statement of verified compliance. The customer-facing [privacy policy](https://docs.modelbridge.app/legal/privacy-policy/) governs. It holds retention periods, lawful bases, request procedures and user rights, which this document does not repeat. Where the two differ, the policy is right.*
 
-*This is a public technical overview and our own self-assessment, not a legal opinion, a certification, or a statement of verified compliance. The customer-facing privacy policy is the governing source for current retention information, request procedures, and user-rights information.*
-
-**Revised 2026-09-24** against two internal audits — a privacy and security pass (2026-08-29) and a media-exfiltration pass (2026-09-07) — plus a re-read of the shipping code. Twenty statements in the previous version were wrong, and the ones that were wrong in an absolute form have been replaced rather than qualified: no cookies, no fingerprinting, no hardware identifier, "everything we hold", the device name, the erasure scope, the telemetry field list, and the claim that no source directory ever reaches Anthropic. Google is named as a recipient for the first time. Each correction says what the document used to claim, because a compliance reference that quietly changes its answer is worth less than one that shows the change.
-
-**Re-checked 2026-10-21** against the shipping panel, backend and production Worker. Corrected: the device name (no network name since 2026-09-27), what a bug report carries (licence key ID, installation ID and product state were missing) and what reaches Resend, the Enhance frame size, the visual-scan frame budget, when scan logs are removed, which project metadata travels on every turn, where the Anthropic key is stored, what Reset clears, how payment-provider message copies are stored, and which analytics events the Worker drops. The larger corrections are also marked where they were made.
-
-**Updated 2026-10-22:** Mobile Preview ships, as *Live preview in mobile*. This document described it as disabled pending review, and named a phone cookie that carried the installation ID. The phone link was redesigned before the feature was switched on: it is now a random link unrelated to your licence or your machine, and you can replace or stop it. §1, §2 and §4 describe what it sends.
-
-**Corrected 2026-11-16:** what a bug report carries (the installation ID has not been part of it since 2026-09-27; the error-log lines, the most recent run and the operating-system version were missing; "the prompt is never included" was too strong), what a satisfaction rating carries (a random identifier kept for the installation, which this document denied), and the size at which Enhance sends a still image.
+Last checked against the shipping product and the privacy policy: 2026-11-24.
 
 ---
 
 ## 1. Architecture Overview — Privacy by Design
 
-modelBridge is a local-first application. The plugin runs entirely inside Adobe Premiere Pro as a CEP panel extension. There is no modelBridge server sitting between the editor and fal.ai. User prompts, media files, and generated content flow directly from the user's device to fal.ai's API — authenticated with the user's own API key — and back. modelBridge infrastructure never sees, stores, or proxies this content. The one exception is a feature you turn on yourself: after you open *Live preview in mobile* in Premiere, the link to each new result on fal.ai's servers, with the model's name, reaches modelBridge's preview service (below). The media itself is not copied to us.
+modelBridge is local-first. The plugin runs inside Adobe Premiere Pro as a CEP panel extension, and no modelBridge server sits between the editor and fal.ai. Prompts, media and generated content go directly from the user's device to fal.ai's API on the user's own key, and back. modelBridge infrastructure does not see, store or proxy them. The one exception is opt-in: with *Live preview in mobile* open, the link to each new result on fal.ai's servers reaches modelBridge's preview service (below), but not the media.
 
-All user preferences, generation history, API keys, installed models, cost logs, and learned constraints are stored locally on the user's machine. No modelBridge-operated database holds user-generated content or creative assets.
-
-modelBridge uses cloud services to support licence validation, catalog monitoring, the in-plugin news feed, model insights, and optional error reporting and analytics.
-
-**Live preview in mobile** shows your results on a phone. After a generation you open *Live preview in mobile* under the result, scan the QR code with the phone's camera, and each new result appears on the phone.
-
-- **Nothing is sent until you open it.** Opening *Live preview in mobile* in Premiere is the opt-in, and the plugin's local backend refuses to send anything before that. Sending also needs an active subscription or trial.
-- **What is sent, per result:** the link to the result file hosted by fal.ai, whether it is an image, a video or audio, the model's name and category, and the time it was sent. Never the source footage, the project or the prompt. The media is not copied to modelBridge; the phone loads it from fal.ai.
-- **The link.** The QR code carries a random link made for this purpose only. It is not derived from your licence or your machine, and it can show results but cannot change them. Anyone who has the link sees the results sent to it, so treat it as private. **New link** replaces it: the old link stops working at once and what was sent to it is deleted. **Stop sharing** does the same and stops sending; opening the QR code again creates a new link. A link that receives no new result for 7 days expires on its own, with everything sent to it.
-- **NDA mode** blocks it entirely: nothing is sent while NDA mode is on.
-- **One cookie, on the preview site only.** The phone's preview page sets one first-party cookie, `mb_feed`, used only to reopen the right page from a Home Screen shortcut. It is HttpOnly and Secure and lasts 7 days. The Premiere plugin itself sets no cookies.
-
-*Corrected 2026-10-22:* this paragraph described the feature as disabled, and named its cookie as `mb_install_id`, carrying the installation ID, with a year-long lifetime to be shortened on re-enablement. That design was replaced before the feature shipped; the installation ID is not part of the phone link or the cookie.
-
-One thing reaches us because you send it, and it carries more than this document previously claimed: a bug report. It carries your message, your name and email if you type them, the three most recent error messages from your session and up to 25 recent lines of the panel's error log, a technical model packet (the selected model and its field definitions, the request ID, status and settings of the most recent run of that model, and the properties of the selected media — never the media itself or its path), the product's own state (plugin, Premiere and backend version, the operating system and its version, whether Generate was ready and why not, whether each provider key was accepted — never the key), your licence status together with your licence key's ID and the payment provider's activation ID for this computer (never the licence key itself, and since 2026-09-27 not your installation's ID), and any screenshots you attach — **with their original filenames**. Until 2026-09-20 the report showed a field-by-field preview and offered a tick-box for including your prompt; both were removed. The prompt field is therefore not attached; log lines are filtered for known patterns, which is not a guarantee that no prompt text appears in one. Nothing else in the report can be struck before sending. Reports are retained 180 days in our database; a copy is emailed to our support mailbox (see Resend in §4), and the privacy policy states how long that copy is kept.
-
-**One model outside this architecture sees your prompt.** The ✨ Enhance button next to a prompt field sends that prompt — and, when media is attached, up to four sampled frames of it — to a language-model endpoint on fal.ai, which runs it on **a Google Gemini model**. It runs on your own fal.ai key and your own fal.ai credit, and only when you press the button. The full flow, including when Anthropic is used instead, is in §4.
+Preferences, generation history (including prompts), API keys, installed models, cost logs and learned constraints stay on the user's machine. The fal.ai and Anthropic keys sit unencrypted in an environment file in the plugin's data folder, readable by anyone with access to the user account.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -73,196 +49,102 @@ One thing reaches us because you send it, and it carries more than this document
      this path         pricing supplements
 ```
 
-The plugin never calls Lemon Squeezy's API itself: the licence key and device name reach
-Lemon Squeezy through modelBridge's licence service, and your browser talks to Lemon
-Squeezy directly only when you open checkout or the customer portal.
+The diagram shows the main paths only. Agent Mode goes directly to Anthropic (§6), and Enhance to Anthropic or to a Google model through fal.ai (§4). The plugin never calls Lemon Squeezy itself; the browser reaches it only for checkout and the customer portal. Exchange rates (frankfurter.dev) and model thumbnails (fal.ai's media hosts, Google Cloud Storage, X) are fetched with no identifier, though each host sees the IP address.
 
-The local backend is not a media-only component, and the diagram's fal.ai column is
-not the whole of what fal.ai carries. The backend also relays licence checks to
-ModelBridge services, fetches currency rates from a public exchange-rate source, and
-— for Enhance — can use a provider-hosted language model operated by Google (§4).
-Each is described at the appropriate level in the sections below rather than in the
-diagram.
+### Live preview in mobile (Mobile Preview)
+
+Opening *Live preview in mobile* under a result shows a QR code; each new result then appears on the phone that scans it.
+
+- **Opt-in.** The local backend sends nothing until the feature is opened, and nothing without an active subscription or trial, or while NDA mode is on.
+- **Per result:** the link to the result on fal.ai's servers, the media type, the model's name and category, and the time sent. Never source footage, the project or the prompt; the phone loads the media from fal.ai.
+- **The link** is random, not derived from the licence or the machine, and read-only. Anyone holding it sees what is sent to it. Mobile preview off in Settings → Privacy revokes it at once.
+- **One cookie, on the preview site only:** `mb_feed` (first-party, HttpOnly, Secure, 7 days) holds the link so a Home Screen shortcut reopens the right page. The Premiere plugin sets no cookies.
+
+### Bug reports
+
+A bug report reaches us because the user sends it. The policy lists its contents. Three engineering details: attached screenshots (up to three) keep their **original filenames**; the licence is identified by key ID and activation ID, never the key, the licence email or a device identifier; and paths, links, prompts and API keys are removed from error text by pattern filters, which remove only what they recognise. There is no preview step or per-field opt-out. A copy is emailed to the support mailbox (§4).
 
 ---
 
 ## 2. Data categories
 
-This section summarises the kinds of data the product handles, where they are held,
-and the controls available to you. The customer-facing privacy policy is the
-governing source for current retention information, request procedures, and
-user-rights information.
+Retention for each server-side category is in the policy's [What we receive and keep](https://docs.modelbridge.app/legal/privacy-policy/#what-we-receive-and-keep) section.
 
-| Data category | Where it lives | Your control |
+| Data category | Where it lives | Control |
 |---|---|---|
-| **Provider API keys** | Your device | Manage locally in the product settings |
-| **Generation history, cost history, installed models, and product settings** | Your device | Manage, reset, or remove locally in the product |
+| **Provider API keys** | Your device | Settings |
+| **Generation history, cost history, installed models, settings** | Your device | Settings → Data management (§7) |
 | **Optional local analysis data** | Your device | Manage or remove locally |
-| **Optional error reports** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
-| **Optional usage measurements** | ModelBridge services, when enabled | Shown switched on in the setup guide; nothing is sent before you press Continue; switch off there or in Settings → Privacy |
-| **Device and installation information** | Your device and ModelBridge services where needed for licensing and device management | Contact us through the customer privacy process |
-| **Licence and subscription information** | ModelBridge services and the payment provider | Manage product access locally; contact us through the customer privacy process |
-| **Feedback and satisfaction ratings** | ModelBridge services, when you choose to submit them | Do not submit feedback; contact us through the customer privacy process |
-| **Bug reports and attachments** | ModelBridge services and service providers used to deliver support communications | Choose what to submit; contact us through the customer privacy process |
-| **Live preview in mobile** | ModelBridge services, only after you open it in Premiere: the link to each result on fal.ai's servers, its media type, the model's name and category, and the time sent. Kept at most 7 days after the last send | Off until you open it; **New link** replaces the link, **Stop sharing** stops it; NDA mode blocks it |
-| **Network and service-security information** | ModelBridge services | Used to protect the service and investigate abuse |
+| **Optional error reports** and **usage measurements** | modelBridge services, when on | Each has its own switch. The setup guide shows both on; nothing is sent before Continue; switch off there or in Settings → Privacy |
+| **Device and installation information** | Your device; modelBridge services for licensing | Erasure request (§3) |
+| **Licence and subscription information** | modelBridge services and the payment provider | Erasure request (§3) |
+| **Free-trial history** | modelBridge services, by computer (a keyed hash of the device ID) | Kept after erasure by design; see the policy |
+| **Ratings, bug reports and attachments** | modelBridge services; bug reports also in the support mailbox | You choose what to send; email request (§3) |
+| **Live preview in mobile** | modelBridge services, after you open it (§1) | Off until opened; Mobile preview off in Settings → Privacy; NDA mode |
+| **IP address** | Seen by Cloudflare on every request; held only as a short-lived abuse-limiting key, not logged | — |
 
 ### Device and analytics identifiers
 
-The product uses separate identifiers for separate purposes.
+**The installation (device) identifier** supports licensing and device management. It is a one-way hash of the computer's hardware identifier, so it survives a reinstall or cleared plugin data. The raw hardware identifier does not leave the device.
 
-**An installation identifier is used to support licensing and device management.**
-It is a one-way hash of the computer's hardware identifier, so it stays the same after a
-reinstall or after the plugin's data is cleared. The raw machine identifier does not
-leave the device. Associated licence and
-activation data can be addressed through the customer privacy process.
-
-**Optional usage measurement uses a separate identifier.** It is a short hash of
-properties the panel's browser engine reports — user agent, screen size, time zone and
-language — kept locally once made. It is sent only while optional usage measurement is
-enabled and is not used to associate usage measurements with a licence or provider
-account. Optional error reporting carries no identifier at all.
-
-The customer-facing privacy policy contains the governing information about these
-data categories and the available privacy controls.
+**The analytics identifier** is separate: a short hash of the user agent, screen size, time zone and language reported by the panel's browser engine. It is kept locally and comes back the same after the panel's data is cleared. It is sent only while usage measurement is on, and is not joined to a licence or provider account. Error reporting carries no identifier.
 
 ### Licence checks
 
-A licence check carries the information needed to validate product access and support
-device management, including a device name made of the platform, the processor model
-and a random four-character tag — for example "macOS · Apple M2 Pro · 3f9a". The device
-name is passed on to the payment provider so the two computers on a licence can be told
-apart. **Corrected 2026-10-21:** this section said device names often reflect the
-computer's hostname. That was true until 2026-09-27; since then the name contains no
-network name. A device activated by an earlier build keeps its old name, which did,
-until it is activated again.
-
-The service returns the subscription status and access information needed by the
-product. Licence checks are not used to transfer creative project content.
+A licence check carries the licence key, the installation identifier and a device name: platform, processor model and a random four-character tag, for example "macOS · Apple M2 Pro · 3f9a". The device name goes on to the payment provider so a licence's computers can be told apart. Since 2026-09-27 it holds no network name; a device activated earlier keeps its old name until reactivated. No creative content travels with a check.
 
 ### What modelBridge's own servers never receive
 
-The scope is the heading, and it is deliberate. Several of these travel to the two services you bring your own key for — your prompt goes to fal.ai on every generation, filenames go to Anthropic on every agent turn — and that is the product working as described in §4 and §6. What follows is the list of things that never reach infrastructure operated by modelBridge, which is the only infrastructure we control and the only thing this document can promise about.
+The scope is the heading. Several items go to the services the user brings a key for, such as the prompt to fal.ai and filenames to Anthropic (§4, §6). This list covers only infrastructure modelBridge operates.
 
-- Prompts, negative prompts, or any creative text input — except in a bug report you write and send
-- Generated media or thumbnails. **Links are a narrower promise:** while *Live preview in mobile* is on, the link to each new result on fal.ai's servers reaches our preview service (§1); the media itself does not
-- File paths. **Filenames are a narrower promise:** a screenshot you attach to a bug report keeps its original filename
+- Prompts, negative prompts or other creative text, except in a bug report the user writes and sends
+- Generated media or thumbnails. **Links are narrower:** with *Live preview in mobile* on, result links on fal.ai's servers reach the preview service (§1)
+- File paths. **Filenames are narrower:** a screenshot attached to a bug report keeps its filename
 - fal.ai or Anthropic API keys
-- Search queries within the plugin
-- Browsing behavior
-- Third-party analytics SDK data (no Google Analytics, Segment, Mixpanel, etc.)
-- Tracking pixels
+- In-plugin search queries, or browsing behaviour
+- Third-party analytics SDK data or tracking pixels
 
-**Three claims that used to be on this list and are not true, removed rather than softened:**
-
-- *"No cookies beyond localStorage."* Removed because the phone page of *Live preview in mobile* sets a first-party cookie (§1). It is named here because the earlier absolute claim was wrong, not because the mechanism belongs in this document.
-- *"No fingerprinting."* Removed because the identifier used for optional usage measurement does not support that absolute claim. The customer-facing privacy policy describes the identifier and the controls over it.
-- *"No hardware identifier."* Removed because the installation identifier is derived from the device. The raw machine identifier does not leave the device.
-
-One thing does reach us because you send it: a bug report (see §1). It carries your message, any contact details you type, the last three error messages and recent error-log lines, a model packet, the product's own state, your licence key's ID and the payment provider's activation ID, and any screenshots — and, since 2026-09-20, it has no preview step and no prompt tick-box, so the prompt field is not attached (log lines are filtered for known patterns) and nothing else can be struck.
+The list does not claim "no cookies", "no fingerprinting" or "no hardware identifier", because none holds: the preview page sets one cookie (§1), the analytics identifier is a hash of browser properties, and the installation identifier derives from the hardware identifier.
 
 ---
 
 ## 3. Privacy practices
 
-*A public technical overview and our own self-assessment. The customer-facing privacy
-policy is the governing source for current retention information, request procedures,
-and user-rights information.*
+**Two separate optional streams.** Error reporting and usage measurement are independent, each with its own switch (§2). Error reporting carries the error's type and source from a fixed list, the HTTP status, whether it was retryable, plugin and Premiere versions and the platform: no message text, model, creative content, file path or identifier. Usage measurement is in §5.
 
-### Optional error reporting
+**Retention.** Device data stays until the user deletes it (§7). Server-side retention is in the policy's [What we receive and keep](https://docs.modelbridge.app/legal/privacy-policy/#what-we-receive-and-keep) table.
 
-Shown switched on in the setup guide since version 1.0.0. Nothing is sent before you press
-Continue, and it can be switched off there or in Settings → Privacy. While on, it carries technical error context so that a
-failure the product does not yet explain properly can be recognised and given a proper
-message. It carries the error's type and source from a fixed list, the HTTP status,
-whether it was retryable, the plugin and Premiere versions and the platform — no message
-text, no model, no creative content, no file paths and no identifier of any kind.
+**Requests and erasure.** The policy's [Your rights](https://docs.modelbridge.app/legal/privacy-policy/#your-rights) section describes self-service access and erasure keyed on the licence key, and what erasure deletes and keeps. By design it cannot reach records not stored by licence: bug reports, ratings and payment-provider message copies (stored by date), analytics and error reports (no licence ID), and preview links. Those go by email. A rating carries a random rating ID and no name, email, licence or device ID, so it is found by quoting its comment.
 
-### Retention
-
-Data held on your own device stays until you clear it. Data held by ModelBridge
-services falls into categories with different retention periods — licensing and
-subscription information, support communications, feedback, and diagnostic and
-security information. A retention period elapsing is not the same thing as a privacy
-request being fulfilled, which is why the two are described separately. The
-customer-facing privacy policy holds the current periods.
-
-### A rating cannot be looked up by licence, and that is the same fact as its unlinkability
-
-A satisfaction rating is not submitted with your name, your email or your licence. It
-carries a random identifier kept for the installation, so that two answers from one
-install can be told apart, together with the score, an optional comment, the number of
-generations run, the time, and the plugin, Premiere and operating-system versions. The
-identifier is not linked to your licence or account, so a licence-based request cannot
-reach a rating. A specific comment can be removed by quoting its wording to
-info@modelbridge.app.
-
-This is a consequence of the design rather than a shortfall in it: the property that
-keeps an answer unlinked from your licence is the property that makes it unfindable
-through one.
-
-### Data requests and erasure
-
-Verified privacy requests are handled through the customer privacy process. Where a
-request is verified, we remove the applicable licence- and account-linked operational
-data and provide a record of the outcome.
-
-Some support, diagnostic, billing-provider, aggregate, and security-related records
-may follow separate retention, legal, or fraud-prevention requirements. Where an
-automated process cannot safely complete a request, it is handled through a manual
-review path.
-
-Preview links from *Live preview in mobile* are not tied to your licence, so an erasure
-request cannot find them. **Stop sharing** in Premiere deletes them at once, and they
-expire on their own 7 days after the last result sent (§1).
-
-The customer-facing privacy policy is the governing source for current retention,
-request procedures, and user-rights information.
-
-### Two separate optional streams
-
-Optional error reporting and optional usage measurement are independent, and each can be
-switched off on its own, in the setup guide or later in Settings → Privacy. Neither is designed to carry creative content, and
-content-bearing fields are excluded before anything is sent and again on receipt.
-
-### No Third-Party Behavioral Data
-
-- No analytics SDKs (Google Analytics, Segment, Mixpanel, Amplitude)
-- No tracking pixels or web beacons
-- No cross-site tracking
-- No session replay or heatmap tools
-- No advertising identifiers and no data sold, shared or brokered
-
-Two lines that were in this list and have been removed as untrue: "no cross-site tracking
-**or fingerprinting**" and "no cookies beyond browser localStorage". Both were absolute
-claims the product does not support, so both were removed rather than qualified; the
-customer-facing privacy policy is the governing description.
+**No third-party behavioural data:** no analytics SDKs (Google Analytics, Segment, Mixpanel, Amplitude), tracking pixels, cross-site tracking, session replay or advertising identifiers. No data is sold, shared or brokered.
 
 ---
 
 ## 4. Subprocessor List
 
-| Processor | Role | Data Received | DPA Status |
+The policy's [Who else handles the data](https://docs.modelbridge.app/legal/privacy-policy/#who-else-handles-the-data) section governs, including each transfer safeguard.
+
+| Processor | Role | Data received | Relationship |
 |---|---|---|---|
-| **Cloudflare** (Workers + KV) | Service hosting and storage | Everything in the §2 categories that is not held on your device: licence and subscription information including a device name, the subscription record the payment provider's messages produce (which carries your email), copies of those messages kept for 30 days (since 2026-10-17 with your name, email, card and address fields redacted before storage), bug reports with contact details and attachments, feedback, optional usage measurements, optional error reports, network information, and — only after you open *Live preview in mobile* — the preview links it sends (the link to each result on fal.ai's servers, its media type, the model's name and category and the time sent, kept at most 7 days after the last send) | Cloudflare DPA (standard) |
-| **Lemon Squeezy** (Link, LLC, formerly Lemon Squeezy LLC, a Stripe company) | Merchant of Record — payment processing, subscription management, license validation | License key, customer email, instance ID including your device name, payment details | **Independent controller** (Art. 4(7)), not a processor for modelBridge: LemonSqueezy is Merchant of Record and determines its own purposes for payment data. We never receive your payment details |
-| **fal.ai** (Features & Labels, Inc.) | AI model generation, schema/pricing APIs, and the LLM behind Enhance | User prompts, media files, generated content (direct from user device, authenticated with user's own API key). Also the Enhance payload described below | Direct controller-to-controller relationship — user contracts directly with fal.ai |
-| **Google** (via fal.ai) | The model that runs Enhance — a Google Gemini model, reached through fal.ai's language-model endpoint | Your prompt text, the model's name and category, the configured duration/aspect ratio/resolution, and — when media is attached — up to four sampled frames. Only when you press Enhance. See the flow below | Reached through fal.ai's language-model endpoint on the user's own fal.ai key; modelBridge chooses the Google model on that endpoint, and the user's relationship is with fal.ai |
-| **Anthropic** (Agent Mode) | Conversational AI for timeline editing | Chat messages; project metadata — clip and sequence names, filenames, timecodes, effect settings, marker names and comments, dailies XMP, camera make/model/date, the client name in Client-project mode, your alias and any custom instructions; frames of a selected clip; media in the Generate tab when you ask about it; and **paths as follows**: media paths and the project file's own path are replaced by session handles at a single choke point, while a path you type into the chat yourself, anything inside raw XMP and the candidate paths of a disk search for an offline file travel as written (see §6). Direct from the user's device, authenticated with the user's own API key | Direct controller-to-controller relationship — user contracts directly with Anthropic |
-| **Anthropic** (model insights) | Model insights enrichment (Worker background task) | Public model metadata, and public facts about a model's creator — no user content | No user PII processed |
-| **Pushover** (Pushover, LLC) | Developer operational alerts | Operational counts (catalog, errors, health), bug-report notices carrying only the model and the report id, and subscription events identified by licence key id and subscription id — never an email address, a name or any other identifying data. **One exception, added 2026-08-28:** the free-text comment from a satisfaction rating. A rating carries a random installation identifier and is not linked to a licence or account (§3) | Pseudonymous identifiers only; the rating comment is unlinked user-written text. Pushover publishes no data processing agreement and is not certified under the EU–US Data Privacy Framework; the privacy policy says so |
-| **GitHub** (Microsoft) | Remote config CDN (read-only) | None — GET requests only, no user data sent | No user data processed |
-| **Resend** (Resend, Inc.) | Email delivery of the reports you send us | For the bug-report email flow documented here, Resend receives the report as described in §1 — the report text, the name and reply email address you typed, your licence key's ID and the payment provider's activation ID, the model, product-state and media-property context, the three recent error messages and the filtered error-log lines, and attached screenshots with their original filenames. This flow does not attach the prompt field, and does not send generated media, media files, project data, provider API keys or the licence key itself to Resend | Processor. Transfer safeguard: EU–US Data Privacy Framework certification and Standard Contractual Clauses in its data processing terms, as the [privacy policy](https://docs.modelbridge.app/legal/privacy-policy/) states |
+| **Cloudflare** (Workers + KV) | Hosting and storage, including the preview service | Everything modelBridge holds server-side (§2), and the IP address of every request | Processor |
+| **Lemon Squeezy** (Link, LLC, formerly Lemon Squeezy LLC, a Stripe company) | Merchant of Record: payments, subscriptions, licence validation | Licence key, customer email, instance ID including the device name, payment details | **Independent controller** (Art. 4(7)). We never receive payment details |
+| **fal.ai** (Features & Labels, Inc.) | Generation, schema and pricing APIs, and the language-model endpoint behind Enhance | Prompts, media and generated content, direct from the device on the user's key, with a header naming the modelBridge version (no identifier). The Enhance payload below | Separate controller; the user contracts directly with fal.ai |
+| **Google** (via fal.ai) | Runs Enhance on the fal.ai branch: a Gemini model on fal.ai's language-model endpoint | Prompt text, model name and category, duration, aspect ratio and resolution, and up to four images when media is attached. Only on an Enhance press | Reached on the user's fal.ai key; modelBridge chooses the model; the user's relationship is with fal.ai |
+| **Anthropic** (Agent Mode; Enhance with an Anthropic key) | Timeline editing by chat; prompt rewriting | What §6 lists, and the Enhance payload on the Anthropic branch. Direct from the device on the user's key | Separate controller; the user contracts directly with Anthropic |
+| **Anthropic** (model insights) | Worker background enrichment | Public model and creator metadata. No user content | No user data |
+| **Pushover** (Pushover, LLC) | Developer operational alerts | Operational counts, bug-report notices with only the model and report ID, licence and subscription IDs, erasure notices with a record count only, and a rating's free-text comment (unlinked, §3). Never an email, a name or any part of a licence key | Pseudonymous IDs. No DPA; not certified under the EU–US Data Privacy Framework |
+| **Resend** (Resend, Inc.) | Delivers the bug-report email | The report as listed in §1, screenshots with filenames included | Processor; DPF certification and Standard Contractual Clauses |
+| **STRATO** (STRATO GmbH) | Hosts the support mailbox, Germany | The emailed bug-report copy and any email sent to us | Processor |
+| **Vercel** | Hosts the documentation website | Visitors' IP address and browser details. Nothing from the panel | Processor |
+| **GitHub** (Microsoft) | Remote config CDN (read-only) | GET requests with no identifier; GitHub sees the IP address | No user data sent |
 
 ### fal.ai Data Flow Note
 
 modelBridge does not act as a data processor for fal.ai generation traffic. The user's device communicates directly with fal.ai's API using the user's own API key. modelBridge infrastructure has no access to this communication channel. The one thing from it that reaches us is the link to a finished result, and only when you turn on *Live preview in mobile* (§1). The user's relationship with fal.ai is governed by fal.ai's own Terms of Service and Privacy Policy.
 
-### Enhance — the one path where a model we did not name until now reads your prompt
+### Enhance routing
 
-Pressing ✨ Enhance rewrites the prompt in the field. Which model does the rewriting
-depends on two things, your Anthropic key and NDA mode, and the branch matters because the
-recipients differ:
+Pressing ✨ Enhance rewrites the prompt in the field. Which model does the rewriting depends on two things, your Anthropic key and NDA mode, and the branch matters because the recipients differ:
 
 | When you press Enhance | Who reads the prompt and any frames |
 |---|---|
@@ -270,20 +152,7 @@ recipients differ:
 | **No** Anthropic key, media attached (the ordinary case — that key is only needed for Agent Mode) | fal.ai's vision language-model endpoint on your own fal.ai key, running **a Google Gemini model** (gemini-2.5-flash-lite, chosen by modelBridge) |
 | **No** Anthropic key and no media, **or** NDA mode on — a text-only rewrite | fal.ai's language-model endpoint on your own fal.ai key, running the same Google model |
 
-What travels: the prompt text as typed; the model's display name and category; the
-configured duration, aspect ratio, resolution or image size; and, when media is attached,
-at most four images — a few sampled frames per video, and stills, each downscaled to a
-bounded size before sending. All are sent inline in the request body rather than as
-links. Each image is labelled by its role in the form (for example, the start frame). **No
-filenames, no file paths and no project data are included.** NDA mode strips the frames and
-forces the text-only rewrite at fal.ai, whatever key is present. *(Corrected 2026-11-24: since
-2026-11-19 an Anthropic key takes text-only rewrites too; this table had them always at fal.ai.)* The request needs an active subscription and a fal.ai key,
-spends your own fal.ai credit (or, on the Anthropic branch, your Anthropic credit, on
-Claude Haiku 5.5), and happens only on the press. *(Corrected 2026-10-21 and 2026-11-16: the
-frame sizes this paragraph stated were wrong; the sizes are bounded as described.)*
-
-Some provider-specific processing disclosures are not yet surfaced at every in-product
-decision point. Improving that transparency is tracked product work.
+What travels: the prompt as typed, the model's name and category, the configured duration, aspect ratio, resolution or image size, and at most four images (sampled video frames and stills), each downscaled, sent inline and labelled by its role in the form. **No filenames, file paths or project data.** NDA mode strips the frames and forces the text-only rewrite at fal.ai. Enhance needs an active subscription and a fal.ai key, spends the user's own credit, and runs only on the press.
 
 ---
 
@@ -291,51 +160,34 @@ decision point. Improving that transparency is tracked product work.
 
 ### Event Taxonomy (editorial events)
 
-Only while optional usage measurement is enabled, the panel sends a fixed set of
-editorial events. What they can carry, in full:
+Only while usage measurement is on, the panel sends a fixed set of editorial events. What they can carry, in full:
 
 | Events about | Metadata |
 |---|---|
-| A generation — started, completed, failed, imported or dismissed | Model ID; on completion the cost (USD) and duration; on failure or dismissal, where it came from; on import, a count |
+| A generation started, completed, failed or dismissed | Model ID; on completion, cost (USD) and duration; on failure or dismissal, where it came from |
+| `gen_accept`: results imported from preview | Model ID and the number imported |
 | Choosing a model, and Dual Mode | Model ID, or the primary and secondary model IDs |
-| Browsing and searching the catalogue | The category filter — never the search text |
-| Opening Costs, and changing a setting | The setting's key **and its new value** — so a privacy toggle reports its own position, including the one that enables this stream |
+| Browsing and searching the catalogue | The category filter, never the search text |
+| Opening the Billing tab, and changing a privacy setting | For Error reporting, Timeline frames to the agent and Usage analytics: the key **and its new on/off value**, so the toggle that enables this stream reports its own position |
 
-Corrected 2026-09-24 in both directions: the table had listed metadata some events do not
-carry and missed some they do. Some events the plugin emits are discarded by our service
-on receipt rather than stored (re-checked 2026-10-21).
-
-### How measurements are aggregated
-
-Events are batched on the machine, sent with the identifier described in §2, aggregated
-per installation, and the raw events discarded. A daily job compiles a global aggregate
-that contains no per-user data. An operator-only view of that aggregate exists and is
-authenticated.
+Events are batched locally and sent with the analytics identifier (§2). The service keeps daily totals per installation and an all-user total, and discards raw events; the policy lists what is kept and for how long. Generation-start coverage is incomplete, so the counts are not a complete record.
 
 ---
 
 ## 6. Agent Mode Data Handling
 
-Agent Mode allows users to edit the Premiere Pro timeline via natural language chat, powered by Anthropic's Claude API.
+Agent Mode edits the timeline through chat, using Anthropic's Claude API on the user's own key, which is stored locally (§1). Traffic goes directly between the plugin and Anthropic.
 
-**User's own API key.** The user enters their own Anthropic API key in Settings. It is stored locally — in an environment file in the plugin's data folder, readable only by your user account; no copy or fragment of it is kept in `localStorage` — and is never transmitted to modelBridge infrastructure. All conversation traffic flows directly between the plugin (running locally) and Anthropic's API.
+**What reaches Anthropic, as two rules.**
 
-**What reaches Anthropic, as a rule rather than a list.** Two sentences govern every path, present and future:
+1. **No image goes on the agent's own initiative unless the user allowed it.** Settings → Privacy → "Timeline frames to the agent" governs this, and the panel asks before the first send. It covers the 3–12 frames sent once per clip per conversation while a clip is selected, the agent reading the Generate tab's media card, and visual scans. With it off, no frame goes by any path; the agent is told what is in the media card (slot, role, filename, media type) but not shown it. NDA mode blocks frames regardless. Frames are sampled across the **whole source file**, not only the trimmed part.
+2. **An action the user starts about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames, up to the ceilings on the [Privacy Controls](https://docs.modelbridge.app/features/privacy-controls/) page, with a cost dialog before a larger scan and only with the setting above allowed. Enhance sends the media attached to the prompt (§4).
 
-1. **The agent never sends images on its own initiative unless the user has allowed it.** One setting governs that — Settings → Privacy → "Timeline frames to the agent". With it off, no frame from your timeline or media goes to the agent by any path. It covers the frames that accompany a message while a clip is selected (3–12 depending on clip length, sent once per clip per conversation, and **asked before the first send** — nothing is sent until you answer) and the agent's ability to read the Generate tab's media card by itself, and, since 2026-10-21, a visual scan. NDA mode blocks it whatever you answered. With it off, the agent is told what is in the card — slot, role, filename, media type — and is not shown it, through the same coverage contract that stops it describing anything it did not see. One property worth knowing: the frames are sampled across the **whole source file**, not the part you trimmed into the timeline, so a three-second selection inside a long interview sends frames from across the whole interview.
-2. **Anything the user activates that is about a piece of media sends that media.** Asking the agent to watch a clip sends sampled frames of it — evenly spaced frames plus samples around detected scene changes, with a hard ceiling per scan — and a cost dialog before a larger scan runs. It also needs the timeline-frames setting above: if you have not answered yet, the panel asks first, and with the setting off or NDA mode on, no scan runs; pressing Enhance on a prompt sends the media attached to that prompt, to Anthropic or to Google depending on the branch in §4.
+**Project metadata.** Every turn: the selected client in Client-project mode, the name the user asked the agent to use, custom instructions, and local time and time zone. Whenever the agent reads the project, which is most turns: clip and sequence names, filenames, timecodes, effect settings, marker names and comments verbatim, dailies XMP fields, and camera make, model and creation time.
 
-*This is written as a rule because the previous version was an enumeration, and an enumeration of exceptions goes false the moment another tool learns to read the media card — which is exactly how it broke.*
+**Paths.** The media path keys (`sourceFile`, `mediaPath`, `proxyPath`) are replaced with opaque, session-scoped references at a single choke point and resolved back locally. The project file is handled the same way: the agent gets its name and a session handle, never the absolute path. Three kinds of path travel as written: a path typed into the chat, anything inside raw XMP text, and the candidate paths (up to 20) of a disk search for an offline file.
 
-**Project metadata travels to Anthropic**, and more of it than this document used to list. On every turn: the client name if you are in Client-project mode, your alias, any custom instructions you saved, and your local time and time zone. Whenever the agent reads the project or timeline, which is most turns: clip and sequence names, filenames, timecodes, effect settings, marker names and comments verbatim, dailies XMP fields, and camera make, model and creation time.
-
-**Paths: what is masked and what is not.** Until 2026-09-24 this section said source directories do not travel. That is true of the media path keys — `sourceFile`, `mediaPath` and `proxyPath` are swapped for an opaque session-scoped reference at a single choke point and resolved back locally. Since 2026-09-27 the project file's own path is handled the same way: it travels as a session handle, never as the absolute path, and the agent's exact-target checks compare handles. A path you type into the chat yourself travels as you wrote it, anything embedded in raw XMP text travels as written, and when you ask the agent to find an offline file on your disk, the candidate paths it finds (up to 20) travel as found. The narrow claim holds; the absolute one did not, so it has been replaced rather than qualified.
-
-**No conversation data collected — with one local exception.** modelBridge does not intercept, store, proxy, or log Agent Mode conversation content on any server of ours: no prompts, no Claude responses, no tool calls, no timeline edit commands. On your own disk there is one exception: when you ask the agent to watch a clip, the sampled frames, the absolute media path, the clip name, the prompt and the model's reply are written to a scan-log folder in the plugin's data folder. Folders older than seven days are removed when the local backend next starts, so a log can outlive seven days on a machine where the backend keeps running. A generation triggered from Agent Mode emits the same anonymous generation events as one started from the Generate button — subject to the same opt-in, and the same fields that are never transmitted. Agent Mode emits no events of its own to our servers; it does write to the local usage store, which is never transmitted.
-
-**Customizable system instructions.** Users can configure custom system instructions for the Agent. These are stored locally only and included in requests sent directly to Anthropic's API. modelBridge infrastructure never sees them.
-
-**Anthropic's privacy policy applies.** The user's interaction with Claude is governed by Anthropic's Usage Policy and Privacy Policy. modelBridge is not a party to this data flow.
+**No conversation data on our servers.** modelBridge does not store, proxy or log prompts, Claude responses, tool calls or edit commands. One local exception: a visual scan writes its frames, the absolute media path, the clip name, the prompt and the reply to a scan-log folder in the data folder. Folders older than seven days are removed when the backend next starts. Agent Mode emits no analytics events of its own; a generation it starts emits the same events as the Generate button. Anthropic's own policies govern the user's interaction with Claude.
 
 ---
 
@@ -350,13 +202,12 @@ Stockholm, Sweden
 info@modelbridge.app
 
 **Supervisory Authority:**
-Integritetsskyddsmyndigheten (IMY) — Swedish Authority for Privacy Protection
+Integritetsskyddsmyndigheten (IMY), the Swedish Authority for Privacy Protection
 imy.se
 
-**Data access and erasure requests:** email info@modelbridge.app from the address associated with your purchase, or include your order reference. Requests are handled through the customer privacy process described in the privacy policy.
+**Data access and erasure requests:** see the policy's [Your rights](https://docs.modelbridge.app/legal/privacy-policy/#your-rights) section (summary in §3).
 
-**Local Data Deletion:**
-Settings → Data → "Reset all data" clears the generation history and cost logs the panel shows, external costs and client/project data, and — if you tick the box — installed models. It does not remove your API keys, your licence, Agent Mode preferences, learned constraints or local scan logs. Keys are removed and the licence is released in Settings; the rest lives in the plugin's data folder in your user Library (`~/Library/Application Support/modelBridge`), which is kept across reinstalls by design, so uninstalling the extension does not delete it — deleting that folder does. *(Corrected 2026-10-21: this section said Reset clears everything, including API keys, settings and learned constraints. It does not.)*
+**Local data deletion:** Settings → Data management → "Reset all data" clears history, cost logs, external AI costs and client and project data, and, if ticked, installed models. It keeps API keys and the licence. Local data lives in `~/Library/Application Support/modelBridge` and CEP browser storage, and survives uninstalling by design; [Removing modelBridge](https://docs.modelbridge.app/getting-started/uninstalling/) lists every location.
 
 ---
 
