@@ -57,6 +57,8 @@ AI generation and professional editing grew up in different places. New models a
 
 modelBridge started from one idea: remove that friction. Generation should happen in the same window as the edit, side by side with the editor's workspace and timeline, and the result should land where it belongs without a detour.
 
+The goal is less friction, more time for the edit itself, and a Premiere Pro that keeps pace with a market where new AI models are released every week.
+
 It does that by connecting two things that are each very good at their own job:
 
 - **fal.ai** runs a large, fast-moving catalogue of image, video and audio models and adds new ones soon after they are released.
