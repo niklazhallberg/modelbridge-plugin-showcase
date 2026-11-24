@@ -354,6 +354,8 @@ pkgutil --check-signature modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg
 
 A public engineering record for modelBridge. The plugin source is private, and customer documentation lives at [docs.modelbridge.app ↗](https://docs.modelbridge.app).
 
+The JSON files at the root are live configuration, not documentation, and installed panels fetch them from this repository. `ota-manifest.json` lists the payloads with a SHA-256 for each; a payload that does not match its pin is ignored, and the workflows in `.github/` check every pin on each change. `pricing-supplements.json` is a schema example only, because real pricing ships inside the plugin.
+
 **Coverage.** Eleven fal.ai categories used in editing: text-to-image, image-to-image, text-to-video, image-to-video, video-to-video, audio-to-video, text-to-audio, audio-to-audio, video-to-audio, text-to-speech and speech-to-speech. Three model counts appear in this repository, and they measure different things: the **live catalog** on docs.modelbridge.app (1,190 models on 2026-11-21, 1,191 on 2026-11-24), the **scheduled CI verification** (on 2026-11-21: 1,172 verified, 16 offered through a prompt interface, 12 blocked), and the **panel's own count of installable models** (1,296 on 2026-10-21, the date of the reliability measurements). None of them is a count of models tested through a paid generation. The [live catalog ↗](https://docs.modelbridge.app/models/available-models/) carries today's figure. 3D, training, transcription, captioning, text or structured-data output, and general language or vision models are out of scope on purpose.
 
 **How to read the claims.**
