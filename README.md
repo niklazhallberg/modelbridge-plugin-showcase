@@ -410,7 +410,3 @@ Actively preparing for Adobe's UXP: platform-specific code is moving behind adap
 Built by [Niklaz Hallberg ↗](https://niklaz.works) — digital designer and creative technologist at the intersection of design, code, and generative AI. Solo development with structured documentation, migration-aware architecture, and test suites designed for team onboarding.
 
 2025–2026.
-
-<p align="center">
-  <img src="assets/modelbridge-premiere-panel.webp" alt="modelBridge for Adobe Premiere Pro: the Generate tab docked beside the Program monitor" width="100%">
-</p>
