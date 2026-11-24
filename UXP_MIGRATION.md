@@ -497,8 +497,8 @@ most entitled to trust. All three are corrected against what Adobe's September
 2026 announcement and reference pages state, not against anything we ran.
 
 - **The support window.** We read a "calendar year" sentence in a sample ReadMe
-  as CEP removal around November 2026, and planned against it. Adobe's September
-  2026 announcement places CEP retirement at the end of 2029, with new CEP
+  as CEP removal around November 2026, and planned against it. [Adobe's September
+  2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP
   submissions ending in December 2027 and CEP disabled by default in December
   2028. Our re-read on 2026-10-21 confirmed that the old sentence was unchanged
   and did not look for a newer statement, so it re-confirmed a page instead of
@@ -675,8 +675,8 @@ Adobe's own PProPanel sample ReadMe (updated November 2025) says CEP extensions
 plan is to support both CEP and UXP for a calendar year, after which we will
 remove support for CEP extensibilty." On 30 August we read that as removal around
 November 2026 and planned against it, and on 2026-10-21 we re-read the sentence
-and found it unchanged. That reading is retired. Adobe's September 2026
-announcement places CEP retirement at the end of 2029, with new CEP submissions
+and found it unchanged. That reading is retired. [Adobe's September 2026
+announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP submissions
 ending in December 2027 and CEP disabled by default in December 2028. The
 announcement also says ExtendScript is not affected by this transition.
 Corrected here on 2026-11-16; section 4.4 says how we missed it.
@@ -811,7 +811,7 @@ They are listed so a reader who has seen them elsewhere knows they are dead.
 
 | Retired claim | What measurement found | Retired |
 |---|---|---|
-| "Adobe will remove CEP support around November 2026" — published here as [PLATFORM] | Adobe's September 2026 announcement places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | 2026-11-16 |
+| "Adobe will remove CEP support around November 2026" — published here as [PLATFORM] | [Adobe's September 2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications) places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | 2026-11-16 |
 | "UXP provides no `localStorage`; its replacement is asynchronous" — published here as [PLATFORM] | Adobe's reference pages document a synchronous `localStorage` in UXP. It does not give access to the data our CEP panel has stored, so the work is a data migration | 2026-11-16 |
 | "UXP requires a bundled entry point" — published here as [PLATFORM] | Bundling is optional under UXP. Our globals, load order and inline handlers still need review | 2026-11-16 |
 | "Host calls are 82 % routed" | True of the panel's script modules only. The panel's HTML page makes 18 more direct calls, which puts the 21 Oct commit at about 75 % | 2026-11-16 |
@@ -928,7 +928,7 @@ only re-asserted.
 | 15 | Secure storage is documented as a cache, not persistent storage | [PLATFORM] | 30 Aug | Adobe restating it |
 | 16 | A lost seat record cannot be regenerated without consuming a second slot | [ASSUMPTION] | 30 Aug | A supported cleared-vs-never-written signal — question 5 |
 | 17 | CEP still works end to end in Premiere Pro 26.3.2 | [SOURCE] — a live host measurement | 1 Sep; the panel also loaded and its backend answered in 26.5.1 on 21 Oct, with no generation run | Any later version. **One version, one platform, one machine** |
-| 18 | Adobe places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | [PLATFORM] | Adobe's September 2026 announcement; corrected 2026-11-16. On 30 Aug we published "roughly a calendar year from 25.6" | Adobe revising the schedule |
+| 18 | Adobe places CEP retirement at the end of 2029, with new CEP submissions ending in December 2027 and CEP disabled by default in December 2028 | [PLATFORM] | [Adobe's September 2026 announcement](https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications); corrected 2026-11-16. On 30 Aug we published "roughly a calendar year from 25.6" | Adobe revising the schedule |
 | 19 | Our extraction contract has no *proven* UXP parity. Documented candidate APIs may exist — a sequence-frame path and a sequence-export path are the two we know to look at — but none has been shown to satisfy the whole contract | [ASSUMPTION] — see 19a | 9 Sep | A spike, not a document. Question 1, and 7.2 below |
 | 19a | *Retired 2026-09-09:* "frame export has no UXP API today", published here as [PLATFORM] | [DEPRECATED] | — | Adobe publishes no statement of absence, so nothing could have been quoted. See 7.2 |
 | 20 | Four of our durable documents carry a schema version and three do not | [SOURCE] | 21 Oct (three and four on 9 Sep) | Stamping the three |
