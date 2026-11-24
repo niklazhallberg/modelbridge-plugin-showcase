@@ -4,20 +4,6 @@ What's coming next for modelBridge — the problems we're solving and who they'r
 
 ---
 
-## Team Cost Intelligence
-
-Agencies and post-production houses running AI generation across multiple editors face a common problem: every generation across every editor lands on a single fal.ai bill as an undifferentiated lump sum. There's no way to attribute costs to specific clients, projects, or deliverables. When an editor generates 40 AI clips across three client projects in a week, the finance team has no way to allocate those costs — and the editor has no way to prove what was billable.
-
-modelBridge already tracks per-generation costs with model, timestamp and confidence tier, and editors already tag each generation to a client, project and deliverable at the point of creation. Team Cost Intelligence extends that across a team: cost reports broken down by client, by project, by model, and by editor — with Estimated and Metered costs clearly distinguished.
-
-The system will also track billable failures separately from caught failures. When modelBridge's validation engine blocks a generation before it reaches the API, that's a prevented cost. When fal.ai charges for a generation that fails partway through processing, that's a billable failure. Both matter for accurate client invoicing — one is a cost saving, the other is a line item.
-
-Privacy controls are built into the design. Prompt text and filenames are opt-in per project, allowing agencies with NDAs or confidential creative briefs to track costs without exposing creative direction. Small teams will be able to share cost visibility on a project without any server setup.
-
-Detailed technical architecture and implementation plan exists and is available to qualified partners under NDA.
-
----
-
 ## Agent Mode — Expanding Capabilities
 
 Agent Mode allows editors to control the Premiere Pro timeline through natural language conversation. The agent reads the active project, understands sequence structure, and executes edits directly — from single clip adjustments to multi-step workflows spanning dozens of clips.
@@ -113,6 +99,20 @@ Platform-specific code is being isolated behind adapter layers, and some surface
 [UXP_MIGRATION.md](UXP_MIGRATION.md) carries the measurements, the open questions to Adobe, the No-Go criteria for our beta, and the places our own early decisions turned out to be wrong.
 
 This migration does not change how the current build behaves for users today. The CEP build keeps working on the Premiere versions that support CEP — and that window is Adobe's to set, not ours. See [UXP_MIGRATION.md](UXP_MIGRATION.md) §7 for Adobe's stated plan and how we are planning against it.
+
+---
+
+## Team Cost Intelligence
+
+Agencies and post-production houses running AI generation across multiple editors face a common problem: every generation across every editor lands on a single fal.ai bill as an undifferentiated lump sum. There's no way to attribute costs to specific clients, projects, or deliverables. When an editor generates 40 AI clips across three client projects in a week, the finance team has no way to allocate those costs — and the editor has no way to prove what was billable.
+
+modelBridge already tracks per-generation costs with model, timestamp and confidence tier, and editors already tag each generation to a client, project and deliverable at the point of creation. Team Cost Intelligence extends that across a team: cost reports broken down by client, by project, by model, and by editor — with Estimated and Metered costs clearly distinguished.
+
+The system will also track billable failures separately from caught failures. When modelBridge's validation engine blocks a generation before it reaches the API, that's a prevented cost. When fal.ai charges for a generation that fails partway through processing, that's a billable failure. Both matter for accurate client invoicing — one is a cost saving, the other is a line item.
+
+Privacy controls are built into the design. Prompt text and filenames are opt-in per project, allowing agencies with NDAs or confidential creative briefs to track costs without exposing creative direction. Small teams will be able to share cost visibility on a project without any server setup.
+
+Detailed technical architecture and implementation plan exists and is available to qualified partners under NDA.
 
 ---
 
