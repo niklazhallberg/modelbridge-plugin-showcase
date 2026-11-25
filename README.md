@@ -1,4 +1,4 @@
-# <img src="assets/modelBridge_app_README.webp" alt="" width="30" height="30" align="absmiddle"> modelBridge for Premiere Pro
+# <img src="assets/modelBridge_app_README.webp" alt="" width="34" height="34" align="absmiddle"> modelBridge for Premiere Pro
 
 ### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
 
