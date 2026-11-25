@@ -324,19 +324,19 @@ modelBridge 1.0.0 installs from a signed, notarised macOS installer: **[download
 
 The download is free; generating needs an active trial or subscription. Installing or using modelBridge means accepting its [Terms and Conditions ↗](https://docs.modelbridge.app/legal/terms-and-conditions/).
 
-**Check the download before you run it.** The installer is `modelBridge-1.0.0-mac-19dd528a-0acc40d1.pkg`, and its SHA-256 is:
+**Check the download before you run it.** The installer is `modelBridge-1.0.0-mac-bb945e1c-79c5ce39.pkg`, and its SHA-256 is:
 
 ```
-0acc40d130fc05fc4c3be0675899fd5cd34e1957ed044572087ef740a771bca8
+79c5ce39d4acec010424951d8d297a08524e9707578686d830ea516ed398c949
 ```
 
 The eight characters before `.pkg` in the filename are the first eight of that hash. With the `.pkg` and the `.sha256` file from the release in the same folder:
 
 ```sh
-shasum -a 256 -c modelBridge-1.0.0-mac-19dd528a-0acc40d1.pkg.sha256
-# modelBridge-1.0.0-mac-19dd528a-0acc40d1.pkg: OK
+shasum -a 256 -c modelBridge-1.0.0-mac-bb945e1c-79c5ce39.pkg.sha256
+# modelBridge-1.0.0-mac-bb945e1c-79c5ce39.pkg: OK
 
-pkgutil --check-signature modelBridge-1.0.0-mac-19dd528a-0acc40d1.pkg
+pkgutil --check-signature modelBridge-1.0.0-mac-bb945e1c-79c5ce39.pkg
 # Status: signed by a developer certificate issued by Apple for distribution
 # Notarization: trusted by the Apple notary service
 ```

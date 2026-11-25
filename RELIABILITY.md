@@ -225,7 +225,7 @@ suite that was green going red without a written reason.
 **Before a customer build.** A release build is refused unless it is built from a
 clean, published, untagged state of the main branch, with a bundled ffmpeg that
 carries everything the backend uses and an identity that matches the extension
-manifest. The 1.0.0 installer, rebuilt 2026-11-25 from plugin commit `19dd528a`, is
+manifest. The 1.0.0 installer, rebuilt 2026-11-25 from plugin commit `bb945e1c`, is
 signed with a Developer ID
 Installer certificate, notarised by Apple and stapled (checked 2026-11-25 with
 `pkgutil --check-signature`, `spctl -a -vv -t install` and `xcrun stapler validate`).
