@@ -1,6 +1,6 @@
 # <img src="assets/modelBridge_app_README.webp" alt="" width="40" height="40" align="texttop">&nbsp;&nbsp;modelBridge for Premiere Pro
 
-### fal.ai image, video and audio generation, inside Adobe Premiere Pro.
+### Experience fal.ai image, video and audio generation, inside Adobe Premiere Pro.
 
 **Bridging the gap** between a video editor's working environment and the best AI video, image and audio models available.
 
