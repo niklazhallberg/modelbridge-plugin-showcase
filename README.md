@@ -351,7 +351,7 @@ pkgutil --check-signature modelBridge-1.0.0-mac-5b583e78-bc4ca4a6.pkg
 
 ## Pricing
 
-**$19/month** or **$190/year**, plus VAT or sales tax where it applies, sold through Lemon Squeezy as Merchant of Record. The 14-day free trial starts with a card or PayPal, and Lemon Squeezy takes the first payment on day 15 unless you cancel before then. No generations are included: you bring your own fal.ai key — and your own Anthropic key for Agent Mode — and pay those providers directly at their published rates, with no markup, no credit system and no revenue share. A lapsed subscription drops to read-only and your data stays. [Pricing details ↗](https://docs.modelbridge.app/billing/subscription/)
+**$19/month** or **$182/year** (save 20%), plus VAT or sales tax where it applies, sold through Lemon Squeezy as Merchant of Record. The 14-day free trial starts with a card or PayPal, and Lemon Squeezy takes the first payment on day 15 unless you cancel before then. No generations are included: you bring your own fal.ai key — and your own Anthropic key for Agent Mode — and pay those providers directly at their published rates, with no markup, no credit system and no revenue share. A lapsed subscription drops to read-only and your data stays. [Pricing details ↗](https://docs.modelbridge.app/billing/subscription/)
 
 ---
 
