@@ -8,7 +8,7 @@ run or a wrong number.
 
 Figures are dated. Those marked 2026-10-21 were measured against panel commit
 `e721aa52`; those marked 1.0.0 against `5b583e78`, the commit the 1.0.0 installer was
-built from. The plugin source is private; the files behind each claim can be shown to
+first built from. The plugin source is private; the files behind each claim can be shown to
 a reviewer on request, and every figure here comes from a run or a count that can be
 repeated.
 
@@ -225,9 +225,9 @@ suite that was green going red without a written reason.
 **Before a customer build.** A release build is refused unless it is built from a
 clean, published, untagged state of the main branch, with a bundled ffmpeg that
 carries everything the backend uses and an identity that matches the extension
-manifest. The 1.0.0 installer, built 2026-11-24 from plugin commit `5b583e78`, is
+manifest. The 1.0.0 installer, rebuilt 2026-11-25 from plugin commit `19dd528a`, is
 signed with a Developer ID
-Installer certificate, notarised by Apple and stapled (checked 2026-11-24 with
+Installer certificate, notarised by Apple and stapled (checked 2026-11-25 with
 `pkgutil --check-signature`, `spctl -a -vv -t install` and `xcrun stapler validate`).
 
 ## 6. What is running is recorded, not assumed
