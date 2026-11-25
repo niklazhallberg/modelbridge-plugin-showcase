@@ -6,7 +6,7 @@
 
 Pick a model, see the result in Premiere's Source Monitor, press Import. It lands on your timeline in the right place. No browser tabs, no downloads, no manual imports.
 
-- **About 1,200 fal.ai image, video and audio models**, linked into Premiere (1,190 in the live catalog on 2026-11-21, [live catalog ↗](https://docs.modelbridge.app/models/available-models/))
+- **About 1,000+ fal.ai image, video and audio models**, linked into Premiere (1,190 in the live catalog on 2026-11-21, [live catalog ↗](https://docs.modelbridge.app/models/available-models/))
 - **New models arrive on their own, controls already built.** modelBridge syncs with fal.ai several times a day, and every model's sliders, dropdowns and media inputs are generated from its own spec. No plugin update, no per-model code
 - **Your own fal.ai key, no markup.** You pay fal.ai directly at its published rates
 - **Optional Agent Mode, powered by Claude**, on your own Anthropic key
